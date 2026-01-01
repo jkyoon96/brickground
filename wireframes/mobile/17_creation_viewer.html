@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=390, initial-scale=1.0">
+    <title>Creation 3D 뷰어 - Mobile Wireframe</title>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --pixar-primary: #0066FF;
+            --pixar-secondary: #FFD93D;
+            --pixar-success: #6BCB77;
+            --pixar-error: #FF6B6B;
+            --pixar-teal: #00CEC9;
+            --pixar-cyan: #00D4FF;
+            --pixar-bg: #1a1a2e;
+            --pixar-card: #252542;
+            --pixar-text: #FFFFFF;
+            --pixar-text-light: #a0a0b0;
+            --pixar-border: #3d3d5c;
+            --pixar-radius: 16px;
+            --pixar-radius-sm: 10px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Nunito', '나눔스퀘어라운드', sans-serif;
+            background: #1a1a2e;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .phone-frame {
+            width: 390px;
+            background: #1a1a1a;
+            border-radius: 50px;
+            padding: 12px;
+            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.5);
+        }
+
+        .phone-screen {
+            background: var(--pixar-bg);
+            border-radius: 40px;
+            overflow: hidden;
+            min-height: 780px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Status Bar */
+        .status-bar {
+            padding: 14px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--pixar-card);
+        }
+        .status-time { font-size: 14px; font-weight: 600; color: var(--pixar-text); }
+        .status-icons { display: flex; gap: 6px; }
+        .status-icons i { width: 16px; height: 16px; color: var(--pixar-text); }
+
+        /* Top Bar */
+        .top-bar {
+            background: var(--pixar-card);
+            padding: 10px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--pixar-border);
+        }
+
+        .top-bar-left { display: flex; align-items: center; gap: 10px; }
+
+        .back-btn {
+            width: 32px; height: 32px;
+            border-radius: 50%;
+            background: var(--pixar-bg);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--pixar-text);
+        }
+        .back-btn i { width: 16px; height: 16px; }
+
+        .creation-info { display: flex; align-items: center; gap: 10px; }
+
+        .creation-thumb {
+            width: 36px; height: 36px;
+            border-radius: 8px;
+            background: linear-gradient(135deg, var(--pixar-teal), var(--pixar-cyan));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .creation-thumb i { width: 18px; height: 18px; color: white; }
+
+        .creation-details h2 { font-size: 14px; font-weight: 700; color: var(--pixar-text); }
+        .creation-details span { font-size: 11px; color: var(--pixar-text-light); }
+
+        .top-bar-right { display: flex; align-items: center; gap: 6px; }
+
+        .btn-icon {
+            width: 34px; height: 34px;
+            border-radius: 50%;
+            background: var(--pixar-bg);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--pixar-text);
+        }
+        .btn-icon i { width: 16px; height: 16px; }
+        .btn-icon.liked { color: var(--pixar-error); }
+        .btn-icon.liked i { fill: var(--pixar-error); }
+
+        /* 3D Scene */
+        .scene-3d {
+            flex: 1;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: radial-gradient(circle at center, #252542 0%, #1a1a2e 100%);
+        }
+
+        .model-placeholder {
+            width: 280px; height: 280px;
+            background: rgba(0, 206, 201, 0.1);
+            border: 2px dashed var(--pixar-teal);
+            border-radius: var(--pixar-radius);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .model-placeholder i { width: 70px; height: 70px; color: var(--pixar-teal); opacity: 0.5; }
+        .model-placeholder span { font-size: 16px; font-weight: 600; color: var(--pixar-text-light); margin-top: 12px; }
+        .model-placeholder small { font-size: 12px; color: var(--pixar-text-light); opacity: 0.7; }
+
+        /* View Presets */
+        .view-presets {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .preset-btn {
+            width: 40px; height: 40px;
+            background: var(--pixar-card);
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--pixar-text);
+        }
+        .preset-btn.active { background: var(--pixar-teal); }
+        .preset-btn i { width: 18px; height: 18px; }
+
+        /* Auto Rotate */
+        .auto-rotate {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--pixar-card);
+            padding: 8px 12px;
+            border-radius: 16px;
+        }
+        .auto-rotate i { width: 14px; height: 14px; color: var(--pixar-teal); }
+        .auto-rotate span { font-size: 11px; color: var(--pixar-text); }
+
+        .toggle-switch { position: relative; width: 36px; height: 20px; }
+        .toggle-switch input { opacity: 0; width: 0; height: 0; }
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: var(--pixar-border);
+            border-radius: 20px;
+            transition: 0.3s;
+        }
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 14px; width: 14px;
+            left: 3px; bottom: 3px;
+            background: white;
+            border-radius: 50%;
+            transition: 0.3s;
+        }
+        input:checked + .toggle-slider { background: var(--pixar-teal); }
+        input:checked + .toggle-slider:before { transform: translateX(16px); }
+
+        /* View Controls */
+        .view-controls {
+            position: absolute;
+            bottom: 12px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 6px;
+            background: var(--pixar-card);
+            padding: 8px;
+            border-radius: 22px;
+        }
+
+        .view-ctrl-btn {
+            width: 36px; height: 36px;
+            border: none;
+            background: var(--pixar-bg);
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--pixar-text);
+        }
+        .view-ctrl-btn.active { background: var(--pixar-teal); }
+        .view-ctrl-btn i { width: 16px; height: 16px; }
+
+        /* Bottom Panel */
+        .bottom-panel {
+            background: var(--pixar-card);
+            padding: 14px 16px 30px;
+            border-top: 1px solid var(--pixar-border);
+        }
+
+        .panel-tabs {
+            display: flex;
+            gap: 4px;
+            margin-bottom: 12px;
+        }
+
+        .panel-tab {
+            flex: 1;
+            padding: 8px;
+            background: var(--pixar-bg);
+            border: none;
+            border-radius: 8px;
+            color: var(--pixar-text-light);
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+        }
+        .panel-tab.active { background: var(--pixar-teal); color: white; }
+        .panel-tab i { width: 14px; height: 14px; }
+
+        /* Export Grid */
+        .export-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+        }
+
+        .export-btn {
+            padding: 12px 8px;
+            background: var(--pixar-bg);
+            border: 2px solid var(--pixar-border);
+            border-radius: 10px;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+        .export-btn:hover { border-color: var(--pixar-teal); }
+        .export-btn i { width: 20px; height: 20px; color: var(--pixar-teal); }
+        .export-btn span { font-size: 10px; font-weight: 600; color: var(--pixar-text); }
+
+        /* Settings Panel */
+        .settings-panel { display: none; }
+
+        .setting-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--pixar-border);
+        }
+        .setting-row:last-child { border-bottom: none; }
+
+        .setting-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            color: var(--pixar-text);
+        }
+        .setting-label i { width: 16px; height: 16px; color: var(--pixar-text-light); }
+
+        /* Home Indicator */
+        .home-indicator {
+            position: absolute;
+            bottom: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 134px;
+            height: 5px;
+            background: var(--pixar-text);
+            border-radius: 3px;
+            opacity: 0.2;
+        }
+    </style>
+</head>
+<body>
+    <div class="phone-frame">
+        <div class="phone-screen">
+            <!-- Status Bar -->
+            <div class="status-bar">
+                <span class="status-time">9:41</span>
+                <div class="status-icons">
+                    <i data-lucide="signal"></i>
+                    <i data-lucide="wifi"></i>
+                    <i data-lucide="battery-full"></i>
+                </div>
+            </div>
+
+            <!-- Top Bar -->
+            <div class="top-bar">
+                <div class="top-bar-left">
+                    <button class="back-btn"><i data-lucide="arrow-left"></i></button>
+                    <div class="creation-info">
+                        <div class="creation-thumb"><i data-lucide="building-2"></i></div>
+                        <div class="creation-details">
+                            <h2>미래 도시 스카이라인</h2>
+                            <span>빌더마스터 · 12.4K views</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="top-bar-right">
+                    <button class="btn-icon liked"><i data-lucide="heart"></i></button>
+                    <button class="btn-icon"><i data-lucide="share-2"></i></button>
+                </div>
+            </div>
+
+            <!-- 3D Scene -->
+            <div class="scene-3d">
+                <div class="model-placeholder">
+                    <i data-lucide="building-2"></i>
+                    <span>3D 창작물 뷰어</span>
+                    <small>터치로 회전</small>
+                </div>
+
+                <!-- View Presets -->
+                <div class="view-presets">
+                    <button class="preset-btn active"><i data-lucide="box"></i></button>
+                    <button class="preset-btn"><i data-lucide="rotate-3d"></i></button>
+                    <button class="preset-btn"><i data-lucide="arrow-up"></i></button>
+                    <button class="preset-btn"><i data-lucide="compass"></i></button>
+                </div>
+
+                <!-- Auto Rotate -->
+                <div class="auto-rotate">
+                    <i data-lucide="refresh-cw"></i>
+                    <span>자동 회전</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+
+                <!-- View Controls -->
+                <div class="view-controls">
+                    <button class="view-ctrl-btn active"><i data-lucide="rotate-3d"></i></button>
+                    <button class="view-ctrl-btn"><i data-lucide="move"></i></button>
+                    <button class="view-ctrl-btn"><i data-lucide="zoom-in"></i></button>
+                    <button class="view-ctrl-btn"><i data-lucide="maximize"></i></button>
+                </div>
+            </div>
+
+            <!-- Bottom Panel -->
+            <div class="bottom-panel">
+                <div class="panel-tabs">
+                    <button class="panel-tab active"><i data-lucide="download"></i>내보내기</button>
+                    <button class="panel-tab"><i data-lucide="settings-2"></i>설정</button>
+                    <button class="panel-tab"><i data-lucide="info"></i>정보</button>
+                </div>
+
+                <div class="export-grid">
+                    <button class="export-btn"><i data-lucide="image"></i><span>PNG</span></button>
+                    <button class="export-btn"><i data-lucide="film"></i><span>GIF</span></button>
+                    <button class="export-btn"><i data-lucide="box"></i><span>GLTF</span></button>
+                    <button class="export-btn"><i data-lucide="cube"></i><span>OBJ</span></button>
+                </div>
+            </div>
+
+            <div class="home-indicator"></div>
+        </div>
+    </div>
+    <script>lucide.createIcons();</script>
+</body>
+</html>

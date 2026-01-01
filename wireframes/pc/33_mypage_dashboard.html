@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>마이페이지 - BrickGround PC Wireframe</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="common/components.css">
+    <link rel="stylesheet" href="common/responsive.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+
+        * {
+            font-family: 'Nunito', sans-serif;
+        }
+
+        :root {
+            --bg-primary: #F8FAFC;
+            --bg-secondary: #FFFFFF;
+            --text-primary: #1E293B;
+            --text-secondary: #64748B;
+            --text-muted: #94A3B8;
+            --border-color: #E2E8F0;
+            --pixar-blue: #0066FF;
+            --rose-primary: #FF6B9D;
+            --coral-primary: #FF8C8C;
+            --rose-light: #FFB3C6;
+            --purple-accent: #A29BFE;
+        }
+
+        body {
+            background: var(--bg-primary);
+            color: var(--text-primary);
+        }
+
+        .nav-link {
+            color: var(--text-secondary);
+            font-weight: 600;
+            font-size: 15px;
+            transition: all 0.2s;
+        }
+
+        .nav-link:hover {
+            color: var(--rose-primary);
+        }
+
+        .header-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--bg-primary);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            transition: all 0.2s;
+            border: 1px solid var(--border-color);
+        }
+
+        .header-icon:hover {
+            color: var(--rose-primary);
+            border-color: var(--rose-primary);
+        }
+
+        .profile-card {
+            background: linear-gradient(135deg, var(--rose-primary) 0%, var(--coral-primary) 100%);
+            border-radius: 24px;
+            padding: 32px;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .profile-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 300px;
+            height: 300px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+        }
+
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 3px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .grade-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 14px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .card {
+            background: var(--bg-secondary);
+            border-radius: 20px;
+            padding: 24px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--border-color);
+        }
+
+        .stat-card {
+            background: var(--bg-secondary);
+            border-radius: 20px;
+            padding: 24px;
+            text-align: center;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 30px rgba(255, 107, 157, 0.15);
+            border-color: var(--rose-primary);
+        }
+
+        .stat-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 12px;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px;
+            border-radius: 16px;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .menu-item:hover {
+            background: rgba(255, 107, 157, 0.08);
+        }
+
+        .menu-item.active {
+            background: rgba(255, 107, 157, 0.1);
+            color: var(--rose-primary);
+        }
+
+        .menu-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .order-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px;
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+            transition: all 0.2s;
+        }
+
+        .order-item:hover {
+            border-color: var(--rose-primary);
+            background: rgba(255, 107, 157, 0.03);
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .status-badge.shipping {
+            background: rgba(0, 206, 201, 0.1);
+            color: #00CEC9;
+        }
+
+        .status-badge.completed {
+            background: rgba(107, 203, 119, 0.1);
+            color: #6BCB77;
+        }
+
+        .status-badge.preparing {
+            background: rgba(255, 217, 61, 0.2);
+            color: #F59E0B;
+        }
+
+        .activity-item {
+            display: flex;
+            gap: 16px;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+
+        .activity-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .quick-action {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            padding: 16px;
+            border-radius: 16px;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .quick-action:hover {
+            background: rgba(255, 107, 157, 0.08);
+        }
+
+        .quick-action-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 0.4s ease-out forwards;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: white;
+            border-radius: 4px;
+        }
+
+        /* ==================== Responsive Design ==================== */
+        /* Tablet (1024px) */
+        @media (max-width: 1024px) {
+            main { padding: 24px !important; }
+            main > .grid { grid-template-columns: 1fr !important; gap: 24px; }
+            .col-span-1 { display: flex; flex-direction: row; gap: 16px; }
+            .col-span-1 > .profile-card { flex: 1; margin-bottom: 0; }
+            .col-span-1 > .card { flex: 2; }
+            .col-span-3 { width: 100%; }
+            .grid-cols-4 { grid-template-columns: repeat(2, 1fr) !important; }
+            .grid-cols-5 { grid-template-columns: repeat(3, 1fr) !important; }
+        }
+
+        /* Mobile (768px) */
+        @media (max-width: 768px) {
+            main { padding: 16px !important; }
+            .col-span-1 { flex-direction: column; }
+            .col-span-1 > .profile-card,
+            .col-span-1 > .card { flex: none; }
+
+            .profile-card { padding: 20px; border-radius: 16px; }
+            .profile-avatar { width: 60px; height: 60px; }
+
+            .card { padding: 16px; border-radius: 16px; }
+
+            .menu-item { padding: 12px; gap: 12px; }
+            .menu-icon { width: 36px; height: 36px; }
+
+            .stat-card { padding: 16px; border-radius: 16px; }
+            .stat-icon { width: 44px; height: 44px; margin-bottom: 8px; }
+
+            .grid-cols-5 > div { padding: 12px 8px; }
+            .grid-cols-5 p:first-child { font-size: 24px !important; }
+
+            .order-item { flex-wrap: wrap; gap: 12px; padding: 12px; }
+            .order-item > .w-16 { width: 56px !important; height: 56px !important; }
+            .order-item button { width: 100%; margin-top: 8px; }
+
+            .grid-cols-2 { grid-template-columns: 1fr !important; }
+
+            .quick-action { padding: 12px; }
+            .quick-action-icon { width: 40px; height: 40px; }
+
+            .activity-item { padding: 10px 0; }
+            .activity-icon { width: 36px; height: 36px; }
+        }
+
+        /* Small Mobile (480px) */
+        @media (max-width: 480px) {
+            main { padding: 12px !important; }
+
+            .profile-card { padding: 16px; }
+            .profile-avatar { width: 50px; height: 50px; }
+            .profile-card h2 { font-size: 16px !important; }
+            .grade-badge { padding: 4px 10px; font-size: 11px; }
+
+            .card { padding: 12px; margin-bottom: 12px; }
+            .menu-item { padding: 10px; gap: 10px; }
+            .menu-icon { width: 32px; height: 32px; }
+            .menu-item span { font-size: 13px; }
+
+            .stat-card { padding: 12px; }
+            .stat-icon { width: 40px; height: 40px; }
+            .stat-card .text-2xl { font-size: 18px !important; }
+            .stat-card .text-sm { font-size: 12px !important; }
+
+            .grid-cols-5 { grid-template-columns: repeat(2, 1fr) !important; }
+            .grid-cols-5 > div:nth-child(5) { grid-column: span 2; }
+            .grid-cols-5 p:first-child { font-size: 20px !important; }
+            .grid-cols-5 .text-sm { font-size: 11px !important; }
+
+            .order-item > .w-16 { width: 48px !important; height: 48px !important; }
+            .order-item p.font-semibold { font-size: 13px !important; }
+
+            .quick-action { padding: 10px; }
+            .quick-action-icon { width: 36px; height: 36px; }
+            .quick-action span { font-size: 10px !important; }
+
+            .activity-icon { width: 32px; height: 32px; }
+            .activity-item p:first-child { font-size: 13px !important; }
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <!-- Header -->
+    <!-- Header -->
+    <div id="header"></div>
+
+    <!-- Main Content -->
+    <main class="mx-auto px-6 py-8" style="max-width: 1400px;">
+        <div class="grid grid-cols-4 gap-8">
+            <!-- Sidebar -->
+            <div class="col-span-1 space-y-6">
+                <!-- Profile Card -->
+                <div class="profile-card animate-fade-in">
+                    <div class="flex items-center gap-4 mb-4 relative z-10">
+                        <div class="profile-avatar">
+                            <i data-lucide="user" class="w-10 h-10"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-xl font-bold">김브릭</h2>
+                            <p class="opacity-80 text-sm">brick@email.com</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between mb-3 relative z-10">
+                        <span class="grade-badge">
+                            <i data-lucide="crown" class="w-4 h-4"></i>
+                            GOLD 등급
+                        </span>
+                        <span class="text-sm opacity-80">다음 등급까지 32,000P</span>
+                    </div>
+                    <div class="progress-bar relative z-10">
+                        <div class="progress-fill" style="width: 68%;"></div>
+                    </div>
+                </div>
+
+                <!-- Menu -->
+                <div class="card animate-fade-in" style="animation-delay: 0.1s; padding: 16px;">
+                    <div class="menu-item active">
+                        <div class="menu-icon" style="background: rgba(255, 107, 157, 0.1);">
+                            <i data-lucide="layout-dashboard" class="w-5 h-5" style="color: var(--rose-primary);"></i>
+                        </div>
+                        <span class="font-semibold">대시보드</span>
+                    </div>
+                    <div class="menu-item">
+                        <div class="menu-icon" style="background: var(--bg-primary);">
+                            <i data-lucide="package" class="w-5 h-5" style="color: var(--text-secondary);"></i>
+                        </div>
+                        <span class="font-semibold" style="color: var(--text-secondary);">주문 내역</span>
+                    </div>
+                    <div class="menu-item">
+                        <div class="menu-icon" style="background: var(--bg-primary);">
+                            <i data-lucide="heart" class="w-5 h-5" style="color: var(--text-secondary);"></i>
+                        </div>
+                        <span class="font-semibold" style="color: var(--text-secondary);">찜 목록</span>
+                    </div>
+                    <div class="menu-item">
+                        <div class="menu-icon" style="background: var(--bg-primary);">
+                            <i data-lucide="coins" class="w-5 h-5" style="color: var(--text-secondary);"></i>
+                        </div>
+                        <span class="font-semibold" style="color: var(--text-secondary);">포인트</span>
+                    </div>
+                    <div class="menu-item">
+                        <div class="menu-icon" style="background: var(--bg-primary);">
+                            <i data-lucide="ticket" class="w-5 h-5" style="color: var(--text-secondary);"></i>
+                        </div>
+                        <span class="font-semibold" style="color: var(--text-secondary);">쿠폰</span>
+                    </div>
+                    <div class="menu-item">
+                        <div class="menu-icon" style="background: var(--bg-primary);">
+                            <i data-lucide="message-square" class="w-5 h-5" style="color: var(--text-secondary);"></i>
+                        </div>
+                        <span class="font-semibold" style="color: var(--text-secondary);">1:1 문의</span>
+                    </div>
+                    <div class="menu-item">
+                        <div class="menu-icon" style="background: var(--bg-primary);">
+                            <i data-lucide="star" class="w-5 h-5" style="color: var(--text-secondary);"></i>
+                        </div>
+                        <span class="font-semibold" style="color: var(--text-secondary);">내 리뷰</span>
+                    </div>
+                    <hr style="border-color: var(--border-color); margin: 8px 0;">
+                    <div class="menu-item">
+                        <div class="menu-icon" style="background: var(--bg-primary);">
+                            <i data-lucide="settings" class="w-5 h-5" style="color: var(--text-secondary);"></i>
+                        </div>
+                        <span class="font-semibold" style="color: var(--text-secondary);">회원정보 수정</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="col-span-3 space-y-6">
+                <!-- Stats Cards -->
+                <div class="grid grid-cols-4 gap-4 animate-fade-in" style="animation-delay: 0.1s;">
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: rgba(255, 107, 157, 0.1);">
+                            <i data-lucide="coins" class="w-7 h-7" style="color: var(--rose-primary);"></i>
+                        </div>
+                        <p class="text-sm mb-1" style="color: var(--text-secondary);">포인트</p>
+                        <p class="text-2xl font-bold" style="color: var(--text-primary);">12,500P</p>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: rgba(162, 155, 254, 0.1);">
+                            <i data-lucide="ticket" class="w-7 h-7" style="color: var(--purple-accent);"></i>
+                        </div>
+                        <p class="text-sm mb-1" style="color: var(--text-secondary);">쿠폰</p>
+                        <p class="text-2xl font-bold" style="color: var(--text-primary);">5장</p>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: rgba(255, 140, 140, 0.1);">
+                            <i data-lucide="heart" class="w-7 h-7" style="color: var(--coral-primary);"></i>
+                        </div>
+                        <p class="text-sm mb-1" style="color: var(--text-secondary);">찜 목록</p>
+                        <p class="text-2xl font-bold" style="color: var(--text-primary);">23개</p>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: rgba(0, 206, 201, 0.1);">
+                            <i data-lucide="star" class="w-7 h-7" style="color: #00CEC9;"></i>
+                        </div>
+                        <p class="text-sm mb-1" style="color: var(--text-secondary);">내 리뷰</p>
+                        <p class="text-2xl font-bold" style="color: var(--text-primary);">8건</p>
+                    </div>
+                </div>
+
+                <!-- Order Status -->
+                <div class="card animate-fade-in" style="animation-delay: 0.2s;">
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="text-lg font-bold" style="color: var(--text-primary);">주문/배송 현황</h3>
+                        <a href="#" class="text-sm font-semibold" style="color: var(--rose-primary);">전체보기 &rarr;</a>
+                    </div>
+                    <div class="grid grid-cols-5 text-center">
+                        <div class="py-4 border-r" style="border-color: var(--border-color);">
+                            <p class="text-3xl font-bold mb-1" style="color: var(--rose-primary);">2</p>
+                            <p class="text-sm" style="color: var(--text-secondary);">결제완료</p>
+                        </div>
+                        <div class="py-4 border-r" style="border-color: var(--border-color);">
+                            <p class="text-3xl font-bold mb-1" style="color: var(--text-primary);">1</p>
+                            <p class="text-sm" style="color: var(--text-secondary);">상품준비중</p>
+                        </div>
+                        <div class="py-4 border-r" style="border-color: var(--border-color);">
+                            <p class="text-3xl font-bold mb-1" style="color: var(--text-primary);">1</p>
+                            <p class="text-sm" style="color: var(--text-secondary);">배송중</p>
+                        </div>
+                        <div class="py-4 border-r" style="border-color: var(--border-color);">
+                            <p class="text-3xl font-bold mb-1" style="color: var(--text-primary);">3</p>
+                            <p class="text-sm" style="color: var(--text-secondary);">배송완료</p>
+                        </div>
+                        <div class="py-4">
+                            <p class="text-3xl font-bold mb-1" style="color: var(--text-muted);">0</p>
+                            <p class="text-sm" style="color: var(--text-secondary);">취소/반품</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Orders -->
+                <div class="card animate-fade-in" style="animation-delay: 0.3s;">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-lg font-bold" style="color: var(--text-primary);">최근 주문</h3>
+                        <a href="19_product_list.html" class="text-sm font-semibold" style="color: var(--rose-primary);">더보기 &rarr;</a>
+                    </div>
+                    <div class="space-y-3">
+                        <div class="order-item">
+                            <div class="w-16 h-16 rounded-xl flex items-center justify-center" style="background: linear-gradient(135deg, #FFE5EC 0%, #FFF0F5 100%);">
+                                <i data-lucide="package" class="w-8 h-8" style="color: var(--rose-primary);"></i>
+                            </div>
+                            <div class="flex-1">
+                                <div class="flex items-center gap-2 mb-1">
+                                    <span class="status-badge shipping">
+                                        <i data-lucide="truck" class="w-3 h-3"></i>
+                                        배송중
+                                    </span>
+                                    <span class="text-xs" style="color: var(--text-muted);">2025.01.15</span>
+                                </div>
+                                <p class="font-semibold" style="color: var(--text-primary);">레고 테크닉 포르쉐 911 GT3 RS 외 1건</p>
+                                <p class="text-sm" style="color: var(--text-secondary);">156,000원</p>
+                            </div>
+                            <button class="px-4 py-2 rounded-xl text-sm font-semibold" style="background: var(--bg-primary); color: var(--text-secondary);">
+                                배송조회
+                            </button>
+                        </div>
+                        <div class="order-item">
+                            <div class="w-16 h-16 rounded-xl flex items-center justify-center" style="background: linear-gradient(135deg, #E8F5E9 0%, #F1F8E9 100%);">
+                                <i data-lucide="check-circle" class="w-8 h-8" style="color: #6BCB77;"></i>
+                            </div>
+                            <div class="flex-1">
+                                <div class="flex items-center gap-2 mb-1">
+                                    <span class="status-badge completed">
+                                        <i data-lucide="check" class="w-3 h-3"></i>
+                                        배송완료
+                                    </span>
+                                    <span class="text-xs" style="color: var(--text-muted);">2025.01.10</span>
+                                </div>
+                                <p class="font-semibold" style="color: var(--text-primary);">브릭 아트 픽셀 프레임 세트</p>
+                                <p class="text-sm" style="color: var(--text-secondary);">89,000원</p>
+                            </div>
+                            <button class="px-4 py-2 rounded-xl text-sm font-semibold" style="background: linear-gradient(135deg, var(--rose-primary) 0%, var(--coral-primary) 100%); color: white;">
+                                리뷰쓰기
+                            </button>
+                        </div>
+                        <div class="order-item">
+                            <div class="w-16 h-16 rounded-xl flex items-center justify-center" style="background: linear-gradient(135deg, #FFF8E1 0%, #FFFDE7 100%);">
+                                <i data-lucide="box" class="w-8 h-8" style="color: #F59E0B;"></i>
+                            </div>
+                            <div class="flex-1">
+                                <div class="flex items-center gap-2 mb-1">
+                                    <span class="status-badge preparing">
+                                        <i data-lucide="loader" class="w-3 h-3"></i>
+                                        상품준비중
+                                    </span>
+                                    <span class="text-xs" style="color: var(--text-muted);">2025.01.18</span>
+                                </div>
+                                <p class="font-semibold" style="color: var(--text-primary);">미니 브릭 캐릭터 컬렉션 5종</p>
+                                <p class="text-sm" style="color: var(--text-secondary);">45,000원</p>
+                            </div>
+                            <button class="px-4 py-2 rounded-xl text-sm font-semibold" style="background: var(--bg-primary); color: var(--text-secondary);">
+                                주문상세
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions & Activity -->
+                <div class="grid grid-cols-2 gap-6">
+                    <!-- Quick Actions -->
+                    <div class="card animate-fade-in" style="animation-delay: 0.4s;">
+                        <h3 class="text-lg font-bold mb-4" style="color: var(--text-primary);">빠른 메뉴</h3>
+                        <div class="grid grid-cols-4 gap-2">
+                            <div class="quick-action">
+                                <div class="quick-action-icon" style="background: rgba(255, 107, 157, 0.1);">
+                                    <i data-lucide="store" class="w-6 h-6" style="color: var(--rose-primary);"></i>
+                                </div>
+                                <span class="text-xs font-semibold" style="color: var(--text-secondary);">내 BrickArt</span>
+                            </div>
+                            <div class="quick-action">
+                                <div class="quick-action-icon" style="background: rgba(162, 155, 254, 0.1);">
+                                    <i data-lucide="palette" class="w-6 h-6" style="color: var(--purple-accent);"></i>
+                                </div>
+                                <span class="text-xs font-semibold" style="color: var(--text-secondary);">내 DotArt</span>
+                            </div>
+                            <div class="quick-action">
+                                <div class="quick-action-icon" style="background: rgba(0, 206, 201, 0.1);">
+                                    <i data-lucide="sparkles" class="w-6 h-6" style="color: #00CEC9;"></i>
+                                </div>
+                                <span class="text-xs font-semibold" style="color: var(--text-secondary);">내 Creation</span>
+                            </div>
+                            <div class="quick-action">
+                                <div class="quick-action-icon" style="background: rgba(255, 140, 140, 0.1);">
+                                    <i data-lucide="receipt" class="w-6 h-6" style="color: var(--coral-primary);"></i>
+                                </div>
+                                <span class="text-xs font-semibold" style="color: var(--text-secondary);">주문내역</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recent Activity -->
+                    <div class="card animate-fade-in" style="animation-delay: 0.5s;">
+                        <h3 class="text-lg font-bold mb-4" style="color: var(--text-primary);">최근 활동</h3>
+                        <div class="space-y-0">
+                            <div class="activity-item">
+                                <div class="activity-icon" style="background: rgba(107, 203, 119, 0.1);">
+                                    <i data-lucide="plus-circle" class="w-5 h-5" style="color: #6BCB77;"></i>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-semibold" style="color: var(--text-primary);">포인트 적립 +1,500P</p>
+                                    <p class="text-xs" style="color: var(--text-muted);">상품 리뷰 작성 · 2시간 전</p>
+                                </div>
+                            </div>
+                            <div class="activity-item">
+                                <div class="activity-icon" style="background: rgba(255, 107, 157, 0.1);">
+                                    <i data-lucide="ticket" class="w-5 h-5" style="color: var(--rose-primary);"></i>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-semibold" style="color: var(--text-primary);">쿠폰 발급</p>
+                                    <p class="text-xs" style="color: var(--text-muted);">신규 회원 10% 할인 · 어제</p>
+                                </div>
+                            </div>
+                            <div class="activity-item">
+                                <div class="activity-icon" style="background: rgba(162, 155, 254, 0.1);">
+                                    <i data-lucide="star" class="w-5 h-5" style="color: var(--purple-accent);"></i>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-semibold" style="color: var(--text-primary);">등급 업그레이드</p>
+                                    <p class="text-xs" style="color: var(--text-muted);">SILVER &rarr; GOLD · 3일 전</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer style="background: var(--bg-secondary); border-top: 1px solid var(--border-color);">
+        <div class="max-w-7xl mx-auto px-6 py-8">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background: linear-gradient(135deg, var(--rose-primary) 0%, var(--coral-primary) 100%);">
+                        <i data-lucide="box" class="w-4 h-4 text-white"></i>
+                    </div>
+                    <span class="font-bold" style="color: var(--text-secondary);">BrickGround</span>
+                </div>
+                <p style="color: var(--text-muted); font-size: 14px;">&copy; 2025 BrickGround. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+    </script>
+    <script src="common/loader.js"></script>
+</body>
+</html>

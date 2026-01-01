@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1:1 문의 - BrickGround</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="common/components.css">
+    <link rel="stylesheet" href="common/responsive.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #F8FAFC;
+            --bg-secondary: #FFFFFF;
+            --text-primary: #1E293B;
+            --text-secondary: #64748B;
+            --text-muted: #94A3B8;
+            --border-color: #E2E8F0;
+            --pixar-blue: #0066FF;
+            --toy-cyan: #00CEC9;
+            --toy-cyan-light: #00D4FF;
+            --toy-yellow: #FFD93D;
+            --toy-success: #6BCB77;
+            --toy-error: #FF6B6B;
+            --toy-orange: #FF6B35;
+            --radius-lg: 20px;
+            --radius-md: 12px;
+            --shadow: 0 4px 20px rgba(0, 206, 201, 0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Nunito', 'Nanum Square Round', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            background: var(--bg-secondary);
+            padding: 16px 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: var(--shadow);
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 32px;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--pixar-blue);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .logo i {
+            width: 32px;
+            height: 32px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 24px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-weight: 600;
+            padding: 8px 16px;
+            border-radius: var(--radius-md);
+        }
+
+        .nav-links a.active {
+            color: var(--toy-cyan);
+            background: rgba(0, 206, 201, 0.1);
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .header-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: var(--bg-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .header-icon i {
+            width: 22px;
+            height: 22px;
+            color: var(--text-primary);
+        }
+
+        /* Page Header */
+        .page-header {
+            background: linear-gradient(135deg, var(--toy-cyan) 0%, var(--toy-cyan-light) 100%);
+            padding: 48px 40px;
+            color: white;
+        }
+
+        .page-header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .page-title-section {}
+
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            margin-bottom: 16px;
+            opacity: 0.8;
+        }
+
+        .breadcrumb a {
+            color: white;
+            text-decoration: none;
+        }
+
+        .breadcrumb i {
+            width: 14px;
+            height: 14px;
+        }
+
+        .page-header h1 {
+            font-size: 32px;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .page-header h1 i {
+            width: 36px;
+            height: 36px;
+        }
+
+        .new-inquiry-btn {
+            padding: 16px 32px;
+            background: white;
+            border: none;
+            border-radius: var(--radius-lg);
+            color: var(--toy-cyan);
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .new-inquiry-btn i {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* Main Content */
+        .main-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px;
+        }
+
+        /* Stats Cards */
+        .stats-cards {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .stat-card {
+            background: var(--bg-secondary);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            text-align: center;
+            box-shadow: var(--shadow);
+        }
+
+        .stat-value {
+            font-size: 28px;
+            font-weight: 800;
+            margin-bottom: 4px;
+        }
+
+        .stat-value.teal {
+            color: var(--toy-cyan);
+        }
+
+        .stat-value.orange {
+            color: var(--toy-orange);
+        }
+
+        .stat-value.success {
+            color: var(--toy-success);
+        }
+
+        .stat-value.gray {
+            color: var(--text-secondary);
+        }
+
+        .stat-label {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        /* Filter Section */
+        .filter-section {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
+        }
+
+        .filter-tabs {
+            display: flex;
+            gap: 8px;
+        }
+
+        .filter-tab {
+            padding: 10px 20px;
+            background: var(--bg-secondary);
+            border: 2px solid var(--border-color);
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .filter-tab.active {
+            border-color: var(--toy-cyan);
+            color: var(--toy-cyan);
+        }
+
+        .filter-tab i {
+            width: 16px;
+            height: 16px;
+        }
+
+        .filter-count {
+            background: var(--bg-primary);
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 12px;
+        }
+
+        .filter-tab.active .filter-count {
+            background: var(--toy-cyan);
+            color: white;
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 18px;
+            background: var(--bg-secondary);
+            border: 2px solid var(--border-color);
+            border-radius: 24px;
+            width: 280px;
+        }
+
+        .search-box i {
+            width: 18px;
+            height: 18px;
+            color: var(--text-secondary);
+        }
+
+        .search-box input {
+            border: none;
+            outline: none;
+            font-size: 14px;
+            flex: 1;
+        }
+
+        /* Inquiry List */
+        .inquiry-list {
+            background: var(--bg-secondary);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+
+        .inquiry-item {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 24px;
+            border-bottom: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        .inquiry-item:last-child {
+            border-bottom: none;
+        }
+
+        .inquiry-item:hover {
+            background: var(--bg-primary);
+        }
+
+        .inquiry-status {
+            width: 80px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .status-badge i {
+            width: 14px;
+            height: 14px;
+        }
+
+        .status-badge.waiting {
+            background: rgba(255, 107, 53, 0.15);
+            color: var(--toy-orange);
+        }
+
+        .status-badge.answered {
+            background: rgba(107, 203, 119, 0.15);
+            color: var(--toy-success);
+        }
+
+        .status-badge.closed {
+            background: var(--bg-primary);
+            color: var(--text-secondary);
+        }
+
+        .inquiry-content {
+            flex: 1;
+        }
+
+        .inquiry-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+
+        .inquiry-category {
+            padding: 4px 10px;
+            background: var(--bg-primary);
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        .inquiry-title {
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        .inquiry-preview {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.5;
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .inquiry-meta {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 8px;
+            flex-shrink: 0;
+            min-width: 120px;
+        }
+
+        .inquiry-date {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .inquiry-number {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .inquiry-arrow {
+            flex-shrink: 0;
+            color: var(--text-secondary);
+        }
+
+        .inquiry-arrow i {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* Load More */
+        .load-more {
+            display: flex;
+            justify-content: center;
+            margin-top: 32px;
+        }
+
+        .load-more-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 16px 48px;
+            background: var(--bg-secondary);
+            border: 2px solid var(--border-color);
+            border-radius: 20px;
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .load-more-btn:hover {
+            border-color: var(--toy-cyan);
+            background: var(--toy-cyan);
+            color: white;
+        }
+
+        .load-more-btn i {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* Info Box */
+        .info-box {
+            background: rgba(0, 206, 201, 0.1);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            margin-top: 32px;
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+        }
+
+        .info-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--toy-cyan);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .info-icon i {
+            width: 24px;
+            height: 24px;
+            color: white;
+        }
+
+        .info-content h4 {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .info-content p {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .info-content ul {
+            margin-top: 12px;
+            padding-left: 20px;
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.8;
+        }
+
+        /* ========== Responsive Design ========== */
+        /* Tablet (1024px) */
+        @media (max-width: 1024px) {
+            .header { padding: 12px 24px; }
+            .header-left { gap: 16px; }
+            .nav-links { gap: 16px; }
+            .nav-links a { padding: 6px 12px; font-size: 14px; }
+
+            .page-header { padding: 32px 24px; }
+            .page-header h1 { font-size: 28px; }
+            .page-header h1 i { width: 28px; height: 28px; }
+
+            .main-content { padding: 24px; }
+
+            .stats-cards {
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 12px;
+            }
+
+            .filter-section { flex-wrap: wrap; gap: 16px; }
+            .filter-tabs {
+                overflow-x: auto;
+                flex-wrap: nowrap;
+                padding-bottom: 8px;
+                -webkit-overflow-scrolling: touch;
+            }
+            .filter-tab { flex-shrink: 0; }
+            .search-box { width: 240px; }
+        }
+
+        /* Mobile (768px) */
+        @media (max-width: 768px) {
+            .header { padding: 12px 16px; }
+            .logo { font-size: 20px; }
+            .logo i { width: 24px; height: 24px; }
+            .nav-links { display: none; }
+            .header-icon { width: 36px; height: 36px; }
+            .header-icon i { width: 18px; height: 18px; }
+
+            .page-header { padding: 24px 16px; }
+            .page-header-content { flex-direction: column; gap: 16px; align-items: flex-start; }
+            .page-header h1 { font-size: 24px; }
+            .breadcrumb { font-size: 12px; margin-bottom: 12px; }
+            .new-inquiry-btn {
+                padding: 12px 24px;
+                font-size: 14px;
+                width: 100%;
+                justify-content: center;
+            }
+
+            .main-content { padding: 16px; }
+
+            .stats-cards { gap: 10px; }
+            .stat-card { padding: 16px; }
+            .stat-value { font-size: 24px; }
+            .stat-label { font-size: 12px; }
+
+            .filter-section { flex-direction: column; align-items: stretch; }
+            .filter-tabs { width: 100%; }
+            .filter-tab { padding: 8px 14px; font-size: 12px; }
+            .search-box { width: 100%; }
+
+            .inquiry-item { flex-wrap: wrap; gap: 12px; padding: 16px; }
+            .inquiry-status { width: auto; text-align: left; }
+            .status-badge { padding: 4px 10px; font-size: 11px; }
+            .inquiry-content { width: 100%; order: 1; }
+            .inquiry-title { font-size: 14px; }
+            .inquiry-preview { font-size: 13px; }
+            .inquiry-meta { flex-direction: row; align-items: center; justify-content: flex-start; gap: 12px; min-width: auto; order: 2; }
+            .inquiry-arrow { display: none; }
+
+            .load-more-btn { padding: 12px 32px; font-size: 14px; }
+
+            .info-box { padding: 16px; flex-direction: column; }
+            .info-icon { width: 40px; height: 40px; }
+            .info-icon i { width: 20px; height: 20px; }
+            .info-content h4 { font-size: 15px; }
+            .info-content p { font-size: 13px; }
+            .info-content ul { font-size: 13px; }
+        }
+
+        /* Small Mobile (480px) */
+        @media (max-width: 480px) {
+            .header { padding: 10px 12px; }
+            .logo { font-size: 18px; }
+            .header-right { gap: 8px; }
+            .header-icon { width: 32px; height: 32px; }
+
+            .page-header { padding: 20px 12px; }
+            .page-header h1 { font-size: 20px; }
+
+            .main-content { padding: 12px; }
+
+            .stats-cards {
+                grid-template-columns: 1fr !important;
+            }
+
+            .filter-tabs { gap: 6px; }
+            .filter-tab { padding: 6px 10px; font-size: 11px; }
+
+            .inquiry-item { padding: 12px; }
+            .inquiry-header { flex-direction: column; align-items: flex-start; gap: 6px; }
+            .inquiry-category { margin-bottom: 4px; }
+            .inquiry-meta { flex-direction: column; align-items: flex-start; gap: 4px; }
+
+            .load-more-btn { width: 100%; justify-content: center; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <!-- Header -->
+    <div id="header"></div>
+
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="page-header-content">
+            <div class="page-title-section">
+                <div class="breadcrumb">
+                    <a href="00_main_home.html">홈</a>
+                    <i data-lucide="chevron-right"></i>
+                    <a href="29_help_center.html">고객센터</a>
+                    <i data-lucide="chevron-right"></i>
+                    <span>1:1 문의</span>
+                </div>
+                <h1><i data-lucide="message-circle"></i>1:1 문의</h1>
+            </div>
+            <a href="32_qna_write.html" class="new-inquiry-btn">
+                <i data-lucide="plus"></i>
+                새 문의 작성
+            </a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Stats Cards -->
+        <div class="stats-cards">
+            <div class="stat-card">
+                <div class="stat-value teal">12</div>
+                <div class="stat-label">전체 문의</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value orange">2</div>
+                <div class="stat-label">답변 대기</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value success">8</div>
+                <div class="stat-label">답변 완료</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value gray">2</div>
+                <div class="stat-label">종료</div>
+            </div>
+        </div>
+
+        <!-- Filter Section -->
+        <div class="filter-section">
+            <div class="filter-tabs">
+                <button class="filter-tab active">
+                    <i data-lucide="list"></i>
+                    전체
+                    <span class="filter-count">12</span>
+                </button>
+                <button class="filter-tab">
+                    <i data-lucide="clock"></i>
+                    답변 대기
+                    <span class="filter-count">2</span>
+                </button>
+                <button class="filter-tab">
+                    <i data-lucide="check-circle"></i>
+                    답변 완료
+                    <span class="filter-count">8</span>
+                </button>
+                <button class="filter-tab">
+                    <i data-lucide="archive"></i>
+                    종료
+                    <span class="filter-count">2</span>
+                </button>
+            </div>
+            <div class="search-box">
+                <i data-lucide="search"></i>
+                <input type="text" placeholder="문의 내용 검색...">
+            </div>
+        </div>
+
+        <!-- Inquiry List -->
+        <div class="inquiry-list">
+            <div class="inquiry-item">
+                <div class="inquiry-status">
+                    <span class="status-badge waiting"><i data-lucide="clock"></i>대기중</span>
+                </div>
+                <div class="inquiry-content">
+                    <div class="inquiry-header">
+                        <span class="inquiry-category">배송</span>
+                        <span class="inquiry-title">배송 지연 문의드립니다</span>
+                    </div>
+                    <p class="inquiry-preview">주문한 상품이 예정일보다 늦어지고 있어서 문의드립니다. 현재 배송 상태 확인 부탁드립니다...</p>
+                </div>
+                <div class="inquiry-meta">
+                    <span class="inquiry-date">2026.01.01</span>
+                    <span class="inquiry-number">#INQ-20260101-001</span>
+                </div>
+                <div class="inquiry-arrow"><i data-lucide="chevron-right"></i></div>
+            </div>
+
+            <div class="inquiry-item">
+                <div class="inquiry-status">
+                    <span class="status-badge waiting"><i data-lucide="clock"></i>대기중</span>
+                </div>
+                <div class="inquiry-content">
+                    <div class="inquiry-header">
+                        <span class="inquiry-category">교환/반품</span>
+                        <span class="inquiry-title">교환 절차 문의</span>
+                    </div>
+                    <p class="inquiry-preview">받은 상품의 색상이 다르게 왔는데 교환 가능한지 문의드립니다...</p>
+                </div>
+                <div class="inquiry-meta">
+                    <span class="inquiry-date">2025.12.28</span>
+                    <span class="inquiry-number">#INQ-20251228-003</span>
+                </div>
+                <div class="inquiry-arrow"><i data-lucide="chevron-right"></i></div>
+            </div>
+
+            <div class="inquiry-item">
+                <div class="inquiry-status">
+                    <span class="status-badge answered"><i data-lucide="check"></i>답변완료</span>
+                </div>
+                <div class="inquiry-content">
+                    <div class="inquiry-header">
+                        <span class="inquiry-category">주문/결제</span>
+                        <span class="inquiry-title">결제 취소 요청</span>
+                    </div>
+                    <p class="inquiry-preview">잘못 결제한 주문 취소 부탁드립니다. 주문번호 ORD-20251225-001234입니다...</p>
+                </div>
+                <div class="inquiry-meta">
+                    <span class="inquiry-date">2025.12.25</span>
+                    <span class="inquiry-number">#INQ-20251225-002</span>
+                </div>
+                <div class="inquiry-arrow"><i data-lucide="chevron-right"></i></div>
+            </div>
+
+            <div class="inquiry-item">
+                <div class="inquiry-status">
+                    <span class="status-badge answered"><i data-lucide="check"></i>답변완료</span>
+                </div>
+                <div class="inquiry-content">
+                    <div class="inquiry-header">
+                        <span class="inquiry-category">BrickArt</span>
+                        <span class="inquiry-title">BrickArt 접속 오류</span>
+                    </div>
+                    <p class="inquiry-preview">BrickArt 페이지가 로딩되지 않습니다. 확인 부탁드립니다...</p>
+                </div>
+                <div class="inquiry-meta">
+                    <span class="inquiry-date">2025.12.20</span>
+                    <span class="inquiry-number">#INQ-20251220-001</span>
+                </div>
+                <div class="inquiry-arrow"><i data-lucide="chevron-right"></i></div>
+            </div>
+
+            <div class="inquiry-item">
+                <div class="inquiry-status">
+                    <span class="status-badge answered"><i data-lucide="check"></i>답변완료</span>
+                </div>
+                <div class="inquiry-content">
+                    <div class="inquiry-header">
+                        <span class="inquiry-category">회원/계정</span>
+                        <span class="inquiry-title">포인트 적립 문의</span>
+                    </div>
+                    <p class="inquiry-preview">지난번 주문한 상품의 포인트가 적립되지 않았습니다. 확인 부탁드립니다...</p>
+                </div>
+                <div class="inquiry-meta">
+                    <span class="inquiry-date">2025.12.15</span>
+                    <span class="inquiry-number">#INQ-20251215-004</span>
+                </div>
+                <div class="inquiry-arrow"><i data-lucide="chevron-right"></i></div>
+            </div>
+
+            <div class="inquiry-item">
+                <div class="inquiry-status">
+                    <span class="status-badge closed"><i data-lucide="archive"></i>종료</span>
+                </div>
+                <div class="inquiry-content">
+                    <div class="inquiry-header">
+                        <span class="inquiry-category">상품</span>
+                        <span class="inquiry-title">상품 재입고 문의</span>
+                    </div>
+                    <p class="inquiry-preview">레고 테크닉 람보르기니 재입고 일정이 궁금합니다...</p>
+                </div>
+                <div class="inquiry-meta">
+                    <span class="inquiry-date">2025.12.10</span>
+                    <span class="inquiry-number">#INQ-20251210-002</span>
+                </div>
+                <div class="inquiry-arrow"><i data-lucide="chevron-right"></i></div>
+            </div>
+        </div>
+
+                <!-- Load More -->
+        <div class="load-more">
+            <button class="load-more-btn">
+                <i data-lucide="plus"></i>
+                더 보기
+            </button>
+        </div>
+
+        <!-- Info Box -->
+        <div class="info-box">
+            <div class="info-icon"><i data-lucide="info"></i></div>
+            <div class="info-content">
+                <h4>1:1 문의 안내</h4>
+                <p>문의하신 내용은 영업일 기준 1-2일 내에 답변드립니다.</p>
+                <ul>
+                    <li>평일: 오전 9시 ~ 오후 6시 (점심시간 12시 ~ 1시 제외)</li>
+                    <li>주말 및 공휴일은 휴무입니다</li>
+                    <li>긴급 문의: 고객센터 1588-1234</li>
+                </ul>
+            </div>
+        </div>
+    </main>
+    <!-- Footer -->
+    <div id="footer"></div>
+
+
+
+    <script>lucide.createIcons();</script>
+    <script src="common/loader.js"></script>
+</body>
+</html>

@@ -1,0 +1,1266 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>매뉴얼 목록 - BrickGround</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="common/components.css">
+    <link rel="stylesheet" href="common/responsive.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #F8FAFC;
+            --bg-secondary: #FFFFFF;
+            --text-primary: #1E293B;
+            --text-secondary: #64748B;
+            --text-muted: #94A3B8;
+            --border-color: #E2E8F0;
+            --pixar-blue: #0066FF;
+            --toy-purple: #9B59B6;
+            --toy-yellow: #FFD93D;
+            --toy-success: #6BCB77;
+            --toy-error: #FF6B6B;
+            --toy-indigo: #5C6BC0;
+            --radius-lg: 20px;
+            --radius-md: 12px;
+            --shadow: 0 4px 20px rgba(155, 89, 182, 0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Nunito', 'Nanum Square Round', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            background: var(--bg-secondary);
+            padding: 16px 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: var(--shadow);
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 32px;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--pixar-blue);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .logo i {
+            width: 32px;
+            height: 32px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 24px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-weight: 600;
+            padding: 8px 16px;
+            border-radius: var(--radius-md);
+        }
+
+        .nav-links a.active {
+            color: var(--toy-purple);
+            background: rgba(155, 89, 182, 0.1);
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 20px;
+            background: var(--bg-primary);
+            border: 2px solid var(--border-color);
+            border-radius: 24px;
+            width: 300px;
+        }
+
+        .search-box i {
+            width: 18px;
+            height: 18px;
+            color: var(--text-secondary);
+        }
+
+        .search-box input {
+            border: none;
+            outline: none;
+            font-size: 14px;
+            background: transparent;
+            flex: 1;
+        }
+
+        .header-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: var(--bg-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .header-icon i {
+            width: 22px;
+            height: 22px;
+            color: var(--text-primary);
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, var(--toy-purple) 0%, var(--toy-indigo) 100%);
+            padding: 60px 40px;
+            text-align: center;
+            color: white;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 10px 20px;
+            border-radius: 24px;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .hero-badge i {
+            width: 18px;
+            height: 18px;
+        }
+
+        .hero h1 {
+            font-size: 42px;
+            font-weight: 800;
+            margin-bottom: 16px;
+        }
+
+        .hero p {
+            font-size: 18px;
+            opacity: 0.9;
+            margin-bottom: 32px;
+            max-width: 600px;
+            margin-inline: auto;
+        }
+
+        .hero-search {
+            max-width: 600px;
+            margin: 0 auto;
+            display: flex;
+            gap: 12px;
+        }
+
+        .hero-search-input {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px 24px;
+            background: white;
+            border-radius: 28px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .hero-search-input i {
+            width: 22px;
+            height: 22px;
+            color: var(--text-secondary);
+        }
+
+        .hero-search-input input {
+            border: none;
+            outline: none;
+            font-size: 16px;
+            flex: 1;
+        }
+
+        .hero-search-btn {
+            padding: 16px 32px;
+            background: var(--toy-yellow);
+            border: none;
+            border-radius: 28px;
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text-primary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .hero-search-btn i {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* Main Content */
+        .main-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px;
+        }
+
+        /* Stats Section */
+        .stats-section {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            background: var(--bg-secondary);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            text-align: center;
+            box-shadow: var(--shadow);
+        }
+
+        .stat-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, rgba(155, 89, 182, 0.2), rgba(92, 107, 192, 0.2));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+        }
+
+        .stat-icon i {
+            width: 28px;
+            height: 28px;
+            color: var(--toy-purple);
+        }
+
+        .stat-value {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--toy-purple);
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        /* Filter Section */
+        .filter-section {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 32px;
+        }
+
+        .category-tabs {
+            display: flex;
+            gap: 8px;
+        }
+
+        .category-tab {
+            padding: 12px 20px;
+            background: var(--bg-secondary);
+            border: 2px solid transparent;
+            border-radius: 24px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .category-tab i {
+            width: 16px;
+            height: 16px;
+        }
+
+        .category-tab:hover {
+            border-color: var(--toy-purple);
+        }
+
+        .category-tab.active {
+            border-color: var(--toy-purple);
+            color: var(--toy-purple);
+        }
+
+        .filter-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .filter-btn {
+            padding: 10px 20px;
+            background: var(--bg-secondary);
+            border: 2px solid var(--border-color);
+            border-radius: 24px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .filter-btn i {
+            width: 16px;
+            height: 16px;
+        }
+
+        .view-toggle {
+            display: flex;
+            background: var(--bg-secondary);
+            border: 2px solid var(--border-color);
+            border-radius: 24px;
+            padding: 4px;
+        }
+
+        .view-toggle button {
+            width: 36px;
+            height: 36px;
+            border: none;
+            background: transparent;
+            border-radius: 18px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .view-toggle button.active {
+            background: var(--toy-purple);
+        }
+
+        .view-toggle button.active i {
+            color: white;
+        }
+
+        .view-toggle button i {
+            width: 18px;
+            height: 18px;
+            color: var(--text-secondary);
+        }
+
+        /* Manual Grid */
+        .manual-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+        }
+
+        .manual-card {
+            background: var(--bg-secondary);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .manual-card:hover {
+            transform: translateY(-6px);
+        }
+
+        .manual-thumbnail {
+            width: 100%;
+            aspect-ratio: 3/4;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .manual-preview {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #f5f5f5 0%, #e0e0e0 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .manual-preview i {
+            width: 48px;
+            height: 48px;
+            color: var(--toy-purple);
+            margin-bottom: 12px;
+        }
+
+        .manual-preview .page-preview {
+            width: 80%;
+            height: 60%;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            padding: 12px;
+        }
+
+        .page-preview .line {
+            height: 8px;
+            background: var(--border-color);
+            border-radius: 4px;
+            margin-bottom: 8px;
+        }
+
+        .page-preview .line.short {
+            width: 60%;
+        }
+
+        .page-preview .line.medium {
+            width: 80%;
+        }
+
+        .manual-badge {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            background: var(--toy-purple);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .manual-badge i {
+            width: 12px;
+            height: 12px;
+        }
+
+        .manual-badge.new {
+            background: var(--toy-success);
+        }
+
+        .manual-badge.popular {
+            background: var(--toy-yellow);
+            color: var(--text-primary);
+        }
+
+        .manual-format {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 6px 10px;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .manual-body {
+            padding: 20px;
+        }
+
+        .manual-product {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
+        .product-thumb {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .product-thumb i {
+            width: 16px;
+            height: 16px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .product-name {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .manual-title {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            line-height: 1.4;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .manual-meta {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .manual-meta span {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .manual-meta span i {
+            width: 14px;
+            height: 14px;
+        }
+
+        .manual-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .manual-action-btn {
+            flex: 1;
+            padding: 10px;
+            border: 2px solid var(--border-color);
+            background: white;
+            border-radius: 10px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+        }
+
+        .manual-action-btn i {
+            width: 14px;
+            height: 14px;
+        }
+
+        .manual-action-btn.primary {
+            background: var(--toy-purple);
+            border-color: var(--toy-purple);
+            color: white;
+        }
+
+        .manual-action-btn:hover {
+            border-color: var(--toy-purple);
+        }
+
+        /* Card Link */
+        .manual-thumbnail-link {
+            display: block;
+        }
+
+        .manual-body-link {
+            display: block;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .manual-body-link:hover .manual-title {
+            color: var(--toy-purple);
+        }
+
+        /* Load More */
+        .load-more {
+            display: flex;
+            justify-content: center;
+            margin-top: 48px;
+        }
+
+        .load-more-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 16px 48px;
+            background: var(--bg-secondary);
+            border: 2px solid var(--border-color);
+            border-radius: 20px;
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .load-more-btn:hover {
+            border-color: var(--toy-purple);
+            background: var(--toy-purple);
+            color: white;
+        }
+
+        .load-more-btn i {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* Recent Section */
+        .recent-section {
+            margin-top: 60px;
+            padding-top: 40px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
+        }
+
+        .section-title {
+            font-size: 24px;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title i {
+            width: 28px;
+            height: 28px;
+            color: var(--toy-purple);
+        }
+
+        .section-link {
+            font-size: 14px;
+            color: var(--pixar-blue);
+            text-decoration: none;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .section-link i {
+            width: 16px;
+            height: 16px;
+        }
+
+        .recent-list {
+            display: flex;
+            gap: 16px;
+            overflow-x: auto;
+            padding-bottom: 8px;
+        }
+
+        .recent-item {
+            flex-shrink: 0;
+            width: 200px;
+            background: var(--bg-secondary);
+            border-radius: var(--radius-md);
+            padding: 16px;
+            box-shadow: var(--shadow);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .recent-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--toy-purple), var(--toy-indigo));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .recent-icon i {
+            width: 24px;
+            height: 24px;
+            color: white;
+        }
+
+        .recent-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .recent-title {
+            font-size: 14px;
+            font-weight: 600;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .recent-date {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        /* ========== Responsive Design ========== */
+        /* Tablet (1024px) */
+        @media (max-width: 1024px) {
+            .header { padding: 12px 24px; }
+            .header-left { gap: 16px; }
+            .nav-links { gap: 16px; }
+            .nav-links a { padding: 6px 12px; font-size: 14px; }
+            .search-box { width: 240px; }
+
+            .hero { padding: 40px 24px; }
+            .hero h1 { font-size: 32px; }
+            .hero p { font-size: 16px; }
+            .hero-search { flex-direction: column; gap: 12px; }
+            .hero-search-input { width: 100%; }
+            .hero-search-btn { width: 100%; justify-content: center; }
+
+            .main-content { padding: 24px; }
+
+            .stats-section {
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 16px;
+            }
+
+            .filter-section { flex-wrap: wrap; gap: 16px; }
+            .category-tabs {
+                overflow-x: auto;
+                flex-wrap: nowrap;
+                padding-bottom: 8px;
+                -webkit-overflow-scrolling: touch;
+            }
+            .category-tab { flex-shrink: 0; }
+
+            .manual-grid {
+                grid-template-columns: repeat(3, 1fr) !important;
+                gap: 16px;
+            }
+        }
+
+        /* Mobile (768px) */
+        @media (max-width: 768px) {
+            .header { padding: 12px 16px; }
+            .logo { font-size: 20px; }
+            .logo i { width: 24px; height: 24px; }
+            .nav-links { display: none; }
+            .search-box { width: 180px; padding: 8px 14px; }
+            .header-icon { width: 36px; height: 36px; }
+            .header-icon i { width: 18px; height: 18px; }
+
+            .hero { padding: 32px 16px; }
+            .hero-badge { padding: 8px 14px; font-size: 12px; }
+            .hero h1 { font-size: 26px; margin-bottom: 12px; }
+            .hero p { font-size: 14px; margin-bottom: 24px; }
+            .hero-search-input { padding: 12px 18px; }
+            .hero-search-btn { padding: 12px 24px; font-size: 14px; }
+
+            .main-content { padding: 16px; }
+
+            .stats-section { gap: 12px; }
+            .stat-card { padding: 16px; }
+            .stat-icon { width: 44px; height: 44px; margin-bottom: 12px; }
+            .stat-icon i { width: 22px; height: 22px; }
+            .stat-value { font-size: 22px; }
+            .stat-label { font-size: 12px; }
+
+            .filter-section { flex-direction: column; align-items: stretch; }
+            .category-tabs { width: 100%; }
+            .category-tab { padding: 10px 14px; font-size: 12px; }
+            .filter-actions { justify-content: space-between; }
+            .filter-btn { padding: 8px 14px; font-size: 12px; }
+
+            .manual-grid {
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 12px;
+            }
+
+            .manual-body { padding: 14px; }
+            .manual-product { margin-bottom: 8px; }
+            .product-thumb { width: 28px; height: 28px; }
+            .product-name { font-size: 11px; }
+            .manual-title { font-size: 14px; }
+            .manual-meta span { font-size: 11px; }
+            .manual-actions { gap: 6px; }
+            .manual-action-btn { padding: 8px; font-size: 11px; }
+
+            .load-more-btn { padding: 12px 32px; font-size: 14px; }
+
+            .recent-section { margin-top: 40px; padding-top: 24px; }
+            .section-title { font-size: 20px; }
+            .recent-item { width: 160px; padding: 12px; }
+            .recent-icon { width: 40px; height: 40px; }
+            .recent-icon i { width: 20px; height: 20px; }
+            .recent-title { font-size: 13px; }
+        }
+
+        /* Small Mobile (480px) */
+        @media (max-width: 480px) {
+            .header { padding: 10px 12px; }
+            .logo { font-size: 18px; }
+            .search-box { width: 140px; padding: 6px 12px; font-size: 12px; }
+            .header-right { gap: 8px; }
+            .header-icon { width: 32px; height: 32px; }
+
+            .hero { padding: 24px 12px; }
+            .hero h1 { font-size: 22px; }
+            .hero p { font-size: 13px; }
+
+            .main-content { padding: 12px; }
+
+            .stats-section {
+                grid-template-columns: 1fr !important;
+            }
+
+            .category-tabs { gap: 6px; }
+            .category-tab { padding: 8px 12px; font-size: 11px; }
+
+            .manual-grid {
+                grid-template-columns: 1fr !important;
+            }
+
+            .manual-card:hover { transform: none; }
+            .manual-thumbnail { aspect-ratio: 4/3; }
+            .manual-body { padding: 14px; }
+
+            .load-more-btn { width: 100%; justify-content: center; }
+
+            .recent-item { width: 140px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <!-- Header -->
+    <div id="header"></div>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-badge"><i data-lucide="book-open"></i>Product Manuals</div>
+        <h1>제품 매뉴얼 라이브러리</h1>
+        <p>레고, 피규어, 보드게임 등 다양한 제품의 매뉴얼을 찾아보세요</p>
+        <div class="hero-search">
+            <div class="hero-search-input">
+                <i data-lucide="search"></i>
+                <input type="text" placeholder="제품명 또는 모델번호로 검색...">
+            </div>
+            <button class="hero-search-btn">
+                <i data-lucide="search"></i>
+                검색
+            </button>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Stats Section -->
+        <div class="stats-section">
+            <div class="stat-card">
+                <div class="stat-icon"><i data-lucide="book-open"></i></div>
+                <div class="stat-value">2,847</div>
+                <div class="stat-label">전체 매뉴얼</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon"><i data-lucide="box"></i></div>
+                <div class="stat-value">1,234</div>
+                <div class="stat-label">레고 매뉴얼</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon"><i data-lucide="download"></i></div>
+                <div class="stat-value">156K</div>
+                <div class="stat-label">다운로드</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon"><i data-lucide="clock"></i></div>
+                <div class="stat-value">24</div>
+                <div class="stat-label">신규 (이번 주)</div>
+            </div>
+        </div>
+
+        <!-- Filter Section -->
+        <div class="filter-section">
+            <div class="category-tabs">
+                <button class="category-tab active"><i data-lucide="grid-3x3"></i>전체</button>
+                <button class="category-tab"><i data-lucide="box"></i>레고</button>
+                <button class="category-tab"><i data-lucide="gamepad-2"></i>피규어</button>
+                <button class="category-tab"><i data-lucide="puzzle"></i>보드게임</button>
+                <button class="category-tab"><i data-lucide="blocks"></i>교육완구</button>
+                <button class="category-tab"><i data-lucide="book"></i>프로그램북</button>
+            </div>
+            <div class="filter-actions">
+                <button class="filter-btn"><i data-lucide="sliders"></i>필터</button>
+                <button class="filter-btn"><i data-lucide="arrow-up-down"></i>최신순</button>
+                <div class="view-toggle">
+                    <button class="active"><i data-lucide="grid-3x3"></i></button>
+                    <button><i data-lucide="list"></i></button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Manual Grid -->
+        <div class="manual-grid">
+            <div class="manual-card">
+                <a href="28_manual_viewer.html" class="manual-thumbnail-link">
+                <div class="manual-thumbnail">
+                    <div class="manual-preview">
+                        <div class="page-preview">
+                            <div class="line short"></div>
+                            <div class="line"></div>
+                            <div class="line medium"></div>
+                            <div class="line"></div>
+                            <div class="line short"></div>
+                        </div>
+                    </div>
+                    <span class="manual-badge popular"><i data-lucide="flame"></i>인기</span>
+                    <span class="manual-format">PDF</span>
+                </div>
+                </a>
+                <div class="manual-body">
+                    <div class="manual-product">
+                        <div class="product-thumb" style="background: linear-gradient(135deg, #FF6B35, #FFD93D);">
+                            <i data-lucide="box"></i>
+                        </div>
+                        <span class="product-name">레고 테크닉</span>
+                    </div>
+                    <h3 class="manual-title">레고 테크닉 람보르기니 시안 FKP 37 조립 설명서</h3>
+                    <div class="manual-meta">
+                        <span><i data-lucide="file-text"></i>368 페이지</span>
+                        <span><i data-lucide="download"></i>12.4K</span>
+                    </div>
+                    <div class="manual-actions">
+                        <a href="28_manual_viewer.html" class="manual-action-btn primary"><i data-lucide="eye"></i>보기</a>
+                        <button class="manual-action-btn"><i data-lucide="download"></i>다운로드</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="manual-card">
+                <a href="28_manual_viewer.html" class="manual-thumbnail-link">
+                <div class="manual-thumbnail">
+                    <div class="manual-preview">
+                        <div class="page-preview">
+                            <div class="line short"></div>
+                            <div class="line"></div>
+                            <div class="line medium"></div>
+                            <div class="line"></div>
+                            <div class="line short"></div>
+                        </div>
+                    </div>
+                    <span class="manual-badge new"><i data-lucide="sparkles"></i>NEW</span>
+                    <span class="manual-format">PDF</span>
+                </div>
+                </a>
+                <div class="manual-body">
+                    <div class="manual-product">
+                        <div class="product-thumb" style="background: linear-gradient(135deg, #0066FF, #4ECDC4);">
+                            <i data-lucide="gamepad-2"></i>
+                        </div>
+                        <span class="product-name">건담 RG</span>
+                    </div>
+                    <h3 class="manual-title">건담 RG 1/144 사자비 스페셜 에디션 조립 가이드</h3>
+                    <div class="manual-meta">
+                        <span><i data-lucide="file-text"></i>48 페이지</span>
+                        <span><i data-lucide="download"></i>3.2K</span>
+                    </div>
+                    <div class="manual-actions">
+                        <a href="28_manual_viewer.html" class="manual-action-btn primary"><i data-lucide="eye"></i>보기</a>
+                        <button class="manual-action-btn"><i data-lucide="download"></i>다운로드</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="manual-card">
+                <a href="28_manual_viewer.html" class="manual-thumbnail-link">
+                <div class="manual-thumbnail">
+                    <div class="manual-preview">
+                        <div class="page-preview">
+                            <div class="line short"></div>
+                            <div class="line"></div>
+                            <div class="line medium"></div>
+                            <div class="line"></div>
+                            <div class="line short"></div>
+                        </div>
+                    </div>
+                    <span class="manual-format">PDF</span>
+                </div>
+                </a>
+                <div class="manual-body">
+                    <div class="manual-product">
+                        <div class="product-thumb" style="background: linear-gradient(135deg, #6BCB77, #9B59B6);">
+                            <i data-lucide="puzzle"></i>
+                        </div>
+                        <span class="product-name">보드게임</span>
+                    </div>
+                    <h3 class="manual-title">카탄 기본판 + 확장판 게임 규칙서</h3>
+                    <div class="manual-meta">
+                        <span><i data-lucide="file-text"></i>24 페이지</span>
+                        <span><i data-lucide="download"></i>8.7K</span>
+                    </div>
+                    <div class="manual-actions">
+                        <a href="28_manual_viewer.html" class="manual-action-btn primary"><i data-lucide="eye"></i>보기</a>
+                        <button class="manual-action-btn"><i data-lucide="download"></i>다운로드</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="manual-card">
+                <a href="28_manual_viewer.html" class="manual-thumbnail-link">
+                <div class="manual-thumbnail">
+                    <div class="manual-preview">
+                        <div class="page-preview">
+                            <div class="line short"></div>
+                            <div class="line"></div>
+                            <div class="line medium"></div>
+                            <div class="line"></div>
+                            <div class="line short"></div>
+                        </div>
+                    </div>
+                    <span class="manual-badge"><i data-lucide="book"></i>프로그램북</span>
+                    <span class="manual-format">PDF</span>
+                </div>
+                </a>
+                <div class="manual-body">
+                    <div class="manual-product">
+                        <div class="product-thumb" style="background: linear-gradient(135deg, #9B59B6, #5C6BC0);">
+                            <i data-lucide="book-open"></i>
+                        </div>
+                        <span class="product-name">BrickGround</span>
+                    </div>
+                    <h3 class="manual-title">BrickGround BrickArt 이용 가이드</h3>
+                    <div class="manual-meta">
+                        <span><i data-lucide="file-text"></i>32 페이지</span>
+                        <span><i data-lucide="download"></i>5.1K</span>
+                    </div>
+                    <div class="manual-actions">
+                        <a href="28_manual_viewer.html" class="manual-action-btn primary"><i data-lucide="eye"></i>보기</a>
+                        <button class="manual-action-btn"><i data-lucide="download"></i>다운로드</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="manual-card">
+                <a href="28_manual_viewer.html" class="manual-thumbnail-link">
+                <div class="manual-thumbnail">
+                    <div class="manual-preview">
+                        <div class="page-preview">
+                            <div class="line short"></div>
+                            <div class="line"></div>
+                            <div class="line medium"></div>
+                            <div class="line"></div>
+                            <div class="line short"></div>
+                        </div>
+                    </div>
+                    <span class="manual-format">PDF</span>
+                </div>
+                </a>
+                <div class="manual-body">
+                    <div class="manual-product">
+                        <div class="product-thumb" style="background: linear-gradient(135deg, #9B59B6, #FF6B6B);">
+                            <i data-lucide="castle"></i>
+                        </div>
+                        <span class="product-name">레고 디즈니</span>
+                    </div>
+                    <h3 class="manual-title">레고 디즈니 캐슬 71040 조립 설명서</h3>
+                    <div class="manual-meta">
+                        <span><i data-lucide="file-text"></i>480 페이지</span>
+                        <span><i data-lucide="download"></i>9.3K</span>
+                    </div>
+                    <div class="manual-actions">
+                        <a href="28_manual_viewer.html" class="manual-action-btn primary"><i data-lucide="eye"></i>보기</a>
+                        <button class="manual-action-btn"><i data-lucide="download"></i>다운로드</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="manual-card">
+                <a href="28_manual_viewer.html" class="manual-thumbnail-link">
+                <div class="manual-thumbnail">
+                    <div class="manual-preview">
+                        <div class="page-preview">
+                            <div class="line short"></div>
+                            <div class="line"></div>
+                            <div class="line medium"></div>
+                            <div class="line"></div>
+                            <div class="line short"></div>
+                        </div>
+                    </div>
+                    <span class="manual-format">PDF</span>
+                </div>
+                </a>
+                <div class="manual-body">
+                    <div class="manual-product">
+                        <div class="product-thumb" style="background: linear-gradient(135deg, #FF6B6B, #FF6B35);">
+                            <i data-lucide="rocket"></i>
+                        </div>
+                        <span class="product-name">레고 아이디어스</span>
+                    </div>
+                    <h3 class="manual-title">레고 아이디어스 NASA 스페이스 셔틀 조립 설명서</h3>
+                    <div class="manual-meta">
+                        <span><i data-lucide="file-text"></i>212 페이지</span>
+                        <span><i data-lucide="download"></i>6.8K</span>
+                    </div>
+                    <div class="manual-actions">
+                        <a href="28_manual_viewer.html" class="manual-action-btn primary"><i data-lucide="eye"></i>보기</a>
+                        <button class="manual-action-btn"><i data-lucide="download"></i>다운로드</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="manual-card">
+                <a href="28_manual_viewer.html" class="manual-thumbnail-link">
+                <div class="manual-thumbnail">
+                    <div class="manual-preview">
+                        <div class="page-preview">
+                            <div class="line short"></div>
+                            <div class="line"></div>
+                            <div class="line medium"></div>
+                            <div class="line"></div>
+                            <div class="line short"></div>
+                        </div>
+                    </div>
+                    <span class="manual-format">PDF</span>
+                </div>
+                </a>
+                <div class="manual-body">
+                    <div class="manual-product">
+                        <div class="product-thumb" style="background: linear-gradient(135deg, #FF6B9D, #FFD93D);">
+                            <i data-lucide="blocks"></i>
+                        </div>
+                        <span class="product-name">교육완구</span>
+                    </div>
+                    <h3 class="manual-title">스마트 코딩 로봇 큐브로이드 사용 설명서</h3>
+                    <div class="manual-meta">
+                        <span><i data-lucide="file-text"></i>56 페이지</span>
+                        <span><i data-lucide="download"></i>2.4K</span>
+                    </div>
+                    <div class="manual-actions">
+                        <a href="28_manual_viewer.html" class="manual-action-btn primary"><i data-lucide="eye"></i>보기</a>
+                        <button class="manual-action-btn"><i data-lucide="download"></i>다운로드</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="manual-card">
+                <a href="28_manual_viewer.html" class="manual-thumbnail-link">
+                <div class="manual-thumbnail">
+                    <div class="manual-preview">
+                        <div class="page-preview">
+                            <div class="line short"></div>
+                            <div class="line"></div>
+                            <div class="line medium"></div>
+                            <div class="line"></div>
+                            <div class="line short"></div>
+                        </div>
+                    </div>
+                    <span class="manual-format">PDF</span>
+                </div>
+                </a>
+                <div class="manual-body">
+                    <div class="manual-product">
+                        <div class="product-thumb" style="background: linear-gradient(135deg, #4ECDC4, #0066FF);">
+                            <i data-lucide="car"></i>
+                        </div>
+                        <span class="product-name">레고 시티</span>
+                    </div>
+                    <h3 class="manual-title">레고 시티 경찰서 세트 조립 설명서</h3>
+                    <div class="manual-meta">
+                        <span><i data-lucide="file-text"></i>156 페이지</span>
+                        <span><i data-lucide="download"></i>4.2K</span>
+                    </div>
+                    <div class="manual-actions">
+                        <a href="28_manual_viewer.html" class="manual-action-btn primary"><i data-lucide="eye"></i>보기</a>
+                        <button class="manual-action-btn"><i data-lucide="download"></i>다운로드</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+                <!-- Load More -->
+        <div class="load-more">
+            <button class="load-more-btn">
+                <i data-lucide="plus"></i>
+                더 보기
+            </button>
+        </div>
+
+        <!-- Recent Section -->
+        <div class="recent-section">
+            <div class="section-header">
+                <h2 class="section-title"><i data-lucide="clock"></i>최근 본 매뉴얼</h2>
+                <a href="#" class="section-link">전체보기 <i data-lucide="chevron-right"></i></a>
+            </div>
+            <div class="recent-list">
+                <div class="recent-item">
+                    <div class="recent-icon"><i data-lucide="book-open"></i></div>
+                    <div class="recent-info">
+                        <div class="recent-title">레고 테크닉 람보르기니</div>
+                        <div class="recent-date">오늘 14:30</div>
+                    </div>
+                </div>
+                <div class="recent-item">
+                    <div class="recent-icon"><i data-lucide="book-open"></i></div>
+                    <div class="recent-info">
+                        <div class="recent-title">건담 RG 사자비</div>
+                        <div class="recent-date">오늘 11:20</div>
+                    </div>
+                </div>
+                <div class="recent-item">
+                    <div class="recent-icon"><i data-lucide="book-open"></i></div>
+                    <div class="recent-info">
+                        <div class="recent-title">카탄 게임 규칙서</div>
+                        <div class="recent-date">어제</div>
+                    </div>
+                </div>
+                <div class="recent-item">
+                    <div class="recent-icon"><i data-lucide="book-open"></i></div>
+                    <div class="recent-info">
+                        <div class="recent-title">레고 디즈니 캐슬</div>
+                        <div class="recent-date">2일 전</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <!-- Footer -->
+    <div id="footer"></div>
+
+
+
+    <script>lucide.createIcons();</script>
+    <script src="common/loader.js"></script>
+</body>
+</html>

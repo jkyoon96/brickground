@@ -1,0 +1,922 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQ - BrickGround</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="common/components.css">
+    <link rel="stylesheet" href="common/responsive.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #F8FAFC;
+            --bg-secondary: #FFFFFF;
+            --text-primary: #1E293B;
+            --text-secondary: #64748B;
+            --text-muted: #94A3B8;
+            --border-color: #E2E8F0;
+            --pixar-blue: #0066FF;
+            --toy-cyan: #00CEC9;
+            --toy-cyan-light: #00D4FF;
+            --toy-yellow: #FFD93D;
+            --toy-success: #6BCB77;
+            --toy-error: #FF6B6B;
+            --radius-lg: 20px;
+            --radius-md: 12px;
+            --shadow: 0 4px 20px rgba(0, 206, 201, 0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Nunito', 'Nanum Square Round', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            background: var(--bg-secondary);
+            padding: 16px 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: var(--shadow);
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 32px;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--pixar-blue);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .logo i {
+            width: 32px;
+            height: 32px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 24px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-weight: 600;
+            padding: 8px 16px;
+            border-radius: var(--radius-md);
+        }
+
+        .nav-links a.active {
+            color: var(--toy-cyan);
+            background: rgba(0, 206, 201, 0.1);
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .header-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: var(--bg-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .header-icon i {
+            width: 22px;
+            height: 22px;
+            color: var(--text-primary);
+        }
+
+        /* Page Header */
+        .page-header {
+            background: linear-gradient(135deg, var(--toy-cyan) 0%, var(--toy-cyan-light) 100%);
+            padding: 48px 40px;
+            color: white;
+        }
+
+        .page-header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            margin-bottom: 16px;
+            opacity: 0.8;
+        }
+
+        .breadcrumb a {
+            color: white;
+            text-decoration: none;
+        }
+
+        .breadcrumb i {
+            width: 14px;
+            height: 14px;
+        }
+
+        .page-header h1 {
+            font-size: 36px;
+            font-weight: 800;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .page-header h1 i {
+            width: 40px;
+            height: 40px;
+        }
+
+        .page-header p {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        /* Main Content */
+        .main-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px;
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 32px;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .search-card {
+            background: var(--bg-secondary);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            box-shadow: var(--shadow);
+        }
+
+        .search-input {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 18px;
+            background: var(--bg-primary);
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius-md);
+        }
+
+        .search-input i {
+            width: 20px;
+            height: 20px;
+            color: var(--text-secondary);
+        }
+
+        .search-input input {
+            border: none;
+            outline: none;
+            font-size: 14px;
+            background: transparent;
+            flex: 1;
+        }
+
+        .category-card {
+            background: var(--bg-secondary);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            box-shadow: var(--shadow);
+        }
+
+        .category-title {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .category-title i {
+            width: 20px;
+            height: 20px;
+            color: var(--toy-cyan);
+        }
+
+        .category-list {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .category-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 16px;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        .category-item:hover {
+            background: var(--bg-primary);
+        }
+
+        .category-item.active {
+            background: rgba(0, 206, 201, 0.1);
+            color: var(--toy-cyan);
+        }
+
+        .category-item i {
+            width: 18px;
+            height: 18px;
+        }
+
+        .category-count {
+            background: var(--bg-primary);
+            padding: 2px 10px;
+            border-radius: 10px;
+            font-size: 12px;
+        }
+
+        .category-item.active .category-count {
+            background: var(--toy-cyan);
+            color: white;
+        }
+
+        /* FAQ Content */
+        .faq-content {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .faq-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .faq-count {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .faq-count strong {
+            color: var(--toy-cyan);
+        }
+
+        .faq-sort {
+            display: flex;
+            gap: 8px;
+        }
+
+        .sort-btn {
+            padding: 8px 16px;
+            background: var(--bg-secondary);
+            border: 2px solid var(--border-color);
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .sort-btn.active {
+            border-color: var(--toy-cyan);
+            color: var(--toy-cyan);
+        }
+
+        /* FAQ List */
+        .faq-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .faq-item {
+            background: var(--bg-secondary);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            border: 2px solid transparent;
+            transition: all 0.2s ease;
+        }
+
+        .faq-item:hover {
+            border-color: var(--toy-cyan);
+        }
+
+        .faq-item.open {
+            border-color: var(--toy-cyan);
+        }
+
+        .faq-question {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 20px 24px;
+            cursor: pointer;
+        }
+
+        .faq-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--toy-cyan), var(--toy-cyan-light));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 18px;
+            font-weight: 800;
+            flex-shrink: 0;
+        }
+
+        .faq-text-wrap {
+            flex: 1;
+        }
+
+        .faq-category-tag {
+            display: inline-flex;
+            padding: 4px 10px;
+            background: var(--bg-primary);
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 6px;
+        }
+
+        .faq-text {
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        .faq-meta {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            font-size: 12px;
+            color: var(--text-secondary);
+            flex-shrink: 0;
+        }
+
+        .faq-meta span {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .faq-meta i {
+            width: 14px;
+            height: 14px;
+        }
+
+        .faq-toggle {
+            width: 36px;
+            height: 36px;
+            background: var(--bg-primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: all 0.2s ease;
+        }
+
+        .faq-item.open .faq-toggle {
+            background: var(--toy-cyan);
+        }
+
+        .faq-toggle i {
+            width: 20px;
+            height: 20px;
+            color: var(--text-secondary);
+            transition: all 0.2s ease;
+        }
+
+        .faq-item.open .faq-toggle i {
+            color: white;
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            padding: 0 24px 24px 80px;
+            display: none;
+        }
+
+        .faq-item.open .faq-answer {
+            display: block;
+        }
+
+        .answer-content {
+            background: var(--bg-primary);
+            border-radius: var(--radius-md);
+            padding: 20px;
+        }
+
+        .answer-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .answer-icon {
+            width: 28px;
+            height: 28px;
+            background: var(--toy-cyan);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 14px;
+            font-weight: 800;
+        }
+
+        .answer-label {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--toy-cyan);
+        }
+
+        .answer-text {
+            font-size: 15px;
+            line-height: 1.8;
+            color: var(--text-primary);
+        }
+
+        .answer-helpful {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-top: 20px;
+            padding-top: 16px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .helpful-label {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .helpful-btn {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 16px;
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            font-size: 13px;
+            cursor: pointer;
+        }
+
+        .helpful-btn:hover {
+            border-color: var(--toy-cyan);
+            color: var(--toy-cyan);
+        }
+
+        .helpful-btn i {
+            width: 16px;
+            height: 16px;
+        }
+
+        /* Pagination */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            margin-top: 24px;
+        }
+
+        .pagination button {
+            width: 40px;
+            height: 40px;
+            border: 2px solid var(--border-color);
+            background: var(--bg-secondary);
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .pagination button:hover {
+            border-color: var(--toy-cyan);
+        }
+
+        .pagination button.active {
+            background: var(--toy-cyan);
+            border-color: var(--toy-cyan);
+            color: white;
+        }
+
+        .pagination button i {
+            width: 16px;
+            height: 16px;
+        }
+
+        /* Contact Box */
+        .contact-box {
+            background: var(--bg-secondary);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            box-shadow: var(--shadow);
+            text-align: center;
+        }
+
+        .contact-box-title {
+            font-size: 15px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .contact-box-desc {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+        }
+
+        .contact-box-btn {
+            width: 100%;
+            padding: 14px;
+            background: var(--toy-cyan);
+            border: none;
+            border-radius: var(--radius-md);
+            color: white;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .contact-box-btn i {
+            width: 18px;
+            height: 18px;
+        }
+
+        /* ==================== Responsive Design ==================== */
+        /* Tablet (1024px) */
+        @media (max-width: 1024px) {
+            .header { padding: 12px 24px; }
+            .nav-links { gap: 16px; }
+            .nav-links a { padding: 6px 12px; font-size: 14px; }
+            .page-header { padding: 32px 24px; }
+            .page-header h1 { font-size: 28px; }
+            .main-content { padding: 32px 24px; }
+            .content-layout { gap: 24px; }
+            .faq-sidebar { width: 260px; }
+        }
+
+        /* Mobile (768px) */
+        @media (max-width: 768px) {
+            .header { padding: 10px 16px; flex-wrap: wrap; gap: 10px; }
+            .header-left { flex: 1; min-width: 100%; justify-content: space-between; }
+            .nav-links { display: none; }
+            .header-right { flex: 1; min-width: 100%; justify-content: flex-end; }
+            .logo { font-size: 20px; }
+            .logo i { width: 28px; height: 28px; }
+            .header-icon { width: 40px; height: 40px; }
+            .page-header { padding: 24px 16px; }
+            .page-header h1 { font-size: 24px; }
+            .breadcrumb { font-size: 12px; }
+            .main-content { padding: 24px 16px; }
+            .content-layout { flex-direction: column; }
+            .faq-sidebar { width: 100%; }
+            .category-list { display: flex; flex-wrap: wrap; gap: 8px; padding: 12px; }
+            .category-item { padding: 8px 14px; font-size: 13px; }
+            .faq-main { padding-left: 0; }
+            .search-box input { padding: 12px 16px; font-size: 14px; }
+            .faq-item { padding: 16px; }
+            .faq-question { font-size: 14px; padding-right: 30px; }
+            .faq-answer { padding: 14px 16px; font-size: 13px; }
+            .contact-box { padding: 20px; flex-direction: column; text-align: center; gap: 16px; }
+            .contact-box-btn { width: 100%; }
+            .footer { padding: 32px 16px; flex-direction: column; gap: 16px; text-align: center; }
+        }
+
+        /* Small Mobile (480px) */
+        @media (max-width: 480px) {
+            .header { padding: 8px 12px; }
+            .logo { font-size: 18px; }
+            .header-icon { width: 36px; height: 36px; }
+            .page-header { padding: 20px 12px; }
+            .page-header h1 { font-size: 20px; }
+            .main-content { padding: 16px 12px; }
+            .category-item { padding: 6px 12px; font-size: 12px; }
+            .search-box input { padding: 10px 14px; }
+            .faq-item { padding: 14px; }
+            .faq-question { font-size: 13px; }
+            .faq-answer { padding: 12px 14px; font-size: 12px; }
+            .contact-box { padding: 16px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <!-- Header -->
+    <div id="header"></div>
+
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="page-header-content">
+            <div class="breadcrumb">
+                <a href="00_main_home.html">홈</a>
+                <i data-lucide="chevron-right"></i>
+                <a href="29_help_center.html">고객센터</a>
+                <i data-lucide="chevron-right"></i>
+                <span>FAQ</span>
+            </div>
+            <h1><i data-lucide="help-circle"></i>자주 묻는 질문</h1>
+            <p>궁금하신 점을 빠르게 찾아보세요</p>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="search-card">
+                <div class="search-input">
+                    <i data-lucide="search"></i>
+                    <input type="text" placeholder="FAQ 검색...">
+                </div>
+            </div>
+
+            <div class="category-card">
+                <h3 class="category-title"><i data-lucide="folder"></i>카테고리</h3>
+                <div class="category-list">
+                    <div class="category-item active">
+                        <span><i data-lucide="grid-3x3"></i> 전체</span>
+                        <span class="category-count">128</span>
+                    </div>
+                    <div class="category-item">
+                        <span><i data-lucide="shopping-bag"></i> 주문/결제</span>
+                        <span class="category-count">32</span>
+                    </div>
+                    <div class="category-item">
+                        <span><i data-lucide="truck"></i> 배송</span>
+                        <span class="category-count">24</span>
+                    </div>
+                    <div class="category-item">
+                        <span><i data-lucide="refresh-ccw"></i> 교환/반품</span>
+                        <span class="category-count">28</span>
+                    </div>
+                    <div class="category-item">
+                        <span><i data-lucide="user"></i> 회원/계정</span>
+                        <span class="category-count">18</span>
+                    </div>
+                    <div class="category-item">
+                        <span><i data-lucide="building-2"></i> BrickArt</span>
+                        <span class="category-count">15</span>
+                    </div>
+                    <div class="category-item">
+                        <span><i data-lucide="palette"></i> DotArt/Creation</span>
+                        <span class="category-count">11</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="contact-box">
+                <h4 class="contact-box-title">원하는 답변을 못 찾으셨나요?</h4>
+                <p class="contact-box-desc">1:1 문의로 직접 질문해 주세요</p>
+                <button class="contact-box-btn">
+                    <i data-lucide="message-circle"></i>
+                    1:1 문의하기
+                </button>
+            </div>
+        </aside>
+
+        <!-- FAQ Content -->
+        <div class="faq-content">
+            <div class="faq-header">
+                <span class="faq-count">총 <strong>128</strong>개의 FAQ</span>
+                <div class="faq-sort">
+                    <button class="sort-btn active">최신순</button>
+                    <button class="sort-btn">인기순</button>
+                </div>
+            </div>
+
+            <div class="faq-list">
+                <div class="faq-item open">
+                    <div class="faq-question">
+                        <span class="faq-icon">Q</span>
+                        <div class="faq-text-wrap">
+                            <span class="faq-category-tag">배송</span>
+                            <div class="faq-text">배송은 얼마나 걸리나요?</div>
+                        </div>
+                        <div class="faq-meta">
+                            <span><i data-lucide="eye"></i>12,345</span>
+                        </div>
+                        <div class="faq-toggle"><i data-lucide="chevron-down"></i></div>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="answer-content">
+                            <div class="answer-header">
+                                <span class="answer-icon">A</span>
+                                <span class="answer-label">답변</span>
+                            </div>
+                            <div class="answer-text">
+                                일반 배송은 결제 완료 후 <strong>영업일 기준 2-3일</strong> 이내에 도착합니다.<br><br>
+                                - 오늘출발 상품: 오후 2시 이전 주문 시 당일 출고<br>
+                                - 일반 배송: 영업일 기준 2-3일 소요<br>
+                                - 도서산간 지역: 1-2일 추가 소요<br><br>
+                                배송 현황은 마이페이지 > 주문내역에서 실시간으로 확인하실 수 있습니다.
+                            </div>
+                            <div class="answer-helpful">
+                                <span class="helpful-label">이 답변이 도움이 되었나요?</span>
+                                <button class="helpful-btn"><i data-lucide="thumbs-up"></i>예 (234)</button>
+                                <button class="helpful-btn"><i data-lucide="thumbs-down"></i>아니오 (12)</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span class="faq-icon">Q</span>
+                        <div class="faq-text-wrap">
+                            <span class="faq-category-tag">교환/반품</span>
+                            <div class="faq-text">교환/반품은 어떻게 하나요?</div>
+                        </div>
+                        <div class="faq-meta">
+                            <span><i data-lucide="eye"></i>9,876</span>
+                        </div>
+                        <div class="faq-toggle"><i data-lucide="chevron-down"></i></div>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="answer-content">
+                            <div class="answer-header">
+                                <span class="answer-icon">A</span>
+                                <span class="answer-label">답변</span>
+                            </div>
+                            <div class="answer-text">
+                                마이페이지 > 주문내역에서 교환/반품 신청이 가능합니다.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span class="faq-icon">Q</span>
+                        <div class="faq-text-wrap">
+                            <span class="faq-category-tag">주문/결제</span>
+                            <div class="faq-text">무료배송 조건이 어떻게 되나요?</div>
+                        </div>
+                        <div class="faq-meta">
+                            <span><i data-lucide="eye"></i>8,543</span>
+                        </div>
+                        <div class="faq-toggle"><i data-lucide="chevron-down"></i></div>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="answer-content">
+                            <div class="answer-header">
+                                <span class="answer-icon">A</span>
+                                <span class="answer-label">답변</span>
+                            </div>
+                            <div class="answer-text">
+                                5만원 이상 구매 시 무료배송입니다.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span class="faq-icon">Q</span>
+                        <div class="faq-text-wrap">
+                            <span class="faq-category-tag">BrickArt</span>
+                            <div class="faq-text">BrickArt는 어떻게 이용하나요?</div>
+                        </div>
+                        <div class="faq-meta">
+                            <span><i data-lucide="eye"></i>7,234</span>
+                        </div>
+                        <div class="faq-toggle"><i data-lucide="chevron-down"></i></div>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="answer-content">
+                            <div class="answer-header">
+                                <span class="answer-icon">A</span>
+                                <span class="answer-label">답변</span>
+                            </div>
+                            <div class="answer-text">
+                                BrickArt 메뉴에서 원하는 공간을 선택하면 3D로 창작물을 감상할 수 있습니다.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span class="faq-icon">Q</span>
+                        <div class="faq-text-wrap">
+                            <span class="faq-category-tag">회원/계정</span>
+                            <div class="faq-text">비밀번호를 잊어버렸어요. 어떻게 하나요?</div>
+                        </div>
+                        <div class="faq-meta">
+                            <span><i data-lucide="eye"></i>6,892</span>
+                        </div>
+                        <div class="faq-toggle"><i data-lucide="chevron-down"></i></div>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="answer-content">
+                            <div class="answer-header">
+                                <span class="answer-icon">A</span>
+                                <span class="answer-label">답변</span>
+                            </div>
+                            <div class="answer-text">
+                                로그인 페이지에서 "비밀번호 찾기"를 클릭하여 재설정할 수 있습니다.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span class="faq-icon">Q</span>
+                        <div class="faq-text-wrap">
+                            <span class="faq-category-tag">주문/결제</span>
+                            <div class="faq-text">쿠폰은 어떻게 사용하나요?</div>
+                        </div>
+                        <div class="faq-meta">
+                            <span><i data-lucide="eye"></i>5,678</span>
+                        </div>
+                        <div class="faq-toggle"><i data-lucide="chevron-down"></i></div>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="answer-content">
+                            <div class="answer-header">
+                                <span class="answer-icon">A</span>
+                                <span class="answer-label">답변</span>
+                            </div>
+                            <div class="answer-text">
+                                결제 페이지에서 쿠폰 적용 영역에 쿠폰 코드를 입력하거나 보유 쿠폰을 선택하세요.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pagination -->
+            <div class="pagination">
+                <button><i data-lucide="chevron-left"></i></button>
+                <button class="active">1</button>
+                <button>2</button>
+                <button>3</button>
+                <button>4</button>
+                <button>5</button>
+                <button><i data-lucide="chevron-right"></i></button>
+            </div>
+        </div>
+    </main>
+    <!-- Footer -->
+    <div id="footer"></div>
+
+
+
+    <script>lucide.createIcons();</script>
+    <script src="common/loader.js"></script>
+</body>
+</html>

@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>결제 완료 - PC Wireframe</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="common/components.css">
+    <link rel="stylesheet" href="common/responsive.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #F8FAFC;
+            --bg-secondary: #FFFFFF;
+            --text-primary: #1E293B;
+            --text-secondary: #64748B;
+            --text-muted: #94A3B8;
+            --border-color: #E2E8F0;
+            --pixar-blue: #0066FF;
+            --toy-orange: #FF6B35;
+            --toy-yellow: #FFD93D;
+            --toy-green: #6BCB77;
+            --pixar-error: #FF6B6B;
+            --pixar-radius: 20px;
+            --pixar-radius-sm: 12px;
+            --pixar-shadow: 0 4px 20px rgba(107, 203, 119, 0.15);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            background: var(--bg-secondary);
+            padding: 16px 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: var(--pixar-shadow);
+        }
+
+        .header-left { display: flex; align-items: center; gap: 24px; }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--pixar-blue);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .logo i { width: 32px; height: 32px; }
+
+        .checkout-steps {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .step {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+        .step.completed { color: var(--toy-green); }
+        .step i { width: 18px; height: 18px; }
+        .step-num {
+            width: 24px; height: 24px;
+            background: var(--border-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+        }
+        .step.completed .step-num { background: var(--toy-green); color: white; }
+
+        .step-divider { width: 40px; height: 2px; background: var(--toy-green); }
+
+        /* Main Content */
+        .main-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 60px 40px;
+        }
+
+        /* Success Section */
+        .success-section {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        .success-icon {
+            width: 120px; height: 120px;
+            background: linear-gradient(135deg, var(--toy-green), #4ECDC4);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 28px;
+            animation: bounce 0.6s ease-out;
+        }
+        .success-icon i { width: 60px; height: 60px; color: white; }
+
+        @keyframes bounce {
+            0% { transform: scale(0.5); opacity: 0; }
+            60% { transform: scale(1.1); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .success-title {
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 12px;
+            color: var(--toy-green);
+        }
+
+        .success-message {
+            font-size: 16px;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+
+        .order-number {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--bg-secondary);
+            padding: 12px 24px;
+            border-radius: var(--pixar-radius);
+            font-size: 16px;
+            font-weight: 600;
+            box-shadow: var(--pixar-shadow);
+            margin-top: 20px;
+        }
+        .order-number i { width: 18px; height: 18px; color: var(--pixar-blue); }
+        .order-number span { color: var(--pixar-blue); }
+
+        /* Order Summary Card */
+        .order-card {
+            background: var(--bg-secondary);
+            border-radius: var(--pixar-radius);
+            padding: 32px;
+            box-shadow: var(--pixar-shadow);
+            margin-bottom: 24px;
+        }
+
+        .order-card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .order-card-title {
+            font-size: 18px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .order-card-title i { width: 22px; height: 22px; color: var(--toy-green); }
+
+        .order-status {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 16px;
+            background: rgba(107, 203, 119, 0.15);
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--toy-green);
+        }
+        .order-status i { width: 16px; height: 16px; }
+
+        /* Order Info Grid */
+        .order-info-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 32px;
+        }
+
+        .info-section h4 {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .info-section h4 i { width: 16px; height: 16px; }
+
+        .info-content {
+            background: var(--bg-primary);
+            border-radius: var(--pixar-radius-sm);
+            padding: 16px;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+        }
+        .info-row .label { color: var(--text-secondary); font-size: 14px; }
+        .info-row .value { font-weight: 600; font-size: 14px; }
+
+        .delivery-info { line-height: 1.8; font-size: 14px; }
+        .delivery-info strong { display: block; font-size: 15px; margin-bottom: 4px; }
+
+        /* Order Items */
+        .order-items { margin-top: 28px; padding-top: 24px; border-top: 1px solid var(--border-color); }
+
+        .items-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        .items-header h4 {
+            font-size: 16px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .items-header h4 i { width: 20px; height: 20px; color: var(--toy-orange); }
+        .items-count {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .order-item {
+            display: flex;
+            gap: 16px;
+            padding: 16px;
+            background: var(--bg-primary);
+            border-radius: var(--pixar-radius-sm);
+            margin-bottom: 12px;
+        }
+        .order-item:last-child { margin-bottom: 0; }
+
+        .order-item-image {
+            width: 70px; height: 70px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .order-item-image i { width: 28px; height: 28px; color: rgba(255,255,255,0.5); }
+
+        .order-item-details { flex: 1; }
+        .order-item-name { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+        .order-item-option { font-size: 12px; color: var(--text-secondary); }
+
+        .order-item-price { text-align: right; }
+        .order-item-price .current { font-size: 15px; font-weight: 700; }
+        .order-item-price .qty { font-size: 12px; color: var(--text-secondary); }
+
+        /* Payment Summary */
+        .payment-summary {
+            margin-top: 24px;
+            padding-top: 24px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .payment-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            font-size: 14px;
+        }
+        .payment-row .label { color: var(--text-secondary); }
+        .payment-row .value { font-weight: 600; }
+        .payment-row .value.discount { color: var(--pixar-error); }
+
+        .payment-total {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            padding: 20px 0 0;
+            margin-top: 12px;
+            border-top: 2px solid var(--border-color);
+        }
+        .payment-total .label { font-size: 16px; font-weight: 700; }
+        .payment-total .price { font-size: 28px; font-weight: 800; color: var(--toy-green); }
+        .payment-total .won { font-size: 16px; }
+
+        /* Delivery Timeline */
+        .timeline-card {
+            background: var(--bg-secondary);
+            border-radius: var(--pixar-radius);
+            padding: 28px;
+            box-shadow: var(--pixar-shadow);
+            margin-bottom: 24px;
+        }
+
+        .timeline-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 24px;
+        }
+        .timeline-header h3 { font-size: 18px; font-weight: 700; }
+        .timeline-header i { width: 22px; height: 22px; color: var(--pixar-blue); }
+
+        .timeline {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+        }
+        .timeline::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 40px;
+            right: 40px;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+        }
+        .timeline::after {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 40px;
+            width: 25%;
+            height: 4px;
+            background: var(--toy-green);
+            border-radius: 2px;
+        }
+
+        .timeline-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            z-index: 1;
+        }
+
+        .timeline-icon {
+            width: 44px; height: 44px;
+            background: var(--border-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .timeline-step.active .timeline-icon {
+            background: var(--toy-green);
+        }
+        .timeline-icon i { width: 22px; height: 22px; color: var(--text-secondary); }
+        .timeline-step.active .timeline-icon i { color: white; }
+
+        .timeline-label { font-size: 14px; font-weight: 600; text-align: center; }
+        .timeline-date { font-size: 12px; color: var(--text-secondary); }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+        }
+
+        .btn-primary {
+            padding: 16px 40px;
+            background: linear-gradient(135deg, var(--toy-orange), var(--toy-yellow));
+            border: none;
+            border-radius: var(--pixar-radius);
+            color: white;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
+        }
+        .btn-primary i { width: 20px; height: 20px; }
+
+        .btn-secondary {
+            padding: 16px 40px;
+            background: var(--bg-secondary);
+            border: 2px solid var(--border-color);
+            border-radius: var(--pixar-radius);
+            color: var(--text-primary);
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .btn-secondary i { width: 20px; height: 20px; }
+        .btn-secondary:hover { border-color: var(--pixar-blue); color: var(--pixar-blue); }
+
+        /* Additional Info */
+        .additional-info {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 40px;
+            padding-top: 32px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .info-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+        .info-item i { width: 20px; height: 20px; color: var(--toy-green); }
+
+        /* ==================== Responsive Design ==================== */
+        /* Tablet (1024px) */
+        @media (max-width: 1024px) {
+            .header { padding: 12px 24px; }
+            .checkout-steps { gap: 6px; }
+            .step { padding: 6px 12px; font-size: 13px; }
+            .step-divider { width: 30px; }
+            .main-content { padding: 48px 24px; }
+            .content-grid { grid-template-columns: 1fr 1fr; gap: 24px; }
+            .success-icon { width: 100px; height: 100px; }
+            .success-icon i { width: 50px; height: 50px; }
+            .success-title { font-size: 28px; }
+        }
+
+        /* Mobile (768px) */
+        @media (max-width: 768px) {
+            .header { padding: 10px 16px; flex-wrap: wrap; gap: 10px; }
+            .header-left { flex: 1; min-width: 100%; justify-content: space-between; }
+            .checkout-steps { overflow-x: auto; flex: 1; }
+            .logo { font-size: 20px; }
+            .logo i { width: 28px; height: 28px; }
+            .step { padding: 6px 10px; font-size: 12px; white-space: nowrap; }
+            .step span { display: none; }
+            .step-num { width: 20px; height: 20px; font-size: 11px; }
+            .step-divider { width: 20px; }
+            .main-content { padding: 32px 16px; }
+            .success-section { margin-bottom: 32px; }
+            .success-icon { width: 80px; height: 80px; margin-bottom: 20px; }
+            .success-icon i { width: 40px; height: 40px; }
+            .success-title { font-size: 24px; }
+            .success-message { font-size: 14px; }
+            .order-number { padding: 10px 20px; font-size: 14px; }
+            .content-grid { grid-template-columns: 1fr; gap: 20px; }
+            .order-card { padding: 20px; border-radius: 16px; }
+            .order-card h3 { font-size: 16px; }
+            .order-item { padding: 14px 0; }
+            .item-thumb { width: 64px; height: 64px; }
+            .action-buttons { flex-direction: column; gap: 12px; }
+            .btn-primary, .btn-secondary { width: 100%; justify-content: center; padding: 14px 24px; }
+            .info-section { flex-direction: column; gap: 16px; }
+        }
+
+        /* Small Mobile (480px) */
+        @media (max-width: 480px) {
+            .header { padding: 8px 12px; }
+            .logo { font-size: 18px; }
+            .step { padding: 4px 8px; }
+            .main-content { padding: 24px 12px; }
+            .success-icon { width: 70px; height: 70px; }
+            .success-icon i { width: 35px; height: 35px; }
+            .success-title { font-size: 20px; }
+            .success-message { font-size: 13px; }
+            .order-number { padding: 8px 16px; font-size: 13px; }
+            .order-card { padding: 16px; }
+            .order-card h3 { font-size: 15px; }
+            .item-thumb { width: 56px; height: 56px; }
+            .item-name { font-size: 13px; }
+            .item-price { font-size: 13px; }
+            .btn-primary, .btn-secondary { padding: 12px 20px; font-size: 14px; }
+            .info-item { font-size: 12px; gap: 6px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <!-- Header -->
+    <div id="header"></div>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Success Section -->
+        <div class="success-section">
+            <div class="success-icon">
+                <i data-lucide="check"></i>
+            </div>
+            <h1 class="success-title">주문이 완료되었습니다!</h1>
+            <p class="success-message">주문해주셔서 감사합니다. 주문 내역은 마이페이지에서 확인하실 수 있습니다.</p>
+            <div class="order-number">
+                <i data-lucide="hash"></i>
+                주문번호: <span>ORD-20260101-001234</span>
+            </div>
+        </div>
+
+        <!-- Order Summary Card -->
+        <div class="order-card">
+            <div class="order-card-header">
+                <h3 class="order-card-title">
+                    <i data-lucide="receipt"></i>
+                    주문 정보
+                </h3>
+                <div class="order-status">
+                    <i data-lucide="check-circle"></i>
+                    결제 완료
+                </div>
+            </div>
+
+            <div class="order-info-grid">
+                <div class="info-section">
+                    <h4><i data-lucide="map-pin"></i>배송지</h4>
+                    <div class="info-content">
+                        <div class="delivery-info">
+                            <strong>홍길동 / 010-1234-5678</strong>
+                            [12345] 서울특별시 강남구 테헤란로 123<br>
+                            브릭타워 5층 502호
+                        </div>
+                    </div>
+                </div>
+                <div class="info-section">
+                    <h4><i data-lucide="credit-card"></i>결제 정보</h4>
+                    <div class="info-content">
+                        <div class="info-row">
+                            <span class="label">결제 수단</span>
+                            <span class="value">신용카드 (삼성카드)</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="label">결제 일시</span>
+                            <span class="value">2026.01.01 14:30</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Order Items -->
+            <div class="order-items">
+                <div class="items-header">
+                    <h4><i data-lucide="package"></i>주문 상품</h4>
+                    <span class="items-count">총 3개</span>
+                </div>
+                <div class="order-item">
+                    <div class="order-item-image" style="background: linear-gradient(135deg, #FF6B35, #FFD93D);">
+                        <i data-lucide="box"></i>
+                    </div>
+                    <div class="order-item-details">
+                        <div class="order-item-name">레고 테크닉 람보르기니 시안 FKP 37</div>
+                        <div class="order-item-option">선물포장: O</div>
+                    </div>
+                    <div class="order-item-price">
+                        <div class="current">489,000</div>
+                        <div class="qty">수량: 1개</div>
+                    </div>
+                </div>
+                <div class="order-item">
+                    <div class="order-item-image" style="background: linear-gradient(135deg, #0066FF, #4ECDC4);">
+                        <i data-lucide="gamepad-2"></i>
+                    </div>
+                    <div class="order-item-details">
+                        <div class="order-item-name">건담 RG 1/144 사자비 스페셜 에디션</div>
+                        <div class="order-item-option"></div>
+                    </div>
+                    <div class="order-item-price">
+                        <div class="current">68,000</div>
+                        <div class="qty">수량: 1개</div>
+                    </div>
+                </div>
+                <div class="order-item">
+                    <div class="order-item-image" style="background: linear-gradient(135deg, #6BCB77, #9B59B6);">
+                        <i data-lucide="puzzle"></i>
+                    </div>
+                    <div class="order-item-details">
+                        <div class="order-item-name">카탄: 확장판 시나리오 컬렉션</div>
+                        <div class="order-item-option"></div>
+                    </div>
+                    <div class="order-item-price">
+                        <div class="current">70,000</div>
+                        <div class="qty">수량: 2개</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Payment Summary -->
+            <div class="payment-summary">
+                <div class="payment-row">
+                    <span class="label">상품 금액</span>
+                    <span class="value">717,000</span>
+                </div>
+                <div class="payment-row">
+                    <span class="label">상품 할인</span>
+                    <span class="value discount">-90,000</span>
+                </div>
+                <div class="payment-row">
+                    <span class="label">배송비</span>
+                    <span class="value">무료</span>
+                </div>
+                <div class="payment-total">
+                    <span class="label">총 결제 금액</span>
+                    <span class="price">627,000<span class="won">원</span></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Delivery Timeline -->
+        <div class="timeline-card">
+            <div class="timeline-header">
+                <i data-lucide="truck"></i>
+                <h3>배송 현황</h3>
+            </div>
+            <div class="timeline">
+                <div class="timeline-step active">
+                    <div class="timeline-icon"><i data-lucide="check"></i></div>
+                    <span class="timeline-label">결제 완료</span>
+                    <span class="timeline-date">01.01 14:30</span>
+                </div>
+                <div class="timeline-step">
+                    <div class="timeline-icon"><i data-lucide="package"></i></div>
+                    <span class="timeline-label">상품 준비중</span>
+                    <span class="timeline-date">예정</span>
+                </div>
+                <div class="timeline-step">
+                    <div class="timeline-icon"><i data-lucide="truck"></i></div>
+                    <span class="timeline-label">배송중</span>
+                    <span class="timeline-date">예정</span>
+                </div>
+                <div class="timeline-step">
+                    <div class="timeline-icon"><i data-lucide="home"></i></div>
+                    <span class="timeline-label">배송 완료</span>
+                    <span class="timeline-date">01.03~04 예정</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <button class="btn-primary">
+                <i data-lucide="list"></i>
+                주문 내역 보기
+            </button>
+            <button class="btn-secondary">
+                <i data-lucide="shopping-bag"></i>
+                쇼핑 계속하기
+            </button>
+        </div>
+
+        <!-- Additional Info -->
+        <div class="additional-info">
+            <div class="info-item">
+                <i data-lucide="mail"></i>
+                주문 확인 메일이 발송되었습니다
+            </div>
+            <div class="info-item">
+                <i data-lucide="headphones"></i>
+                문의: 1588-1234
+            </div>
+            <div class="info-item">
+                <i data-lucide="refresh-ccw"></i>
+                30일 이내 무료 교환/반품
+            </div>
+        </div>
+    </main>
+    <!-- Footer -->
+    <div id="footer"></div>
+
+
+
+    <script>lucide.createIcons();</script>
+    <script src="common/loader.js"></script>
+</body>
+</html>

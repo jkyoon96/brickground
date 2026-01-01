@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1024, initial-scale=1.0">
+    <title>VR Mall 3D 뷰어 - Tablet Wireframe</title>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --pixar-primary: #0066FF;
+            --pixar-secondary: #FFD93D;
+            --pixar-success: #6BCB77;
+            --pixar-error: #FF6B6B;
+            --pixar-bg: #F8FAFC;
+            --pixar-card: #FFFFFF;
+            --pixar-text: #1E293B;
+            --pixar-text-light: #64748B;
+            --pixar-border: #E2E8F0;
+            --pixar-radius: 20px;
+            --pixar-radius-sm: 12px;
+            --pixar-shadow: 0 4px 20px rgba(0, 102, 255, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Nunito', '나눔스퀘어라운드', sans-serif;
+            background: #1a1a2e;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        /* Tablet Frame */
+        .tablet-frame {
+            width: 1024px;
+            background: #2d2d44;
+            border-radius: 40px;
+            padding: 20px;
+            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.5);
+        }
+
+        .tablet-screen {
+            background: #1a1a2e;
+            border-radius: 24px;
+            overflow: hidden;
+            height: 720px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Top Bar */
+        .top-bar {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: white;
+        }
+
+        .top-bar-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .back-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .back-btn i {
+            width: 20px;
+            height: 20px;
+        }
+
+        .mall-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .mall-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--pixar-secondary) 0%, #FFC107 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .mall-avatar i {
+            width: 20px;
+            height: 20px;
+            color: white;
+        }
+
+        .mall-details h2 {
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        .mall-details span {
+            font-size: 12px;
+            opacity: 0.7;
+        }
+
+        .top-bar-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .top-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .top-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .top-btn i {
+            width: 18px;
+            height: 18px;
+        }
+
+        .visitor-count {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 8px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+        }
+
+        .visitor-count i {
+            width: 16px;
+            height: 16px;
+        }
+
+        /* Main Layout */
+        .viewer-layout {
+            flex: 1;
+            display: flex;
+            position: relative;
+        }
+
+        /* 3D Scene */
+        .scene-3d {
+            flex: 1;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .scene-3d-icon {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 16px;
+        }
+
+        .scene-3d-icon i {
+            width: 50px;
+            height: 50px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .scene-3d-text {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .scene-3d-hint {
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 13px;
+        }
+
+        /* Hotspots */
+        .hotspot {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--pixar-primary);
+            border: 3px solid white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: pulse-ring 2s ease infinite;
+            transition: transform 0.3s ease;
+        }
+
+        .hotspot:hover {
+            transform: scale(1.2);
+        }
+
+        .hotspot i {
+            width: 22px;
+            height: 22px;
+            color: white;
+        }
+
+        .hotspot-1 { top: 30%; left: 25%; }
+        .hotspot-2 { top: 50%; left: 60%; }
+        .hotspot-3 { top: 65%; left: 35%; }
+
+        @keyframes pulse-ring {
+            0% { box-shadow: 0 0 0 0 rgba(0, 102, 255, 0.5); }
+            70% { box-shadow: 0 0 0 15px rgba(0, 102, 255, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(0, 102, 255, 0); }
+        }
+
+        /* Control Panel */
+        .control-panel {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 10px;
+            border-radius: 28px;
+        }
+
+        .control-btn {
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .control-btn:hover,
+        .control-btn.active {
+            background: var(--pixar-primary);
+        }
+
+        .control-btn i {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* Mini Map */
+        .mini-map {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            width: 140px;
+            height: 100px;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: var(--pixar-radius-sm);
+            padding: 10px;
+        }
+
+        .mini-map-title {
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 6px;
+        }
+
+        .mini-map-content {
+            width: 100%;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 6px;
+            position: relative;
+        }
+
+        .map-dot {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: var(--pixar-primary);
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 320px;
+            background: var(--pixar-card);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar-header {
+            padding: 16px;
+            border-bottom: 1px solid var(--pixar-border);
+        }
+
+        .sidebar-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--pixar-text);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .sidebar-title i {
+            width: 20px;
+            height: 20px;
+            color: var(--pixar-primary);
+        }
+
+        .product-count {
+            font-size: 12px;
+            color: var(--pixar-text-light);
+            margin-top: 4px;
+        }
+
+        .sidebar-tabs {
+            display: flex;
+            padding: 0 16px;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .sidebar-tab {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            background: var(--pixar-bg);
+            border-radius: var(--pixar-radius-sm);
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--pixar-text-light);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-tab.active {
+            background: var(--pixar-primary);
+            color: white;
+        }
+
+        /* Product List */
+        .product-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px;
+        }
+
+        .product-item {
+            display: flex;
+            gap: 12px;
+            padding: 12px;
+            background: var(--pixar-bg);
+            border-radius: var(--pixar-radius-sm);
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .product-item:hover {
+            background: rgba(0, 102, 255, 0.1);
+        }
+
+        .product-thumb {
+            width: 60px;
+            height: 60px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .product-thumb i {
+            width: 24px;
+            height: 24px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .product-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .product-name {
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .product-price {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--pixar-primary);
+        }
+
+        .product-location {
+            font-size: 11px;
+            color: var(--pixar-text-light);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            margin-top: 4px;
+        }
+
+        .product-location i {
+            width: 12px;
+            height: 12px;
+        }
+
+        /* Sidebar Footer */
+        .sidebar-footer {
+            padding: 16px;
+            border-top: 1px solid var(--pixar-border);
+        }
+
+        .cart-summary {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .cart-count {
+            font-size: 13px;
+            color: var(--pixar-text-light);
+        }
+
+        .cart-total {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--pixar-primary);
+        }
+
+        .cart-btn {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            background: linear-gradient(135deg, var(--pixar-primary) 0%, #0052CC 100%);
+            color: white;
+            font-size: 14px;
+            font-weight: 700;
+            border-radius: var(--pixar-radius-sm);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .cart-btn i {
+            width: 18px;
+            height: 18px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Tablet Frame -->
+    <div class="tablet-frame">
+        <div class="tablet-screen">
+            <!-- Top Bar -->
+            <div class="top-bar">
+                <div class="top-bar-left">
+                    <button class="back-btn">
+                        <i data-lucide="arrow-left"></i>
+                    </button>
+                    <div class="mall-info">
+                        <div class="mall-avatar">
+                            <i data-lucide="store"></i>
+                        </div>
+                        <div class="mall-details">
+                            <h2>코스모스 리빙</h2>
+                            <span>프리미엄 가구 전문점</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="top-bar-right">
+                    <div class="visitor-count">
+                        <i data-lucide="users"></i>
+                        24명 방문 중
+                    </div>
+                    <button class="top-btn">
+                        <i data-lucide="heart"></i>
+                    </button>
+                    <button class="top-btn">
+                        <i data-lucide="share-2"></i>
+                    </button>
+                    <button class="top-btn">
+                        <i data-lucide="maximize"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Main Layout -->
+            <div class="viewer-layout">
+                <!-- 3D Scene -->
+                <div class="scene-3d">
+                    <div class="scene-3d-icon">
+                        <i data-lucide="box"></i>
+                    </div>
+                    <span class="scene-3d-text">3D 씬 렌더링 영역</span>
+                    <span class="scene-3d-hint">React Three Fiber 캔버스</span>
+
+                    <!-- Hotspots -->
+                    <div class="hotspot hotspot-1">
+                        <i data-lucide="sofa"></i>
+                    </div>
+                    <div class="hotspot hotspot-2">
+                        <i data-lucide="lamp-desk"></i>
+                    </div>
+                    <div class="hotspot hotspot-3">
+                        <i data-lucide="armchair"></i>
+                    </div>
+
+                    <!-- Control Panel -->
+                    <div class="control-panel">
+                        <button class="control-btn active">
+                            <i data-lucide="rotate-3d"></i>
+                        </button>
+                        <button class="control-btn">
+                            <i data-lucide="move"></i>
+                        </button>
+                        <button class="control-btn">
+                            <i data-lucide="zoom-in"></i>
+                        </button>
+                        <button class="control-btn">
+                            <i data-lucide="zoom-out"></i>
+                        </button>
+                        <button class="control-btn">
+                            <i data-lucide="scan"></i>
+                        </button>
+                        <button class="control-btn">
+                            <i data-lucide="glasses"></i>
+                        </button>
+                    </div>
+
+                    <!-- Mini Map -->
+                    <div class="mini-map">
+                        <div class="mini-map-title">미니맵</div>
+                        <div class="mini-map-content">
+                            <div class="map-dot"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sidebar -->
+                <div class="sidebar">
+                    <div class="sidebar-header">
+                        <h3 class="sidebar-title">
+                            <i data-lucide="package"></i>
+                            상품 목록
+                        </h3>
+                        <p class="product-count">총 156개 상품</p>
+                        <div class="sidebar-tabs">
+                            <button class="sidebar-tab active">전체</button>
+                            <button class="sidebar-tab">소파</button>
+                            <button class="sidebar-tab">테이블</button>
+                        </div>
+                    </div>
+
+                    <div class="product-list">
+                        <div class="product-item">
+                            <div class="product-thumb">
+                                <i data-lucide="sofa"></i>
+                            </div>
+                            <div class="product-info">
+                                <p class="product-name">북유럽 3인용 소파</p>
+                                <p class="product-price">667,500원</p>
+                                <p class="product-location">
+                                    <i data-lucide="map-pin"></i>
+                                    A존 거실
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="product-item">
+                            <div class="product-thumb" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                                <i data-lucide="lamp-desk"></i>
+                            </div>
+                            <div class="product-info">
+                                <p class="product-name">LED 플로어 스탠드</p>
+                                <p class="product-price">189,000원</p>
+                                <p class="product-location">
+                                    <i data-lucide="map-pin"></i>
+                                    A존 거실
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="product-item">
+                            <div class="product-thumb" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+                                <i data-lucide="square"></i>
+                            </div>
+                            <div class="product-info">
+                                <p class="product-name">원목 사이드 테이블</p>
+                                <p class="product-price">145,000원</p>
+                                <p class="product-location">
+                                    <i data-lucide="map-pin"></i>
+                                    B존 서재
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="product-item">
+                            <div class="product-thumb" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">
+                                <i data-lucide="armchair"></i>
+                            </div>
+                            <div class="product-info">
+                                <p class="product-name">1인용 리클라이너</p>
+                                <p class="product-price">450,000원</p>
+                                <p class="product-location">
+                                    <i data-lucide="map-pin"></i>
+                                    A존 거실
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="product-item">
+                            <div class="product-thumb" style="background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);">
+                                <i data-lucide="bed-double"></i>
+                            </div>
+                            <div class="product-info">
+                                <p class="product-name">퀸 사이즈 침대 프레임</p>
+                                <p class="product-price">890,000원</p>
+                                <p class="product-location">
+                                    <i data-lucide="map-pin"></i>
+                                    C존 침실
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="sidebar-footer">
+                        <div class="cart-summary">
+                            <span class="cart-count">장바구니 3개 상품</span>
+                            <span class="cart-total">1,001,500원</span>
+                        </div>
+                        <button class="cart-btn">
+                            <i data-lucide="shopping-cart"></i>
+                            장바구니 보기
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>

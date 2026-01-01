@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1024, initial-scale=1.0">
+    <title>Creation 갤러리 - Tablet Wireframe</title>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --pixar-primary: #0066FF;
+            --pixar-secondary: #FFD93D;
+            --pixar-success: #6BCB77;
+            --pixar-error: #FF6B6B;
+            --pixar-teal: #00CEC9;
+            --pixar-cyan: #00D4FF;
+            --pixar-bg: #F8FAFC;
+            --pixar-card: #FFFFFF;
+            --pixar-text: #1E293B;
+            --pixar-text-light: #64748B;
+            --pixar-border: #E2E8F0;
+            --pixar-radius: 20px;
+            --pixar-radius-sm: 12px;
+            --pixar-shadow: 0 4px 20px rgba(0, 206, 201, 0.15);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Nunito', '나눔스퀘어라운드', sans-serif;
+            background: #1a1a2e;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .tablet-frame {
+            width: 1024px;
+            background: #2a2a2a;
+            border-radius: 40px;
+            padding: 20px;
+            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.5);
+        }
+
+        .tablet-screen {
+            background: var(--pixar-bg);
+            border-radius: 24px;
+            overflow: hidden;
+            min-height: 700px;
+        }
+
+        /* Header */
+        .header {
+            background: var(--pixar-card);
+            padding: 16px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: var(--pixar-shadow);
+        }
+
+        .header-left { display: flex; align-items: center; gap: 24px; }
+
+        .logo {
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--pixar-primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .logo i { width: 28px; height: 28px; }
+
+        .nav-links { display: flex; gap: 16px; }
+        .nav-links a {
+            text-decoration: none;
+            color: var(--pixar-text-light);
+            font-weight: 600;
+            font-size: 14px;
+            padding: 8px 14px;
+            border-radius: var(--pixar-radius-sm);
+        }
+        .nav-links a.active { color: var(--pixar-teal); background: rgba(0, 206, 201, 0.1); }
+
+        .header-right { display: flex; align-items: center; gap: 12px; }
+
+        .header-icon {
+            width: 40px; height: 40px;
+            border-radius: 50%;
+            background: var(--pixar-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .header-icon i { width: 20px; height: 20px; color: var(--pixar-text); }
+
+        /* Hero */
+        .hero {
+            background: linear-gradient(135deg, var(--pixar-teal) 0%, var(--pixar-cyan) 100%);
+            padding: 40px 24px;
+            text-align: center;
+            color: white;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(255,255,255,0.2);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+        .hero-badge i { width: 16px; height: 16px; }
+
+        .hero h1 { font-size: 32px; font-weight: 800; margin-bottom: 12px; }
+        .hero p { font-size: 15px; opacity: 0.9; margin-bottom: 24px; }
+
+        .hero-actions { display: flex; gap: 12px; justify-content: center; }
+
+        .btn-hero-primary {
+            padding: 14px 28px;
+            background: white;
+            color: var(--pixar-teal);
+            border: none;
+            border-radius: 24px;
+            font-size: 15px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+        .btn-hero-primary i { width: 20px; height: 20px; }
+
+        .btn-hero-secondary {
+            padding: 14px 28px;
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+            border-radius: 24px;
+            font-size: 15px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+        .btn-hero-secondary i { width: 20px; height: 20px; }
+
+        /* Main Content */
+        .main-content { padding: 24px; }
+
+        /* Stats */
+        .stats-section {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .stat-card {
+            background: var(--pixar-card);
+            border-radius: var(--pixar-radius);
+            padding: 20px;
+            text-align: center;
+            box-shadow: var(--pixar-shadow);
+        }
+
+        .stat-icon {
+            width: 48px; height: 48px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, rgba(0, 206, 201, 0.2), rgba(0, 212, 255, 0.2));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 12px;
+        }
+        .stat-icon i { width: 24px; height: 24px; color: var(--pixar-teal); }
+        .stat-value { font-size: 22px; font-weight: 800; color: var(--pixar-teal); }
+        .stat-label { font-size: 12px; color: var(--pixar-text-light); }
+
+        /* Filter */
+        .filter-section {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
+        }
+
+        .category-tabs { display: flex; gap: 6px; }
+        .category-tab {
+            padding: 10px 16px;
+            background: var(--pixar-card);
+            border: 2px solid transparent;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--pixar-text-light);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .category-tab i { width: 14px; height: 14px; }
+        .category-tab.active { border-color: var(--pixar-teal); color: var(--pixar-teal); }
+
+        .filter-actions { display: flex; gap: 10px; }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 16px;
+            background: var(--pixar-card);
+            border: 2px solid var(--pixar-border);
+            border-radius: 20px;
+        }
+        .search-box i { width: 16px; height: 16px; color: var(--pixar-text-light); }
+        .search-box input { border: none; outline: none; font-size: 13px; width: 150px; }
+
+        /* Creation Grid */
+        .creation-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .creation-card {
+            background: var(--pixar-card);
+            border-radius: var(--pixar-radius);
+            overflow: hidden;
+            box-shadow: var(--pixar-shadow);
+        }
+
+        .creation-thumbnail {
+            width: 100%;
+            aspect-ratio: 4/3;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .creation-thumbnail i { width: 48px; height: 48px; color: rgba(255,255,255,0.5); }
+
+        .creation-badge {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: var(--pixar-secondary);
+            color: var(--pixar-text);
+            padding: 5px 10px;
+            border-radius: 10px;
+            font-size: 10px;
+            font-weight: 700;
+        }
+
+        .creation-featured-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: var(--pixar-teal);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 10px;
+            font-size: 10px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .creation-featured-badge i { width: 12px; height: 12px; }
+
+        .creation-body { padding: 16px; }
+
+        .creation-author {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
+        .author-avatar {
+            width: 28px; height: 28px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--pixar-teal), var(--pixar-cyan));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .author-avatar i { width: 14px; height: 14px; color: white; }
+        .author-name { font-size: 12px; color: var(--pixar-text-light); }
+
+        .creation-title { font-size: 15px; font-weight: 700; margin-bottom: 6px; }
+        .creation-desc {
+            font-size: 12px;
+            color: var(--pixar-text-light);
+            line-height: 1.4;
+            margin-bottom: 10px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .creation-stats { display: flex; gap: 14px; }
+        .creation-stat {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 12px;
+            color: var(--pixar-text-light);
+        }
+        .creation-stat i { width: 14px; height: 14px; }
+        .creation-stat.liked i { color: var(--pixar-error); fill: var(--pixar-error); }
+
+        /* FAB */
+        .create-fab {
+            position: fixed;
+            bottom: 80px;
+            right: 60px;
+            background: linear-gradient(135deg, var(--pixar-teal), var(--pixar-cyan));
+            border: none;
+            padding: 16px 28px;
+            border-radius: 28px;
+            color: white;
+            font-size: 15px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 6px 25px rgba(0, 206, 201, 0.4);
+            cursor: pointer;
+        }
+        .create-fab i { width: 20px; height: 20px; }
+    </style>
+</head>
+<body>
+    <div class="tablet-frame">
+        <div class="tablet-screen">
+            <!-- Header -->
+            <header class="header">
+                <div class="header-left">
+                    <div class="logo"><i data-lucide="box"></i>BrickGround</div>
+                    <nav class="nav-links">
+                        <a href="#">VR Mall</a>
+                        <a href="#">DotArt</a>
+                        <a href="#" class="active">Creation</a>
+                        <a href="#">고객센터</a>
+                    </nav>
+                </div>
+                <div class="header-right">
+                    <div class="header-icon"><i data-lucide="search"></i></div>
+                    <div class="header-icon"><i data-lucide="bell"></i></div>
+                    <div class="header-icon"><i data-lucide="user"></i></div>
+                </div>
+            </header>
+
+            <!-- Hero -->
+            <section class="hero">
+                <div class="hero-badge"><i data-lucide="cube"></i>3D 창작 플랫폼</div>
+                <h1>Creation Gallery</h1>
+                <p>나만의 3D 창작물을 만들고 공유하세요</p>
+                <div class="hero-actions">
+                    <button class="btn-hero-primary"><i data-lucide="plus"></i>새 창작물</button>
+                    <button class="btn-hero-secondary"><i data-lucide="play"></i>튜토리얼</button>
+                </div>
+            </section>
+
+            <!-- Main Content -->
+            <main class="main-content">
+                <!-- Stats -->
+                <div class="stats-section">
+                    <div class="stat-card">
+                        <div class="stat-icon"><i data-lucide="cube"></i></div>
+                        <div class="stat-value">12,847</div>
+                        <div class="stat-label">총 창작물</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon"><i data-lucide="users"></i></div>
+                        <div class="stat-value">4,523</div>
+                        <div class="stat-label">창작자</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon"><i data-lucide="heart"></i></div>
+                        <div class="stat-value">89.2K</div>
+                        <div class="stat-label">좋아요</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon"><i data-lucide="download"></i></div>
+                        <div class="stat-value">34.1K</div>
+                        <div class="stat-label">다운로드</div>
+                    </div>
+                </div>
+
+                <!-- Filter -->
+                <div class="filter-section">
+                    <div class="category-tabs">
+                        <button class="category-tab active"><i data-lucide="grid-3x3"></i>전체</button>
+                        <button class="category-tab"><i data-lucide="flame"></i>인기</button>
+                        <button class="category-tab"><i data-lucide="clock"></i>최신</button>
+                        <button class="category-tab"><i data-lucide="building-2"></i>건축</button>
+                        <button class="category-tab"><i data-lucide="car"></i>탈것</button>
+                    </div>
+                    <div class="filter-actions">
+                        <div class="search-box">
+                            <i data-lucide="search"></i>
+                            <input type="text" placeholder="창작물 검색...">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Creation Grid -->
+                <div class="creation-grid">
+                    <div class="creation-card">
+                        <div class="creation-thumbnail" style="background: linear-gradient(135deg, #00CEC9, #00D4FF);">
+                            <span class="creation-badge">HOT</span>
+                            <span class="creation-featured-badge"><i data-lucide="award"></i>추천</span>
+                            <i data-lucide="building-2"></i>
+                        </div>
+                        <div class="creation-body">
+                            <div class="creation-author">
+                                <div class="author-avatar"><i data-lucide="user"></i></div>
+                                <span class="author-name">빌더마스터</span>
+                            </div>
+                            <h3 class="creation-title">미래 도시 스카이라인</h3>
+                            <p class="creation-desc">네온 불빛이 가득한 사이버펑크 스타일의 미래 도시</p>
+                            <div class="creation-stats">
+                                <span class="creation-stat liked"><i data-lucide="heart"></i>3,245</span>
+                                <span class="creation-stat"><i data-lucide="message-circle"></i>187</span>
+                                <span class="creation-stat"><i data-lucide="download"></i>892</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="creation-card">
+                        <div class="creation-thumbnail" style="background: linear-gradient(135deg, #6BCB77, #4D96FF);">
+                            <span class="creation-featured-badge"><i data-lucide="award"></i>추천</span>
+                            <i data-lucide="car"></i>
+                        </div>
+                        <div class="creation-body">
+                            <div class="creation-author">
+                                <div class="author-avatar"><i data-lucide="user"></i></div>
+                                <span class="author-name">레이서킹</span>
+                            </div>
+                            <h3 class="creation-title">슈퍼카 컬렉션</h3>
+                            <p class="creation-desc">다양한 스포츠카 모델을 블록으로 재현</p>
+                            <div class="creation-stats">
+                                <span class="creation-stat liked"><i data-lucide="heart"></i>2,891</span>
+                                <span class="creation-stat"><i data-lucide="message-circle"></i>156</span>
+                                <span class="creation-stat"><i data-lucide="download"></i>723</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="creation-card">
+                        <div class="creation-thumbnail" style="background: linear-gradient(135deg, #FF6B6B, #FFD93D);">
+                            <span class="creation-badge">NEW</span>
+                            <i data-lucide="gamepad-2"></i>
+                        </div>
+                        <div class="creation-body">
+                            <div class="creation-author">
+                                <div class="author-avatar"><i data-lucide="user"></i></div>
+                                <span class="author-name">캐릭터러버</span>
+                            </div>
+                            <h3 class="creation-title">귀여운 로봇 친구들</h3>
+                            <p class="creation-desc">다양한 표정의 미니 로봇 캐릭터 세트</p>
+                            <div class="creation-stats">
+                                <span class="creation-stat"><i data-lucide="heart"></i>1,567</span>
+                                <span class="creation-stat"><i data-lucide="message-circle"></i>89</span>
+                                <span class="creation-stat"><i data-lucide="download"></i>456</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="creation-card">
+                        <div class="creation-thumbnail" style="background: linear-gradient(135deg, #9B5DE5, #F15BB5);">
+                            <i data-lucide="castle"></i>
+                        </div>
+                        <div class="creation-body">
+                            <div class="creation-author">
+                                <div class="author-avatar"><i data-lucide="user"></i></div>
+                                <span class="author-name">판타지빌더</span>
+                            </div>
+                            <h3 class="creation-title">마법의 성</h3>
+                            <p class="creation-desc">동화 속에서 튀어나온 듯한 마법의 성</p>
+                            <div class="creation-stats">
+                                <span class="creation-stat liked"><i data-lucide="heart"></i>2,134</span>
+                                <span class="creation-stat"><i data-lucide="message-circle"></i>112</span>
+                                <span class="creation-stat"><i data-lucide="download"></i>567</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="creation-card">
+                        <div class="creation-thumbnail" style="background: linear-gradient(135deg, #00D4FF, #0066FF);">
+                            <i data-lucide="rocket"></i>
+                        </div>
+                        <div class="creation-body">
+                            <div class="creation-author">
+                                <div class="author-avatar"><i data-lucide="user"></i></div>
+                                <span class="author-name">스페이스맨</span>
+                            </div>
+                            <h3 class="creation-title">우주 정거장</h3>
+                            <p class="creation-desc">국제 우주 정거장을 모티브로 한 창작물</p>
+                            <div class="creation-stats">
+                                <span class="creation-stat liked"><i data-lucide="heart"></i>1,892</span>
+                                <span class="creation-stat"><i data-lucide="message-circle"></i>78</span>
+                                <span class="creation-stat"><i data-lucide="download"></i>389</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="creation-card">
+                        <div class="creation-thumbnail" style="background: linear-gradient(135deg, #FFD93D, #6BCB77);">
+                            <i data-lucide="trees"></i>
+                        </div>
+                        <div class="creation-body">
+                            <div class="creation-author">
+                                <div class="author-avatar"><i data-lucide="user"></i></div>
+                                <span class="author-name">자연러버</span>
+                            </div>
+                            <h3 class="creation-title">미니어처 정원</h3>
+                            <p class="creation-desc">작은 세계 속 아름다운 정원 풍경</p>
+                            <div class="creation-stats">
+                                <span class="creation-stat"><i data-lucide="heart"></i>987</span>
+                                <span class="creation-stat"><i data-lucide="message-circle"></i>45</span>
+                                <span class="creation-stat"><i data-lucide="download"></i>234</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- FAB -->
+    <button class="create-fab"><i data-lucide="plus"></i>새 창작물</button>
+
+    <script>lucide.createIcons();</script>
+</body>
+</html>

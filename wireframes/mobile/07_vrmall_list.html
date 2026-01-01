@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=390, initial-scale=1.0">
+    <title>VR Mall 목록 - Mobile Wireframe</title>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --pixar-primary: #0066FF;
+            --pixar-secondary: #FFD93D;
+            --pixar-success: #6BCB77;
+            --pixar-error: #FF6B6B;
+            --pixar-bg: #F8FAFC;
+            --pixar-card: #FFFFFF;
+            --pixar-text: #1E293B;
+            --pixar-text-light: #64748B;
+            --pixar-border: #E2E8F0;
+            --pixar-radius: 16px;
+            --pixar-radius-sm: 10px;
+            --pixar-shadow: 0 2px 12px rgba(0, 102, 255, 0.08);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Nunito', '나눔스퀘어라운드', sans-serif;
+            background: #1a1a2e;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        /* Phone Frame */
+        .phone-frame {
+            width: 390px;
+            background: #2d2d44;
+            border-radius: 50px;
+            padding: 12px;
+            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.5);
+        }
+
+        .phone-screen {
+            background: var(--pixar-bg);
+            border-radius: 40px;
+            overflow: hidden;
+            min-height: 780px;
+        }
+
+        /* Status Bar */
+        .status-bar {
+            background: var(--pixar-card);
+            padding: 12px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .status-bar-left {
+            color: var(--pixar-text);
+        }
+
+        .status-bar-right {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .status-bar-right i {
+            width: 16px;
+            height: 16px;
+            color: var(--pixar-text);
+        }
+
+        /* Header */
+        .header {
+            background: var(--pixar-card);
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: var(--pixar-shadow);
+        }
+
+        .logo {
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--pixar-primary);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .logo i {
+            width: 22px;
+            height: 22px;
+        }
+
+        .header-icons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .header-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--pixar-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .header-icon i {
+            width: 18px;
+            height: 18px;
+            color: var(--pixar-text);
+        }
+
+        .badge {
+            position: absolute;
+            top: -2px;
+            right: -2px;
+            background: var(--pixar-error);
+            color: white;
+            font-size: 9px;
+            font-weight: 700;
+            min-width: 14px;
+            height: 14px;
+            border-radius: 7px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, var(--pixar-primary) 0%, #0052CC 100%);
+            padding: 24px 16px;
+            text-align: center;
+            color: white;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 6px 12px;
+            border-radius: 16px;
+            font-size: 11px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .hero-badge i {
+            width: 12px;
+            height: 12px;
+        }
+
+        .hero h1 {
+            font-size: 22px;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .hero p {
+            font-size: 13px;
+            opacity: 0.9;
+            margin-bottom: 16px;
+        }
+
+        .search-bar {
+            display: flex;
+            background: white;
+            border-radius: 24px;
+            padding: 4px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .search-bar input {
+            flex: 1;
+            border: none;
+            padding: 10px 14px;
+            font-size: 14px;
+            border-radius: 20px;
+            outline: none;
+        }
+
+        .search-btn {
+            background: var(--pixar-primary);
+            border: none;
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .search-btn i {
+            width: 18px;
+            height: 18px;
+            color: white;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 16px;
+        }
+
+        /* Category Scroll */
+        .category-scroll {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            padding-bottom: 12px;
+            margin-bottom: 16px;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .category-scroll::-webkit-scrollbar {
+            display: none;
+        }
+
+        .category-chip {
+            padding: 8px 14px;
+            background: var(--pixar-card);
+            border: 2px solid transparent;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--pixar-text-light);
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            cursor: pointer;
+        }
+
+        .category-chip i {
+            width: 14px;
+            height: 14px;
+        }
+
+        .category-chip.active {
+            border-color: var(--pixar-primary);
+            color: var(--pixar-primary);
+            background: rgba(0, 102, 255, 0.05);
+        }
+
+        /* Mall List */
+        .mall-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .mall-card {
+            background: var(--pixar-card);
+            border-radius: var(--pixar-radius);
+            overflow: hidden;
+            box-shadow: var(--pixar-shadow);
+        }
+
+        .mall-thumbnail {
+            width: 100%;
+            aspect-ratio: 16/9;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .mall-thumbnail i {
+            width: 36px;
+            height: 36px;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 6px;
+        }
+
+        .mall-thumbnail span {
+            color: white;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .mall-badge {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: var(--pixar-secondary);
+            color: var(--pixar-text);
+            padding: 4px 10px;
+            border-radius: 10px;
+            font-size: 10px;
+            font-weight: 700;
+        }
+
+        .mall-live {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: var(--pixar-error);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 10px;
+            font-size: 10px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .mall-live::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            background: white;
+            border-radius: 50%;
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .mall-body {
+            padding: 14px;
+        }
+
+        .mall-title {
+            font-size: 15px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .mall-desc {
+            font-size: 12px;
+            color: var(--pixar-text-light);
+            margin-bottom: 10px;
+        }
+
+        .mall-stats {
+            display: flex;
+            gap: 12px;
+        }
+
+        .mall-stat {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 11px;
+            color: var(--pixar-text-light);
+        }
+
+        .mall-stat i {
+            width: 12px;
+            height: 12px;
+        }
+
+        /* Bottom Nav */
+        .bottom-nav {
+            position: fixed;
+            bottom: 56px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 366px;
+            background: var(--pixar-card);
+            border-radius: 20px 20px 0 0;
+            padding: 12px 0;
+            display: flex;
+            justify-content: space-around;
+            box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            color: var(--pixar-text-light);
+            text-decoration: none;
+            font-size: 10px;
+            font-weight: 600;
+        }
+
+        .nav-item.active {
+            color: var(--pixar-primary);
+        }
+
+        .nav-item i {
+            width: 22px;
+            height: 22px;
+        }
+
+        /* Create FAB */
+        .create-fab {
+            position: fixed;
+            bottom: 140px;
+            right: calc(50% - 170px);
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--pixar-primary) 0%, #0052CC 100%);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 16px rgba(0, 102, 255, 0.4);
+        }
+
+        .create-fab i {
+            width: 24px;
+            height: 24px;
+            color: white;
+        }
+
+        /* Home Indicator */
+        .home-indicator {
+            height: 34px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--pixar-bg);
+        }
+
+        .home-indicator::after {
+            content: '';
+            width: 134px;
+            height: 5px;
+            background: var(--pixar-text);
+            border-radius: 3px;
+            opacity: 0.2;
+        }
+    </style>
+</head>
+<body>
+    <!-- Phone Frame -->
+    <div class="phone-frame">
+        <div class="phone-screen">
+            <!-- Status Bar -->
+            <div class="status-bar">
+                <span class="status-bar-left">9:41</span>
+                <div class="status-bar-right">
+                    <i data-lucide="signal"></i>
+                    <i data-lucide="wifi"></i>
+                    <i data-lucide="battery-full"></i>
+                </div>
+            </div>
+
+            <!-- Header -->
+            <header class="header">
+                <div class="logo">
+                    <i data-lucide="box"></i>
+                    BrickGround
+                </div>
+                <div class="header-icons">
+                    <div class="header-icon">
+                        <i data-lucide="bell"></i>
+                    </div>
+                    <div class="header-icon">
+                        <i data-lucide="shopping-cart"></i>
+                        <span class="badge">3</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Hero Section -->
+            <section class="hero">
+                <div class="hero-badge">
+                    <i data-lucide="sparkles"></i>
+                    3D 가상 쇼핑
+                </div>
+                <h1>VR Mall 둘러보기</h1>
+                <p>나만의 3D 가상 쇼핑몰에서 쇼핑하세요</p>
+                <div class="search-bar">
+                    <input type="text" placeholder="Mall 검색...">
+                    <button class="search-btn">
+                        <i data-lucide="search"></i>
+                    </button>
+                </div>
+            </section>
+
+            <!-- Main Content -->
+            <main class="main-content">
+                <!-- Category Scroll -->
+                <div class="category-scroll">
+                    <button class="category-chip active">
+                        <i data-lucide="grid-3x3"></i>
+                        전체
+                    </button>
+                    <button class="category-chip">
+                        <i data-lucide="home"></i>
+                        가구
+                    </button>
+                    <button class="category-chip">
+                        <i data-lucide="shirt"></i>
+                        패션
+                    </button>
+                    <button class="category-chip">
+                        <i data-lucide="sparkles"></i>
+                        뷰티
+                    </button>
+                    <button class="category-chip">
+                        <i data-lucide="laptop"></i>
+                        전자
+                    </button>
+                </div>
+
+                <!-- Mall List -->
+                <div class="mall-list">
+                    <div class="mall-card">
+                        <div class="mall-thumbnail" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                            <span class="mall-badge">🔥 인기</span>
+                            <i data-lucide="home"></i>
+                            <span>3D 미리보기</span>
+                        </div>
+                        <div class="mall-body">
+                            <h3 class="mall-title">코스모스 리빙</h3>
+                            <p class="mall-desc">북유럽 스타일 프리미엄 가구</p>
+                            <div class="mall-stats">
+                                <span class="mall-stat">
+                                    <i data-lucide="eye"></i>
+                                    12.5K
+                                </span>
+                                <span class="mall-stat">
+                                    <i data-lucide="heart"></i>
+                                    2.1K
+                                </span>
+                                <span class="mall-stat">
+                                    <i data-lucide="package"></i>
+                                    156
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mall-card">
+                        <div class="mall-thumbnail" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                            <span class="mall-live">LIVE</span>
+                            <i data-lucide="shirt"></i>
+                            <span>3D 미리보기</span>
+                        </div>
+                        <div class="mall-body">
+                            <h3 class="mall-title">스타일 부티크</h3>
+                            <p class="mall-desc">트렌디한 패션 아이템 컬렉션</p>
+                            <div class="mall-stats">
+                                <span class="mall-stat">
+                                    <i data-lucide="eye"></i>
+                                    8.7K
+                                </span>
+                                <span class="mall-stat">
+                                    <i data-lucide="heart"></i>
+                                    1.4K
+                                </span>
+                                <span class="mall-stat">
+                                    <i data-lucide="package"></i>
+                                    89
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mall-card">
+                        <div class="mall-thumbnail" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+                            <span class="mall-badge">✨ 신규</span>
+                            <i data-lucide="laptop"></i>
+                            <span>3D 미리보기</span>
+                        </div>
+                        <div class="mall-body">
+                            <h3 class="mall-title">테크 허브</h3>
+                            <p class="mall-desc">최신 전자제품 체험 공간</p>
+                            <div class="mall-stats">
+                                <span class="mall-stat">
+                                    <i data-lucide="eye"></i>
+                                    5.2K
+                                </span>
+                                <span class="mall-stat">
+                                    <i data-lucide="heart"></i>
+                                    892
+                                </span>
+                                <span class="mall-stat">
+                                    <i data-lucide="package"></i>
+                                    67
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+
+            <!-- Bottom Nav -->
+            <nav class="bottom-nav">
+                <a href="#" class="nav-item">
+                    <i data-lucide="home"></i>
+                    <span>홈</span>
+                </a>
+                <a href="#" class="nav-item active">
+                    <i data-lucide="store"></i>
+                    <span>VR Mall</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i data-lucide="grid-3x3"></i>
+                    <span>DotArt</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i data-lucide="box"></i>
+                    <span>Creation</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i data-lucide="user"></i>
+                    <span>마이</span>
+                </a>
+            </nav>
+
+            <!-- Create FAB -->
+            <button class="create-fab">
+                <i data-lucide="plus"></i>
+            </button>
+
+            <!-- Home Indicator -->
+            <div class="home-indicator"></div>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>

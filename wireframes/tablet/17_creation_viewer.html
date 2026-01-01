@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1024, initial-scale=1.0">
+    <title>Creation 3D 뷰어 - Tablet Wireframe</title>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --pixar-primary: #0066FF;
+            --pixar-secondary: #FFD93D;
+            --pixar-success: #6BCB77;
+            --pixar-error: #FF6B6B;
+            --pixar-teal: #00CEC9;
+            --pixar-cyan: #00D4FF;
+            --pixar-bg: #1a1a2e;
+            --pixar-card: #252542;
+            --pixar-text: #FFFFFF;
+            --pixar-text-light: #a0a0b0;
+            --pixar-border: #3d3d5c;
+            --pixar-radius: 16px;
+            --pixar-radius-sm: 10px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Nunito', '나눔스퀘어라운드', sans-serif;
+            background: #1a1a2e;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .tablet-frame {
+            width: 1024px;
+            background: #2a2a2a;
+            border-radius: 40px;
+            padding: 20px;
+            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.5);
+        }
+
+        .tablet-screen {
+            background: var(--pixar-bg);
+            border-radius: 24px;
+            overflow: hidden;
+            height: 700px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Top Bar */
+        .top-bar {
+            background: var(--pixar-card);
+            padding: 14px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--pixar-border);
+        }
+
+        .top-left { display: flex; align-items: center; gap: 16px; }
+
+        .back-btn {
+            width: 40px; height: 40px;
+            border-radius: 50%;
+            background: var(--pixar-bg);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--pixar-text);
+        }
+        .back-btn i { width: 20px; height: 20px; }
+
+        .creation-info { display: flex; align-items: center; gap: 14px; }
+
+        .creation-thumb {
+            width: 48px; height: 48px;
+            border-radius: var(--pixar-radius-sm);
+            background: linear-gradient(135deg, var(--pixar-teal), var(--pixar-cyan));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .creation-thumb i { width: 24px; height: 24px; color: white; }
+
+        .creation-details h1 { font-size: 17px; font-weight: 700; color: var(--pixar-text); margin-bottom: 2px; }
+        .creation-meta {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            font-size: 12px;
+            color: var(--pixar-text-light);
+        }
+        .creation-meta span { display: flex; align-items: center; gap: 4px; }
+        .creation-meta i { width: 12px; height: 12px; }
+
+        .top-right { display: flex; align-items: center; gap: 10px; }
+
+        .btn-icon {
+            width: 40px; height: 40px;
+            border-radius: 50%;
+            background: var(--pixar-bg);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--pixar-text);
+        }
+        .btn-icon i { width: 18px; height: 18px; }
+        .btn-icon.liked { color: var(--pixar-error); }
+        .btn-icon.liked i { fill: var(--pixar-error); }
+
+        .btn-secondary {
+            padding: 10px 20px;
+            border: 2px solid var(--pixar-border);
+            background: transparent;
+            color: var(--pixar-text);
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .btn-secondary i { width: 16px; height: 16px; }
+
+        .btn-primary {
+            padding: 10px 20px;
+            border: none;
+            background: linear-gradient(135deg, var(--pixar-teal), var(--pixar-cyan));
+            color: white;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .btn-primary i { width: 16px; height: 16px; }
+
+        /* Main Layout */
+        .viewer-layout { display: flex; flex: 1; overflow: hidden; }
+
+        /* Viewer Area */
+        .viewer-area {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            background: radial-gradient(circle at center, #252542 0%, #1a1a2e 100%);
+        }
+
+        .model-placeholder {
+            width: 420px; height: 420px;
+            background: rgba(0, 206, 201, 0.1);
+            border: 2px dashed var(--pixar-teal);
+            border-radius: var(--pixar-radius);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .model-placeholder i { width: 100px; height: 100px; color: var(--pixar-teal); opacity: 0.5; }
+        .model-placeholder span { font-size: 18px; font-weight: 600; color: var(--pixar-text-light); margin-top: 14px; }
+        .model-placeholder small { font-size: 13px; color: var(--pixar-text-light); opacity: 0.7; }
+
+        /* View Presets */
+        .view-presets {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .preset-btn {
+            width: 44px; height: 44px;
+            background: var(--pixar-card);
+            border: none;
+            border-radius: var(--pixar-radius-sm);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--pixar-text);
+        }
+        .preset-btn.active { background: var(--pixar-teal); }
+        .preset-btn i { width: 20px; height: 20px; }
+
+        /* Auto Rotate */
+        .auto-rotate {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--pixar-card);
+            padding: 10px 16px;
+            border-radius: 20px;
+        }
+        .auto-rotate i { width: 16px; height: 16px; color: var(--pixar-teal); }
+        .auto-rotate span { font-size: 12px; font-weight: 600; color: var(--pixar-text); }
+
+        .toggle-switch { position: relative; width: 40px; height: 22px; }
+        .toggle-switch input { opacity: 0; width: 0; height: 0; }
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: var(--pixar-border);
+            border-radius: 22px;
+            transition: 0.3s;
+        }
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 16px; width: 16px;
+            left: 3px; bottom: 3px;
+            background: white;
+            border-radius: 50%;
+            transition: 0.3s;
+        }
+        input:checked + .toggle-slider { background: var(--pixar-teal); }
+        input:checked + .toggle-slider:before { transform: translateX(18px); }
+
+        /* Fullscreen */
+        .fullscreen-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 44px; height: 44px;
+            background: var(--pixar-card);
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--pixar-text);
+        }
+        .fullscreen-btn i { width: 20px; height: 20px; }
+
+        /* View Controls */
+        .view-controls {
+            position: absolute;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 8px;
+            background: var(--pixar-card);
+            padding: 10px;
+            border-radius: 28px;
+        }
+
+        .view-ctrl-btn {
+            width: 44px; height: 44px;
+            border: none;
+            background: var(--pixar-bg);
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--pixar-text);
+        }
+        .view-ctrl-btn.active { background: var(--pixar-teal); }
+        .view-ctrl-btn i { width: 20px; height: 20px; }
+
+        /* Right Panel */
+        .right-panel {
+            width: 300px;
+            background: var(--pixar-card);
+            border-left: 1px solid var(--pixar-border);
+            overflow-y: auto;
+        }
+
+        .panel-section {
+            padding: 20px;
+            border-bottom: 1px solid var(--pixar-border);
+        }
+
+        .panel-title {
+            font-size: 14px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 14px;
+            color: var(--pixar-text);
+        }
+        .panel-title i { width: 18px; height: 18px; color: var(--pixar-teal); }
+
+        /* Tabs */
+        .panel-tabs { display: flex; gap: 4px; margin-bottom: 16px; }
+        .panel-tab {
+            flex: 1;
+            padding: 10px;
+            background: var(--pixar-bg);
+            border: none;
+            border-radius: 8px;
+            color: var(--pixar-text-light);
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+        .panel-tab.active { background: var(--pixar-teal); color: white; }
+        .panel-tab i { width: 14px; height: 14px; }
+
+        /* Export Grid */
+        .export-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+
+        .export-btn {
+            padding: 16px;
+            background: var(--pixar-bg);
+            border: 2px solid var(--pixar-border);
+            border-radius: var(--pixar-radius-sm);
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+        }
+        .export-btn:hover { border-color: var(--pixar-teal); }
+        .export-btn i { width: 24px; height: 24px; color: var(--pixar-teal); }
+        .export-btn span { font-size: 12px; font-weight: 600; color: var(--pixar-text); }
+        .export-btn small { font-size: 10px; color: var(--pixar-text-light); }
+
+        /* Settings */
+        .setting-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--pixar-border);
+        }
+        .setting-row:last-child { border-bottom: none; }
+
+        .setting-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: var(--pixar-text);
+        }
+        .setting-label i { width: 16px; height: 16px; color: var(--pixar-text-light); }
+
+        /* Author Card */
+        .author-card {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px;
+            background: var(--pixar-bg);
+            border-radius: var(--pixar-radius-sm);
+        }
+
+        .author-avatar {
+            width: 48px; height: 48px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--pixar-teal), var(--pixar-cyan));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .author-avatar i { width: 24px; height: 24px; color: white; }
+
+        .author-info { flex: 1; }
+        .author-name { font-size: 14px; font-weight: 700; color: var(--pixar-text); margin-bottom: 2px; }
+        .author-stats { font-size: 11px; color: var(--pixar-text-light); }
+
+        .follow-btn {
+            padding: 8px 16px;
+            border: none;
+            background: var(--pixar-teal);
+            color: white;
+            border-radius: 16px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        /* Related */
+        .related-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+
+        .related-item {
+            aspect-ratio: 1;
+            background: var(--pixar-bg);
+            border-radius: var(--pixar-radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        .related-item i { width: 28px; height: 28px; color: var(--pixar-text-light); }
+
+        .related-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 8px;
+            background: linear-gradient(transparent, rgba(0,0,0,0.8));
+        }
+        .related-overlay span { font-size: 10px; font-weight: 600; color: white; }
+    </style>
+</head>
+<body>
+    <div class="tablet-frame">
+        <div class="tablet-screen">
+            <!-- Top Bar -->
+            <div class="top-bar">
+                <div class="top-left">
+                    <button class="back-btn"><i data-lucide="arrow-left"></i></button>
+                    <div class="creation-info">
+                        <div class="creation-thumb"><i data-lucide="building-2"></i></div>
+                        <div class="creation-details">
+                            <h1>미래 도시 스카이라인</h1>
+                            <div class="creation-meta">
+                                <span><i data-lucide="user"></i>빌더마스터</span>
+                                <span><i data-lucide="eye"></i>12,487 views</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="top-right">
+                    <button class="btn-icon liked"><i data-lucide="heart"></i></button>
+                    <button class="btn-icon"><i data-lucide="bookmark"></i></button>
+                    <button class="btn-icon"><i data-lucide="share-2"></i></button>
+                    <button class="btn-secondary"><i data-lucide="git-branch"></i>리믹스</button>
+                    <button class="btn-primary"><i data-lucide="download"></i>다운로드</button>
+                </div>
+            </div>
+
+            <!-- Main Layout -->
+            <div class="viewer-layout">
+                <!-- Viewer Area -->
+                <div class="viewer-area">
+                    <div class="model-placeholder">
+                        <i data-lucide="building-2"></i>
+                        <span>3D 창작물 뷰어</span>
+                        <small>터치로 회전, 핀치로 확대/축소</small>
+                    </div>
+
+                    <div class="view-presets">
+                        <button class="preset-btn active"><i data-lucide="box"></i></button>
+                        <button class="preset-btn"><i data-lucide="rotate-3d"></i></button>
+                        <button class="preset-btn"><i data-lucide="arrow-up"></i></button>
+                        <button class="preset-btn"><i data-lucide="compass"></i></button>
+                        <button class="preset-btn"><i data-lucide="home"></i></button>
+                    </div>
+
+                    <div class="auto-rotate">
+                        <i data-lucide="refresh-cw"></i>
+                        <span>자동 회전</span>
+                        <label class="toggle-switch">
+                            <input type="checkbox" checked>
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+
+                    <button class="fullscreen-btn"><i data-lucide="maximize"></i></button>
+
+                    <div class="view-controls">
+                        <button class="view-ctrl-btn active"><i data-lucide="rotate-3d"></i></button>
+                        <button class="view-ctrl-btn"><i data-lucide="move"></i></button>
+                        <button class="view-ctrl-btn"><i data-lucide="zoom-in"></i></button>
+                        <button class="view-ctrl-btn"><i data-lucide="zoom-out"></i></button>
+                        <button class="view-ctrl-btn"><i data-lucide="camera"></i></button>
+                    </div>
+                </div>
+
+                <!-- Right Panel -->
+                <div class="right-panel">
+                    <div class="panel-section">
+                        <div class="panel-tabs">
+                            <button class="panel-tab active"><i data-lucide="download"></i>내보내기</button>
+                            <button class="panel-tab"><i data-lucide="settings-2"></i>설정</button>
+                            <button class="panel-tab"><i data-lucide="info"></i>정보</button>
+                        </div>
+
+                        <div class="export-grid">
+                            <button class="export-btn">
+                                <i data-lucide="image"></i>
+                                <span>PNG</span>
+                                <small>스크린샷</small>
+                            </button>
+                            <button class="export-btn">
+                                <i data-lucide="film"></i>
+                                <span>GIF</span>
+                                <small>애니메이션</small>
+                            </button>
+                            <button class="export-btn">
+                                <i data-lucide="box"></i>
+                                <span>GLTF</span>
+                                <small>3D 모델</small>
+                            </button>
+                            <button class="export-btn">
+                                <i data-lucide="cube"></i>
+                                <span>OBJ</span>
+                                <small>3D 메쉬</small>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="panel-section">
+                        <h3 class="panel-title"><i data-lucide="sliders"></i>렌더링 설정</h3>
+                        <div class="setting-row">
+                            <div class="setting-label"><i data-lucide="shadow"></i>그림자</div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <div class="setting-row">
+                            <div class="setting-label"><i data-lucide="grid-3x3"></i>와이어프레임</div>
+                            <label class="toggle-switch">
+                                <input type="checkbox">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="panel-section">
+                        <h3 class="panel-title"><i data-lucide="user"></i>창작자</h3>
+                        <div class="author-card">
+                            <div class="author-avatar"><i data-lucide="user"></i></div>
+                            <div class="author-info">
+                                <div class="author-name">빌더마스터</div>
+                                <div class="author-stats">팔로워 2,345 · 작품 48개</div>
+                            </div>
+                            <button class="follow-btn">팔로우</button>
+                        </div>
+                    </div>
+
+                    <div class="panel-section">
+                        <h3 class="panel-title"><i data-lucide="sparkles"></i>관련 작품</h3>
+                        <div class="related-grid">
+                            <div class="related-item" style="background: linear-gradient(135deg, #00CEC9, #00D4FF);">
+                                <i data-lucide="building-2"></i>
+                                <div class="related-overlay"><span>네온 타워</span></div>
+                            </div>
+                            <div class="related-item" style="background: linear-gradient(135deg, #9B5DE5, #F15BB5);">
+                                <i data-lucide="rocket"></i>
+                                <div class="related-overlay"><span>우주 정거장</span></div>
+                            </div>
+                            <div class="related-item" style="background: linear-gradient(135deg, #FFD93D, #FF6B6B);">
+                                <i data-lucide="car"></i>
+                                <div class="related-overlay"><span>사이버 카</span></div>
+                            </div>
+                            <div class="related-item" style="background: linear-gradient(135deg, #6BCB77, #4D96FF);">
+                                <i data-lucide="trees"></i>
+                                <div class="related-overlay"><span>미래 공원</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>lucide.createIcons();</script>
+</body>
+</html>

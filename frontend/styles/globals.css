@@ -1,0 +1,157 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ========================================
+   User Frontend - Pixar Style Theme
+   ======================================== */
+:root {
+  /* Pixar Colors */
+  --pixar-blue: #0066ff;
+  --pixar-yellow: #ffd93d;
+  --pixar-green: #6bcb77;
+  --pixar-orange: #ff6b35;
+  --pixar-purple: #9b59b6;
+  --pixar-background: #f8fafc;
+  --pixar-surface: #ffffff;
+  --pixar-text: #2d3748;
+  --pixar-text-secondary: #718096;
+
+  /* Pixar Radius */
+  --pixar-radius-sm: 12px;
+  --pixar-radius-md: 16px;
+  --pixar-radius-lg: 24px;
+  --pixar-radius-xl: 32px;
+}
+
+/* ========================================
+   Admin Frontend - shadcn/ui Theme
+   ======================================== */
+.admin {
+  --background: 0 0% 100%;
+  --foreground: 240 10% 3.9%;
+  --card: 0 0% 100%;
+  --card-foreground: 240 10% 3.9%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 240 10% 3.9%;
+  --primary: 240 5.9% 10%;
+  --primary-foreground: 0 0% 98%;
+  --secondary: 240 4.8% 95.9%;
+  --secondary-foreground: 240 5.9% 10%;
+  --muted: 240 4.8% 95.9%;
+  --muted-foreground: 240 3.8% 46.1%;
+  --accent: 240 4.8% 95.9%;
+  --accent-foreground: 240 5.9% 10%;
+  --destructive: 0 84.2% 60.2%;
+  --destructive-foreground: 0 0% 98%;
+  --border: 240 5.9% 90%;
+  --input: 240 5.9% 90%;
+  --ring: 240 5.9% 10%;
+  --radius: 0.5rem;
+}
+
+.admin.dark {
+  --background: 240 10% 3.9%;
+  --foreground: 0 0% 98%;
+  --card: 240 10% 3.9%;
+  --card-foreground: 0 0% 98%;
+  --popover: 240 10% 3.9%;
+  --popover-foreground: 0 0% 98%;
+  --primary: 0 0% 98%;
+  --primary-foreground: 240 5.9% 10%;
+  --secondary: 240 3.7% 15.9%;
+  --secondary-foreground: 0 0% 98%;
+  --muted: 240 3.7% 15.9%;
+  --muted-foreground: 240 5% 64.9%;
+  --accent: 240 3.7% 15.9%;
+  --accent-foreground: 0 0% 98%;
+  --destructive: 0 62.8% 30.6%;
+  --destructive-foreground: 0 0% 98%;
+  --border: 240 3.7% 15.9%;
+  --input: 240 3.7% 15.9%;
+  --ring: 240 4.9% 83.9%;
+}
+
+/* ========================================
+   Base Styles
+   ======================================== */
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings:
+      'rlig' 1,
+      'calt' 1;
+  }
+}
+
+/* ========================================
+   Pixar Style Utilities
+   ======================================== */
+@layer utilities {
+  /* Pixar Button */
+  .btn-pixar {
+    @apply rounded-pixar-md bg-pixar-blue px-6 py-3 font-display font-bold text-white shadow-pixar-soft transition-all duration-200;
+  }
+
+  .btn-pixar:hover {
+    @apply scale-105 shadow-pixar-elevated;
+  }
+
+  .btn-pixar:active {
+    @apply scale-95;
+  }
+
+  /* Pixar Card */
+  .card-pixar {
+    @apply rounded-pixar-lg bg-white p-6 shadow-pixar-soft transition-all duration-300;
+  }
+
+  .card-pixar:hover {
+    @apply -translate-y-1 shadow-pixar-elevated;
+  }
+
+  /* Pixar Input */
+  .input-pixar {
+    @apply rounded-pixar-md border-2 border-gray-200 px-4 py-3 transition-all duration-200 focus:border-pixar-blue focus:ring-4 focus:ring-pixar-blue/20;
+  }
+
+  /* Gradient Backgrounds */
+  .bg-pixar-gradient {
+    @apply bg-gradient-to-br from-pixar-blue via-pixar-purple to-pixar-orange;
+  }
+
+  /* Text Gradient */
+  .text-pixar-gradient {
+    @apply bg-gradient-to-r from-pixar-blue to-pixar-purple bg-clip-text text-transparent;
+  }
+}
+
+/* ========================================
+   Animation Classes
+   ======================================== */
+@layer utilities {
+  .animate-bounce-in {
+    animation: bounceIn 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  }
+
+  @keyframes bounceIn {
+    0% {
+      opacity: 0;
+      transform: scale(0.3);
+    }
+    50% {
+      transform: scale(1.05);
+    }
+    70% {
+      transform: scale(0.9);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+}

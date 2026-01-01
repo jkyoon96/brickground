@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>장바구니 - PC Wireframe</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="common/components.css">
+    <link rel="stylesheet" href="common/responsive.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #F8FAFC;
+            --bg-secondary: #FFFFFF;
+            --text-primary: #1E293B;
+            --text-secondary: #64748B;
+            --text-muted: #94A3B8;
+            --border-color: #E2E8F0;
+            --pixar-blue: #0066FF;
+            --toy-orange: #FF6B35;
+            --toy-yellow: #FFD93D;
+            --toy-green: #6BCB77;
+            --pixar-error: #FF6B6B;
+            --pixar-radius: 20px;
+            --pixar-radius-sm: 12px;
+            --pixar-shadow: 0 4px 20px rgba(255, 107, 53, 0.15);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            background: var(--bg-secondary);
+            padding: 16px 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: var(--pixar-shadow);
+        }
+
+        .header-left { display: flex; align-items: center; gap: 32px; }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--pixar-blue);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .logo i { width: 32px; height: 32px; }
+
+        .nav-links { display: flex; gap: 24px; }
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-weight: 600;
+            padding: 8px 16px;
+            border-radius: var(--pixar-radius-sm);
+        }
+        .nav-links a.active { color: var(--toy-orange); background: rgba(255, 107, 53, 0.1); }
+
+        .header-right { display: flex; align-items: center; gap: 16px; }
+
+        .header-icon {
+            width: 44px; height: 44px;
+            border-radius: 50%;
+            background: var(--bg-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            position: relative;
+        }
+        .header-icon i { width: 22px; height: 22px; color: var(--text-primary); }
+        .header-icon.active { background: var(--toy-orange); }
+        .header-icon.active i { color: white; }
+        .header-icon .badge {
+            position: absolute;
+            top: -2px; right: -2px;
+            background: var(--pixar-error);
+            color: white;
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 10px;
+            font-weight: 700;
+        }
+
+        /* Page Header */
+        .page-header {
+            background: var(--toy-orange);
+            padding: 40px;
+            color: white;
+        }
+
+        .page-header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .page-header h1 {
+            font-size: 32px;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .page-header h1 i { width: 36px; height: 36px; }
+        .page-header .item-count {
+            background: rgba(255,255,255,0.2);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        /* Main Content */
+        .main-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 32px;
+        }
+
+        /* Cart Items Section */
+        .cart-section { display: flex; flex-direction: column; gap: 24px; }
+
+        .cart-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .select-all {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .checkbox {
+            width: 24px; height: 24px;
+            border: 2px solid var(--border-color);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+        .checkbox.checked {
+            background: var(--toy-orange);
+            border-color: var(--toy-orange);
+        }
+        .checkbox.checked i { color: white; width: 16px; height: 16px; }
+
+        .select-label { font-size: 15px; font-weight: 600; }
+
+        .delete-selected {
+            padding: 10px 20px;
+            background: transparent;
+            border: 2px solid var(--border-color);
+            border-radius: var(--pixar-radius-sm);
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .delete-selected i { width: 16px; height: 16px; }
+
+        /* Cart Item Card */
+        .cart-item {
+            background: var(--bg-secondary);
+            border-radius: var(--pixar-radius);
+            padding: 24px;
+            box-shadow: var(--pixar-shadow);
+            display: flex;
+            gap: 20px;
+        }
+
+        .cart-item .checkbox { flex-shrink: 0; }
+
+        .item-image {
+            width: 140px; height: 140px;
+            border-radius: var(--pixar-radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .item-image i { width: 48px; height: 48px; color: rgba(255,255,255,0.5); }
+
+        .item-details { flex: 1; display: flex; flex-direction: column; gap: 8px; }
+
+        .item-brand { font-size: 13px; color: var(--text-secondary); }
+
+        .item-name {
+            font-size: 18px;
+            font-weight: 700;
+            line-height: 1.4;
+        }
+
+        .item-options {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .item-options span {
+            font-size: 12px;
+            padding: 4px 10px;
+            background: var(--bg-primary);
+            border-radius: 6px;
+            color: var(--text-secondary);
+        }
+
+        .item-tags { display: flex; gap: 6px; margin-top: auto; }
+        .item-tags span {
+            font-size: 11px;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-weight: 600;
+        }
+        .item-tags .free-shipping { background: rgba(107, 203, 119, 0.15); color: var(--toy-green); }
+        .item-tags .today-delivery { background: rgba(255, 107, 53, 0.15); color: var(--toy-orange); }
+
+        .item-actions {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            justify-content: space-between;
+            min-width: 180px;
+        }
+
+        .item-delete {
+            width: 36px; height: 36px;
+            background: transparent;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+        }
+        .item-delete:hover { background: var(--bg-primary); }
+        .item-delete i { width: 20px; height: 20px; }
+
+        .quantity-control {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: var(--bg-primary);
+            border-radius: var(--pixar-radius-sm);
+            padding: 8px 12px;
+        }
+        .quantity-control button {
+            width: 32px; height: 32px;
+            border: none;
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .quantity-control button i { width: 16px; height: 16px; color: var(--text-primary); }
+        .quantity-control span { font-size: 16px; font-weight: 700; min-width: 30px; text-align: center; }
+
+        .item-price { text-align: right; }
+        .item-price .current { font-size: 20px; font-weight: 800; color: var(--text-primary); }
+        .item-price .original {
+            font-size: 14px;
+            color: var(--text-secondary);
+            text-decoration: line-through;
+            margin-left: 8px;
+        }
+
+        /* Continue Shopping */
+        .continue-shopping {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 16px;
+            background: var(--bg-secondary);
+            border: 2px dashed var(--border-color);
+            border-radius: var(--pixar-radius);
+            color: var(--text-secondary);
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .continue-shopping i { width: 20px; height: 20px; }
+        .continue-shopping:hover { border-color: var(--toy-orange); color: var(--toy-orange); }
+
+        /* Order Summary */
+        .order-summary {
+            background: var(--bg-secondary);
+            border-radius: var(--pixar-radius);
+            padding: 28px;
+            box-shadow: var(--pixar-shadow);
+            position: sticky;
+            top: 40px;
+            height: fit-content;
+        }
+
+        .summary-title {
+            font-size: 20px;
+            font-weight: 800;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .summary-title i { width: 24px; height: 24px; color: var(--toy-orange); }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .summary-row:last-of-type { border-bottom: none; }
+
+        .summary-label { font-size: 15px; color: var(--text-secondary); }
+        .summary-value { font-size: 16px; font-weight: 700; color: var(--text-primary); }
+        .summary-value.discount { color: var(--pixar-error); }
+        .summary-value.shipping { color: var(--toy-green); }
+
+        .summary-divider {
+            height: 1px;
+            background: var(--border-color);
+            margin: 16px 0;
+        }
+
+        .summary-total {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 24px;
+        }
+        .summary-total .label { font-size: 18px; font-weight: 700; }
+        .summary-total .price { font-size: 28px; font-weight: 800; color: var(--toy-orange); }
+        .summary-total .won { font-size: 18px; }
+
+        /* Coupon Section */
+        .coupon-section {
+            background: var(--bg-primary);
+            border-radius: var(--pixar-radius-sm);
+            padding: 16px;
+            margin-bottom: 20px;
+        }
+
+        .coupon-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        .coupon-header span {
+            font-size: 14px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .coupon-header span i { width: 16px; height: 16px; color: var(--toy-orange); }
+        .coupon-header a { font-size: 13px; color: var(--pixar-blue); text-decoration: none; }
+
+        .coupon-input {
+            display: flex;
+            gap: 8px;
+        }
+        .coupon-input input {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid var(--border-color);
+            border-radius: var(--pixar-radius-sm);
+            font-size: 14px;
+        }
+        .coupon-input button {
+            padding: 12px 20px;
+            background: var(--text-primary);
+            color: white;
+            border: none;
+            border-radius: var(--pixar-radius-sm);
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        /* Checkout Button */
+        .checkout-btn {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, var(--toy-orange), var(--toy-yellow));
+            border: none;
+            border-radius: var(--pixar-radius);
+            color: white;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            box-shadow: 0 4px 15px rgba(255, 107, 53, 0.4);
+        }
+        .checkout-btn i { width: 22px; height: 22px; }
+
+        /* Payment Methods */
+        .payment-methods {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+        }
+        .payment-methods img {
+            height: 24px;
+            opacity: 0.6;
+        }
+        .payment-icon {
+            width: 40px; height: 24px;
+            background: var(--bg-primary);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .payment-icon i { width: 16px; height: 16px; color: var(--text-secondary); }
+
+        /* Benefits */
+        .benefits {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .benefit-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+        .benefit-item i { width: 18px; height: 18px; color: var(--toy-green); }
+
+        /* Empty Cart */
+        .empty-cart {
+            background: var(--bg-secondary);
+            border-radius: var(--pixar-radius);
+            padding: 60px;
+            text-align: center;
+            box-shadow: var(--pixar-shadow);
+        }
+        .empty-cart-icon {
+            width: 100px; height: 100px;
+            margin: 0 auto 24px;
+            background: var(--bg-primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .empty-cart-icon i { width: 48px; height: 48px; color: var(--text-secondary); }
+        .empty-cart h3 { font-size: 20px; font-weight: 700; margin-bottom: 8px; }
+        .empty-cart p { color: var(--text-secondary); margin-bottom: 24px; }
+        .empty-cart-btn {
+            padding: 14px 32px;
+            background: var(--toy-orange);
+            color: white;
+            border: none;
+            border-radius: var(--pixar-radius);
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        /* ==================== Responsive Design ==================== */
+        /* Tablet (1024px) */
+        @media (max-width: 1024px) {
+            .header { padding: 16px 24px; }
+            .page-header { padding: 32px 24px; }
+            .main-content { padding: 32px 24px; gap: 24px; }
+
+            .item-image { width: 120px; height: 120px; }
+            .item-name { font-size: 16px; }
+            .item-actions { min-width: 150px; }
+        }
+
+        /* Mobile (768px) */
+        @media (max-width: 768px) {
+            .header { padding: 12px 16px; }
+            .header-left { gap: 16px; }
+            .nav-links { display: none; }
+            .logo { font-size: 20px; }
+            .logo i { width: 28px; height: 28px; }
+
+            .page-header { padding: 24px 16px; }
+            .page-header h1 { font-size: 24px; }
+            .page-header h1 i { width: 28px; height: 28px; }
+
+            .main-content {
+                padding: 20px 16px;
+                grid-template-columns: 1fr !important;
+                gap: 20px;
+            }
+
+            .cart-item {
+                flex-wrap: wrap;
+                padding: 16px;
+                gap: 12px;
+            }
+
+            .item-image { width: 100px; height: 100px; }
+
+            .item-details {
+                flex: 1;
+                min-width: calc(100% - 140px);
+            }
+
+            .item-actions {
+                width: 100%;
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
+                min-width: auto;
+                padding-top: 12px;
+                border-top: 1px solid var(--border-color);
+            }
+
+            .item-delete { order: 3; }
+
+            .order-summary {
+                position: static;
+            }
+
+            .summary-total .price { font-size: 24px; }
+        }
+
+        /* Small Mobile (480px) */
+        @media (max-width: 480px) {
+            .header { padding: 10px 12px; }
+            .logo { font-size: 18px; }
+            .header-icon { width: 38px; height: 38px; }
+
+            .page-header { padding: 20px 12px; }
+            .page-header h1 { font-size: 20px; gap: 8px; }
+            .page-header h1 i { width: 24px; height: 24px; }
+            .page-header .item-count { font-size: 13px; padding: 4px 12px; }
+
+            .main-content { padding: 16px 12px; }
+
+            .cart-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+
+            .cart-item { padding: 12px; }
+
+            .item-image { width: 80px; height: 80px; }
+            .item-image i { width: 32px; height: 32px; }
+
+            .item-details { min-width: calc(100% - 116px); }
+            .item-name { font-size: 14px; }
+            .item-brand { font-size: 12px; }
+
+            .item-actions {
+                flex-wrap: wrap;
+                gap: 12px;
+            }
+
+            .item-price .current { font-size: 16px; }
+            .item-price .original { font-size: 12px; }
+
+            .quantity-control { padding: 6px 10px; gap: 8px; }
+            .quantity-control button { width: 28px; height: 28px; }
+            .quantity-control span { font-size: 14px; }
+
+            .order-summary { padding: 20px; }
+            .summary-title { font-size: 18px; }
+            .summary-total .price { font-size: 22px; }
+
+            .coupon-input { flex-direction: column; }
+            .coupon-input button { width: 100%; }
+
+            .checkout-btn { font-size: 16px; padding: 16px; }
+
+            .payment-methods { gap: 10px; }
+
+            .continue-shopping { padding: 14px; font-size: 14px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <!-- Header -->
+    <div id="header"></div>
+
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="page-header-content">
+            <h1><i data-lucide="shopping-cart"></i>장바구니</h1>
+            <span class="item-count">3개 상품</span>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Cart Items -->
+        <div class="cart-section">
+            <div class="cart-header">
+                <div class="select-all">
+                    <div class="checkbox checked"><i data-lucide="check"></i></div>
+                    <span class="select-label">전체 선택 (3/3)</span>
+                </div>
+                <button class="delete-selected">
+                    <i data-lucide="trash-2"></i>
+                    선택 삭제
+                </button>
+            </div>
+
+            <!-- Cart Item 1 -->
+            <div class="cart-item">
+                <div class="checkbox checked"><i data-lucide="check"></i></div>
+                <div class="item-image">
+                    <img src="assets/images/shop/1000000106.jpg" alt="레고 테크닉" style="width: 100%; height: 100%; object-fit: cover; border-radius: var(--pixar-radius-sm);">
+                </div>
+                <div class="item-details">
+                    <span class="item-brand">레고 / 테크닉</span>
+                    <h3 class="item-name">레고 테크닉 람보르기니 시안 FKP 37</h3>
+                    <div class="item-options">
+                        <span>수량: 1개</span>
+                        <span>선물포장: O</span>
+                    </div>
+                    <div class="item-tags">
+                        <span class="free-shipping">무료배송</span>
+                        <span class="today-delivery">오늘출발</span>
+                    </div>
+                </div>
+                <div class="item-actions">
+                    <button class="item-delete"><i data-lucide="x"></i></button>
+                    <div class="quantity-control">
+                        <button><i data-lucide="minus"></i></button>
+                        <span>1</span>
+                        <button><i data-lucide="plus"></i></button>
+                    </div>
+                    <div class="item-price">
+                        <span class="current">489,000</span>
+                        <span class="original">549,000</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cart Item 2 -->
+            <div class="cart-item">
+                <div class="checkbox checked"><i data-lucide="check"></i></div>
+                <div class="item-image">
+                    <img src="assets/images/shop/1000000104.jpg" alt="건담" style="width: 100%; height: 100%; object-fit: cover; border-radius: var(--pixar-radius-sm);">
+                </div>
+                <div class="item-details">
+                    <span class="item-brand">피규어 / 건담</span>
+                    <h3 class="item-name">건담 RG 1/144 사자비 스페셜 에디션</h3>
+                    <div class="item-options">
+                        <span>수량: 1개</span>
+                    </div>
+                    <div class="item-tags">
+                        <span class="free-shipping">무료배송</span>
+                    </div>
+                </div>
+                <div class="item-actions">
+                    <button class="item-delete"><i data-lucide="x"></i></button>
+                    <div class="quantity-control">
+                        <button><i data-lucide="minus"></i></button>
+                        <span>1</span>
+                        <button><i data-lucide="plus"></i></button>
+                    </div>
+                    <div class="item-price">
+                        <span class="current">68,000</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cart Item 3 -->
+            <div class="cart-item">
+                <div class="checkbox checked"><i data-lucide="check"></i></div>
+                <div class="item-image">
+                    <img src="assets/images/shop/1000000103.jpg" alt="보드게임" style="width: 100%; height: 100%; object-fit: cover; border-radius: var(--pixar-radius-sm);">
+                </div>
+                <div class="item-details">
+                    <span class="item-brand">보드게임</span>
+                    <h3 class="item-name">카탄: 확장판 시나리오 컬렉션</h3>
+                    <div class="item-options">
+                        <span>수량: 2개</span>
+                    </div>
+                    <div class="item-tags">
+                        <span class="free-shipping">무료배송</span>
+                    </div>
+                </div>
+                <div class="item-actions">
+                    <button class="item-delete"><i data-lucide="x"></i></button>
+                    <div class="quantity-control">
+                        <button><i data-lucide="minus"></i></button>
+                        <span>2</span>
+                        <button><i data-lucide="plus"></i></button>
+                    </div>
+                    <div class="item-price">
+                        <span class="current">70,000</span>
+                        <span class="original">100,000</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Continue Shopping -->
+            <button class="continue-shopping">
+                <i data-lucide="plus"></i>
+                쇼핑 계속하기
+            </button>
+        </div>
+
+        <!-- Order Summary -->
+        <div class="order-summary">
+            <h2 class="summary-title"><i data-lucide="receipt"></i>주문 요약</h2>
+
+            <div class="summary-row">
+                <span class="summary-label">상품 금액</span>
+                <span class="summary-value">717,000</span>
+            </div>
+            <div class="summary-row">
+                <span class="summary-label">상품 할인</span>
+                <span class="summary-value discount">-90,000</span>
+            </div>
+            <div class="summary-row">
+                <span class="summary-label">배송비</span>
+                <span class="summary-value shipping">무료</span>
+            </div>
+
+            <div class="summary-divider"></div>
+
+            <div class="summary-total">
+                <span class="label">총 결제 금액</span>
+                <span class="price">627,000<span class="won">원</span></span>
+            </div>
+
+            <!-- Coupon -->
+            <div class="coupon-section">
+                <div class="coupon-header">
+                    <span><i data-lucide="ticket"></i>쿠폰 적용</span>
+                    <a href="#">사용 가능 쿠폰 3장</a>
+                </div>
+                <div class="coupon-input">
+                    <input type="text" placeholder="쿠폰 코드 입력">
+                    <button>적용</button>
+                </div>
+            </div>
+
+            <!-- Checkout Button -->
+            <button class="checkout-btn">
+                <i data-lucide="credit-card"></i>
+                주문하기 (3개 상품)
+            </button>
+
+            <!-- Payment Methods -->
+            <div class="payment-methods">
+                <div class="payment-icon"><i data-lucide="credit-card"></i></div>
+                <div class="payment-icon"><i data-lucide="wallet"></i></div>
+                <div class="payment-icon"><i data-lucide="smartphone"></i></div>
+                <div class="payment-icon"><i data-lucide="building"></i></div>
+            </div>
+
+            <!-- Benefits -->
+            <div class="benefits">
+                <div class="benefit-item">
+                    <i data-lucide="shield-check"></i>
+                    <span>안전한 결제 시스템</span>
+                </div>
+                <div class="benefit-item">
+                    <i data-lucide="truck"></i>
+                    <span>5만원 이상 무료배송</span>
+                </div>
+                <div class="benefit-item">
+                    <i data-lucide="refresh-ccw"></i>
+                    <span>30일 이내 무료 교환/반품</span>
+                </div>
+            </div>
+        </div>
+    </main>
+    <!-- Footer -->
+    <div id="footer"></div>
+
+
+
+    <script>lucide.createIcons();</script>
+    <script src="common/loader.js"></script>
+</body>
+</html>

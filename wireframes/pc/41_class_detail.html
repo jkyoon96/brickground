@@ -1,0 +1,1249 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>클래스 상세 - BrickGround</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="common/components.css">
+    <link rel="stylesheet" href="common/responsive.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #F8FAFC;
+            --bg-secondary: #FFFFFF;
+            --text-primary: #1E293B;
+            --text-secondary: #64748B;
+            --text-muted: #94A3B8;
+            --border-color: #E2E8F0;
+            --pixar-blue: #0066FF;
+            --toy-green: #10B981;
+            --toy-yellow: #FFD93D;
+            --toy-success: #6BCB77;
+            --toy-error: #FF6B6B;
+            --toy-orange: #F97316;
+            --radius-lg: 20px;
+            --radius-md: 12px;
+            --shadow: 0 4px 20px rgba(16, 185, 129, 0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Nunito', 'Nanum Square Round', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+        }
+
+        /* Breadcrumb */
+        .breadcrumb {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px 40px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .breadcrumb a {
+            color: var(--text-secondary);
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            color: var(--toy-green);
+        }
+
+        .breadcrumb i {
+            width: 16px;
+            height: 16px;
+        }
+
+        .breadcrumb span {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        /* Main Content */
+        .main-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 40px 60px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+        }
+
+        /* Left Column */
+        .class-main {
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+        }
+
+        /* Class Header */
+        .class-header {
+            background: var(--bg-secondary);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+
+        .class-hero {
+            width: 100%;
+            aspect-ratio: 16/9;
+            background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            position: relative;
+        }
+
+        .class-hero i {
+            width: 80px;
+            height: 80px;
+            color: var(--toy-green);
+        }
+
+        .class-hero span {
+            font-size: 18px;
+            color: var(--toy-green);
+            font-weight: 700;
+        }
+
+        .class-badges {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            display: flex;
+            gap: 8px;
+        }
+
+        .class-badge {
+            background: var(--toy-green);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 16px;
+            font-size: 13px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .class-badge i {
+            width: 16px;
+            height: 16px;
+        }
+
+        .class-badge.popular {
+            background: var(--toy-yellow);
+            color: var(--text-primary);
+        }
+
+        .class-status {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: var(--toy-green);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 16px;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .class-header-content {
+            padding: 32px;
+        }
+
+        .class-type {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 14px;
+            background: rgba(16, 185, 129, 0.1);
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--toy-green);
+            margin-bottom: 16px;
+        }
+
+        .class-type i {
+            width: 16px;
+            height: 16px;
+        }
+
+        .class-title {
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 16px;
+            line-height: 1.3;
+        }
+
+        .class-meta {
+            display: flex;
+            gap: 24px;
+            margin-bottom: 20px;
+        }
+
+        .class-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .class-meta-item i {
+            width: 18px;
+            height: 18px;
+            color: var(--toy-green);
+        }
+
+        .class-rating {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .stars {
+            display: flex;
+            gap: 2px;
+        }
+
+        .stars i {
+            width: 18px;
+            height: 18px;
+            color: var(--toy-yellow);
+            fill: var(--toy-yellow);
+        }
+
+        .rating-text {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        /* Info Section */
+        .info-section {
+            background: var(--bg-secondary);
+            border-radius: var(--radius-lg);
+            padding: 32px;
+            box-shadow: var(--shadow);
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 800;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title i {
+            width: 24px;
+            height: 24px;
+            color: var(--toy-green);
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .info-item {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .info-label {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .info-value {
+            font-size: 16px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .info-value i {
+            width: 18px;
+            height: 18px;
+            color: var(--toy-green);
+        }
+
+        /* Description */
+        .description-content {
+            line-height: 1.8;
+            color: var(--text-secondary);
+        }
+
+        .description-content p {
+            margin-bottom: 16px;
+        }
+
+        .description-content ul {
+            list-style: none;
+            margin: 16px 0;
+        }
+
+        .description-content ul li {
+            padding: 8px 0;
+            padding-left: 24px;
+            position: relative;
+        }
+
+        .description-content ul li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 14px;
+            width: 8px;
+            height: 8px;
+            background: var(--toy-green);
+            border-radius: 50%;
+        }
+
+        /* Curriculum */
+        .curriculum-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .curriculum-item {
+            display: flex;
+            gap: 16px;
+            padding: 20px;
+            background: var(--bg-primary);
+            border-radius: var(--radius-md);
+        }
+
+        .curriculum-number {
+            width: 40px;
+            height: 40px;
+            background: var(--toy-green);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            font-weight: 800;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .curriculum-content {
+            flex: 1;
+        }
+
+        .curriculum-title {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .curriculum-desc {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        /* Instructor */
+        .instructor-card {
+            display: flex;
+            gap: 20px;
+            padding: 24px;
+            background: var(--bg-primary);
+            border-radius: var(--radius-lg);
+        }
+
+        .instructor-avatar {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--toy-green), #059669);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .instructor-avatar i {
+            width: 40px;
+            height: 40px;
+            color: white;
+        }
+
+        .instructor-info {
+            flex: 1;
+        }
+
+        .instructor-name {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .instructor-role {
+            font-size: 14px;
+            color: var(--toy-green);
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .instructor-bio {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* Reviews */
+        .reviews-summary {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            padding: 24px;
+            background: var(--bg-primary);
+            border-radius: var(--radius-lg);
+            margin-bottom: 24px;
+        }
+
+        .reviews-score {
+            text-align: center;
+        }
+
+        .reviews-score .score {
+            font-size: 48px;
+            font-weight: 800;
+            color: var(--toy-green);
+            line-height: 1;
+        }
+
+        .reviews-score .count {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+
+        .reviews-bars {
+            flex: 1;
+        }
+
+        .review-bar {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 8px;
+        }
+
+        .review-bar span {
+            width: 24px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .review-bar .bar-track {
+            flex: 1;
+            height: 8px;
+            background: var(--border-color);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .review-bar .bar-fill {
+            height: 100%;
+            background: var(--toy-green);
+            border-radius: 4px;
+        }
+
+        .review-item {
+            padding: 20px;
+            background: var(--bg-primary);
+            border-radius: var(--radius-md);
+            margin-bottom: 16px;
+        }
+
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .review-user {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .review-avatar {
+            width: 40px;
+            height: 40px;
+            background: var(--border-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: var(--text-secondary);
+        }
+
+        .review-name {
+            font-weight: 700;
+        }
+
+        .review-date {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .review-rating {
+            display: flex;
+            gap: 2px;
+        }
+
+        .review-rating i {
+            width: 14px;
+            height: 14px;
+            color: var(--toy-yellow);
+            fill: var(--toy-yellow);
+        }
+
+        .review-content {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* Right Column - Sidebar */
+        .class-sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .sticky-box {
+            position: sticky;
+            top: 100px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        /* Apply Card */
+        .apply-card {
+            background: var(--bg-secondary);
+            border-radius: var(--radius-lg);
+            padding: 28px;
+            box-shadow: var(--shadow);
+        }
+
+        .apply-price {
+            display: flex;
+            align-items: baseline;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .apply-price .price {
+            font-size: 36px;
+            font-weight: 800;
+            color: var(--toy-green);
+        }
+
+        .apply-price .unit {
+            font-size: 16px;
+            color: var(--text-secondary);
+        }
+
+        .apply-info {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            margin-bottom: 24px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .apply-info-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .apply-info-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .apply-info-label i {
+            width: 18px;
+            height: 18px;
+        }
+
+        .apply-info-value {
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .apply-info-value.highlight {
+            color: var(--toy-error);
+        }
+
+        .apply-btn {
+            width: 100%;
+            padding: 18px;
+            background: var(--toy-green);
+            border: none;
+            border-radius: var(--radius-md);
+            font-size: 18px;
+            font-weight: 700;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-decoration: none;
+            margin-bottom: 12px;
+        }
+
+        .apply-btn i {
+            width: 22px;
+            height: 22px;
+        }
+
+        .apply-btn:hover {
+            background: #059669;
+        }
+
+        .wishlist-btn {
+            width: 100%;
+            padding: 14px;
+            background: var(--bg-primary);
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius-md);
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-primary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .wishlist-btn i {
+            width: 18px;
+            height: 18px;
+        }
+
+        .wishlist-btn:hover {
+            border-color: var(--toy-green);
+        }
+
+        /* Schedule Card */
+        .schedule-card {
+            background: var(--bg-secondary);
+            border-radius: var(--radius-lg);
+            padding: 28px;
+            box-shadow: var(--shadow);
+        }
+
+        .schedule-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .schedule-title i {
+            width: 20px;
+            height: 20px;
+            color: var(--toy-green);
+        }
+
+        .schedule-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .schedule-item {
+            display: flex;
+            gap: 16px;
+            padding: 16px;
+            background: var(--bg-primary);
+            border-radius: var(--radius-md);
+        }
+
+        .schedule-date-box {
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(135deg, var(--toy-green), #059669);
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .schedule-date-box .month {
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .schedule-date-box .day {
+            font-size: 20px;
+            font-weight: 800;
+            line-height: 1;
+        }
+
+        .schedule-info {
+            flex: 1;
+        }
+
+        .schedule-time {
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .schedule-spots {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .schedule-spots.few {
+            color: var(--toy-orange);
+        }
+
+        /* Location Card */
+        .location-card {
+            background: var(--bg-secondary);
+            border-radius: var(--radius-lg);
+            padding: 28px;
+            box-shadow: var(--shadow);
+        }
+
+        .location-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .location-title i {
+            width: 20px;
+            height: 20px;
+            color: var(--toy-green);
+        }
+
+        .location-map {
+            width: 100%;
+            height: 160px;
+            background: var(--bg-primary);
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 16px;
+        }
+
+        .location-map i {
+            width: 48px;
+            height: 48px;
+            color: var(--text-muted);
+        }
+
+        .location-address {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .location-address strong {
+            color: var(--text-primary);
+        }
+
+        /* ==================== Responsive Design ==================== */
+        /* Tablet (1024px) */
+        @media (max-width: 1024px) {
+            .breadcrumb { padding: 16px 24px; }
+            .main-content { padding: 0 24px 40px; gap: 32px; }
+
+            .class-header-content { padding: 24px; }
+            .class-title { font-size: 26px; }
+
+            .info-section { padding: 24px; }
+            .info-grid { gap: 16px; }
+
+            .apply-card, .schedule-card, .location-card { padding: 24px; }
+            .sticky-box { top: 80px; }
+        }
+
+        /* Mobile (768px) */
+        @media (max-width: 768px) {
+            .breadcrumb {
+                padding: 12px 16px;
+                font-size: 12px;
+                overflow-x: auto;
+                white-space: nowrap;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            .main-content {
+                padding: 0 16px 32px;
+                grid-template-columns: 1fr !important;
+                gap: 24px;
+            }
+
+            .class-hero { aspect-ratio: 16/10; }
+            .class-hero i { width: 60px; height: 60px; }
+
+            .class-header-content { padding: 20px; }
+            .class-title { font-size: 22px; }
+            .class-meta { gap: 16px; flex-wrap: wrap; }
+            .class-meta-item { font-size: 13px; }
+
+            .info-section { padding: 20px; margin-bottom: 20px; }
+            .section-title { font-size: 18px; margin-bottom: 20px; }
+            .info-grid { grid-template-columns: 1fr; gap: 16px; }
+            .info-value { font-size: 14px; }
+
+            .curriculum-item { padding: 16px; gap: 12px; }
+            .curriculum-number { width: 32px; height: 32px; font-size: 14px; }
+            .curriculum-title { font-size: 14px; }
+
+            .instructor-card { flex-direction: column; text-align: center; padding: 20px; }
+            .instructor-avatar { width: 64px; height: 64px; }
+            .instructor-avatar i { width: 32px; height: 32px; }
+
+            .reviews-summary { flex-direction: column; padding: 20px; gap: 20px; }
+            .review-item { padding: 16px; }
+
+            .sticky-box { position: static; }
+            .apply-card, .schedule-card, .location-card { padding: 20px; }
+            .apply-price .price { font-size: 28px; }
+        }
+
+        /* Small Mobile (480px) */
+        @media (max-width: 480px) {
+            .breadcrumb { padding: 10px 12px; font-size: 11px; }
+            .breadcrumb i { width: 12px; height: 12px; }
+
+            .main-content { padding: 0 12px 24px; gap: 16px; }
+
+            .class-badges { top: 12px; left: 12px; gap: 6px; }
+            .class-badge { padding: 6px 10px; font-size: 11px; }
+            .class-status { top: 12px; right: 12px; padding: 6px 10px; font-size: 11px; }
+
+            .class-hero i { width: 48px; height: 48px; }
+            .class-hero span { font-size: 14px; }
+
+            .class-header-content { padding: 16px; }
+            .class-type { font-size: 11px; padding: 4px 10px; }
+            .class-title { font-size: 18px; margin-bottom: 12px; }
+            .class-meta { gap: 12px; margin-bottom: 16px; }
+            .class-meta-item { font-size: 12px; }
+            .class-meta-item i { width: 14px; height: 14px; }
+            .stars i { width: 14px; height: 14px; }
+            .rating-text { font-size: 12px; }
+
+            .info-section { padding: 16px; }
+            .section-title { font-size: 16px; gap: 8px; margin-bottom: 16px; }
+            .section-title i { width: 20px; height: 20px; }
+            .info-label { font-size: 12px; }
+            .info-value { font-size: 13px; gap: 6px; }
+            .info-value i { width: 14px; height: 14px; }
+
+            .description-content { font-size: 14px; }
+            .description-content ul li { padding-left: 18px; }
+
+            .curriculum-item { padding: 12px; }
+            .curriculum-number { width: 28px; height: 28px; font-size: 12px; }
+            .curriculum-title { font-size: 13px; }
+            .curriculum-desc { font-size: 12px; }
+
+            .instructor-card { padding: 16px; gap: 12px; }
+            .instructor-name { font-size: 16px; }
+            .instructor-role { font-size: 12px; }
+            .instructor-bio { font-size: 13px; }
+
+            .reviews-summary { padding: 16px; }
+            .reviews-score .score { font-size: 36px; }
+            .review-item { padding: 12px; margin-bottom: 12px; }
+            .review-avatar { width: 32px; height: 32px; font-size: 12px; }
+            .review-name { font-size: 13px; }
+            .review-content { font-size: 13px; }
+
+            .apply-card, .schedule-card, .location-card { padding: 16px; }
+            .apply-price .price { font-size: 24px; }
+            .apply-price .unit { font-size: 14px; }
+            .apply-info { margin-bottom: 20px; padding-bottom: 20px; }
+            .apply-info-row { font-size: 13px; }
+            .apply-btn { padding: 14px; font-size: 16px; }
+            .wishlist-btn { padding: 12px; font-size: 14px; }
+
+            .schedule-title { font-size: 16px; }
+            .schedule-item { padding: 12px; gap: 12px; }
+            .schedule-date-box { width: 48px; height: 48px; }
+            .schedule-date-box .month { font-size: 10px; }
+            .schedule-date-box .day { font-size: 16px; }
+            .schedule-time { font-size: 13px; }
+            .schedule-spots { font-size: 11px; }
+
+            .location-title { font-size: 16px; }
+            .location-map { height: 120px; }
+            .location-address { font-size: 13px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div id="header"></div>
+
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb">
+        <a href="00_main_home.html">홈</a>
+        <i data-lucide="chevron-right"></i>
+        <a href="40_class_list.html">클래스</a>
+        <i data-lucide="chevron-right"></i>
+        <span>레고 테크닉 자동차 조립 체험</span>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Left Column -->
+        <div class="class-main">
+            <!-- Class Header -->
+            <div class="class-header">
+                <div class="class-hero">
+                    <i data-lucide="puzzle"></i>
+                    <span>레고 조립 체험</span>
+                    <div class="class-badges">
+                        <span class="class-badge"><i data-lucide="sparkles"></i>체험수업</span>
+                        <span class="class-badge popular"><i data-lucide="flame"></i>인기</span>
+                    </div>
+                    <span class="class-status">모집중</span>
+                </div>
+                <div class="class-header-content">
+                    <div class="class-type"><i data-lucide="sparkles"></i>체험수업</div>
+                    <h1 class="class-title">레고 테크닉 자동차 조립 체험</h1>
+                    <div class="class-meta">
+                        <div class="class-meta-item">
+                            <i data-lucide="users"></i>
+                            초등 1-3학년
+                        </div>
+                        <div class="class-meta-item">
+                            <i data-lucide="clock"></i>
+                            2시간
+                        </div>
+                        <div class="class-meta-item">
+                            <i data-lucide="map-pin"></i>
+                            서울 강남구
+                        </div>
+                    </div>
+                    <div class="class-rating">
+                        <div class="stars">
+                            <i data-lucide="star"></i>
+                            <i data-lucide="star"></i>
+                            <i data-lucide="star"></i>
+                            <i data-lucide="star"></i>
+                            <i data-lucide="star"></i>
+                        </div>
+                        <span class="rating-text">4.9 (128개 리뷰)</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Class Info -->
+            <div class="info-section">
+                <h2 class="section-title"><i data-lucide="info"></i>수업 정보</h2>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <span class="info-label">수업 일시</span>
+                        <span class="info-value"><i data-lucide="calendar"></i>매주 토요일 10:00 - 12:00</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">수업 장소</span>
+                        <span class="info-value"><i data-lucide="map-pin"></i>서울 강남구 삼성동 123-45</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">대상 연령</span>
+                        <span class="info-value"><i data-lucide="users"></i>초등학교 1-3학년</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">정원</span>
+                        <span class="info-value"><i data-lucide="user-check"></i>최대 12명</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">수업 시간</span>
+                        <span class="info-value"><i data-lucide="clock"></i>2시간</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">준비물</span>
+                        <span class="info-value"><i data-lucide="package"></i>없음 (모든 재료 제공)</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Description -->
+            <div class="info-section">
+                <h2 class="section-title"><i data-lucide="file-text"></i>수업 소개</h2>
+                <div class="description-content">
+                    <p>레고 테크닉 자동차 조립 체험은 아이들이 직접 레고 테크닉 세트를 조립하며 기계공학의 원리를 배우는 체험 수업입니다.</p>
+                    <p>이 수업을 통해 아이들은:</p>
+                    <ul>
+                        <li>기어, 축, 모터 등 기계 부품의 원리를 이해합니다</li>
+                        <li>설명서를 읽고 따라하는 집중력을 기릅니다</li>
+                        <li>완성 후 작동 원리를 직접 확인하며 성취감을 느낍니다</li>
+                        <li>친구들과 함께 협동하며 사회성을 발달시킵니다</li>
+                    </ul>
+                    <p>수업에서 사용하는 모든 레고 세트는 제공되며, 완성된 작품은 집으로 가져갈 수 있습니다.</p>
+                </div>
+            </div>
+
+            <!-- Curriculum -->
+            <div class="info-section">
+                <h2 class="section-title"><i data-lucide="list-checks"></i>커리큘럼</h2>
+                <div class="curriculum-list">
+                    <div class="curriculum-item">
+                        <div class="curriculum-number">1</div>
+                        <div class="curriculum-content">
+                            <h4 class="curriculum-title">오리엔테이션 (15분)</h4>
+                            <p class="curriculum-desc">레고 테크닉 소개 및 안전 교육, 오늘 만들 자동차 모델 소개</p>
+                        </div>
+                    </div>
+                    <div class="curriculum-item">
+                        <div class="curriculum-number">2</div>
+                        <div class="curriculum-content">
+                            <h4 class="curriculum-title">기초 조립 (30분)</h4>
+                            <p class="curriculum-desc">섀시와 바퀴 조립, 기어 박스 만들기</p>
+                        </div>
+                    </div>
+                    <div class="curriculum-item">
+                        <div class="curriculum-number">3</div>
+                        <div class="curriculum-content">
+                            <h4 class="curriculum-title">본체 조립 (45분)</h4>
+                            <p class="curriculum-desc">자동차 본체와 조향 장치 조립, 디테일 파츠 장착</p>
+                        </div>
+                    </div>
+                    <div class="curriculum-item">
+                        <div class="curriculum-number">4</div>
+                        <div class="curriculum-content">
+                            <h4 class="curriculum-title">완성 및 테스트 (30분)</h4>
+                            <p class="curriculum-desc">완성된 자동차 테스트 및 작동 원리 설명, 사진 촬영</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Instructor -->
+            <div class="info-section">
+                <h2 class="section-title"><i data-lucide="user"></i>강사 소개</h2>
+                <div class="instructor-card">
+                    <div class="instructor-avatar">
+                        <i data-lucide="user"></i>
+                    </div>
+                    <div class="instructor-info">
+                        <h3 class="instructor-name">김블록 선생님</h3>
+                        <p class="instructor-role">레고 공인 강사 (LEGO Certified Professional)</p>
+                        <p class="instructor-bio">10년 이상의 레고 교육 경력을 가진 전문 강사입니다. 아이들의 눈높이에 맞춘 재미있고 교육적인 수업을 진행합니다. 현재까지 2,000명 이상의 수강생을 지도했습니다.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Reviews -->
+            <div class="info-section">
+                <h2 class="section-title"><i data-lucide="message-square"></i>수강 후기</h2>
+                <div class="reviews-summary">
+                    <div class="reviews-score">
+                        <div class="score">4.9</div>
+                        <div class="count">128개 리뷰</div>
+                    </div>
+                    <div class="reviews-bars">
+                        <div class="review-bar">
+                            <span>5점</span>
+                            <div class="bar-track"><div class="bar-fill" style="width: 85%"></div></div>
+                        </div>
+                        <div class="review-bar">
+                            <span>4점</span>
+                            <div class="bar-track"><div class="bar-fill" style="width: 12%"></div></div>
+                        </div>
+                        <div class="review-bar">
+                            <span>3점</span>
+                            <div class="bar-track"><div class="bar-fill" style="width: 3%"></div></div>
+                        </div>
+                        <div class="review-bar">
+                            <span>2점</span>
+                            <div class="bar-track"><div class="bar-fill" style="width: 0%"></div></div>
+                        </div>
+                        <div class="review-bar">
+                            <span>1점</span>
+                            <div class="bar-track"><div class="bar-fill" style="width: 0%"></div></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="review-item">
+                    <div class="review-header">
+                        <div class="review-user">
+                            <div class="review-avatar">김</div>
+                            <div>
+                                <div class="review-name">김**</div>
+                                <div class="review-date">2024.01.10</div>
+                            </div>
+                        </div>
+                        <div class="review-rating">
+                            <i data-lucide="star"></i>
+                            <i data-lucide="star"></i>
+                            <i data-lucide="star"></i>
+                            <i data-lucide="star"></i>
+                            <i data-lucide="star"></i>
+                        </div>
+                    </div>
+                    <p class="review-content">아이가 너무 좋아했어요! 선생님이 친절하게 설명해주셔서 2시간이 금방 갔습니다. 완성된 자동차를 집에 가져와서 계속 가지고 놀아요.</p>
+                </div>
+
+                <div class="review-item">
+                    <div class="review-header">
+                        <div class="review-user">
+                            <div class="review-avatar">이</div>
+                            <div>
+                                <div class="review-name">이**</div>
+                                <div class="review-date">2024.01.08</div>
+                            </div>
+                        </div>
+                        <div class="review-rating">
+                            <i data-lucide="star"></i>
+                            <i data-lucide="star"></i>
+                            <i data-lucide="star"></i>
+                            <i data-lucide="star"></i>
+                            <i data-lucide="star"></i>
+                        </div>
+                    </div>
+                    <p class="review-content">집중력이 약한 아이인데 수업 시간 동안 정말 집중해서 만들더라구요. 다음에 또 신청하려고 합니다!</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column - Sidebar -->
+        <aside class="class-sidebar">
+            <div class="sticky-box">
+                <!-- Apply Card -->
+                <div class="apply-card">
+                    <div class="apply-price">
+                        <span class="price">35,000원</span>
+                        <span class="unit">/회</span>
+                    </div>
+                    <div class="apply-info">
+                        <div class="apply-info-row">
+                            <span class="apply-info-label"><i data-lucide="calendar"></i>다음 수업</span>
+                            <span class="apply-info-value">1월 15일 (토)</span>
+                        </div>
+                        <div class="apply-info-row">
+                            <span class="apply-info-label"><i data-lucide="clock"></i>시간</span>
+                            <span class="apply-info-value">10:00 - 12:00</span>
+                        </div>
+                        <div class="apply-info-row">
+                            <span class="apply-info-label"><i data-lucide="users"></i>잔여석</span>
+                            <span class="apply-info-value highlight">3자리 남음</span>
+                        </div>
+                    </div>
+                    <a href="42_class_apply.html" class="apply-btn">
+                        <i data-lucide="check-circle"></i>
+                        수업 신청하기
+                    </a>
+                    <button class="wishlist-btn">
+                        <i data-lucide="heart"></i>
+                        관심 등록
+                    </button>
+                </div>
+
+                <!-- Schedule Card -->
+                <div class="schedule-card">
+                    <h3 class="schedule-title"><i data-lucide="calendar"></i>수업 일정</h3>
+                    <div class="schedule-list">
+                        <div class="schedule-item">
+                            <div class="schedule-date-box">
+                                <span class="month">Jan</span>
+                                <span class="day">15</span>
+                            </div>
+                            <div class="schedule-info">
+                                <div class="schedule-time">토요일 10:00 - 12:00</div>
+                                <div class="schedule-spots few">3자리 남음</div>
+                            </div>
+                        </div>
+                        <div class="schedule-item">
+                            <div class="schedule-date-box">
+                                <span class="month">Jan</span>
+                                <span class="day">22</span>
+                            </div>
+                            <div class="schedule-info">
+                                <div class="schedule-time">토요일 10:00 - 12:00</div>
+                                <div class="schedule-spots">8자리 남음</div>
+                            </div>
+                        </div>
+                        <div class="schedule-item">
+                            <div class="schedule-date-box">
+                                <span class="month">Jan</span>
+                                <span class="day">29</span>
+                            </div>
+                            <div class="schedule-info">
+                                <div class="schedule-time">토요일 10:00 - 12:00</div>
+                                <div class="schedule-spots">12자리 남음</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Location Card -->
+                <div class="location-card">
+                    <h3 class="location-title"><i data-lucide="map-pin"></i>수업 장소</h3>
+                    <div class="location-map">
+                        <i data-lucide="map"></i>
+                    </div>
+                    <div class="location-address">
+                        <strong>BrickGround 강남교육센터</strong><br>
+                        서울 강남구 삼성동 123-45<br>
+                        강남역 3번 출구 도보 5분
+                    </div>
+                </div>
+            </div>
+        </aside>
+    </main>
+
+    <!-- Footer -->
+    <div id="footer"></div>
+
+    <script>lucide.createIcons();</script>
+    <script src="common/loader.js"></script>
+</body>
+</html>

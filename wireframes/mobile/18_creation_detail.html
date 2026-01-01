@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=390, initial-scale=1.0">
+    <title>Creation 상세 - Mobile Wireframe</title>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --pixar-primary: #0066FF;
+            --pixar-secondary: #FFD93D;
+            --pixar-success: #6BCB77;
+            --pixar-error: #FF6B6B;
+            --pixar-teal: #00CEC9;
+            --pixar-cyan: #00D4FF;
+            --pixar-bg: #F8FAFC;
+            --pixar-card: #FFFFFF;
+            --pixar-text: #1E293B;
+            --pixar-text-light: #64748B;
+            --pixar-border: #E2E8F0;
+            --pixar-radius: 16px;
+            --pixar-radius-sm: 10px;
+            --pixar-shadow: 0 4px 20px rgba(0, 206, 201, 0.15);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Nunito', '나눔스퀘어라운드', sans-serif;
+            background: #1a1a2e;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .phone-frame {
+            width: 390px;
+            background: #1a1a1a;
+            border-radius: 50px;
+            padding: 12px;
+            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.5);
+        }
+
+        .phone-screen {
+            background: var(--pixar-bg);
+            border-radius: 40px;
+            overflow: hidden;
+            min-height: 780px;
+            position: relative;
+        }
+
+        /* Status Bar */
+        .status-bar {
+            padding: 14px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(135deg, var(--pixar-teal), var(--pixar-cyan));
+        }
+        .status-time { font-size: 14px; font-weight: 600; color: white; }
+        .status-icons { display: flex; gap: 6px; }
+        .status-icons i { width: 16px; height: 16px; color: white; }
+
+        /* Hero Preview */
+        .hero-preview {
+            width: 100%;
+            aspect-ratio: 16/10;
+            background: linear-gradient(135deg, #00CEC9, #00D4FF);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        .hero-preview i { width: 80px; height: 80px; color: rgba(255,255,255,0.5); }
+
+        .back-btn {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            width: 36px; height: 36px;
+            border-radius: 50%;
+            background: rgba(0,0,0,0.3);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+        .back-btn i { width: 18px; height: 18px; }
+
+        .preview-badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: var(--pixar-secondary);
+            color: var(--pixar-text);
+            padding: 5px 10px;
+            border-radius: 10px;
+            font-size: 10px;
+            font-weight: 700;
+        }
+
+        .view-3d-btn {
+            position: absolute;
+            bottom: 12px;
+            right: 12px;
+            padding: 10px 18px;
+            background: white;
+            border: none;
+            border-radius: 18px;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--pixar-teal);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+        .view-3d-btn i { width: 14px; height: 14px; }
+
+        /* Content */
+        .content { padding: 16px; padding-bottom: 80px; }
+
+        /* Title Section */
+        .title-section { margin-bottom: 16px; }
+
+        .title-row {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .creation-title { font-size: 20px; font-weight: 800; flex: 1; }
+
+        .action-btns { display: flex; gap: 6px; }
+        .action-btn {
+            width: 36px; height: 36px;
+            border-radius: 50%;
+            background: var(--pixar-card);
+            border: 2px solid var(--pixar-border);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--pixar-text);
+        }
+        .action-btn.liked { border-color: var(--pixar-error); color: var(--pixar-error); background: rgba(255, 107, 107, 0.1); }
+        .action-btn.liked i { fill: var(--pixar-error); }
+        .action-btn i { width: 16px; height: 16px; }
+
+        .creation-category {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: rgba(0, 206, 201, 0.1);
+            color: var(--pixar-teal);
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+        .creation-category i { width: 10px; height: 10px; }
+
+        /* Stats */
+        .creation-stats {
+            display: flex;
+            gap: 16px;
+            padding: 12px 0;
+            border-top: 1px solid var(--pixar-border);
+            border-bottom: 1px solid var(--pixar-border);
+            margin-bottom: 12px;
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            color: var(--pixar-text-light);
+            font-size: 12px;
+        }
+        .stat-item i { width: 14px; height: 14px; }
+        .stat-item strong { color: var(--pixar-text); font-weight: 700; }
+
+        /* Description */
+        .creation-description {
+            font-size: 13px;
+            line-height: 1.6;
+            color: var(--pixar-text-light);
+            margin-bottom: 12px;
+        }
+
+        /* Tags */
+        .tag-list { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 16px; }
+        .tag {
+            padding: 5px 12px;
+            background: var(--pixar-card);
+            border-radius: 14px;
+            font-size: 11px;
+            color: var(--pixar-text);
+        }
+
+        /* Author Card */
+        .author-card {
+            background: var(--pixar-card);
+            border-radius: var(--pixar-radius);
+            padding: 14px;
+            box-shadow: var(--pixar-shadow);
+            margin-bottom: 16px;
+        }
+
+        .author-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .author-avatar {
+            width: 48px; height: 48px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--pixar-teal), var(--pixar-cyan));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .author-avatar i { width: 24px; height: 24px; color: white; }
+
+        .author-info { flex: 1; }
+        .author-name { font-size: 15px; font-weight: 700; margin-bottom: 2px; }
+        .author-stats { font-size: 11px; color: var(--pixar-text-light); }
+
+        .follow-btn {
+            padding: 8px 16px;
+            background: var(--pixar-teal);
+            border: none;
+            border-radius: 16px;
+            color: white;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        /* Remix Section */
+        .remix-section {
+            background: var(--pixar-card);
+            border-radius: var(--pixar-radius);
+            padding: 14px;
+            box-shadow: var(--pixar-shadow);
+            margin-bottom: 16px;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .section-title {
+            font-size: 14px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .section-title i { width: 16px; height: 16px; color: var(--pixar-teal); }
+
+        .section-count { font-size: 11px; color: var(--pixar-text-light); }
+
+        .remix-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .remix-item {
+            aspect-ratio: 1;
+            border-radius: var(--pixar-radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+        .remix-item i { width: 20px; height: 20px; color: rgba(255,255,255,0.5); }
+
+        .remix-btn {
+            width: 100%;
+            padding: 10px;
+            background: var(--pixar-bg);
+            border: 2px dashed var(--pixar-border);
+            border-radius: var(--pixar-radius-sm);
+            color: var(--pixar-text);
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+        .remix-btn i { width: 14px; height: 14px; }
+
+        /* Comments */
+        .comments-section {
+            background: var(--pixar-card);
+            border-radius: var(--pixar-radius);
+            padding: 14px;
+            box-shadow: var(--pixar-shadow);
+        }
+
+        .comment-input-box {
+            display: flex;
+            gap: 10px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--pixar-border);
+            margin-bottom: 12px;
+        }
+
+        .comment-avatar {
+            width: 32px; height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--pixar-teal), var(--pixar-cyan));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .comment-avatar i { width: 16px; height: 16px; color: white; }
+
+        .comment-form { flex: 1; display: flex; gap: 8px; }
+        .comment-input {
+            flex: 1;
+            padding: 10px 14px;
+            border: 2px solid var(--pixar-border);
+            border-radius: 18px;
+            font-size: 12px;
+            font-family: inherit;
+        }
+
+        .submit-btn {
+            width: 36px; height: 36px;
+            background: var(--pixar-teal);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .submit-btn i { width: 16px; height: 16px; }
+
+        .comment-list { display: flex; flex-direction: column; gap: 12px; }
+
+        .comment-item { display: flex; gap: 10px; }
+
+        .commenter-avatar {
+            width: 28px; height: 28px;
+            border-radius: 50%;
+            background: var(--pixar-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .commenter-avatar i { width: 14px; height: 14px; color: var(--pixar-text-light); }
+
+        .comment-content { flex: 1; }
+        .comment-header {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 4px;
+        }
+        .commenter-name { font-size: 12px; font-weight: 700; }
+        .comment-time { font-size: 10px; color: var(--pixar-text-light); }
+        .author-badge {
+            background: var(--pixar-teal);
+            color: white;
+            padding: 1px 5px;
+            border-radius: 4px;
+            font-size: 8px;
+            font-weight: 700;
+        }
+
+        .comment-text { font-size: 12px; line-height: 1.5; color: var(--pixar-text-light); }
+
+        /* Bottom CTA */
+        .bottom-cta {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--pixar-card);
+            padding: 12px 16px 28px;
+            display: flex;
+            gap: 10px;
+            border-top: 1px solid var(--pixar-border);
+        }
+
+        .cta-btn-secondary {
+            flex: 1;
+            padding: 12px;
+            background: var(--pixar-bg);
+            border: 2px solid var(--pixar-border);
+            border-radius: 22px;
+            color: var(--pixar-text);
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+        .cta-btn-secondary i { width: 16px; height: 16px; }
+
+        .cta-btn-primary {
+            flex: 1;
+            padding: 12px;
+            background: linear-gradient(135deg, var(--pixar-teal), var(--pixar-cyan));
+            border: none;
+            border-radius: 22px;
+            color: white;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+        .cta-btn-primary i { width: 16px; height: 16px; }
+
+        /* Home Indicator */
+        .home-indicator {
+            position: absolute;
+            bottom: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 134px;
+            height: 5px;
+            background: var(--pixar-text);
+            border-radius: 3px;
+            opacity: 0.2;
+        }
+    </style>
+</head>
+<body>
+    <div class="phone-frame">
+        <div class="phone-screen">
+            <!-- Status Bar -->
+            <div class="status-bar">
+                <span class="status-time">9:41</span>
+                <div class="status-icons">
+                    <i data-lucide="signal"></i>
+                    <i data-lucide="wifi"></i>
+                    <i data-lucide="battery-full"></i>
+                </div>
+            </div>
+
+            <!-- Hero Preview -->
+            <div class="hero-preview">
+                <button class="back-btn"><i data-lucide="arrow-left"></i></button>
+                <span class="preview-badge">HOT</span>
+                <i data-lucide="building-2"></i>
+                <button class="view-3d-btn"><i data-lucide="box"></i>3D 보기</button>
+            </div>
+
+            <!-- Content -->
+            <div class="content">
+                <!-- Title Section -->
+                <div class="title-section">
+                    <div class="title-row">
+                        <h1 class="creation-title">미래 도시 스카이라인</h1>
+                        <div class="action-btns">
+                            <button class="action-btn liked"><i data-lucide="heart"></i></button>
+                            <button class="action-btn"><i data-lucide="bookmark"></i></button>
+                            <button class="action-btn"><i data-lucide="share-2"></i></button>
+                        </div>
+                    </div>
+                    <span class="creation-category"><i data-lucide="building-2"></i>건축</span>
+                </div>
+
+                <!-- Stats -->
+                <div class="creation-stats">
+                    <div class="stat-item"><i data-lucide="heart"></i><strong>3.2K</strong></div>
+                    <div class="stat-item"><i data-lucide="message-circle"></i><strong>187</strong></div>
+                    <div class="stat-item"><i data-lucide="download"></i><strong>892</strong></div>
+                    <div class="stat-item"><i data-lucide="eye"></i><strong>12.4K</strong></div>
+                </div>
+
+                <!-- Description -->
+                <p class="creation-description">
+                    네온 불빛이 가득한 사이버펑크 스타일의 미래 도시를 블록으로 재현했습니다.
+                    높이 솟은 마천루들과 홀로그램 광고판이 어우러진 2077년의 도시 풍경입니다.
+                </p>
+
+                <!-- Tags -->
+                <div class="tag-list">
+                    <span class="tag">#사이버펑크</span>
+                    <span class="tag">#미래도시</span>
+                    <span class="tag">#네온</span>
+                    <span class="tag">#SF</span>
+                </div>
+
+                <!-- Author Card -->
+                <div class="author-card">
+                    <div class="author-header">
+                        <div class="author-avatar"><i data-lucide="user"></i></div>
+                        <div class="author-info">
+                            <div class="author-name">빌더마스터</div>
+                            <div class="author-stats">팔로워 2,345 · 작품 48개</div>
+                        </div>
+                        <button class="follow-btn">팔로우</button>
+                    </div>
+                </div>
+
+                <!-- Remix Section -->
+                <div class="remix-section">
+                    <div class="section-header">
+                        <h3 class="section-title"><i data-lucide="git-branch"></i>리믹스</h3>
+                        <span class="section-count">23개</span>
+                    </div>
+                    <div class="remix-grid">
+                        <div class="remix-item" style="background: linear-gradient(135deg, #9B5DE5, #F15BB5);"><i data-lucide="building-2"></i></div>
+                        <div class="remix-item" style="background: linear-gradient(135deg, #00D4FF, #0066FF);"><i data-lucide="building-2"></i></div>
+                        <div class="remix-item" style="background: linear-gradient(135deg, #FFD93D, #FF6B6B);"><i data-lucide="building-2"></i></div>
+                        <div class="remix-item" style="background: linear-gradient(135deg, #6BCB77, #00CEC9);"><i data-lucide="building-2"></i></div>
+                    </div>
+                    <button class="remix-btn"><i data-lucide="git-branch"></i>리믹스하기</button>
+                </div>
+
+                <!-- Comments Section -->
+                <div class="comments-section">
+                    <div class="section-header">
+                        <h3 class="section-title"><i data-lucide="message-circle"></i>댓글</h3>
+                        <span class="section-count">187</span>
+                    </div>
+
+                    <div class="comment-input-box">
+                        <div class="comment-avatar"><i data-lucide="user"></i></div>
+                        <div class="comment-form">
+                            <input type="text" class="comment-input" placeholder="댓글 입력...">
+                            <button class="submit-btn"><i data-lucide="send"></i></button>
+                        </div>
+                    </div>
+
+                    <div class="comment-list">
+                        <div class="comment-item">
+                            <div class="commenter-avatar"><i data-lucide="user"></i></div>
+                            <div class="comment-content">
+                                <div class="comment-header">
+                                    <span class="commenter-name">픽셀마스터</span>
+                                    <span class="comment-time">2시간 전</span>
+                                </div>
+                                <p class="comment-text">와 정말 대단해요! 네온 효과가 너무 멋지네요.</p>
+                            </div>
+                        </div>
+
+                        <div class="comment-item">
+                            <div class="commenter-avatar"><i data-lucide="user"></i></div>
+                            <div class="comment-content">
+                                <div class="comment-header">
+                                    <span class="commenter-name">빌더마스터</span>
+                                    <span class="author-badge">작성자</span>
+                                    <span class="comment-time">1시간 전</span>
+                                </div>
+                                <p class="comment-text">감사합니다! 튜토리얼도 곧 올릴 예정이에요!</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom CTA -->
+            <div class="bottom-cta">
+                <button class="cta-btn-secondary"><i data-lucide="git-branch"></i>리믹스</button>
+                <button class="cta-btn-primary"><i data-lucide="download"></i>다운로드</button>
+            </div>
+
+            <div class="home-indicator"></div>
+        </div>
+    </div>
+
+    <script>lucide.createIcons();</script>
+</body>
+</html>

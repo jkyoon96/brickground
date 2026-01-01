@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=390, initial-scale=1.0">
+    <title>DotArt 상세 - Mobile Wireframe</title>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --pixar-primary: #0066FF;
+            --pixar-secondary: #FFD93D;
+            --pixar-success: #6BCB77;
+            --pixar-error: #FF6B6B;
+            --pixar-purple: #9B5DE5;
+            --pixar-pink: #F15BB5;
+            --pixar-bg: #F8FAFC;
+            --pixar-card: #FFFFFF;
+            --pixar-text: #1E293B;
+            --pixar-text-light: #64748B;
+            --pixar-border: #E2E8F0;
+            --pixar-radius: 16px;
+            --pixar-radius-sm: 10px;
+            --pixar-shadow: 0 4px 20px rgba(0, 102, 255, 0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Nunito', '나눔스퀘어라운드', sans-serif;
+            background: #1a1a2e;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .phone-frame {
+            width: 390px;
+            background: #1a1a1a;
+            border-radius: 50px;
+            padding: 12px;
+            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.5);
+        }
+
+        .phone-screen {
+            background: var(--pixar-bg);
+            border-radius: 40px;
+            overflow: hidden;
+            min-height: 780px;
+            position: relative;
+        }
+
+        /* Status Bar */
+        .status-bar {
+            padding: 14px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--pixar-card);
+        }
+        .status-time { font-size: 14px; font-weight: 600; }
+        .status-icons { display: flex; gap: 6px; }
+        .status-icons i { width: 16px; height: 16px; }
+
+        /* Header */
+        .header {
+            background: var(--pixar-card);
+            padding: 10px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--pixar-border);
+        }
+
+        .header-left { display: flex; align-items: center; gap: 10px; }
+
+        .back-btn {
+            width: 32px; height: 32px;
+            border-radius: 50%;
+            background: var(--pixar-bg);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .back-btn i { width: 16px; height: 16px; color: var(--pixar-text); }
+
+        .header-title { font-size: 16px; font-weight: 700; }
+
+        .header-right { display: flex; gap: 6px; }
+        .header-icon {
+            width: 32px; height: 32px;
+            border-radius: 50%;
+            background: var(--pixar-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .header-icon i { width: 16px; height: 16px; color: var(--pixar-text); }
+
+        /* Scrollable Content */
+        .scroll-content {
+            height: 680px;
+            overflow-y: auto;
+            padding-bottom: 70px;
+        }
+
+        /* Artwork Preview */
+        .artwork-preview {
+            width: 100%;
+            aspect-ratio: 1;
+            background: linear-gradient(135deg, #FFD93D, #FF6B6B);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        .artwork-preview i { width: 64px; height: 64px; color: rgba(255, 255, 255, 0.6); }
+
+        .artwork-badges {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            display: flex;
+            gap: 6px;
+        }
+
+        .artwork-badge {
+            padding: 5px 10px;
+            border-radius: 12px;
+            font-size: 10px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 3px;
+        }
+        .artwork-badge.hot { background: var(--pixar-error); color: white; }
+        .artwork-badge.has-3d { background: var(--pixar-purple); color: white; }
+        .artwork-badge i { width: 10px; height: 10px; color: inherit; }
+
+        .view-3d-btn {
+            position: absolute;
+            bottom: 12px;
+            right: 12px;
+            padding: 10px 16px;
+            background: linear-gradient(135deg, var(--pixar-purple), var(--pixar-pink));
+            border: none;
+            border-radius: 18px;
+            color: white;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            box-shadow: 0 4px 12px rgba(155, 93, 229, 0.4);
+        }
+        .view-3d-btn i { width: 14px; height: 14px; color: white; }
+
+        /* Action Bar */
+        .action-bar {
+            background: var(--pixar-card);
+            padding: 12px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--pixar-border);
+        }
+
+        .action-left { display: flex; gap: 10px; }
+
+        .action-btn {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 8px 12px;
+            background: var(--pixar-bg);
+            border: none;
+            border-radius: 10px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--pixar-text);
+            cursor: pointer;
+        }
+        .action-btn.liked { background: rgba(255, 107, 107, 0.1); color: var(--pixar-error); }
+        .action-btn.liked i { fill: var(--pixar-error); }
+        .action-btn i { width: 16px; height: 16px; }
+
+        .action-right { display: flex; gap: 6px; }
+
+        .icon-btn {
+            width: 36px; height: 36px;
+            border-radius: 50%;
+            background: var(--pixar-bg);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--pixar-text);
+        }
+        .icon-btn i { width: 16px; height: 16px; }
+
+        /* Author Card */
+        .author-card {
+            background: var(--pixar-card);
+            padding: 14px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--pixar-border);
+        }
+
+        .author-info { display: flex; align-items: center; gap: 10px; }
+
+        .author-avatar {
+            width: 44px; height: 44px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--pixar-purple), var(--pixar-pink));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .author-avatar i { width: 22px; height: 22px; color: white; }
+
+        .author-details h3 { font-size: 14px; font-weight: 700; margin-bottom: 2px; }
+        .author-details span { font-size: 11px; color: var(--pixar-text-light); }
+
+        .follow-btn {
+            padding: 8px 16px;
+            background: linear-gradient(135deg, var(--pixar-purple), var(--pixar-pink));
+            border: none;
+            border-radius: 16px;
+            color: white;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        /* Artwork Info */
+        .artwork-info-section {
+            background: var(--pixar-card);
+            padding: 16px;
+            border-bottom: 1px solid var(--pixar-border);
+        }
+
+        .info-title { font-size: 18px; font-weight: 800; margin-bottom: 8px; }
+        .info-description {
+            font-size: 13px;
+            color: var(--pixar-text-light);
+            line-height: 1.5;
+            margin-bottom: 12px;
+        }
+
+        .info-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+        .info-tag {
+            padding: 4px 10px;
+            background: rgba(155, 93, 229, 0.1);
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--pixar-purple);
+        }
+
+        .info-meta { display: flex; gap: 16px; }
+        .info-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 11px;
+            color: var(--pixar-text-light);
+        }
+        .info-meta-item i { width: 14px; height: 14px; }
+
+        /* Comments Section */
+        .comments-section {
+            background: var(--pixar-card);
+            padding: 16px;
+        }
+
+        .comments-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .comments-title {
+            font-size: 14px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .comments-title i { width: 16px; height: 16px; color: var(--pixar-purple); }
+        .comments-count { font-size: 12px; color: var(--pixar-text-light); }
+
+        .comment-input {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 14px;
+        }
+
+        .comment-avatar {
+            width: 32px; height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--pixar-purple), var(--pixar-pink));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .comment-avatar i { width: 16px; height: 16px; color: white; }
+
+        .comment-input-box { flex: 1; display: flex; gap: 6px; }
+        .comment-input-box input {
+            flex: 1;
+            padding: 8px 12px;
+            border: 2px solid var(--pixar-border);
+            border-radius: 10px;
+            font-size: 12px;
+            outline: none;
+        }
+        .comment-input-box input:focus { border-color: var(--pixar-purple); }
+
+        .comment-submit {
+            padding: 8px 14px;
+            background: var(--pixar-purple);
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .comment-list { display: flex; flex-direction: column; gap: 12px; }
+
+        .comment-item { display: flex; gap: 8px; }
+        .comment-content { flex: 1; }
+
+        .comment-author { display: flex; align-items: center; gap: 5px; margin-bottom: 3px; }
+        .comment-author-name { font-size: 12px; font-weight: 700; }
+        .comment-date { font-size: 10px; color: var(--pixar-text-light); }
+        .comment-text { font-size: 12px; line-height: 1.4; margin-bottom: 4px; }
+
+        .comment-actions { display: flex; gap: 10px; }
+        .comment-action {
+            font-size: 10px;
+            color: var(--pixar-text-light);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+        .comment-action i { width: 12px; height: 12px; }
+
+        /* Home Indicator */
+        .home-indicator {
+            position: absolute;
+            bottom: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 134px;
+            height: 5px;
+            background: var(--pixar-text);
+            border-radius: 3px;
+            opacity: 0.2;
+        }
+    </style>
+</head>
+<body>
+    <div class="phone-frame">
+        <div class="phone-screen">
+            <!-- Status Bar -->
+            <div class="status-bar">
+                <span class="status-time">9:41</span>
+                <div class="status-icons">
+                    <i data-lucide="signal"></i>
+                    <i data-lucide="wifi"></i>
+                    <i data-lucide="battery-full"></i>
+                </div>
+            </div>
+
+            <!-- Header -->
+            <header class="header">
+                <div class="header-left">
+                    <button class="back-btn"><i data-lucide="arrow-left"></i></button>
+                    <span class="header-title">작품 상세</span>
+                </div>
+                <div class="header-right">
+                    <div class="header-icon"><i data-lucide="bookmark"></i></div>
+                    <div class="header-icon"><i data-lucide="more-vertical"></i></div>
+                </div>
+            </header>
+
+            <!-- Scrollable Content -->
+            <div class="scroll-content">
+                <!-- Artwork Preview -->
+                <div class="artwork-preview">
+                    <div class="artwork-badges">
+                        <span class="artwork-badge hot"><i data-lucide="flame"></i>HOT</span>
+                        <span class="artwork-badge has-3d"><i data-lucide="box"></i>3D</span>
+                    </div>
+                    <i data-lucide="cat"></i>
+                    <button class="view-3d-btn"><i data-lucide="box"></i>3D로 보기</button>
+                </div>
+
+                <!-- Action Bar -->
+                <div class="action-bar">
+                    <div class="action-left">
+                        <button class="action-btn liked"><i data-lucide="heart"></i>2,847</button>
+                        <button class="action-btn"><i data-lucide="message-circle"></i>156</button>
+                        <button class="action-btn"><i data-lucide="copy"></i>리믹스</button>
+                    </div>
+                    <div class="action-right">
+                        <button class="icon-btn"><i data-lucide="share-2"></i></button>
+                    </div>
+                </div>
+
+                <!-- Author Card -->
+                <div class="author-card">
+                    <div class="author-info">
+                        <div class="author-avatar"><i data-lucide="user"></i></div>
+                        <div class="author-details">
+                            <h3>픽셀마스터</h3>
+                            <span>@pixelmaster · 팔로워 8.5K</span>
+                        </div>
+                    </div>
+                    <button class="follow-btn">팔로우</button>
+                </div>
+
+                <!-- Artwork Info -->
+                <div class="artwork-info-section">
+                    <h2 class="info-title">귀여운 고양이</h2>
+                    <p class="info-description">사랑스러운 주황색 고양이를 픽셀 아트로 표현했습니다. 따뜻한 색감으로 귀여움을 극대화했어요!</p>
+                    <div class="info-tags">
+                        <span class="info-tag">#고양이</span>
+                        <span class="info-tag">#동물</span>
+                        <span class="info-tag">#픽셀아트</span>
+                        <span class="info-tag">#3D</span>
+                    </div>
+                    <div class="info-meta">
+                        <div class="info-meta-item"><i data-lucide="grid-3x3"></i>32x32</div>
+                        <div class="info-meta-item"><i data-lucide="eye"></i>12,543</div>
+                        <div class="info-meta-item"><i data-lucide="calendar"></i>12월 28일</div>
+                    </div>
+                </div>
+
+                <!-- Comments Section -->
+                <div class="comments-section">
+                    <div class="comments-header">
+                        <h3 class="comments-title"><i data-lucide="message-circle"></i>댓글</h3>
+                        <span class="comments-count">156개</span>
+                    </div>
+
+                    <div class="comment-input">
+                        <div class="comment-avatar"><i data-lucide="user"></i></div>
+                        <div class="comment-input-box">
+                            <input type="text" placeholder="댓글 입력...">
+                            <button class="comment-submit">등록</button>
+                        </div>
+                    </div>
+
+                    <div class="comment-list">
+                        <div class="comment-item">
+                            <div class="comment-avatar" style="background: linear-gradient(135deg, #4D96FF, #6BCB77);">
+                                <i data-lucide="user"></i>
+                            </div>
+                            <div class="comment-content">
+                                <div class="comment-author">
+                                    <span class="comment-author-name">도트러버</span>
+                                    <span class="comment-date">2시간 전</span>
+                                </div>
+                                <p class="comment-text">와 정말 귀엽네요! 고양이 표정이 너무 사랑스러워요</p>
+                                <div class="comment-actions">
+                                    <span class="comment-action"><i data-lucide="heart"></i>24</span>
+                                    <span class="comment-action"><i data-lucide="message-circle"></i>답글</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="comment-item">
+                            <div class="comment-avatar" style="background: linear-gradient(135deg, #FFD93D, #FF6B6B);">
+                                <i data-lucide="user"></i>
+                            </div>
+                            <div class="comment-content">
+                                <div class="comment-author">
+                                    <span class="comment-author-name">픽셀아티스트</span>
+                                    <span class="comment-date">5시간 전</span>
+                                </div>
+                                <p class="comment-text">색상 조합이 정말 예쁘네요!</p>
+                                <div class="comment-actions">
+                                    <span class="comment-action"><i data-lucide="heart"></i>12</span>
+                                    <span class="comment-action"><i data-lucide="message-circle"></i>답글</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="comment-item">
+                            <div class="comment-avatar" style="background: linear-gradient(135deg, #F15BB5, #9B5DE5);">
+                                <i data-lucide="user"></i>
+                            </div>
+                            <div class="comment-content">
+                                <div class="comment-author">
+                                    <span class="comment-author-name">게임덕후</span>
+                                    <span class="comment-date">1일 전</span>
+                                </div>
+                                <p class="comment-text">3D로 보니까 더 멋지네요! 블록으로 만들어보고 싶어요</p>
+                                <div class="comment-actions">
+                                    <span class="comment-action"><i data-lucide="heart"></i>38</span>
+                                    <span class="comment-action"><i data-lucide="message-circle"></i>답글</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="home-indicator"></div>
+        </div>
+    </div>
+    <script>lucide.createIcons();</script>
+</body>
+</html>

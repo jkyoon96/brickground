@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1024, initial-scale=1.0">
+    <title>Creation 상세 - Tablet Wireframe</title>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --pixar-primary: #0066FF;
+            --pixar-secondary: #FFD93D;
+            --pixar-success: #6BCB77;
+            --pixar-error: #FF6B6B;
+            --pixar-teal: #00CEC9;
+            --pixar-cyan: #00D4FF;
+            --pixar-bg: #F8FAFC;
+            --pixar-card: #FFFFFF;
+            --pixar-text: #1E293B;
+            --pixar-text-light: #64748B;
+            --pixar-border: #E2E8F0;
+            --pixar-radius: 20px;
+            --pixar-radius-sm: 12px;
+            --pixar-shadow: 0 4px 20px rgba(0, 206, 201, 0.15);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Nunito', '나눔스퀘어라운드', sans-serif;
+            background: #1a1a2e;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .tablet-frame {
+            width: 1024px;
+            background: #2a2a2a;
+            border-radius: 40px;
+            padding: 20px;
+            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.5);
+        }
+
+        .tablet-screen {
+            background: var(--pixar-bg);
+            border-radius: 24px;
+            overflow: hidden;
+            min-height: 700px;
+        }
+
+        /* Header */
+        .header {
+            background: var(--pixar-card);
+            padding: 14px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: var(--pixar-shadow);
+        }
+
+        .header-left { display: flex; align-items: center; gap: 20px; }
+
+        .logo {
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--pixar-primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .logo i { width: 26px; height: 26px; }
+
+        .nav-links { display: flex; gap: 14px; }
+        .nav-links a {
+            text-decoration: none;
+            color: var(--pixar-text-light);
+            font-weight: 600;
+            font-size: 14px;
+            padding: 6px 12px;
+            border-radius: 10px;
+        }
+        .nav-links a.active { color: var(--pixar-teal); background: rgba(0, 206, 201, 0.1); }
+
+        .header-right { display: flex; align-items: center; gap: 10px; }
+
+        .header-icon {
+            width: 38px; height: 38px;
+            border-radius: 50%;
+            background: var(--pixar-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .header-icon i { width: 18px; height: 18px; color: var(--pixar-text); }
+
+        /* Main Layout */
+        .main-layout {
+            display: grid;
+            grid-template-columns: 1fr 320px;
+            gap: 24px;
+            padding: 24px;
+        }
+
+        /* Creation Hero */
+        .creation-hero {
+            background: var(--pixar-card);
+            border-radius: var(--pixar-radius);
+            overflow: hidden;
+            box-shadow: var(--pixar-shadow);
+            margin-bottom: 24px;
+        }
+
+        .hero-preview {
+            width: 100%;
+            aspect-ratio: 16/9;
+            background: linear-gradient(135deg, #00CEC9, #00D4FF);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        .hero-preview i { width: 100px; height: 100px; color: rgba(255,255,255,0.5); }
+
+        .preview-badge {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            background: var(--pixar-secondary);
+            color: var(--pixar-text);
+            padding: 6px 14px;
+            border-radius: 14px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .view-3d-btn {
+            position: absolute;
+            bottom: 16px;
+            right: 16px;
+            padding: 12px 24px;
+            background: white;
+            border: none;
+            border-radius: 22px;
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--pixar-teal);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+        .view-3d-btn i { width: 18px; height: 18px; }
+
+        .hero-body { padding: 24px; }
+
+        .creation-title-row {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+
+        .creation-title { font-size: 24px; font-weight: 800; margin-bottom: 8px; }
+        .creation-category {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            background: rgba(0, 206, 201, 0.1);
+            color: var(--pixar-teal);
+            padding: 5px 12px;
+            border-radius: 14px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .creation-category i { width: 12px; height: 12px; }
+
+        .action-buttons { display: flex; gap: 8px; }
+
+        .btn-icon-lg {
+            width: 44px; height: 44px;
+            border-radius: 50%;
+            background: var(--pixar-bg);
+            border: 2px solid var(--pixar-border);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--pixar-text);
+        }
+        .btn-icon-lg.liked { border-color: var(--pixar-error); color: var(--pixar-error); background: rgba(255, 107, 107, 0.1); }
+        .btn-icon-lg.liked i { fill: var(--pixar-error); }
+        .btn-icon-lg i { width: 20px; height: 20px; }
+
+        .btn-primary-lg {
+            padding: 12px 24px;
+            border: none;
+            background: linear-gradient(135deg, var(--pixar-teal), var(--pixar-cyan));
+            color: white;
+            border-radius: 22px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .btn-primary-lg i { width: 18px; height: 18px; }
+
+        .creation-stats {
+            display: flex;
+            gap: 24px;
+            padding: 16px 0;
+            border-top: 1px solid var(--pixar-border);
+            border-bottom: 1px solid var(--pixar-border);
+            margin-bottom: 16px;
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--pixar-text-light);
+            font-size: 13px;
+        }
+        .stat-item i { width: 16px; height: 16px; }
+        .stat-item strong { color: var(--pixar-text); font-weight: 700; margin-left: 3px; }
+
+        .creation-description {
+            font-size: 14px;
+            line-height: 1.7;
+            color: var(--pixar-text-light);
+        }
+
+        .tag-section { margin-top: 16px; }
+        .tag-label { font-size: 12px; font-weight: 700; margin-bottom: 8px; }
+        .tag-list { display: flex; gap: 6px; flex-wrap: wrap; }
+        .tag {
+            padding: 6px 14px;
+            background: var(--pixar-bg);
+            border-radius: 16px;
+            font-size: 12px;
+            color: var(--pixar-text);
+        }
+
+        /* Comments */
+        .comments-section {
+            background: var(--pixar-card);
+            border-radius: var(--pixar-radius);
+            padding: 24px;
+            box-shadow: var(--pixar-shadow);
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            font-size: 16px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .section-title i { width: 20px; height: 20px; color: var(--pixar-teal); }
+
+        .comment-count {
+            background: var(--pixar-teal);
+            color: white;
+            padding: 3px 10px;
+            border-radius: 10px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .comment-input-box {
+            display: flex;
+            gap: 14px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--pixar-border);
+            margin-bottom: 20px;
+        }
+
+        .comment-avatar {
+            width: 40px; height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--pixar-teal), var(--pixar-cyan));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .comment-avatar i { width: 20px; height: 20px; color: white; }
+
+        .comment-form { flex: 1; }
+        .comment-textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid var(--pixar-border);
+            border-radius: var(--pixar-radius-sm);
+            font-size: 13px;
+            font-family: inherit;
+            resize: none;
+            height: 70px;
+            margin-bottom: 10px;
+        }
+
+        .comment-form-actions { display: flex; justify-content: flex-end; }
+        .submit-comment-btn {
+            padding: 8px 20px;
+            background: var(--pixar-teal);
+            border: none;
+            border-radius: 18px;
+            color: white;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .submit-comment-btn i { width: 14px; height: 14px; }
+
+        .comment-list { display: flex; flex-direction: column; gap: 16px; }
+
+        .comment-item { display: flex; gap: 14px; }
+
+        .commenter-avatar {
+            width: 36px; height: 36px;
+            border-radius: 50%;
+            background: var(--pixar-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .commenter-avatar i { width: 18px; height: 18px; color: var(--pixar-text-light); }
+
+        .comment-content { flex: 1; }
+        .comment-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 6px;
+        }
+        .commenter-name { font-size: 13px; font-weight: 700; }
+        .comment-time { font-size: 11px; color: var(--pixar-text-light); }
+        .author-badge {
+            background: var(--pixar-teal);
+            color: white;
+            padding: 2px 6px;
+            border-radius: 6px;
+            font-size: 9px;
+            font-weight: 700;
+        }
+
+        .comment-text { font-size: 13px; line-height: 1.6; color: var(--pixar-text-light); margin-bottom: 8px; }
+
+        .comment-actions { display: flex; gap: 14px; }
+        .comment-action {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 11px;
+            color: var(--pixar-text-light);
+            cursor: pointer;
+            background: none;
+            border: none;
+        }
+        .comment-action i { width: 12px; height: 12px; }
+
+        /* Sidebar */
+        .sidebar {}
+
+        .author-card {
+            background: var(--pixar-card);
+            border-radius: var(--pixar-radius);
+            padding: 24px;
+            box-shadow: var(--pixar-shadow);
+            margin-bottom: 20px;
+        }
+
+        .author-header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 16px;
+        }
+
+        .author-avatar-lg {
+            width: 56px; height: 56px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--pixar-teal), var(--pixar-cyan));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .author-avatar-lg i { width: 28px; height: 28px; color: white; }
+
+        .author-info { flex: 1; }
+        .author-name-lg { font-size: 16px; font-weight: 700; margin-bottom: 2px; }
+        .author-bio { font-size: 12px; color: var(--pixar-text-light); }
+
+        .author-stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            padding: 14px 0;
+            border-top: 1px solid var(--pixar-border);
+            border-bottom: 1px solid var(--pixar-border);
+            margin-bottom: 14px;
+            text-align: center;
+        }
+
+        .author-stat-value { font-size: 16px; font-weight: 800; color: var(--pixar-teal); }
+        .author-stat-label { font-size: 10px; color: var(--pixar-text-light); }
+
+        .follow-btn-lg {
+            width: 100%;
+            padding: 12px;
+            background: var(--pixar-teal);
+            border: none;
+            border-radius: 20px;
+            color: white;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+        .follow-btn-lg i { width: 16px; height: 16px; }
+
+        /* Remix */
+        .remix-section {
+            background: var(--pixar-card);
+            border-radius: var(--pixar-radius);
+            padding: 24px;
+            box-shadow: var(--pixar-shadow);
+            margin-bottom: 20px;
+        }
+
+        .remix-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+
+        .remix-title {
+            font-size: 15px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .remix-title i { width: 18px; height: 18px; color: var(--pixar-teal); }
+
+        .remix-count { font-size: 12px; color: var(--pixar-text-light); }
+
+        .remix-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+
+        .remix-item {
+            aspect-ratio: 1;
+            border-radius: var(--pixar-radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        .remix-item i { width: 28px; height: 28px; color: rgba(255,255,255,0.5); }
+
+        .remix-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 8px;
+            background: linear-gradient(transparent, rgba(0,0,0,0.8));
+        }
+        .remix-author { font-size: 10px; color: white; font-weight: 600; }
+
+        .remix-btn {
+            width: 100%;
+            padding: 12px;
+            background: var(--pixar-bg);
+            border: 2px dashed var(--pixar-border);
+            border-radius: var(--pixar-radius-sm);
+            color: var(--pixar-text);
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            margin-top: 14px;
+        }
+        .remix-btn i { width: 16px; height: 16px; }
+
+        /* Related */
+        .related-section {
+            background: var(--pixar-card);
+            border-radius: var(--pixar-radius);
+            padding: 24px;
+            box-shadow: var(--pixar-shadow);
+        }
+
+        .related-title {
+            font-size: 15px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .related-title i { width: 18px; height: 18px; color: var(--pixar-teal); }
+
+        .related-list { display: flex; flex-direction: column; gap: 14px; }
+
+        .related-item {
+            display: flex;
+            gap: 12px;
+            cursor: pointer;
+        }
+
+        .related-thumb {
+            width: 64px; height: 64px;
+            border-radius: var(--pixar-radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .related-thumb i { width: 24px; height: 24px; color: rgba(255,255,255,0.5); }
+
+        .related-info { flex: 1; }
+        .related-item-title { font-size: 13px; font-weight: 700; margin-bottom: 2px; }
+        .related-item-author { font-size: 11px; color: var(--pixar-text-light); margin-bottom: 2px; }
+        .related-item-stats {
+            display: flex;
+            gap: 10px;
+            font-size: 10px;
+            color: var(--pixar-text-light);
+        }
+        .related-item-stats span { display: flex; align-items: center; gap: 3px; }
+        .related-item-stats i { width: 10px; height: 10px; }
+    </style>
+</head>
+<body>
+    <div class="tablet-frame">
+        <div class="tablet-screen">
+            <!-- Header -->
+            <header class="header">
+                <div class="header-left">
+                    <div class="logo"><i data-lucide="box"></i>BrickGround</div>
+                    <nav class="nav-links">
+                        <a href="#">VR Mall</a>
+                        <a href="#">DotArt</a>
+                        <a href="#" class="active">Creation</a>
+                        <a href="#">고객센터</a>
+                    </nav>
+                </div>
+                <div class="header-right">
+                    <div class="header-icon"><i data-lucide="search"></i></div>
+                    <div class="header-icon"><i data-lucide="bell"></i></div>
+                    <div class="header-icon"><i data-lucide="user"></i></div>
+                </div>
+            </header>
+
+            <!-- Main Layout -->
+            <div class="main-layout">
+                <!-- Main Content -->
+                <div class="main-content">
+                    <div class="creation-hero">
+                        <div class="hero-preview">
+                            <span class="preview-badge">HOT</span>
+                            <i data-lucide="building-2"></i>
+                            <button class="view-3d-btn"><i data-lucide="box"></i>3D로 보기</button>
+                        </div>
+                        <div class="hero-body">
+                            <div class="creation-title-row">
+                                <div>
+                                    <h1 class="creation-title">미래 도시 스카이라인</h1>
+                                    <span class="creation-category"><i data-lucide="building-2"></i>건축</span>
+                                </div>
+                                <div class="action-buttons">
+                                    <button class="btn-icon-lg liked"><i data-lucide="heart"></i></button>
+                                    <button class="btn-icon-lg"><i data-lucide="bookmark"></i></button>
+                                    <button class="btn-icon-lg"><i data-lucide="share-2"></i></button>
+                                    <button class="btn-primary-lg"><i data-lucide="download"></i>다운로드</button>
+                                </div>
+                            </div>
+
+                            <div class="creation-stats">
+                                <div class="stat-item"><i data-lucide="heart"></i>좋아요<strong>3,245</strong></div>
+                                <div class="stat-item"><i data-lucide="message-circle"></i>댓글<strong>187</strong></div>
+                                <div class="stat-item"><i data-lucide="download"></i>다운로드<strong>892</strong></div>
+                                <div class="stat-item"><i data-lucide="eye"></i>조회<strong>12,487</strong></div>
+                            </div>
+
+                            <p class="creation-description">
+                                네온 불빛이 가득한 사이버펑크 스타일의 미래 도시를 블록으로 재현했습니다.
+                                높이 솟은 마천루들과 홀로그램 광고판이 어우러진 2077년의 도시 풍경입니다.
+                            </p>
+
+                            <div class="tag-section">
+                                <div class="tag-label">태그</div>
+                                <div class="tag-list">
+                                    <span class="tag">#사이버펑크</span>
+                                    <span class="tag">#미래도시</span>
+                                    <span class="tag">#네온</span>
+                                    <span class="tag">#SF</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="comments-section">
+                        <div class="section-header">
+                            <h2 class="section-title"><i data-lucide="message-circle"></i>댓글</h2>
+                            <span class="comment-count">187</span>
+                        </div>
+
+                        <div class="comment-input-box">
+                            <div class="comment-avatar"><i data-lucide="user"></i></div>
+                            <div class="comment-form">
+                                <textarea class="comment-textarea" placeholder="댓글을 입력하세요..."></textarea>
+                                <div class="comment-form-actions">
+                                    <button class="submit-comment-btn"><i data-lucide="send"></i>등록</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="comment-list">
+                            <div class="comment-item">
+                                <div class="commenter-avatar"><i data-lucide="user"></i></div>
+                                <div class="comment-content">
+                                    <div class="comment-header">
+                                        <span class="commenter-name">픽셀마스터</span>
+                                        <span class="comment-time">2시간 전</span>
+                                    </div>
+                                    <p class="comment-text">와 정말 대단해요! 네온 효과가 너무 멋지네요.</p>
+                                    <div class="comment-actions">
+                                        <button class="comment-action"><i data-lucide="heart"></i>좋아요 12</button>
+                                        <button class="comment-action"><i data-lucide="message-circle"></i>답글</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="comment-item">
+                                <div class="commenter-avatar"><i data-lucide="user"></i></div>
+                                <div class="comment-content">
+                                    <div class="comment-header">
+                                        <span class="commenter-name">빌더마스터</span>
+                                        <span class="author-badge">작성자</span>
+                                        <span class="comment-time">1시간 전</span>
+                                    </div>
+                                    <p class="comment-text">@픽셀마스터 감사합니다! 튜토리얼도 곧 올릴 예정이에요!</p>
+                                    <div class="comment-actions">
+                                        <button class="comment-action"><i data-lucide="heart"></i>좋아요 8</button>
+                                        <button class="comment-action"><i data-lucide="message-circle"></i>답글</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sidebar -->
+                <div class="sidebar">
+                    <div class="author-card">
+                        <div class="author-header">
+                            <div class="author-avatar-lg"><i data-lucide="user"></i></div>
+                            <div class="author-info">
+                                <div class="author-name-lg">빌더마스터</div>
+                                <div class="author-bio">3D 건축 전문 크리에이터</div>
+                            </div>
+                        </div>
+                        <div class="author-stats-grid">
+                            <div>
+                                <div class="author-stat-value">48</div>
+                                <div class="author-stat-label">작품</div>
+                            </div>
+                            <div>
+                                <div class="author-stat-value">2.3K</div>
+                                <div class="author-stat-label">팔로워</div>
+                            </div>
+                            <div>
+                                <div class="author-stat-value">89K</div>
+                                <div class="author-stat-label">좋아요</div>
+                            </div>
+                        </div>
+                        <button class="follow-btn-lg"><i data-lucide="user-plus"></i>팔로우</button>
+                    </div>
+
+                    <div class="remix-section">
+                        <div class="remix-header">
+                            <h3 class="remix-title"><i data-lucide="git-branch"></i>리믹스</h3>
+                            <span class="remix-count">23개</span>
+                        </div>
+                        <div class="remix-grid">
+                            <div class="remix-item" style="background: linear-gradient(135deg, #9B5DE5, #F15BB5);">
+                                <i data-lucide="building-2"></i>
+                                <div class="remix-overlay"><span class="remix-author">@네온킹</span></div>
+                            </div>
+                            <div class="remix-item" style="background: linear-gradient(135deg, #00D4FF, #0066FF);">
+                                <i data-lucide="building-2"></i>
+                                <div class="remix-overlay"><span class="remix-author">@시티빌더</span></div>
+                            </div>
+                        </div>
+                        <button class="remix-btn"><i data-lucide="git-branch"></i>리믹스하기</button>
+                    </div>
+
+                    <div class="related-section">
+                        <h3 class="related-title"><i data-lucide="sparkles"></i>비슷한 작품</h3>
+                        <div class="related-list">
+                            <div class="related-item">
+                                <div class="related-thumb" style="background: linear-gradient(135deg, #00CEC9, #0066FF);">
+                                    <i data-lucide="rocket"></i>
+                                </div>
+                                <div class="related-info">
+                                    <div class="related-item-title">우주 정거장</div>
+                                    <div class="related-item-author">스페이스맨</div>
+                                    <div class="related-item-stats">
+                                        <span><i data-lucide="heart"></i>1,892</span>
+                                        <span><i data-lucide="download"></i>389</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="related-item">
+                                <div class="related-thumb" style="background: linear-gradient(135deg, #9B5DE5, #F15BB5);">
+                                    <i data-lucide="castle"></i>
+                                </div>
+                                <div class="related-info">
+                                    <div class="related-item-title">네온 캐슬</div>
+                                    <div class="related-item-author">판타지빌더</div>
+                                    <div class="related-item-stats">
+                                        <span><i data-lucide="heart"></i>2,134</span>
+                                        <span><i data-lucide="download"></i>567</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>lucide.createIcons();</script>
+</body>
+</html>

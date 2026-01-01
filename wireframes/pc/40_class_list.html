@@ -1,0 +1,1095 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>클래스 목록 - BrickGround</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="common/components.css">
+    <link rel="stylesheet" href="common/responsive.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #F8FAFC;
+            --bg-secondary: #FFFFFF;
+            --text-primary: #1E293B;
+            --text-secondary: #64748B;
+            --text-muted: #94A3B8;
+            --border-color: #E2E8F0;
+            --pixar-blue: #0066FF;
+            --toy-green: #10B981;
+            --toy-yellow: #FFD93D;
+            --toy-success: #6BCB77;
+            --toy-error: #FF6B6B;
+            --toy-orange: #F97316;
+            --radius-lg: 20px;
+            --radius-md: 12px;
+            --shadow: 0 4px 20px rgba(16, 185, 129, 0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Nunito', 'Nanum Square Round', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, var(--toy-green) 0%, #059669 100%);
+            padding: 60px 40px;
+            text-align: center;
+            color: white;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 10px 20px;
+            border-radius: 24px;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .hero-badge i {
+            width: 18px;
+            height: 18px;
+        }
+
+        .hero h1 {
+            font-size: 42px;
+            font-weight: 800;
+            margin-bottom: 16px;
+        }
+
+        .hero p {
+            font-size: 18px;
+            opacity: 0.9;
+            margin-bottom: 32px;
+            max-width: 600px;
+            margin-inline: auto;
+        }
+
+        .hero-search {
+            max-width: 600px;
+            margin: 0 auto;
+            display: flex;
+            gap: 12px;
+        }
+
+        .hero-search-input {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px 24px;
+            background: white;
+            border-radius: 28px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .hero-search-input i {
+            width: 22px;
+            height: 22px;
+            color: var(--text-secondary);
+        }
+
+        .hero-search-input input {
+            border: none;
+            outline: none;
+            font-size: 16px;
+            flex: 1;
+        }
+
+        .hero-search-btn {
+            padding: 16px 32px;
+            background: var(--toy-yellow);
+            border: none;
+            border-radius: 28px;
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text-primary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .hero-search-btn i {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* Main Content */
+        .main-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px;
+        }
+
+        /* Stats Section */
+        .stats-section {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            background: var(--bg-secondary);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            text-align: center;
+            box-shadow: var(--shadow);
+        }
+
+        .stat-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(5, 150, 105, 0.2));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+        }
+
+        .stat-icon i {
+            width: 28px;
+            height: 28px;
+            color: var(--toy-green);
+        }
+
+        .stat-value {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--toy-green);
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        /* Filter Section */
+        .filter-section {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 32px;
+        }
+
+        .category-tabs {
+            display: flex;
+            gap: 8px;
+        }
+
+        .category-tab {
+            padding: 12px 20px;
+            background: var(--bg-secondary);
+            border: 2px solid transparent;
+            border-radius: 24px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .category-tab i {
+            width: 16px;
+            height: 16px;
+        }
+
+        .category-tab:hover {
+            border-color: var(--toy-green);
+        }
+
+        .category-tab.active {
+            border-color: var(--toy-green);
+            color: var(--toy-green);
+        }
+
+        .filter-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .filter-btn {
+            padding: 10px 20px;
+            background: var(--bg-secondary);
+            border: 2px solid var(--border-color);
+            border-radius: 24px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .filter-btn i {
+            width: 16px;
+            height: 16px;
+        }
+
+        /* Class Grid */
+        .class-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        .class-card {
+            background: var(--bg-secondary);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s ease;
+        }
+
+        .class-card:hover {
+            transform: translateY(-6px);
+        }
+
+        .class-thumbnail {
+            width: 100%;
+            aspect-ratio: 16/10;
+            position: relative;
+            background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .class-preview {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .class-preview i {
+            width: 64px;
+            height: 64px;
+            color: var(--toy-green);
+        }
+
+        .class-preview span {
+            font-size: 14px;
+            color: var(--toy-green);
+            font-weight: 600;
+        }
+
+        .class-badge {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            background: var(--toy-green);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .class-badge i {
+            width: 12px;
+            height: 12px;
+        }
+
+        .class-badge.new {
+            background: var(--toy-success);
+        }
+
+        .class-badge.popular {
+            background: var(--toy-yellow);
+            color: var(--text-primary);
+        }
+
+        .class-badge.soon {
+            background: var(--toy-orange);
+        }
+
+        .class-status {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 6px 10px;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .class-status.open {
+            background: var(--toy-green);
+        }
+
+        .class-status.closed {
+            background: var(--toy-error);
+        }
+
+        .class-status.few {
+            background: var(--toy-orange);
+        }
+
+        .class-body {
+            padding: 20px;
+        }
+
+        .class-type {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px;
+            background: rgba(16, 185, 129, 0.1);
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--toy-green);
+            margin-bottom: 10px;
+        }
+
+        .class-type i {
+            width: 14px;
+            height: 14px;
+        }
+
+        .class-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            line-height: 1.4;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .class-info {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .class-info-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .class-info-row i {
+            width: 16px;
+            height: 16px;
+            color: var(--toy-green);
+        }
+
+        .class-meta {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-top: 16px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .class-price {
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--toy-green);
+        }
+
+        .class-price span {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        .class-apply-btn {
+            padding: 10px 24px;
+            background: var(--toy-green);
+            border: none;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 700;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            text-decoration: none;
+        }
+
+        .class-apply-btn i {
+            width: 16px;
+            height: 16px;
+        }
+
+        .class-apply-btn:hover {
+            background: #059669;
+        }
+
+        /* Card Link */
+        .class-thumbnail-link {
+            display: block;
+        }
+
+        .class-body-link {
+            display: block;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .class-body-link:hover .class-title {
+            color: var(--toy-green);
+        }
+
+        /* Load More */
+        .load-more {
+            display: flex;
+            justify-content: center;
+            margin-top: 48px;
+        }
+
+        .load-more-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 16px 48px;
+            background: var(--bg-secondary);
+            border: 2px solid var(--border-color);
+            border-radius: 20px;
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .load-more-btn:hover {
+            border-color: var(--toy-green);
+            background: var(--toy-green);
+            color: white;
+        }
+
+        .load-more-btn i {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* Upcoming Section */
+        .upcoming-section {
+            margin-top: 60px;
+            padding-top: 40px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
+        }
+
+        .section-title {
+            font-size: 24px;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title i {
+            width: 28px;
+            height: 28px;
+            color: var(--toy-green);
+        }
+
+        .section-link {
+            font-size: 14px;
+            color: var(--pixar-blue);
+            text-decoration: none;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .section-link i {
+            width: 16px;
+            height: 16px;
+        }
+
+        .upcoming-list {
+            display: flex;
+            gap: 16px;
+            overflow-x: auto;
+            padding-bottom: 8px;
+        }
+
+        .upcoming-item {
+            flex-shrink: 0;
+            width: 280px;
+            background: var(--bg-secondary);
+            border-radius: var(--radius-md);
+            padding: 20px;
+            box-shadow: var(--shadow);
+        }
+
+        .upcoming-date {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .upcoming-date-box {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--toy-green), #059669);
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .upcoming-date-box .month {
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .upcoming-date-box .day {
+            font-size: 18px;
+            font-weight: 800;
+            line-height: 1;
+        }
+
+        .upcoming-time {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .upcoming-title {
+            font-size: 15px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            line-height: 1.4;
+        }
+
+        .upcoming-info {
+            font-size: 12px;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .upcoming-info i {
+            width: 14px;
+            height: 14px;
+        }
+
+        /* ========== Responsive Design ========== */
+        /* Tablet (1024px) */
+        @media (max-width: 1024px) {
+            .hero { padding: 40px 24px; }
+            .hero h1 { font-size: 32px; }
+            .hero p { font-size: 16px; }
+            .hero-search { flex-direction: column; gap: 12px; }
+            .hero-search-input { width: 100%; }
+            .hero-search-btn { width: 100%; justify-content: center; }
+
+            .main-content { padding: 24px; }
+
+            .stats-section {
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 16px;
+            }
+
+            .filter-section { flex-wrap: wrap; gap: 16px; }
+            .category-tabs {
+                overflow-x: auto;
+                flex-wrap: nowrap;
+                padding-bottom: 8px;
+                -webkit-overflow-scrolling: touch;
+            }
+            .category-tab { flex-shrink: 0; }
+
+            .class-grid {
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 16px;
+            }
+        }
+
+        /* Mobile (768px) */
+        @media (max-width: 768px) {
+            .hero { padding: 32px 16px; }
+            .hero-badge { padding: 8px 14px; font-size: 12px; }
+            .hero h1 { font-size: 26px; margin-bottom: 12px; }
+            .hero p { font-size: 14px; margin-bottom: 24px; }
+            .hero-search-input { padding: 12px 18px; }
+            .hero-search-btn { padding: 12px 24px; font-size: 14px; }
+
+            .main-content { padding: 16px; }
+
+            .stats-section { gap: 12px; }
+            .stat-card { padding: 16px; }
+            .stat-icon { width: 44px; height: 44px; margin-bottom: 12px; }
+            .stat-icon i { width: 22px; height: 22px; }
+            .stat-value { font-size: 22px; }
+            .stat-label { font-size: 12px; }
+
+            .filter-section { flex-direction: column; align-items: stretch; }
+            .category-tabs { width: 100%; }
+            .category-tab { padding: 10px 14px; font-size: 12px; }
+            .filter-actions { justify-content: flex-start; flex-wrap: wrap; }
+            .filter-btn { padding: 8px 14px; font-size: 12px; }
+
+            .class-grid {
+                grid-template-columns: 1fr !important;
+            }
+
+            .class-body { padding: 16px; }
+            .class-title { font-size: 16px; }
+            .class-info-row { font-size: 12px; }
+            .class-price { font-size: 18px; }
+            .class-apply-btn { padding: 8px 18px; font-size: 13px; }
+
+            .load-more-btn { padding: 12px 32px; font-size: 14px; }
+
+            .upcoming-section { margin-top: 40px; padding-top: 24px; }
+            .section-title { font-size: 20px; }
+            .upcoming-item { width: 240px; padding: 16px; }
+        }
+
+        /* Small Mobile (480px) */
+        @media (max-width: 480px) {
+            .hero { padding: 24px 12px; }
+            .hero h1 { font-size: 22px; }
+            .hero p { font-size: 13px; }
+
+            .main-content { padding: 12px; }
+
+            .stats-section {
+                grid-template-columns: 1fr !important;
+            }
+
+            .category-tabs { gap: 6px; }
+            .category-tab { padding: 8px 12px; font-size: 11px; }
+
+            .class-card:hover { transform: none; }
+            .class-thumbnail { aspect-ratio: 16/9; }
+            .class-body { padding: 14px; }
+            .class-meta { flex-direction: column; align-items: stretch; gap: 12px; }
+            .class-apply-btn { width: 100%; justify-content: center; }
+
+            .load-more-btn { width: 100%; justify-content: center; }
+
+            .upcoming-item { width: 200px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div id="header"></div>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-badge"><i data-lucide="graduation-cap"></i>BrickGround Class</div>
+        <h1>체험 & 방과후 수업</h1>
+        <p>창의력과 집중력을 키우는 블록 교육 클래스에 참여하세요</p>
+        <div class="hero-search">
+            <div class="hero-search-input">
+                <i data-lucide="search"></i>
+                <input type="text" placeholder="클래스명, 지역으로 검색...">
+            </div>
+            <button class="hero-search-btn">
+                <i data-lucide="search"></i>
+                검색
+            </button>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Stats Section -->
+        <div class="stats-section">
+            <div class="stat-card">
+                <div class="stat-icon"><i data-lucide="calendar"></i></div>
+                <div class="stat-value">156</div>
+                <div class="stat-label">진행중인 클래스</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon"><i data-lucide="users"></i></div>
+                <div class="stat-value">2,847</div>
+                <div class="stat-label">누적 수강생</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon"><i data-lucide="map-pin"></i></div>
+                <div class="stat-value">48</div>
+                <div class="stat-label">교육 장소</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon"><i data-lucide="star"></i></div>
+                <div class="stat-value">4.9</div>
+                <div class="stat-label">평균 만족도</div>
+            </div>
+        </div>
+
+        <!-- Filter Section -->
+        <div class="filter-section">
+            <div class="category-tabs">
+                <button class="category-tab active"><i data-lucide="grid-3x3"></i>전체</button>
+                <button class="category-tab"><i data-lucide="sparkles"></i>체험수업</button>
+                <button class="category-tab"><i data-lucide="book-open"></i>방과후수업</button>
+                <button class="category-tab"><i data-lucide="calendar-check"></i>원데이클래스</button>
+                <button class="category-tab"><i data-lucide="repeat"></i>정기클래스</button>
+            </div>
+            <div class="filter-actions">
+                <button class="filter-btn"><i data-lucide="map-pin"></i>지역</button>
+                <button class="filter-btn"><i data-lucide="sliders"></i>필터</button>
+                <button class="filter-btn"><i data-lucide="arrow-up-down"></i>인기순</button>
+            </div>
+        </div>
+
+        <!-- Class Grid -->
+        <div class="class-grid">
+            <div class="class-card">
+                <a href="41_class_detail.html" class="class-thumbnail-link">
+                    <div class="class-thumbnail">
+                        <div class="class-preview">
+                            <i data-lucide="puzzle"></i>
+                            <span>레고 조립 체험</span>
+                        </div>
+                        <span class="class-badge popular"><i data-lucide="flame"></i>인기</span>
+                        <span class="class-status open">모집중</span>
+                    </div>
+                </a>
+                <a href="41_class_detail.html" class="class-body-link">
+                    <div class="class-body">
+                        <div class="class-type"><i data-lucide="sparkles"></i>체험수업</div>
+                        <h3 class="class-title">레고 테크닉 자동차 조립 체험</h3>
+                        <div class="class-info">
+                            <div class="class-info-row">
+                                <i data-lucide="users"></i>
+                                <span>대상: 초등 1-3학년</span>
+                            </div>
+                            <div class="class-info-row">
+                                <i data-lucide="clock"></i>
+                                <span>매주 토요일 10:00 - 12:00</span>
+                            </div>
+                            <div class="class-info-row">
+                                <i data-lucide="map-pin"></i>
+                                <span>서울 강남구 삼성동</span>
+                            </div>
+                        </div>
+                        <div class="class-meta">
+                            <div class="class-price">35,000원 <span>/회</span></div>
+                            <a href="42_class_apply.html" class="class-apply-btn">
+                                <i data-lucide="check-circle"></i>신청
+                            </a>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="class-card">
+                <a href="41_class_detail.html" class="class-thumbnail-link">
+                    <div class="class-thumbnail">
+                        <div class="class-preview">
+                            <i data-lucide="palette"></i>
+                            <span>DotArt 창작</span>
+                        </div>
+                        <span class="class-badge new"><i data-lucide="sparkles"></i>NEW</span>
+                        <span class="class-status few">마감임박</span>
+                    </div>
+                </a>
+                <a href="41_class_detail.html" class="class-body-link">
+                    <div class="class-body">
+                        <div class="class-type"><i data-lucide="book-open"></i>방과후수업</div>
+                        <h3 class="class-title">픽셀아트 DotArt 창작 수업</h3>
+                        <div class="class-info">
+                            <div class="class-info-row">
+                                <i data-lucide="users"></i>
+                                <span>대상: 초등 전학년</span>
+                            </div>
+                            <div class="class-info-row">
+                                <i data-lucide="clock"></i>
+                                <span>매주 화/목 15:00 - 16:30</span>
+                            </div>
+                            <div class="class-info-row">
+                                <i data-lucide="map-pin"></i>
+                                <span>서울 서초구 반포동</span>
+                            </div>
+                        </div>
+                        <div class="class-meta">
+                            <div class="class-price">120,000원 <span>/월</span></div>
+                            <a href="42_class_apply.html" class="class-apply-btn">
+                                <i data-lucide="check-circle"></i>신청
+                            </a>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="class-card">
+                <a href="41_class_detail.html" class="class-thumbnail-link">
+                    <div class="class-thumbnail">
+                        <div class="class-preview">
+                            <i data-lucide="cube"></i>
+                            <span>3D 창작</span>
+                        </div>
+                        <span class="class-status open">모집중</span>
+                    </div>
+                </a>
+                <a href="41_class_detail.html" class="class-body-link">
+                    <div class="class-body">
+                        <div class="class-type"><i data-lucide="calendar-check"></i>원데이클래스</div>
+                        <h3 class="class-title">3D Creation 원데이 체험</h3>
+                        <div class="class-info">
+                            <div class="class-info-row">
+                                <i data-lucide="users"></i>
+                                <span>대상: 초등 4-6학년</span>
+                            </div>
+                            <div class="class-info-row">
+                                <i data-lucide="clock"></i>
+                                <span>1월 15일 (토) 14:00 - 17:00</span>
+                            </div>
+                            <div class="class-info-row">
+                                <i data-lucide="map-pin"></i>
+                                <span>서울 송파구 잠실동</span>
+                            </div>
+                        </div>
+                        <div class="class-meta">
+                            <div class="class-price">45,000원 <span>/회</span></div>
+                            <a href="42_class_apply.html" class="class-apply-btn">
+                                <i data-lucide="check-circle"></i>신청
+                            </a>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="class-card">
+                <a href="41_class_detail.html" class="class-thumbnail-link">
+                    <div class="class-thumbnail">
+                        <div class="class-preview">
+                            <i data-lucide="bot"></i>
+                            <span>로봇 코딩</span>
+                        </div>
+                        <span class="class-badge soon"><i data-lucide="calendar"></i>곧 시작</span>
+                        <span class="class-status open">모집중</span>
+                    </div>
+                </a>
+                <a href="41_class_detail.html" class="class-body-link">
+                    <div class="class-body">
+                        <div class="class-type"><i data-lucide="repeat"></i>정기클래스</div>
+                        <h3 class="class-title">레고 마인드스톰 로봇 코딩</h3>
+                        <div class="class-info">
+                            <div class="class-info-row">
+                                <i data-lucide="users"></i>
+                                <span>대상: 중등 1-3학년</span>
+                            </div>
+                            <div class="class-info-row">
+                                <i data-lucide="clock"></i>
+                                <span>매주 수요일 17:00 - 19:00</span>
+                            </div>
+                            <div class="class-info-row">
+                                <i data-lucide="map-pin"></i>
+                                <span>경기 성남시 분당구</span>
+                            </div>
+                        </div>
+                        <div class="class-meta">
+                            <div class="class-price">180,000원 <span>/월</span></div>
+                            <a href="42_class_apply.html" class="class-apply-btn">
+                                <i data-lucide="check-circle"></i>신청
+                            </a>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="class-card">
+                <a href="41_class_detail.html" class="class-thumbnail-link">
+                    <div class="class-thumbnail">
+                        <div class="class-preview">
+                            <i data-lucide="blocks"></i>
+                            <span>유아 블록</span>
+                        </div>
+                        <span class="class-status open">모집중</span>
+                    </div>
+                </a>
+                <a href="41_class_detail.html" class="class-body-link">
+                    <div class="class-body">
+                        <div class="class-type"><i data-lucide="sparkles"></i>체험수업</div>
+                        <h3 class="class-title">유아 창의블록 놀이교실</h3>
+                        <div class="class-info">
+                            <div class="class-info-row">
+                                <i data-lucide="users"></i>
+                                <span>대상: 5-7세</span>
+                            </div>
+                            <div class="class-info-row">
+                                <i data-lucide="clock"></i>
+                                <span>매주 금요일 16:00 - 17:00</span>
+                            </div>
+                            <div class="class-info-row">
+                                <i data-lucide="map-pin"></i>
+                                <span>서울 마포구 합정동</span>
+                            </div>
+                        </div>
+                        <div class="class-meta">
+                            <div class="class-price">25,000원 <span>/회</span></div>
+                            <a href="42_class_apply.html" class="class-apply-btn">
+                                <i data-lucide="check-circle"></i>신청
+                            </a>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="class-card">
+                <a href="41_class_detail.html" class="class-thumbnail-link">
+                    <div class="class-thumbnail">
+                        <div class="class-preview">
+                            <i data-lucide="gamepad-2"></i>
+                            <span>보드게임</span>
+                        </div>
+                        <span class="class-status closed">마감</span>
+                    </div>
+                </a>
+                <a href="41_class_detail.html" class="class-body-link">
+                    <div class="class-body">
+                        <div class="class-type"><i data-lucide="book-open"></i>방과후수업</div>
+                        <h3 class="class-title">전략 보드게임 사고력 교실</h3>
+                        <div class="class-info">
+                            <div class="class-info-row">
+                                <i data-lucide="users"></i>
+                                <span>대상: 초등 3-6학년</span>
+                            </div>
+                            <div class="class-info-row">
+                                <i data-lucide="clock"></i>
+                                <span>매주 월/수 15:30 - 17:00</span>
+                            </div>
+                            <div class="class-info-row">
+                                <i data-lucide="map-pin"></i>
+                                <span>서울 용산구 이태원동</span>
+                            </div>
+                        </div>
+                        <div class="class-meta">
+                            <div class="class-price">100,000원 <span>/월</span></div>
+                            <button class="class-apply-btn" style="background: var(--text-muted); cursor: not-allowed;">
+                                마감
+                            </button>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <!-- Load More -->
+        <div class="load-more">
+            <button class="load-more-btn">
+                <i data-lucide="plus"></i>
+                더 보기
+            </button>
+        </div>
+
+        <!-- Upcoming Section -->
+        <div class="upcoming-section">
+            <div class="section-header">
+                <h2 class="section-title"><i data-lucide="calendar"></i>다가오는 클래스</h2>
+                <a href="#" class="section-link">전체보기 <i data-lucide="chevron-right"></i></a>
+            </div>
+            <div class="upcoming-list">
+                <div class="upcoming-item">
+                    <div class="upcoming-date">
+                        <div class="upcoming-date-box">
+                            <span class="month">Jan</span>
+                            <span class="day">15</span>
+                        </div>
+                        <div class="upcoming-time">토요일 10:00 AM</div>
+                    </div>
+                    <div class="upcoming-title">레고 테크닉 자동차 조립 체험</div>
+                    <div class="upcoming-info">
+                        <i data-lucide="map-pin"></i>
+                        서울 강남구 삼성동
+                    </div>
+                </div>
+                <div class="upcoming-item">
+                    <div class="upcoming-date">
+                        <div class="upcoming-date-box">
+                            <span class="month">Jan</span>
+                            <span class="day">16</span>
+                        </div>
+                        <div class="upcoming-time">화요일 15:00 PM</div>
+                    </div>
+                    <div class="upcoming-title">픽셀아트 DotArt 창작 수업</div>
+                    <div class="upcoming-info">
+                        <i data-lucide="map-pin"></i>
+                        서울 서초구 반포동
+                    </div>
+                </div>
+                <div class="upcoming-item">
+                    <div class="upcoming-date">
+                        <div class="upcoming-date-box">
+                            <span class="month">Jan</span>
+                            <span class="day">18</span>
+                        </div>
+                        <div class="upcoming-time">수요일 17:00 PM</div>
+                    </div>
+                    <div class="upcoming-title">레고 마인드스톰 로봇 코딩</div>
+                    <div class="upcoming-info">
+                        <i data-lucide="map-pin"></i>
+                        경기 성남시 분당구
+                    </div>
+                </div>
+                <div class="upcoming-item">
+                    <div class="upcoming-date">
+                        <div class="upcoming-date-box">
+                            <span class="month">Jan</span>
+                            <span class="day">20</span>
+                        </div>
+                        <div class="upcoming-time">금요일 16:00 PM</div>
+                    </div>
+                    <div class="upcoming-title">유아 창의블록 놀이교실</div>
+                    <div class="upcoming-info">
+                        <i data-lucide="map-pin"></i>
+                        서울 마포구 합정동
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <div id="footer"></div>
+
+    <script>lucide.createIcons();</script>
+    <script src="common/loader.js"></script>
+</body>
+</html>

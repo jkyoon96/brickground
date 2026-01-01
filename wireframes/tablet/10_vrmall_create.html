@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1024, initial-scale=1.0">
+    <title>VR Mall 생성 - Tablet Wireframe</title>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --pixar-primary: #0066FF;
+            --pixar-secondary: #FFD93D;
+            --pixar-success: #6BCB77;
+            --pixar-error: #FF6B6B;
+            --pixar-bg: #F8FAFC;
+            --pixar-card: #FFFFFF;
+            --pixar-text: #1E293B;
+            --pixar-text-light: #64748B;
+            --pixar-border: #E2E8F0;
+            --pixar-radius: 20px;
+            --pixar-radius-sm: 12px;
+            --pixar-shadow: 0 4px 20px rgba(0, 102, 255, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Nunito', '나눔스퀘어라운드', sans-serif;
+            background: #1a1a2e;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        /* Tablet Frame */
+        .tablet-frame {
+            width: 1024px;
+            background: #2d2d44;
+            border-radius: 40px;
+            padding: 20px;
+            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.5);
+        }
+
+        .tablet-screen {
+            background: var(--pixar-bg);
+            border-radius: 24px;
+            overflow: hidden;
+            min-height: 720px;
+        }
+
+        /* Header */
+        .header {
+            background: var(--pixar-card);
+            padding: 14px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: var(--pixar-shadow);
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .back-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--pixar-bg);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .back-btn i {
+            width: 20px;
+            height: 20px;
+            color: var(--pixar-text);
+        }
+
+        .header-title {
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-save {
+            padding: 10px 18px;
+            border: 2px solid var(--pixar-border);
+            background: white;
+            border-radius: var(--pixar-radius-sm);
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-save i {
+            width: 16px;
+            height: 16px;
+        }
+
+        /* Progress Steps */
+        .progress-bar {
+            background: var(--pixar-card);
+            padding: 16px 24px;
+            border-bottom: 1px solid var(--pixar-border);
+        }
+
+        .steps {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+        }
+
+        .step {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .step-circle {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--pixar-bg);
+            border: 2px solid var(--pixar-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 14px;
+            color: var(--pixar-text-light);
+        }
+
+        .step.active .step-circle {
+            background: var(--pixar-primary);
+            border-color: var(--pixar-primary);
+            color: white;
+        }
+
+        .step.completed .step-circle {
+            background: var(--pixar-success);
+            border-color: var(--pixar-success);
+            color: white;
+        }
+
+        .step-label {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--pixar-text-light);
+        }
+
+        .step.active .step-label {
+            color: var(--pixar-primary);
+        }
+
+        .step-line {
+            width: 50px;
+            height: 2px;
+            background: var(--pixar-border);
+        }
+
+        .step-line.completed {
+            background: var(--pixar-success);
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 24px;
+        }
+
+        /* Layout */
+        .create-layout {
+            display: grid;
+            grid-template-columns: 1fr 340px;
+            gap: 24px;
+        }
+
+        /* Form Section */
+        .form-section {
+            background: var(--pixar-card);
+            border-radius: var(--pixar-radius);
+            padding: 24px;
+            box-shadow: var(--pixar-shadow);
+        }
+
+        .section-title {
+            font-size: 17px;
+            font-weight: 800;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title i {
+            width: 22px;
+            height: 22px;
+            color: var(--pixar-primary);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .form-label span {
+            color: var(--pixar-error);
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid var(--pixar-border);
+            border-radius: var(--pixar-radius-sm);
+            font-size: 14px;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--pixar-primary);
+        }
+
+        .form-textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .form-hint {
+            font-size: 11px;
+            color: var(--pixar-text-light);
+            margin-top: 4px;
+        }
+
+        /* Category Chips */
+        .category-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .category-chip {
+            padding: 8px 14px;
+            border: 2px solid var(--pixar-border);
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            background: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .category-chip.selected {
+            background: var(--pixar-primary);
+            border-color: var(--pixar-primary);
+            color: white;
+        }
+
+        .category-chip i {
+            width: 14px;
+            height: 14px;
+        }
+
+        /* Upload Area */
+        .upload-area {
+            border: 2px dashed var(--pixar-border);
+            border-radius: var(--pixar-radius);
+            padding: 32px;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .upload-area:hover {
+            border-color: var(--pixar-primary);
+        }
+
+        .upload-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            background: rgba(0, 102, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 12px;
+        }
+
+        .upload-icon i {
+            width: 26px;
+            height: 26px;
+            color: var(--pixar-primary);
+        }
+
+        .upload-text {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .upload-hint {
+            font-size: 12px;
+            color: var(--pixar-text-light);
+        }
+
+        /* Template Grid */
+        .template-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .template-card {
+            background: var(--pixar-bg);
+            border: 2px solid transparent;
+            border-radius: var(--pixar-radius-sm);
+            padding: 16px;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .template-card:hover,
+        .template-card.selected {
+            border-color: var(--pixar-primary);
+        }
+
+        .template-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--pixar-primary) 0%, #0052CC 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 10px;
+        }
+
+        .template-icon i {
+            width: 24px;
+            height: 24px;
+            color: white;
+        }
+
+        .template-name {
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        /* Config Grid */
+        .config-section {
+            margin-top: 20px;
+        }
+
+        .config-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .config-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px;
+            background: var(--pixar-bg);
+            border-radius: var(--pixar-radius-sm);
+        }
+
+        .config-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .config-label i {
+            width: 18px;
+            height: 18px;
+            color: var(--pixar-primary);
+        }
+
+        .config-input {
+            width: 60px;
+            padding: 6px 10px;
+            border: 2px solid var(--pixar-border);
+            border-radius: 6px;
+            font-size: 13px;
+            text-align: center;
+        }
+
+        /* Toggle */
+        .toggle {
+            position: relative;
+            width: 44px;
+            height: 24px;
+        }
+
+        .toggle input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--pixar-border);
+            border-radius: 24px;
+            transition: 0.3s;
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background: white;
+            border-radius: 50%;
+            transition: 0.3s;
+        }
+
+        input:checked + .toggle-slider {
+            background: var(--pixar-primary);
+        }
+
+        input:checked + .toggle-slider:before {
+            transform: translateX(20px);
+        }
+
+        /* Preview Panel */
+        .preview-panel {
+            position: sticky;
+            top: 20px;
+        }
+
+        .preview-card {
+            background: var(--pixar-card);
+            border-radius: var(--pixar-radius);
+            box-shadow: var(--pixar-shadow);
+            overflow: hidden;
+        }
+
+        .preview-header {
+            padding: 16px;
+            background: linear-gradient(135deg, var(--pixar-primary) 0%, #0052CC 100%);
+            color: white;
+        }
+
+        .preview-header h3 {
+            font-size: 14px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .preview-header i {
+            width: 18px;
+            height: 18px;
+        }
+
+        .preview-body {
+            padding: 20px;
+        }
+
+        .preview-3d {
+            width: 100%;
+            aspect-ratio: 16/10;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: var(--pixar-radius-sm);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 16px;
+        }
+
+        .preview-3d i {
+            width: 40px;
+            height: 40px;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 8px;
+        }
+
+        .preview-3d span {
+            color: white;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .preview-mall-name {
+            font-size: 16px;
+            font-weight: 800;
+            margin-bottom: 6px;
+        }
+
+        .preview-mall-desc {
+            font-size: 13px;
+            color: var(--pixar-text-light);
+            margin-bottom: 12px;
+        }
+
+        .preview-stats {
+            display: flex;
+            gap: 12px;
+            padding-top: 12px;
+            border-top: 1px solid var(--pixar-border);
+        }
+
+        .preview-stat {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 12px;
+            color: var(--pixar-text-light);
+        }
+
+        .preview-stat i {
+            width: 14px;
+            height: 14px;
+        }
+
+        /* Tips Card */
+        .tips-card {
+            background: linear-gradient(135deg, var(--pixar-secondary) 0%, #FFC107 100%);
+            border-radius: var(--pixar-radius);
+            padding: 20px;
+            margin-top: 16px;
+        }
+
+        .tips-title {
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .tips-title i {
+            width: 18px;
+            height: 18px;
+        }
+
+        .tips-list {
+            list-style: none;
+        }
+
+        .tips-list li {
+            font-size: 12px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: flex-start;
+            gap: 6px;
+        }
+
+        .tips-list i {
+            width: 14px;
+            height: 14px;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+
+        /* Form Actions */
+        .form-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+            padding-top: 20px;
+            border-top: 1px solid var(--pixar-border);
+        }
+
+        .btn-secondary {
+            flex: 1;
+            padding: 14px;
+            border: 2px solid var(--pixar-border);
+            background: white;
+            border-radius: var(--pixar-radius-sm);
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .btn-secondary i {
+            width: 18px;
+            height: 18px;
+        }
+
+        .btn-primary {
+            flex: 2;
+            padding: 14px;
+            border: none;
+            background: linear-gradient(135deg, var(--pixar-primary) 0%, #0052CC 100%);
+            color: white;
+            border-radius: var(--pixar-radius-sm);
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .btn-primary i {
+            width: 18px;
+            height: 18px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Tablet Frame -->
+    <div class="tablet-frame">
+        <div class="tablet-screen">
+            <!-- Header -->
+            <header class="header">
+                <div class="header-left">
+                    <button class="back-btn">
+                        <i data-lucide="arrow-left"></i>
+                    </button>
+                    <span class="header-title">새 VR Mall 만들기</span>
+                </div>
+                <div class="header-actions">
+                    <button class="btn-save">
+                        <i data-lucide="save"></i>
+                        임시저장
+                    </button>
+                </div>
+            </header>
+
+            <!-- Progress Bar -->
+            <div class="progress-bar">
+                <div class="steps">
+                    <div class="step active">
+                        <div class="step-circle">1</div>
+                        <span class="step-label">기본 정보</span>
+                    </div>
+                    <div class="step-line"></div>
+                    <div class="step">
+                        <div class="step-circle">2</div>
+                        <span class="step-label">공간 설정</span>
+                    </div>
+                    <div class="step-line"></div>
+                    <div class="step">
+                        <div class="step-circle">3</div>
+                        <span class="step-label">상품 배치</span>
+                    </div>
+                    <div class="step-line"></div>
+                    <div class="step">
+                        <div class="step-circle">4</div>
+                        <span class="step-label">발행</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <main class="main-content">
+                <div class="create-layout">
+                    <!-- Form Area -->
+                    <div class="form-area">
+                        <div class="form-section">
+                            <h2 class="section-title">
+                                <i data-lucide="info"></i>
+                                기본 정보
+                            </h2>
+
+                            <div class="form-group">
+                                <label class="form-label">
+                                    Mall 이름 <span>*</span>
+                                </label>
+                                <input type="text" class="form-input" placeholder="예: 코스모스 리빙">
+                                <p class="form-hint">2-30자 이내로 입력해주세요</p>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">
+                                    Mall 설명 <span>*</span>
+                                </label>
+                                <textarea class="form-input form-textarea" placeholder="Mall에 대한 간단한 소개를 작성해주세요"></textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">카테고리</label>
+                                <div class="category-chips">
+                                    <div class="category-chip selected">
+                                        <i data-lucide="home"></i>
+                                        가구
+                                    </div>
+                                    <div class="category-chip">
+                                        <i data-lucide="shirt"></i>
+                                        패션
+                                    </div>
+                                    <div class="category-chip">
+                                        <i data-lucide="sparkles"></i>
+                                        뷰티
+                                    </div>
+                                    <div class="category-chip">
+                                        <i data-lucide="laptop"></i>
+                                        전자
+                                    </div>
+                                    <div class="category-chip">
+                                        <i data-lucide="palette"></i>
+                                        아트
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">대표 이미지</label>
+                                <div class="upload-area">
+                                    <div class="upload-icon">
+                                        <i data-lucide="upload-cloud"></i>
+                                    </div>
+                                    <p class="upload-text">이미지를 드래그하거나 클릭하여 업로드</p>
+                                    <p class="upload-hint">권장: 1200 x 675px (16:9), 최대 5MB</p>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">공간 템플릿</label>
+                                <div class="template-grid">
+                                    <div class="template-card selected">
+                                        <div class="template-icon">
+                                            <i data-lucide="home"></i>
+                                        </div>
+                                        <p class="template-name">모던 갤러리</p>
+                                    </div>
+                                    <div class="template-card">
+                                        <div class="template-icon">
+                                            <i data-lucide="store"></i>
+                                        </div>
+                                        <p class="template-name">부티크 샵</p>
+                                    </div>
+                                    <div class="template-card">
+                                        <div class="template-icon">
+                                            <i data-lucide="warehouse"></i>
+                                        </div>
+                                        <p class="template-name">인더스트리얼</p>
+                                    </div>
+                                    <div class="template-card">
+                                        <div class="template-icon">
+                                            <i data-lucide="trees"></i>
+                                        </div>
+                                        <p class="template-name">네이처 가든</p>
+                                    </div>
+                                    <div class="template-card">
+                                        <div class="template-icon">
+                                            <i data-lucide="moon"></i>
+                                        </div>
+                                        <p class="template-name">미니멀 다크</p>
+                                    </div>
+                                    <div class="template-card">
+                                        <div class="template-icon">
+                                            <i data-lucide="wand-2"></i>
+                                        </div>
+                                        <p class="template-name">커스텀</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="config-section">
+                                <label class="form-label">공간 설정</label>
+                                <div class="config-grid">
+                                    <div class="config-item">
+                                        <div class="config-label">
+                                            <i data-lucide="move"></i>
+                                            공간 크기
+                                        </div>
+                                        <input type="text" class="config-input" value="20m">
+                                    </div>
+                                    <div class="config-item">
+                                        <div class="config-label">
+                                            <i data-lucide="sun"></i>
+                                            조명 밝기
+                                        </div>
+                                        <input type="range" style="width: 80px;">
+                                    </div>
+                                    <div class="config-item">
+                                        <div class="config-label">
+                                            <i data-lucide="music"></i>
+                                            배경음악
+                                        </div>
+                                        <label class="toggle">
+                                            <input type="checkbox" checked>
+                                            <span class="toggle-slider"></span>
+                                        </label>
+                                    </div>
+                                    <div class="config-item">
+                                        <div class="config-label">
+                                            <i data-lucide="users"></i>
+                                            멀티플레이
+                                        </div>
+                                        <label class="toggle">
+                                            <input type="checkbox">
+                                            <span class="toggle-slider"></span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-actions">
+                                <button class="btn-secondary">
+                                    <i data-lucide="x"></i>
+                                    취소
+                                </button>
+                                <button class="btn-primary">
+                                    <i data-lucide="arrow-right"></i>
+                                    다음 단계
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Preview Panel -->
+                    <div class="preview-panel">
+                        <div class="preview-card">
+                            <div class="preview-header">
+                                <h3>
+                                    <i data-lucide="eye"></i>
+                                    미리보기
+                                </h3>
+                            </div>
+                            <div class="preview-body">
+                                <div class="preview-3d">
+                                    <i data-lucide="box"></i>
+                                    <span>3D 프리뷰</span>
+                                </div>
+                                <h4 class="preview-mall-name">Mall 이름</h4>
+                                <p class="preview-mall-desc">Mall 설명이 여기에 표시됩니다...</p>
+                                <div class="preview-stats">
+                                    <div class="preview-stat">
+                                        <i data-lucide="layout-grid"></i>
+                                        상품 0개
+                                    </div>
+                                    <div class="preview-stat">
+                                        <i data-lucide="move"></i>
+                                        20×20m
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="tips-card">
+                            <h3 class="tips-title">
+                                <i data-lucide="lightbulb"></i>
+                                VR Mall 제작 팁
+                            </h3>
+                            <ul class="tips-list">
+                                <li>
+                                    <i data-lucide="check-circle"></i>
+                                    매력적인 이름과 설명으로 관심을 끌어보세요
+                                </li>
+                                <li>
+                                    <i data-lucide="check-circle"></i>
+                                    고해상도 대표 이미지가 클릭률을 높입니다
+                                </li>
+                                <li>
+                                    <i data-lucide="check-circle"></i>
+                                    상품은 동선을 고려하여 배치하세요
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>

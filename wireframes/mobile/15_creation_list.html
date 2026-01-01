@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=390, initial-scale=1.0">
+    <title>Creation 갤러리 - Mobile Wireframe</title>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --pixar-primary: #0066FF;
+            --pixar-secondary: #FFD93D;
+            --pixar-success: #6BCB77;
+            --pixar-error: #FF6B6B;
+            --pixar-teal: #00CEC9;
+            --pixar-cyan: #00D4FF;
+            --pixar-bg: #F8FAFC;
+            --pixar-card: #FFFFFF;
+            --pixar-text: #1E293B;
+            --pixar-text-light: #64748B;
+            --pixar-border: #E2E8F0;
+            --pixar-radius: 16px;
+            --pixar-radius-sm: 10px;
+            --pixar-shadow: 0 4px 20px rgba(0, 206, 201, 0.15);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Nunito', '나눔스퀘어라운드', sans-serif;
+            background: #1a1a2e;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .phone-frame {
+            width: 390px;
+            background: #1a1a1a;
+            border-radius: 50px;
+            padding: 12px;
+            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.5);
+        }
+
+        .phone-screen {
+            background: var(--pixar-bg);
+            border-radius: 40px;
+            overflow: hidden;
+            min-height: 780px;
+            position: relative;
+        }
+
+        /* Status Bar */
+        .status-bar {
+            padding: 14px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(135deg, var(--pixar-teal), var(--pixar-cyan));
+        }
+        .status-time { font-size: 14px; font-weight: 600; color: white; }
+        .status-icons { display: flex; gap: 6px; }
+        .status-icons i { width: 16px; height: 16px; color: white; }
+
+        /* Hero */
+        .hero {
+            background: linear-gradient(135deg, var(--pixar-teal), var(--pixar-cyan));
+            padding: 20px 16px 30px;
+            text-align: center;
+            color: white;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            background: rgba(255,255,255,0.2);
+            padding: 6px 12px;
+            border-radius: 16px;
+            font-size: 11px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+        .hero-badge i { width: 14px; height: 14px; }
+
+        .hero h1 { font-size: 24px; font-weight: 800; margin-bottom: 8px; }
+        .hero p { font-size: 13px; opacity: 0.9; margin-bottom: 16px; }
+
+        .hero-btn {
+            padding: 12px 24px;
+            background: white;
+            color: var(--pixar-teal);
+            border: none;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+        }
+        .hero-btn i { width: 18px; height: 18px; }
+
+        /* Main Content */
+        .main-content { padding: 16px; padding-bottom: 80px; }
+
+        /* Stats */
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .stat-card {
+            background: var(--pixar-card);
+            border-radius: var(--pixar-radius-sm);
+            padding: 12px 8px;
+            text-align: center;
+            box-shadow: var(--pixar-shadow);
+        }
+        .stat-value { font-size: 16px; font-weight: 800; color: var(--pixar-teal); }
+        .stat-label { font-size: 9px; color: var(--pixar-text-light); }
+
+        /* Categories */
+        .category-scroll {
+            display: flex;
+            gap: 6px;
+            overflow-x: auto;
+            padding-bottom: 12px;
+            margin-bottom: 16px;
+        }
+        .category-scroll::-webkit-scrollbar { display: none; }
+
+        .category-chip {
+            padding: 8px 14px;
+            background: var(--pixar-card);
+            border: 2px solid transparent;
+            border-radius: 18px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--pixar-text-light);
+            cursor: pointer;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .category-chip i { width: 12px; height: 12px; }
+        .category-chip.active { border-color: var(--pixar-teal); color: var(--pixar-teal); }
+
+        /* Creation Grid */
+        .creation-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .creation-card {
+            background: var(--pixar-card);
+            border-radius: var(--pixar-radius);
+            overflow: hidden;
+            box-shadow: var(--pixar-shadow);
+        }
+
+        .creation-thumbnail {
+            width: 100%;
+            aspect-ratio: 1;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .creation-thumbnail i { width: 36px; height: 36px; color: rgba(255,255,255,0.5); }
+
+        .creation-badge {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            background: var(--pixar-secondary);
+            color: var(--pixar-text);
+            padding: 4px 8px;
+            border-radius: 8px;
+            font-size: 9px;
+            font-weight: 700;
+        }
+
+        .creation-featured-badge {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: var(--pixar-teal);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 8px;
+            font-size: 9px;
+            font-weight: 700;
+        }
+
+        .creation-body { padding: 12px; }
+
+        .creation-author {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 6px;
+        }
+
+        .author-avatar {
+            width: 20px; height: 20px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--pixar-teal), var(--pixar-cyan));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .author-avatar i { width: 10px; height: 10px; color: white; }
+        .author-name { font-size: 10px; color: var(--pixar-text-light); }
+
+        .creation-title { font-size: 13px; font-weight: 700; margin-bottom: 6px; line-height: 1.3; }
+
+        .creation-stats { display: flex; gap: 10px; }
+        .creation-stat {
+            display: flex;
+            align-items: center;
+            gap: 3px;
+            font-size: 10px;
+            color: var(--pixar-text-light);
+        }
+        .creation-stat i { width: 12px; height: 12px; }
+        .creation-stat.liked i { color: var(--pixar-error); fill: var(--pixar-error); }
+
+        /* Bottom Nav */
+        .bottom-nav {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--pixar-card);
+            padding: 10px 16px 28px;
+            display: flex;
+            justify-content: space-around;
+            border-top: 1px solid var(--pixar-border);
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--pixar-text-light);
+        }
+        .nav-item.active { color: var(--pixar-teal); }
+        .nav-item i { width: 22px; height: 22px; }
+        .nav-item span { font-size: 10px; font-weight: 600; }
+
+        .nav-item.create-btn {
+            width: 56px; height: 56px;
+            background: linear-gradient(135deg, var(--pixar-teal), var(--pixar-cyan));
+            border-radius: 50%;
+            margin-top: -28px;
+            color: white;
+            box-shadow: 0 4px 15px rgba(0, 206, 201, 0.4);
+        }
+        .nav-item.create-btn i { width: 28px; height: 28px; }
+
+        /* Home Indicator */
+        .home-indicator {
+            position: absolute;
+            bottom: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 134px;
+            height: 5px;
+            background: var(--pixar-text);
+            border-radius: 3px;
+            opacity: 0.2;
+        }
+    </style>
+</head>
+<body>
+    <div class="phone-frame">
+        <div class="phone-screen">
+            <!-- Status Bar -->
+            <div class="status-bar">
+                <span class="status-time">9:41</span>
+                <div class="status-icons">
+                    <i data-lucide="signal"></i>
+                    <i data-lucide="wifi"></i>
+                    <i data-lucide="battery-full"></i>
+                </div>
+            </div>
+
+            <!-- Hero -->
+            <section class="hero">
+                <div class="hero-badge"><i data-lucide="cube"></i>3D 창작 플랫폼</div>
+                <h1>Creation Gallery</h1>
+                <p>나만의 3D 창작물을 만들고 공유하세요</p>
+                <button class="hero-btn"><i data-lucide="plus"></i>새 창작물</button>
+            </section>
+
+            <!-- Main Content -->
+            <main class="main-content">
+                <!-- Stats -->
+                <div class="stats-row">
+                    <div class="stat-card">
+                        <div class="stat-value">12.8K</div>
+                        <div class="stat-label">창작물</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">4.5K</div>
+                        <div class="stat-label">창작자</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">89.2K</div>
+                        <div class="stat-label">좋아요</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">34.1K</div>
+                        <div class="stat-label">다운로드</div>
+                    </div>
+                </div>
+
+                <!-- Categories -->
+                <div class="category-scroll">
+                    <button class="category-chip active"><i data-lucide="grid-3x3"></i>전체</button>
+                    <button class="category-chip"><i data-lucide="flame"></i>인기</button>
+                    <button class="category-chip"><i data-lucide="clock"></i>최신</button>
+                    <button class="category-chip"><i data-lucide="building-2"></i>건축</button>
+                    <button class="category-chip"><i data-lucide="car"></i>탈것</button>
+                    <button class="category-chip"><i data-lucide="gamepad-2"></i>캐릭터</button>
+                </div>
+
+                <!-- Creation Grid -->
+                <div class="creation-grid">
+                    <div class="creation-card">
+                        <div class="creation-thumbnail" style="background: linear-gradient(135deg, #00CEC9, #00D4FF);">
+                            <span class="creation-badge">HOT</span>
+                            <span class="creation-featured-badge">추천</span>
+                            <i data-lucide="building-2"></i>
+                        </div>
+                        <div class="creation-body">
+                            <div class="creation-author">
+                                <div class="author-avatar"><i data-lucide="user"></i></div>
+                                <span class="author-name">빌더마스터</span>
+                            </div>
+                            <h3 class="creation-title">미래 도시 스카이라인</h3>
+                            <div class="creation-stats">
+                                <span class="creation-stat liked"><i data-lucide="heart"></i>3.2K</span>
+                                <span class="creation-stat"><i data-lucide="download"></i>892</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="creation-card">
+                        <div class="creation-thumbnail" style="background: linear-gradient(135deg, #6BCB77, #4D96FF);">
+                            <span class="creation-featured-badge">추천</span>
+                            <i data-lucide="car"></i>
+                        </div>
+                        <div class="creation-body">
+                            <div class="creation-author">
+                                <div class="author-avatar"><i data-lucide="user"></i></div>
+                                <span class="author-name">레이서킹</span>
+                            </div>
+                            <h3 class="creation-title">슈퍼카 컬렉션</h3>
+                            <div class="creation-stats">
+                                <span class="creation-stat liked"><i data-lucide="heart"></i>2.8K</span>
+                                <span class="creation-stat"><i data-lucide="download"></i>723</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="creation-card">
+                        <div class="creation-thumbnail" style="background: linear-gradient(135deg, #FF6B6B, #FFD93D);">
+                            <span class="creation-badge">NEW</span>
+                            <i data-lucide="gamepad-2"></i>
+                        </div>
+                        <div class="creation-body">
+                            <div class="creation-author">
+                                <div class="author-avatar"><i data-lucide="user"></i></div>
+                                <span class="author-name">캐릭터러버</span>
+                            </div>
+                            <h3 class="creation-title">귀여운 로봇 친구들</h3>
+                            <div class="creation-stats">
+                                <span class="creation-stat"><i data-lucide="heart"></i>1.5K</span>
+                                <span class="creation-stat"><i data-lucide="download"></i>456</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="creation-card">
+                        <div class="creation-thumbnail" style="background: linear-gradient(135deg, #9B5DE5, #F15BB5);">
+                            <i data-lucide="castle"></i>
+                        </div>
+                        <div class="creation-body">
+                            <div class="creation-author">
+                                <div class="author-avatar"><i data-lucide="user"></i></div>
+                                <span class="author-name">판타지빌더</span>
+                            </div>
+                            <h3 class="creation-title">마법의 성</h3>
+                            <div class="creation-stats">
+                                <span class="creation-stat liked"><i data-lucide="heart"></i>2.1K</span>
+                                <span class="creation-stat"><i data-lucide="download"></i>567</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+
+            <!-- Bottom Nav -->
+            <nav class="bottom-nav">
+                <button class="nav-item">
+                    <i data-lucide="home"></i>
+                    <span>홈</span>
+                </button>
+                <button class="nav-item">
+                    <i data-lucide="palette"></i>
+                    <span>DotArt</span>
+                </button>
+                <button class="nav-item create-btn">
+                    <i data-lucide="plus"></i>
+                </button>
+                <button class="nav-item active">
+                    <i data-lucide="cube"></i>
+                    <span>Creation</span>
+                </button>
+                <button class="nav-item">
+                    <i data-lucide="user"></i>
+                    <span>마이</span>
+                </button>
+            </nav>
+
+            <div class="home-indicator"></div>
+        </div>
+    </div>
+
+    <script>lucide.createIcons();</script>
+</body>
+</html>

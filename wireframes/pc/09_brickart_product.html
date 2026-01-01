@@ -1,0 +1,1334 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BrickArt 상품 상세 - BrickGround</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="common/components.css">
+    <link rel="stylesheet" href="common/responsive.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #F8FAFC;
+            --bg-secondary: #FFFFFF;
+            --text-primary: #1E293B;
+            --text-secondary: #64748B;
+            --text-muted: #94A3B8;
+            --border-color: #E2E8F0;
+            --pixar-blue: #0066FF;
+            --toy-cyan: #00CEC9;
+            --pixar-secondary: #FFD93D;
+            --pixar-success: #6BCB77;
+            --pixar-error: #FF6B6B;
+            --pixar-radius: 20px;
+            --pixar-radius-sm: 12px;
+            --shadow-soft: 0 4px 20px rgba(0, 102, 255, 0.1);
+            --shadow-float: 0 8px 30px rgba(0, 102, 255, 0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            background: var(--bg-secondary);
+            padding: 16px 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: var(--shadow-soft);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 32px;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--pixar-blue);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .logo i {
+            width: 32px;
+            height: 32px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 24px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-weight: 600;
+            padding: 8px 16px;
+            border-radius: var(--pixar-radius-sm);
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--pixar-blue);
+            background: rgba(0, 102, 255, 0.1);
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .header-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: var(--bg-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .header-icon:hover {
+            background: rgba(0, 102, 255, 0.1);
+            transform: scale(1.05);
+        }
+
+        .header-icon i {
+            width: 22px;
+            height: 22px;
+            color: var(--text-primary);
+        }
+
+        .badge {
+            position: absolute;
+            top: -2px;
+            right: -2px;
+            background: var(--pixar-error);
+            color: white;
+            font-size: 10px;
+            font-weight: 700;
+            min-width: 18px;
+            height: 18px;
+            border-radius: 9px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Breadcrumb */
+        .breadcrumb {
+            padding: 16px 40px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .breadcrumb a {
+            color: var(--pixar-blue);
+            text-decoration: none;
+        }
+
+        .breadcrumb i {
+            width: 16px;
+            height: 16px;
+        }
+
+        /* Main Content */
+        .main-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 40px 60px;
+        }
+
+        /* Product Detail Layout */
+        .product-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+        }
+
+        /* Product Gallery */
+        .product-gallery {
+            background: var(--bg-secondary);
+            border-radius: var(--pixar-radius);
+            padding: 24px;
+            box-shadow: var(--shadow-soft);
+        }
+
+        .main-image {
+            width: 100%;
+            aspect-ratio: 4/3;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: var(--pixar-radius-sm);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 16px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .main-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .main-image i {
+            width: 80px;
+            height: 80px;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 16px;
+        }
+
+        .main-image span {
+            color: white;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .image-badge {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            background: var(--pixar-blue);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .image-badge i {
+            width: 16px;
+            height: 16px;
+            color: white;
+            margin: 0;
+        }
+
+        .view-controls {
+            position: absolute;
+            bottom: 16px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 8px;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 8px 12px;
+            border-radius: 24px;
+        }
+
+        .view-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: transparent;
+            border: none;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .view-btn:hover,
+        .view-btn.active {
+            background: var(--pixar-blue);
+        }
+
+        .view-btn i {
+            width: 18px;
+            height: 18px;
+            color: white;
+            margin: 0;
+        }
+
+        .thumbnail-list {
+            display: flex;
+            gap: 12px;
+        }
+
+        .thumbnail {
+            width: 80px;
+            height: 80px;
+            border-radius: var(--pixar-radius-sm);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            cursor: pointer;
+            border: 3px solid transparent;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .thumbnail:hover,
+        .thumbnail.active {
+            border-color: var(--pixar-blue);
+            transform: scale(1.05);
+        }
+
+        .thumbnail img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .thumbnail i {
+            width: 28px;
+            height: 28px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        /* Product Info */
+        .product-info {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .product-header {
+            background: var(--bg-secondary);
+            border-radius: var(--pixar-radius);
+            padding: 28px;
+            box-shadow: var(--shadow-soft);
+        }
+
+        .product-tags {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .tag {
+            background: rgba(0, 102, 255, 0.1);
+            color: var(--pixar-blue);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .tag.hot {
+            background: rgba(255, 107, 107, 0.1);
+            color: var(--pixar-error);
+        }
+
+        .product-title {
+            font-size: 28px;
+            font-weight: 800;
+            margin-bottom: 12px;
+            line-height: 1.3;
+        }
+
+        .product-mall {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin-bottom: 16px;
+        }
+
+        .product-mall a {
+            color: var(--pixar-blue);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .product-stats {
+            display: flex;
+            gap: 20px;
+            padding-top: 16px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .stat-item i {
+            width: 18px;
+            height: 18px;
+        }
+
+        /* Price Box */
+        .price-box {
+            background: var(--bg-secondary);
+            border-radius: var(--pixar-radius);
+            padding: 28px;
+            box-shadow: var(--shadow-soft);
+        }
+
+        .price-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .price-label {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .price-original {
+            font-size: 16px;
+            color: var(--text-secondary);
+            text-decoration: line-through;
+        }
+
+        .price-current {
+            font-size: 32px;
+            font-weight: 800;
+            color: var(--pixar-blue);
+        }
+
+        .discount-badge {
+            background: var(--pixar-error);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .quantity-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 0;
+            border-top: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 20px;
+        }
+
+        .quantity-label {
+            font-weight: 600;
+        }
+
+        .quantity-control {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .qty-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--bg-primary);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .qty-btn:hover {
+            background: rgba(0, 102, 255, 0.1);
+        }
+
+        .qty-btn i {
+            width: 18px;
+            height: 18px;
+            color: var(--text-primary);
+        }
+
+        .qty-value {
+            width: 50px;
+            text-align: center;
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn-cart {
+            flex: 1;
+            padding: 16px;
+            border-radius: var(--pixar-radius-sm);
+            border: 2px solid var(--pixar-blue);
+            background: white;
+            color: var(--pixar-blue);
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-cart:hover {
+            background: rgba(0, 102, 255, 0.1);
+        }
+
+        .btn-cart i {
+            width: 20px;
+            height: 20px;
+        }
+
+        .btn-buy {
+            flex: 2;
+            padding: 16px;
+            border-radius: var(--pixar-radius-sm);
+            border: none;
+            background: var(--pixar-blue);
+            color: white;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-buy:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 102, 255, 0.3);
+        }
+
+        .btn-buy i {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* Delivery Info */
+        .delivery-box {
+            background: var(--bg-secondary);
+            border-radius: var(--pixar-radius);
+            padding: 24px;
+            box-shadow: var(--shadow-soft);
+        }
+
+        .delivery-title {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .delivery-title i {
+            width: 20px;
+            height: 20px;
+            color: var(--pixar-blue);
+        }
+
+        .delivery-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .delivery-item:last-child {
+            border-bottom: none;
+        }
+
+        .delivery-item i {
+            width: 18px;
+            height: 18px;
+            color: var(--text-secondary);
+        }
+
+        .delivery-item span {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .delivery-item strong {
+            color: var(--text-primary);
+        }
+
+        /* Seller Info */
+        .seller-box {
+            background: var(--bg-secondary);
+            border-radius: var(--pixar-radius);
+            padding: 24px;
+            box-shadow: var(--shadow-soft);
+        }
+
+        .seller-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .seller-avatar {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--pixar-secondary) 0%, #FFC107 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .seller-avatar i {
+            width: 28px;
+            height: 28px;
+            color: white;
+        }
+
+        .seller-details h4 {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .seller-details span {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .seller-stats {
+            display: flex;
+            gap: 16px;
+            padding-top: 16px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .seller-stat {
+            text-align: center;
+            flex: 1;
+        }
+
+        .seller-stat-value {
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--pixar-blue);
+        }
+
+        .seller-stat-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        /* Product Details Section */
+        .detail-section {
+            margin-top: 40px;
+        }
+
+        .detail-tabs {
+            display: flex;
+            gap: 8px;
+            background: var(--bg-secondary);
+            padding: 8px;
+            border-radius: var(--pixar-radius);
+            box-shadow: var(--shadow-soft);
+            margin-bottom: 24px;
+        }
+
+        .detail-tab {
+            flex: 1;
+            padding: 14px 24px;
+            border: none;
+            background: transparent;
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            cursor: pointer;
+            border-radius: var(--pixar-radius-sm);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .detail-tab:hover {
+            background: var(--bg-primary);
+        }
+
+        .detail-tab.active {
+            background: var(--pixar-blue);
+            color: white;
+        }
+
+        .detail-tab i {
+            width: 18px;
+            height: 18px;
+        }
+
+        .detail-content {
+            background: var(--bg-secondary);
+            border-radius: var(--pixar-radius);
+            padding: 32px;
+            box-shadow: var(--shadow-soft);
+        }
+
+        .detail-placeholder {
+            text-align: center;
+            padding: 60px 0;
+            color: var(--text-secondary);
+        }
+
+        .detail-placeholder i {
+            width: 64px;
+            height: 64px;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+
+        .detail-placeholder p {
+            font-size: 16px;
+        }
+
+        /* Related Products */
+        .related-section {
+            margin-top: 40px;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
+        }
+
+        .section-title {
+            font-size: 24px;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .section-title i {
+            width: 28px;
+            height: 28px;
+            color: var(--pixar-blue);
+        }
+
+        .view-all {
+            color: var(--pixar-blue);
+            text-decoration: none;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .view-all i {
+            width: 18px;
+            height: 18px;
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+        }
+
+        .product-card {
+            background: var(--bg-secondary);
+            border-radius: var(--pixar-radius);
+            overflow: hidden;
+            box-shadow: var(--shadow-soft);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .product-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-float);
+        }
+
+        .product-card-image {
+            width: 100%;
+            aspect-ratio: 1;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .product-card-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .product-card:hover .product-card-image img {
+            transform: scale(1.05);
+        }
+
+        .product-card-image i {
+            width: 48px;
+            height: 48px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .product-card-body {
+            padding: 16px;
+        }
+
+        .product-card-title {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .product-card-price {
+            font-size: 16px;
+            font-weight: 800;
+            color: var(--pixar-blue);
+        }
+
+        /* VR Preview Button */
+        .vr-preview-fab {
+            position: fixed;
+            bottom: 32px;
+            right: 32px;
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: var(--pixar-blue);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 20px rgba(0, 102, 255, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        .vr-preview-fab:hover {
+            transform: scale(1.1);
+        }
+
+        .vr-preview-fab i {
+            width: 28px;
+            height: 28px;
+            color: white;
+        }
+
+        /* =====================================================
+           반응형 스타일
+           ===================================================== */
+
+        /* 태블릿 (1024px 이하) */
+        @media (max-width: 1024px) {
+            .main-content {
+                padding: 0 24px 40px;
+            }
+
+            .product-layout {
+                display: block !important;
+                max-width: 100% !important;
+                overflow: hidden !important;
+            }
+
+            .product-gallery,
+            .product-info {
+                width: 100% !important;
+                max-width: 100% !important;
+            }
+
+            .product-gallery {
+                margin-bottom: 24px;
+            }
+
+            .product-title {
+                font-size: 24px;
+            }
+
+            .product-grid {
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 16px;
+            }
+
+            .detail-tabs {
+                flex-wrap: wrap;
+            }
+
+            .detail-tab {
+                flex: 1 1 calc(50% - 4px);
+                min-width: calc(50% - 4px);
+            }
+        }
+
+        /* 모바일 (768px 이하) */
+        @media (max-width: 768px) {
+            .breadcrumb {
+                padding: 12px 16px;
+                font-size: 12px;
+                flex-wrap: wrap;
+            }
+
+            .main-content {
+                padding: 0 16px 32px;
+            }
+
+            .product-gallery {
+                padding: 16px;
+            }
+
+            .main-image {
+                border-radius: 16px;
+            }
+
+            .thumbnail-list {
+                gap: 8px;
+            }
+
+            .thumbnail {
+                width: 60px;
+                height: 60px;
+            }
+
+            .product-header,
+            .price-box,
+            .delivery-box,
+            .seller-box {
+                padding: 20px;
+            }
+
+            .product-title {
+                font-size: 20px;
+            }
+
+            .product-tags {
+                flex-wrap: wrap;
+            }
+
+            .product-stats {
+                flex-wrap: wrap;
+                gap: 12px;
+            }
+
+            .price-current {
+                font-size: 26px;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .btn-cart,
+            .btn-buy {
+                width: 100%;
+            }
+
+            .seller-stats {
+                gap: 8px;
+            }
+
+            .detail-section {
+                margin-top: 24px;
+            }
+
+            .detail-tabs {
+                padding: 4px;
+            }
+
+            .detail-tab {
+                padding: 10px 12px;
+                font-size: 13px;
+                flex: 1 1 calc(50% - 4px);
+            }
+
+            .detail-tab i {
+                display: none;
+            }
+
+            .detail-content {
+                padding: 20px;
+            }
+
+            .related-section {
+                margin-top: 24px;
+            }
+
+            .section-title {
+                font-size: 20px;
+            }
+
+            .product-grid {
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 12px !important;
+            }
+
+            .product-card-body {
+                padding: 12px;
+            }
+
+            .product-card-title {
+                font-size: 13px;
+            }
+
+            .product-card-price {
+                font-size: 14px;
+            }
+        }
+
+        /* 소형 모바일 (480px 이하) */
+        @media (max-width: 480px) {
+            .product-title {
+                font-size: 18px;
+            }
+
+            .price-current {
+                font-size: 22px;
+            }
+
+            .thumbnail {
+                width: 50px;
+                height: 50px;
+            }
+
+            .product-header,
+            .price-box,
+            .delivery-box,
+            .seller-box {
+                padding: 16px;
+                border-radius: 16px;
+            }
+
+            .detail-tab {
+                font-size: 12px;
+                padding: 8px 10px;
+            }
+
+            .section-title {
+                font-size: 18px;
+            }
+
+            .product-card-title {
+                font-size: 12px;
+            }
+
+            .product-card-price {
+                font-size: 13px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <!-- Header -->
+    <div id="header"></div>
+
+    <!-- Breadcrumb -->
+    <div class="breadcrumb">
+        <a href="00_main_home.html">홈</a>
+        <i data-lucide="chevron-right"></i>
+        <a href="07_brickart_list.html">BrickArt</a>
+        <i data-lucide="chevron-right"></i>
+        <a href="08_brickart_viewer.html">코스모스 리빙</a>
+        <i data-lucide="chevron-right"></i>
+        <span>북유럽 스타일 3인용 소파</span>
+    </div>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Product Layout -->
+        <div class="product-layout">
+            <!-- Product Gallery -->
+            <div class="product-gallery">
+                <div class="main-image">
+                    <img src="../assets/images/brickart/sopoong (1).jpg" alt="북유럽 스타일 소파">
+                    <div class="image-badge">
+                        <i data-lucide="box"></i>
+                        3D 미리보기
+                    </div>
+                    <div class="view-controls">
+                        <button class="view-btn active">
+                            <i data-lucide="rotate-3d"></i>
+                        </button>
+                        <button class="view-btn">
+                            <i data-lucide="maximize-2"></i>
+                        </button>
+                        <button class="view-btn">
+                            <i data-lucide="move"></i>
+                        </button>
+                        <button class="view-btn">
+                            <i data-lucide="zoom-in"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="thumbnail-list">
+                    <div class="thumbnail active">
+                        <img src="../assets/images/brickart/sopoong (1).jpg" alt="썸네일 1">
+                    </div>
+                    <div class="thumbnail">
+                        <img src="../assets/images/brickart/sopoong (2).jpg" alt="썸네일 2">
+                    </div>
+                    <div class="thumbnail">
+                        <img src="../assets/images/brickart/sopoong (3).jpg" alt="썸네일 3">
+                    </div>
+                    <div class="thumbnail">
+                        <img src="../assets/images/brickart/sopoong (4).jpg" alt="썸네일 4">
+                    </div>
+                    <div class="thumbnail">
+                        <img src="../assets/images/brickart/sopoong (5).jpg" alt="썸네일 5">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product Info -->
+            <div class="product-info">
+                <!-- Header -->
+                <div class="product-header">
+                    <div class="product-tags">
+                        <span class="tag hot">베스트</span>
+                        <span class="tag">무료배송</span>
+                        <span class="tag">3D</span>
+                    </div>
+                    <h1 class="product-title">북유럽 스타일 프리미엄 3인용 패브릭 소파</h1>
+                    <div class="product-mall">
+                        <i data-lucide="store"></i>
+                        <a href="08_brickart_viewer.html">코스모스 리빙</a>에서 판매
+                    </div>
+                    <div class="product-stats">
+                        <div class="stat-item">
+                            <i data-lucide="star"></i>
+                            <span>4.8 (324)</span>
+                        </div>
+                        <div class="stat-item">
+                            <i data-lucide="eye"></i>
+                            <span>12,847</span>
+                        </div>
+                        <div class="stat-item">
+                            <i data-lucide="shopping-bag"></i>
+                            <span>1,234 구매</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Price Box -->
+                <div class="price-box">
+                    <div class="price-row">
+                        <div>
+                            <span class="price-label">정가</span>
+                            <p class="price-original">890,000원</p>
+                        </div>
+                        <span class="discount-badge">25% OFF</span>
+                    </div>
+                    <div class="price-row">
+                        <span class="price-label">판매가</span>
+                        <span class="price-current">667,500원</span>
+                    </div>
+                    <div class="quantity-row">
+                        <span class="quantity-label">수량</span>
+                        <div class="quantity-control">
+                            <button class="qty-btn">
+                                <i data-lucide="minus"></i>
+                            </button>
+                            <span class="qty-value">1</span>
+                            <button class="qty-btn">
+                                <i data-lucide="plus"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="action-buttons">
+                        <button class="btn-cart">
+                            <i data-lucide="shopping-cart"></i>
+                            장바구니
+                        </button>
+                        <button class="btn-buy">
+                            <i data-lucide="credit-card"></i>
+                            바로 구매
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Delivery Info -->
+                <div class="delivery-box">
+                    <h3 class="delivery-title">
+                        <i data-lucide="truck"></i>
+                        배송 정보
+                    </h3>
+                    <div class="delivery-item">
+                        <i data-lucide="package"></i>
+                        <span><strong>무료배송</strong> (도서산간 제외)</span>
+                    </div>
+                    <div class="delivery-item">
+                        <i data-lucide="calendar"></i>
+                        <span>오늘 주문 시 <strong>1/3(금) 도착 예정</strong></span>
+                    </div>
+                    <div class="delivery-item">
+                        <i data-lucide="refresh-cw"></i>
+                        <span>7일 이내 <strong>무료 반품</strong></span>
+                    </div>
+                </div>
+
+                <!-- Seller Info -->
+                <div class="seller-box">
+                    <div class="seller-header">
+                        <div class="seller-avatar">
+                            <i data-lucide="store"></i>
+                        </div>
+                        <div class="seller-details">
+                            <h4>코스모스 리빙</h4>
+                            <span>프리미엄 가구 전문 판매자</span>
+                        </div>
+                    </div>
+                    <div class="seller-stats">
+                        <div class="seller-stat">
+                            <div class="seller-stat-value">4.9</div>
+                            <div class="seller-stat-label">판매자 평점</div>
+                        </div>
+                        <div class="seller-stat">
+                            <div class="seller-stat-value">98%</div>
+                            <div class="seller-stat-label">응답률</div>
+                        </div>
+                        <div class="seller-stat">
+                            <div class="seller-stat-value">2시간</div>
+                            <div class="seller-stat-label">평균 응답</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Product Details Section -->
+        <div class="detail-section">
+            <div class="detail-tabs">
+                <button class="detail-tab active">
+                    <i data-lucide="file-text"></i>
+                    상품 상세
+                </button>
+                <button class="detail-tab">
+                    <i data-lucide="star"></i>
+                    리뷰 (324)
+                </button>
+                <button class="detail-tab">
+                    <i data-lucide="help-circle"></i>
+                    Q&A (18)
+                </button>
+                <button class="detail-tab">
+                    <i data-lucide="info"></i>
+                    배송/교환
+                </button>
+            </div>
+            <div class="detail-content">
+                <div class="detail-placeholder">
+                    <i data-lucide="image"></i>
+                    <p>상품 상세 이미지 및 설명이 표시됩니다</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Related Products -->
+        <div class="related-section">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <i data-lucide="sparkles"></i>
+                    이 상품과 함께 많이 본 상품
+                </h2>
+                <a href="34_mypage_orders.html" class="view-all">
+                    전체보기
+                    <i data-lucide="chevron-right"></i>
+                </a>
+            </div>
+            <div class="product-grid">
+                <div class="product-card">
+                    <div class="product-card-image">
+                        <img src="../assets/images/brickart/sopoong (5).jpg" alt="북유럽 LED 플로어 스탠드">
+                    </div>
+                    <div class="product-card-body">
+                        <p class="product-card-title">북유럽 LED 플로어 스탠드</p>
+                        <p class="product-card-price">189,000원</p>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="product-card-image">
+                        <img src="../assets/images/brickart/sopoong (6).jpg" alt="원목 사이드 테이블">
+                    </div>
+                    <div class="product-card-body">
+                        <p class="product-card-title">원목 사이드 테이블</p>
+                        <p class="product-card-price">145,000원</p>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="product-card-image">
+                        <img src="../assets/images/brickart/sopoong (7).jpg" alt="모던 아트 포스터 세트">
+                    </div>
+                    <div class="product-card-body">
+                        <p class="product-card-title">모던 아트 포스터 세트</p>
+                        <p class="product-card-price">78,000원</p>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="product-card-image">
+                        <img src="../assets/images/brickart/sopoong (8).jpg" alt="세라믹 화분 세트">
+                    </div>
+                    <div class="product-card-body">
+                        <p class="product-card-title">세라믹 화분 세트</p>
+                        <p class="product-card-price">56,000원</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- VR Preview FAB -->
+    <button class="vr-preview-fab">
+        <i data-lucide="glasses"></i>
+    </button>
+    <!-- Footer -->
+    <div id="footer"></div>
+
+
+
+    <script>
+        lucide.createIcons();
+    </script>
+    <script src="common/loader.js"></script>
+</body>
+</html>

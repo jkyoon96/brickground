@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>관리자 회원 관리 - Mobile Wireframe</title>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* shadcn/ui Admin Style */
+        :root {
+            --admin-bg: #0a0a0a;
+            --admin-card: #141414;
+            --admin-border: #262626;
+            --admin-text: #fafafa;
+            --admin-text-muted: #a1a1aa;
+            --admin-primary: #3b82f6;
+            --admin-success: #22c55e;
+            --admin-warning: #f59e0b;
+            --admin-error: #ef4444;
+            --admin-radius: 8px;
+            --admin-radius-sm: 6px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', 'Pretendard', sans-serif;
+            background: #1a1a2e;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .page-container {
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .wireframe-label {
+            background: var(--admin-card);
+            color: var(--admin-text);
+            padding: 6px 12px;
+            border-radius: var(--admin-radius-sm);
+            font-size: 12px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 16px;
+            border: 1px solid var(--admin-border);
+        }
+
+        .mobile-mockup {
+            background: #1a1a1a;
+            border-radius: 40px;
+            padding: 12px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+
+        .mobile-screen {
+            background: var(--admin-bg);
+            border-radius: 32px;
+            overflow: hidden;
+            min-height: 750px;
+        }
+
+        /* Status Bar */
+        .status-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 20px;
+            background: var(--admin-card);
+            color: var(--admin-text);
+        }
+
+        .status-time {
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .status-icons {
+            display: flex;
+            gap: 6px;
+        }
+
+        .status-icons i {
+            width: 16px;
+            height: 16px;
+        }
+
+        /* Header */
+        .app-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 16px;
+            background: var(--admin-card);
+            border-bottom: 1px solid var(--admin-border);
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .menu-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: var(--admin-radius-sm);
+            background: var(--admin-border);
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .menu-btn i {
+            width: 18px;
+            height: 18px;
+            color: var(--admin-text);
+        }
+
+        .header-title {
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--admin-text);
+        }
+
+        .header-right {
+            display: flex;
+            gap: 8px;
+        }
+
+        .icon-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: var(--admin-radius-sm);
+            background: var(--admin-border);
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .icon-btn i {
+            width: 18px;
+            height: 18px;
+            color: var(--admin-text);
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 16px;
+            overflow-y: auto;
+        }
+
+        /* Stats Row */
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        .stat-card {
+            background: var(--admin-card);
+            border: 1px solid var(--admin-border);
+            border-radius: var(--admin-radius);
+            padding: 14px;
+        }
+
+        .stat-label {
+            font-size: 11px;
+            color: var(--admin-text-muted);
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+
+        .stat-value {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--admin-text);
+        }
+
+        .stat-change {
+            display: inline-flex;
+            align-items: center;
+            gap: 2px;
+            font-size: 10px;
+            font-weight: 500;
+            color: var(--admin-success);
+            margin-top: 4px;
+        }
+
+        .stat-change i {
+            width: 12px;
+            height: 12px;
+        }
+
+        /* Search & Filters */
+        .search-bar {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .search-input {
+            flex: 1;
+            position: relative;
+        }
+
+        .search-input i {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 16px;
+            height: 16px;
+            color: var(--admin-text-muted);
+        }
+
+        .search-input input {
+            width: 100%;
+            padding: 10px 10px 10px 36px;
+            background: var(--admin-card);
+            border: 1px solid var(--admin-border);
+            border-radius: var(--admin-radius-sm);
+            color: var(--admin-text);
+            font-size: 13px;
+        }
+
+        .search-input input::placeholder {
+            color: var(--admin-text-muted);
+        }
+
+        .filter-btn {
+            width: 40px;
+            height: 40px;
+            background: var(--admin-card);
+            border: 1px solid var(--admin-border);
+            border-radius: var(--admin-radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .filter-btn i {
+            width: 18px;
+            height: 18px;
+            color: var(--admin-text);
+        }
+
+        /* User List */
+        .user-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .user-card {
+            background: var(--admin-card);
+            border: 1px solid var(--admin-border);
+            border-radius: var(--admin-radius);
+            padding: 14px;
+        }
+
+        .user-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 10px;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--admin-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 14px;
+            color: var(--admin-text);
+        }
+
+        .user-info {
+            flex: 1;
+        }
+
+        .user-name {
+            font-weight: 600;
+            color: var(--admin-text);
+            font-size: 14px;
+        }
+
+        .user-id {
+            font-size: 12px;
+            color: var(--admin-text-muted);
+        }
+
+        .user-actions {
+            display: flex;
+            gap: 6px;
+        }
+
+        .action-btn {
+            width: 32px;
+            height: 32px;
+            border: 1px solid var(--admin-border);
+            border-radius: var(--admin-radius-sm);
+            background: transparent;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .action-btn i {
+            width: 16px;
+            height: 16px;
+            color: var(--admin-text-muted);
+        }
+
+        .user-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .user-meta {
+            display: flex;
+            gap: 12px;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 11px;
+            color: var(--admin-text-muted);
+        }
+
+        .meta-item i {
+            width: 12px;
+            height: 12px;
+        }
+
+        .user-role {
+            display: inline-flex;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: 500;
+        }
+
+        .user-role.admin {
+            background: rgba(139, 92, 246, 0.2);
+            color: #a78bfa;
+        }
+
+        .user-role.seller {
+            background: rgba(59, 130, 246, 0.2);
+            color: #60a5fa;
+        }
+
+        .user-role.user {
+            background: rgba(161, 161, 170, 0.2);
+            color: var(--admin-text-muted);
+        }
+
+        .user-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 11px;
+        }
+
+        .status-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+        }
+
+        .status-dot.active {
+            background: var(--admin-success);
+        }
+
+        .status-dot.banned {
+            background: var(--admin-error);
+        }
+
+        /* Pagination */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 6px;
+            margin-top: 16px;
+        }
+
+        .page-btn {
+            width: 32px;
+            height: 32px;
+            border: 1px solid var(--admin-border);
+            border-radius: var(--admin-radius-sm);
+            background: transparent;
+            color: var(--admin-text-muted);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .page-btn.active {
+            background: var(--admin-primary);
+            border-color: var(--admin-primary);
+            color: white;
+        }
+
+        .page-btn i {
+            width: 14px;
+            height: 14px;
+        }
+
+        /* FAB */
+        .fab {
+            position: fixed;
+            bottom: 100px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--admin-primary);
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+        }
+
+        .fab i {
+            width: 24px;
+            height: 24px;
+            color: white;
+        }
+
+        /* Bottom Tab Bar */
+        .tab-bar {
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            background: var(--admin-card);
+            border-top: 1px solid var(--admin-border);
+        }
+
+        .tab-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            text-decoration: none;
+            color: var(--admin-text-muted);
+            padding: 4px 12px;
+        }
+
+        .tab-item.active {
+            color: var(--admin-primary);
+        }
+
+        .tab-item i {
+            width: 20px;
+            height: 20px;
+        }
+
+        .tab-item span {
+            font-size: 10px;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="page-container">
+        <div class="wireframe-label">
+            <i data-lucide="smartphone"></i>
+            Mobile Wireframe - 관리자 회원 관리 (ST-10-02) - shadcn/ui
+        </div>
+
+        <div class="mobile-mockup">
+            <div class="mobile-screen">
+                <!-- Status Bar -->
+                <div class="status-bar">
+                    <span class="status-time">9:41</span>
+                    <div class="status-icons">
+                        <i data-lucide="signal"></i>
+                        <i data-lucide="wifi"></i>
+                        <i data-lucide="battery-full"></i>
+                    </div>
+                </div>
+
+                <!-- Header -->
+                <div class="app-header">
+                    <div class="header-left">
+                        <button class="menu-btn">
+                            <i data-lucide="menu"></i>
+                        </button>
+                        <span class="header-title">회원 관리</span>
+                    </div>
+                    <div class="header-right">
+                        <button class="icon-btn">
+                            <i data-lucide="download"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Main Content -->
+                <div class="main-content">
+                    <!-- Stats Row -->
+                    <div class="stats-row">
+                        <div class="stat-card">
+                            <div class="stat-label">전체 회원</div>
+                            <div class="stat-value">12,458</div>
+                            <div class="stat-change">
+                                <i data-lucide="trending-up"></i>
+                                +2.5%
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">활성 회원</div>
+                            <div class="stat-value">8,234</div>
+                            <div class="stat-change">
+                                <i data-lucide="trending-up"></i>
+                                +4.1%
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Search & Filter -->
+                    <div class="search-bar">
+                        <div class="search-input">
+                            <i data-lucide="search"></i>
+                            <input type="text" placeholder="Search users...">
+                        </div>
+                        <button class="filter-btn">
+                            <i data-lucide="sliders-horizontal"></i>
+                        </button>
+                    </div>
+
+                    <!-- User List -->
+                    <div class="user-list">
+                        <div class="user-card">
+                            <div class="user-header">
+                                <div class="user-avatar">홍</div>
+                                <div class="user-info">
+                                    <div class="user-name">홍길동</div>
+                                    <div class="user-id">hong@email.com</div>
+                                </div>
+                                <div class="user-actions">
+                                    <button class="action-btn">
+                                        <i data-lucide="more-horizontal"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="user-footer">
+                                <div class="user-meta">
+                                    <span class="user-role admin">관리자</span>
+                                    <span class="user-status">
+                                        <span class="status-dot active"></span>
+                                        활성
+                                    </span>
+                                </div>
+                                <div class="meta-item">
+                                    <i data-lucide="calendar"></i>
+                                    2024.01.15
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="user-card">
+                            <div class="user-header">
+                                <div class="user-avatar">김</div>
+                                <div class="user-info">
+                                    <div class="user-name">김영희</div>
+                                    <div class="user-id">kim@email.com</div>
+                                </div>
+                                <div class="user-actions">
+                                    <button class="action-btn">
+                                        <i data-lucide="more-horizontal"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="user-footer">
+                                <div class="user-meta">
+                                    <span class="user-role seller">판매자</span>
+                                    <span class="user-status">
+                                        <span class="status-dot active"></span>
+                                        활성
+                                    </span>
+                                </div>
+                                <div class="meta-item">
+                                    <i data-lucide="calendar"></i>
+                                    2024.01.14
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="user-card">
+                            <div class="user-header">
+                                <div class="user-avatar">이</div>
+                                <div class="user-info">
+                                    <div class="user-name">이철수</div>
+                                    <div class="user-id">lee@email.com</div>
+                                </div>
+                                <div class="user-actions">
+                                    <button class="action-btn">
+                                        <i data-lucide="more-horizontal"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="user-footer">
+                                <div class="user-meta">
+                                    <span class="user-role user">일반</span>
+                                    <span class="user-status">
+                                        <span class="status-dot banned"></span>
+                                        정지
+                                    </span>
+                                </div>
+                                <div class="meta-item">
+                                    <i data-lucide="calendar"></i>
+                                    2024.01.12
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pagination -->
+                    <div class="pagination">
+                        <button class="page-btn">
+                            <i data-lucide="chevron-left"></i>
+                        </button>
+                        <button class="page-btn active">1</button>
+                        <button class="page-btn">2</button>
+                        <button class="page-btn">3</button>
+                        <button class="page-btn">
+                            <i data-lucide="chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- FAB -->
+                <button class="fab">
+                    <i data-lucide="user-plus"></i>
+                </button>
+
+                <!-- Bottom Tab Bar -->
+                <div class="tab-bar">
+                    <a href="#" class="tab-item">
+                        <i data-lucide="layout-dashboard"></i>
+                        <span>대시보드</span>
+                    </a>
+                    <a href="#" class="tab-item active">
+                        <i data-lucide="users"></i>
+                        <span>회원</span>
+                    </a>
+                    <a href="#" class="tab-item">
+                        <i data-lucide="package"></i>
+                        <span>상품</span>
+                    </a>
+                    <a href="#" class="tab-item">
+                        <i data-lucide="shopping-cart"></i>
+                        <span>주문</span>
+                    </a>
+                    <a href="#" class="tab-item">
+                        <i data-lucide="settings"></i>
+                        <span>설정</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>

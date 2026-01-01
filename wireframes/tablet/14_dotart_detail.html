@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1024, initial-scale=1.0">
+    <title>DotArt 상세 - Tablet Wireframe</title>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --pixar-primary: #0066FF;
+            --pixar-secondary: #FFD93D;
+            --pixar-success: #6BCB77;
+            --pixar-error: #FF6B6B;
+            --pixar-purple: #9B5DE5;
+            --pixar-pink: #F15BB5;
+            --pixar-bg: #F8FAFC;
+            --pixar-card: #FFFFFF;
+            --pixar-text: #1E293B;
+            --pixar-text-light: #64748B;
+            --pixar-border: #E2E8F0;
+            --pixar-radius: 20px;
+            --pixar-radius-sm: 12px;
+            --pixar-shadow: 0 4px 20px rgba(0, 102, 255, 0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Nunito', '나눔스퀘어라운드', sans-serif;
+            background: #1a1a2e;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .tablet-frame {
+            width: 1024px;
+            background: #2d2d44;
+            border-radius: 40px;
+            padding: 20px;
+            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.5);
+        }
+
+        .tablet-screen {
+            background: var(--pixar-bg);
+            border-radius: 24px;
+            overflow: hidden;
+            min-height: 720px;
+        }
+
+        /* Header */
+        .header {
+            background: var(--pixar-card);
+            padding: 14px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: var(--pixar-shadow);
+        }
+
+        .header-left { display: flex; align-items: center; gap: 20px; }
+
+        .logo {
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--pixar-primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .logo i { width: 26px; height: 26px; }
+
+        .nav-links { display: flex; gap: 8px; }
+        .nav-links a {
+            text-decoration: none;
+            color: var(--pixar-text-light);
+            font-weight: 600;
+            font-size: 14px;
+            padding: 8px 14px;
+            border-radius: var(--pixar-radius-sm);
+        }
+        .nav-links a.active { color: var(--pixar-purple); background: rgba(155, 93, 229, 0.1); }
+
+        .header-right { display: flex; gap: 10px; }
+        .header-icon {
+            width: 38px; height: 38px;
+            border-radius: 50%;
+            background: var(--pixar-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+        .header-icon i { width: 18px; height: 18px; color: var(--pixar-text); }
+
+        /* Main Content */
+        .main-content { padding: 20px; }
+
+        /* Breadcrumb */
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            color: var(--pixar-text-light);
+            margin-bottom: 16px;
+        }
+        .breadcrumb a { color: var(--pixar-purple); text-decoration: none; }
+        .breadcrumb i { width: 14px; height: 14px; }
+
+        /* Detail Layout */
+        .detail-layout {
+            display: grid;
+            grid-template-columns: 1fr 320px;
+            gap: 20px;
+        }
+
+        /* Artwork Section */
+        .artwork-section {
+            background: var(--pixar-card);
+            border-radius: var(--pixar-radius);
+            overflow: hidden;
+            box-shadow: var(--pixar-shadow);
+        }
+
+        .artwork-preview {
+            width: 100%;
+            aspect-ratio: 4/3;
+            background: linear-gradient(135deg, #FFD93D, #FF6B6B);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        .artwork-preview i { width: 80px; height: 80px; color: rgba(255, 255, 255, 0.6); }
+
+        .artwork-badges {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            display: flex;
+            gap: 6px;
+        }
+
+        .artwork-badge {
+            padding: 6px 12px;
+            border-radius: 14px;
+            font-size: 11px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .artwork-badge.hot { background: var(--pixar-error); color: white; }
+        .artwork-badge.has-3d { background: var(--pixar-purple); color: white; }
+        .artwork-badge i { width: 12px; height: 12px; color: inherit; }
+
+        .view-3d-btn {
+            position: absolute;
+            bottom: 12px;
+            right: 12px;
+            padding: 12px 20px;
+            background: linear-gradient(135deg, var(--pixar-purple), var(--pixar-pink));
+            border: none;
+            border-radius: 20px;
+            color: white;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 4px 15px rgba(155, 93, 229, 0.4);
+        }
+        .view-3d-btn i { width: 18px; height: 18px; color: white; }
+
+        .artwork-actions {
+            padding: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--pixar-border);
+        }
+
+        .action-left { display: flex; gap: 12px; }
+
+        .action-btn {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 14px;
+            background: var(--pixar-bg);
+            border: none;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--pixar-text);
+            cursor: pointer;
+        }
+        .action-btn:hover { background: rgba(155, 93, 229, 0.1); color: var(--pixar-purple); }
+        .action-btn.liked { background: rgba(255, 107, 107, 0.1); color: var(--pixar-error); }
+        .action-btn.liked i { fill: var(--pixar-error); }
+        .action-btn i { width: 18px; height: 18px; }
+
+        .action-right { display: flex; gap: 6px; }
+
+        .icon-btn {
+            width: 38px; height: 38px;
+            border-radius: 50%;
+            background: var(--pixar-bg);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--pixar-text);
+        }
+        .icon-btn:hover { background: rgba(155, 93, 229, 0.1); color: var(--pixar-purple); }
+        .icon-btn i { width: 18px; height: 18px; }
+
+        /* Comments Section */
+        .comments-section { padding: 16px; }
+
+        .comments-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 14px;
+        }
+
+        .comments-title {
+            font-size: 16px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .comments-title i { width: 18px; height: 18px; color: var(--pixar-purple); }
+        .comments-count { font-size: 13px; color: var(--pixar-text-light); }
+
+        .comment-input {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        .comment-avatar {
+            width: 36px; height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--pixar-purple), var(--pixar-pink));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .comment-avatar i { width: 18px; height: 18px; color: white; }
+
+        .comment-input-box { flex: 1; display: flex; gap: 8px; }
+        .comment-input-box input {
+            flex: 1;
+            padding: 10px 14px;
+            border: 2px solid var(--pixar-border);
+            border-radius: 10px;
+            font-size: 13px;
+            outline: none;
+        }
+        .comment-input-box input:focus { border-color: var(--pixar-purple); }
+
+        .comment-submit {
+            padding: 10px 16px;
+            background: var(--pixar-purple);
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .comment-list { display: flex; flex-direction: column; gap: 14px; }
+
+        .comment-item { display: flex; gap: 10px; }
+        .comment-content { flex: 1; }
+
+        .comment-author { display: flex; align-items: center; gap: 6px; margin-bottom: 4px; }
+        .comment-author-name { font-size: 13px; font-weight: 700; }
+        .comment-date { font-size: 11px; color: var(--pixar-text-light); }
+        .comment-text { font-size: 13px; line-height: 1.5; margin-bottom: 6px; }
+
+        .comment-actions { display: flex; gap: 10px; }
+        .comment-action {
+            font-size: 11px;
+            color: var(--pixar-text-light);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 3px;
+        }
+        .comment-action i { width: 12px; height: 12px; }
+
+        /* Sidebar */
+        .sidebar { display: flex; flex-direction: column; gap: 16px; }
+
+        /* Author Card */
+        .author-card {
+            background: var(--pixar-card);
+            border-radius: var(--pixar-radius);
+            padding: 16px;
+            box-shadow: var(--pixar-shadow);
+        }
+
+        .author-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 14px;
+        }
+
+        .author-avatar {
+            width: 48px; height: 48px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--pixar-purple), var(--pixar-pink));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .author-avatar i { width: 24px; height: 24px; color: white; }
+
+        .author-info h3 { font-size: 15px; font-weight: 700; margin-bottom: 2px; }
+        .author-info span { font-size: 12px; color: var(--pixar-text-light); }
+
+        .author-stats {
+            display: flex;
+            justify-content: space-around;
+            padding: 12px 0;
+            border-top: 1px solid var(--pixar-border);
+            border-bottom: 1px solid var(--pixar-border);
+            margin-bottom: 12px;
+        }
+
+        .author-stat { text-align: center; }
+        .author-stat-value { font-size: 16px; font-weight: 800; color: var(--pixar-purple); }
+        .author-stat-label { font-size: 11px; color: var(--pixar-text-light); }
+
+        .follow-btn {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, var(--pixar-purple), var(--pixar-pink));
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+        .follow-btn i { width: 16px; height: 16px; }
+
+        /* Artwork Info */
+        .artwork-info-card {
+            background: var(--pixar-card);
+            border-radius: var(--pixar-radius);
+            padding: 16px;
+            box-shadow: var(--pixar-shadow);
+        }
+
+        .info-title { font-size: 18px; font-weight: 800; margin-bottom: 8px; }
+        .info-description {
+            font-size: 13px;
+            color: var(--pixar-text-light);
+            line-height: 1.5;
+            margin-bottom: 14px;
+        }
+
+        .info-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
+        .info-tag {
+            padding: 4px 10px;
+            background: rgba(155, 93, 229, 0.1);
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--pixar-purple);
+        }
+
+        .info-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            padding-top: 12px;
+            border-top: 1px solid var(--pixar-border);
+        }
+
+        .info-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            color: var(--pixar-text-light);
+        }
+        .info-meta-item i { width: 14px; height: 14px; }
+
+        /* Related Works */
+        .related-card {
+            background: var(--pixar-card);
+            border-radius: var(--pixar-radius);
+            padding: 16px;
+            box-shadow: var(--pixar-shadow);
+        }
+
+        .related-title {
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .related-title i { width: 16px; height: 16px; color: var(--pixar-purple); }
+
+        .related-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+
+        .related-item {
+            aspect-ratio: 1;
+            border-radius: 10px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+        .related-item:hover { transform: scale(1.05); }
+
+        .related-item-preview {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .related-item-preview i { width: 28px; height: 28px; color: rgba(255, 255, 255, 0.6); }
+    </style>
+</head>
+<body>
+    <div class="tablet-frame">
+        <div class="tablet-screen">
+            <!-- Header -->
+            <header class="header">
+                <div class="header-left">
+                    <div class="logo"><i data-lucide="box"></i>BrickGround</div>
+                    <nav class="nav-links">
+                        <a href="#">VR Mall</a>
+                        <a href="#" class="active">DotArt</a>
+                        <a href="#">Creation</a>
+                    </nav>
+                </div>
+                <div class="header-right">
+                    <div class="header-icon"><i data-lucide="search"></i></div>
+                    <div class="header-icon"><i data-lucide="bell"></i></div>
+                    <div class="header-icon"><i data-lucide="user"></i></div>
+                </div>
+            </header>
+
+            <!-- Main Content -->
+            <main class="main-content">
+                <!-- Breadcrumb -->
+                <div class="breadcrumb">
+                    <a href="#">홈</a>
+                    <i data-lucide="chevron-right"></i>
+                    <a href="#">DotArt</a>
+                    <i data-lucide="chevron-right"></i>
+                    <span>귀여운 고양이</span>
+                </div>
+
+                <!-- Detail Layout -->
+                <div class="detail-layout">
+                    <!-- Artwork Section -->
+                    <div class="artwork-section">
+                        <div class="artwork-preview">
+                            <div class="artwork-badges">
+                                <span class="artwork-badge hot"><i data-lucide="flame"></i>HOT</span>
+                                <span class="artwork-badge has-3d"><i data-lucide="box"></i>3D</span>
+                            </div>
+                            <i data-lucide="cat"></i>
+                            <button class="view-3d-btn"><i data-lucide="box"></i>3D로 보기</button>
+                        </div>
+
+                        <div class="artwork-actions">
+                            <div class="action-left">
+                                <button class="action-btn liked"><i data-lucide="heart"></i><span>2,847</span></button>
+                                <button class="action-btn"><i data-lucide="message-circle"></i><span>156</span></button>
+                                <button class="action-btn"><i data-lucide="copy"></i><span>리믹스</span></button>
+                            </div>
+                            <div class="action-right">
+                                <button class="icon-btn"><i data-lucide="bookmark"></i></button>
+                                <button class="icon-btn"><i data-lucide="share-2"></i></button>
+                            </div>
+                        </div>
+
+                        <!-- Comments Section -->
+                        <div class="comments-section">
+                            <div class="comments-header">
+                                <h3 class="comments-title"><i data-lucide="message-circle"></i>댓글</h3>
+                                <span class="comments-count">156개</span>
+                            </div>
+
+                            <div class="comment-input">
+                                <div class="comment-avatar"><i data-lucide="user"></i></div>
+                                <div class="comment-input-box">
+                                    <input type="text" placeholder="댓글을 입력하세요...">
+                                    <button class="comment-submit">등록</button>
+                                </div>
+                            </div>
+
+                            <div class="comment-list">
+                                <div class="comment-item">
+                                    <div class="comment-avatar" style="background: linear-gradient(135deg, #4D96FF, #6BCB77);">
+                                        <i data-lucide="user"></i>
+                                    </div>
+                                    <div class="comment-content">
+                                        <div class="comment-author">
+                                            <span class="comment-author-name">도트러버</span>
+                                            <span class="comment-date">2시간 전</span>
+                                        </div>
+                                        <p class="comment-text">와 정말 귀엽네요! 고양이 표정이 너무 사랑스러워요</p>
+                                        <div class="comment-actions">
+                                            <span class="comment-action"><i data-lucide="heart"></i>24</span>
+                                            <span class="comment-action"><i data-lucide="message-circle"></i>답글</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="comment-item">
+                                    <div class="comment-avatar" style="background: linear-gradient(135deg, #FFD93D, #FF6B6B);">
+                                        <i data-lucide="user"></i>
+                                    </div>
+                                    <div class="comment-content">
+                                        <div class="comment-author">
+                                            <span class="comment-author-name">픽셀아티스트</span>
+                                            <span class="comment-date">5시간 전</span>
+                                        </div>
+                                        <p class="comment-text">색상 조합이 정말 예쁘네요!</p>
+                                        <div class="comment-actions">
+                                            <span class="comment-action"><i data-lucide="heart"></i>12</span>
+                                            <span class="comment-action"><i data-lucide="message-circle"></i>답글</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sidebar -->
+                    <div class="sidebar">
+                        <!-- Author Card -->
+                        <div class="author-card">
+                            <div class="author-header">
+                                <div class="author-avatar"><i data-lucide="user"></i></div>
+                                <div class="author-info">
+                                    <h3>픽셀마스터</h3>
+                                    <span>@pixelmaster</span>
+                                </div>
+                            </div>
+                            <div class="author-stats">
+                                <div class="author-stat">
+                                    <div class="author-stat-value">142</div>
+                                    <div class="author-stat-label">작품</div>
+                                </div>
+                                <div class="author-stat">
+                                    <div class="author-stat-value">8.5K</div>
+                                    <div class="author-stat-label">팔로워</div>
+                                </div>
+                                <div class="author-stat">
+                                    <div class="author-stat-value">24.7K</div>
+                                    <div class="author-stat-label">좋아요</div>
+                                </div>
+                            </div>
+                            <button class="follow-btn"><i data-lucide="user-plus"></i>팔로우</button>
+                        </div>
+
+                        <!-- Artwork Info -->
+                        <div class="artwork-info-card">
+                            <h2 class="info-title">귀여운 고양이</h2>
+                            <p class="info-description">사랑스러운 주황색 고양이를 픽셀 아트로 표현했습니다. 따뜻한 색감으로 귀여움을 극대화했어요!</p>
+                            <div class="info-tags">
+                                <span class="info-tag">#고양이</span>
+                                <span class="info-tag">#동물</span>
+                                <span class="info-tag">#픽셀아트</span>
+                                <span class="info-tag">#3D</span>
+                            </div>
+                            <div class="info-meta">
+                                <div class="info-meta-item"><i data-lucide="grid-3x3"></i><span>32 x 32 픽셀</span></div>
+                                <div class="info-meta-item"><i data-lucide="calendar"></i><span>2024년 12월 28일</span></div>
+                                <div class="info-meta-item"><i data-lucide="eye"></i><span>조회 12,543회</span></div>
+                            </div>
+                        </div>
+
+                        <!-- Related Works -->
+                        <div class="related-card">
+                            <h3 class="related-title"><i data-lucide="sparkles"></i>관련 작품</h3>
+                            <div class="related-grid">
+                                <div class="related-item">
+                                    <div class="related-item-preview" style="background: linear-gradient(135deg, #6BCB77, #4D96FF);">
+                                        <i data-lucide="dog"></i>
+                                    </div>
+                                </div>
+                                <div class="related-item">
+                                    <div class="related-item-preview" style="background: linear-gradient(135deg, #F15BB5, #FF6B6B);">
+                                        <i data-lucide="bird"></i>
+                                    </div>
+                                </div>
+                                <div class="related-item">
+                                    <div class="related-item-preview" style="background: linear-gradient(135deg, #9B5DE5, #4D96FF);">
+                                        <i data-lucide="rabbit"></i>
+                                    </div>
+                                </div>
+                                <div class="related-item">
+                                    <div class="related-item-preview" style="background: linear-gradient(135deg, #FFD93D, #6BCB77);">
+                                        <i data-lucide="fish"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+    <script>lucide.createIcons();</script>
+</body>
+</html>

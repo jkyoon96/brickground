@@ -1,0 +1,36 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>브릭그라운드</title>
+  <base href="/" />
+  <meta charset="utf-8" />
+  <meta name="viewport"
+    content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=0" />
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+  <meta name="format-detection" content="telephone=no" />
+</head>
+
+<body>
+  <div id="root"></div>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+  <script type="text/javascript" src="http://dapi.kakao.com/v2/maps/sdk.js?appkey=f93652120bf66215c531fee720f6452c&libraries=services"></script>
+  <script type="text/javascript" src="http://developers.kakao.com/sdk/js/kakao.min.js"></script>
+  <script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.1.8.js"></script>
+  <script type="text/javascript">
+    window.onload = function(){
+        var browse = navigator.userAgent.toLowerCase();
+
+        if( (navigator.appName == 'Netscape' && browse.indexOf('trident') != -1) || (browse.indexOf("msie") != -1)) {
+             alert("본 사이트는 크롬버전에 최적화되어있습니다.");
+        }
+
+        const kakaoJsKey = '68ac35183ac992351da8f01e2d1c294f';
+
+        Kakao.init('68ac35183ac992351da8f01e2d1c294f');
+
+    };
+  </script>
+
+</html>

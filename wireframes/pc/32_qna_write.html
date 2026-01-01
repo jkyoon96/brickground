@@ -1,0 +1,1005 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1:1 문의 작성 - BrickGround</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="common/components.css">
+    <link rel="stylesheet" href="common/responsive.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #F8FAFC;
+            --bg-secondary: #FFFFFF;
+            --text-primary: #1E293B;
+            --text-secondary: #64748B;
+            --text-muted: #94A3B8;
+            --border-color: #E2E8F0;
+            --pixar-blue: #0066FF;
+            --toy-cyan: #00CEC9;
+            --toy-cyan-light: #00D4FF;
+            --toy-yellow: #FFD93D;
+            --toy-success: #6BCB77;
+            --toy-error: #FF6B6B;
+            --radius-lg: 20px;
+            --radius-md: 12px;
+            --shadow: 0 4px 20px rgba(0, 206, 201, 0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Nunito', 'Nanum Square Round', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            background: var(--bg-secondary);
+            padding: 16px 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: var(--shadow);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 32px;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--pixar-blue);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--toy-cyan) 0%, var(--toy-cyan-light) 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-icon i {
+            width: 24px;
+            height: 24px;
+            color: white;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 24px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-weight: 600;
+            padding: 8px 16px;
+            border-radius: var(--radius-md);
+            transition: all 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: var(--toy-cyan);
+        }
+
+        .nav-links a.active {
+            color: var(--toy-cyan);
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .header-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            background: var(--bg-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border: 1px solid var(--border-color);
+            transition: all 0.2s;
+        }
+
+        .header-icon:hover {
+            color: var(--toy-cyan);
+            border-color: var(--toy-cyan);
+        }
+
+        .header-icon i {
+            width: 20px;
+            height: 20px;
+            color: var(--text-secondary);
+        }
+
+        /* Main Content */
+        .main-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px;
+        }
+
+        /* Breadcrumb */
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-bottom: 24px;
+        }
+
+        .breadcrumb a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .breadcrumb a:hover {
+            color: var(--toy-cyan);
+        }
+
+        .breadcrumb i {
+            width: 16px;
+            height: 16px;
+        }
+
+        .breadcrumb span {
+            color: var(--toy-cyan);
+            font-weight: 600;
+        }
+
+        /* Page Title */
+        .page-title {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .page-title-icon {
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(135deg, var(--toy-cyan) 0%, var(--toy-cyan-light) 100%);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .page-title-icon i {
+            width: 28px;
+            height: 28px;
+            color: white;
+        }
+
+        .page-title-text h1 {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .page-title-text p {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        /* Layout Grid */
+        .content-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 32px;
+        }
+
+        /* Card */
+        .card {
+            background: var(--bg-secondary);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            margin-bottom: 24px;
+        }
+
+        .card h3 {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 20px;
+        }
+
+        /* Form Elements */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .form-label .required {
+            color: var(--toy-error);
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius-md);
+            font-size: 15px;
+            transition: all 0.2s;
+            background: var(--bg-secondary);
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--toy-cyan);
+            box-shadow: 0 0 0 4px rgba(0, 206, 201, 0.1);
+        }
+
+        .form-input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .form-select {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%2364748B' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+            background-position: right 12px center;
+            background-repeat: no-repeat;
+            background-size: 20px;
+            padding-right: 44px;
+        }
+
+        .form-textarea {
+            min-height: 200px;
+            resize: vertical;
+        }
+
+        /* Order Select */
+        .order-select-row {
+            display: flex;
+            gap: 12px;
+        }
+
+        .order-select-btn {
+            padding: 12px 24px;
+            background: var(--bg-primary);
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            color: var(--text-secondary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .order-select-btn i {
+            width: 18px;
+            height: 18px;
+        }
+
+        /* Quick Templates */
+        .template-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .template-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 14px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .template-chip:hover {
+            border-color: var(--toy-cyan);
+            color: var(--toy-cyan);
+            background: rgba(0, 206, 201, 0.05);
+        }
+
+        .template-chip i {
+            width: 16px;
+            height: 16px;
+        }
+
+        /* Char Count */
+        .char-count {
+            font-size: 13px;
+            color: var(--text-muted);
+            text-align: right;
+            margin-top: 8px;
+        }
+
+        /* File Upload */
+        .file-upload-zone {
+            border: 2px dashed var(--border-color);
+            border-radius: 16px;
+            padding: 40px;
+            text-align: center;
+            transition: all 0.2s;
+            cursor: pointer;
+            background: var(--bg-primary);
+        }
+
+        .file-upload-zone:hover {
+            border-color: var(--toy-cyan);
+            background: rgba(0, 206, 201, 0.05);
+        }
+
+        .upload-icon {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto 16px;
+            background: linear-gradient(135deg, rgba(0, 206, 201, 0.2) 0%, rgba(0, 212, 255, 0.1) 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .upload-icon i {
+            width: 32px;
+            height: 32px;
+            color: var(--toy-cyan);
+        }
+
+        .upload-text {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .upload-hint {
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        /* Attached File */
+        .attached-file {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            background: var(--bg-primary);
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-color);
+            margin-top: 12px;
+        }
+
+        .file-icon {
+            width: 40px;
+            height: 40px;
+            background: rgba(0, 206, 201, 0.1);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .file-icon i {
+            width: 20px;
+            height: 20px;
+            color: var(--toy-cyan);
+        }
+
+        .file-info {
+            flex: 1;
+        }
+
+        .file-name {
+            font-weight: 600;
+            font-size: 14px;
+            color: var(--text-primary);
+        }
+
+        .file-size {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .file-remove {
+            width: 32px;
+            height: 32px;
+            background: none;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .file-remove:hover {
+            background: rgba(255, 107, 107, 0.1);
+        }
+
+        .file-remove i {
+            width: 18px;
+            height: 18px;
+            color: var(--toy-error);
+        }
+
+        /* Buttons */
+        .btn-group {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            margin-top: 32px;
+        }
+
+        .btn {
+            padding: 16px 48px;
+            border-radius: 16px;
+            font-weight: 700;
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+
+        .btn i {
+            width: 20px;
+            height: 20px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--toy-cyan) 0%, var(--toy-cyan-light) 100%);
+            color: white;
+            border: none;
+            box-shadow: 0 4px 15px rgba(0, 206, 201, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 206, 201, 0.4);
+        }
+
+        .btn-secondary {
+            background: var(--bg-primary);
+            color: var(--text-secondary);
+            border: 2px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-secondary);
+            border-color: var(--text-secondary);
+        }
+
+        /* Sidebar Cards */
+        .info-box {
+            background: linear-gradient(135deg, rgba(0, 206, 201, 0.1) 0%, rgba(0, 212, 255, 0.05) 100%);
+            border-radius: 16px;
+            padding: 20px;
+            border: 1px solid rgba(0, 206, 201, 0.2);
+            margin-bottom: 20px;
+        }
+
+        .info-box h4 {
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .info-box h4 i {
+            width: 20px;
+            height: 20px;
+            color: var(--toy-cyan);
+        }
+
+        .info-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 8px 0;
+        }
+
+        .info-item i {
+            width: 20px;
+            height: 20px;
+            color: var(--toy-cyan);
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .info-item p {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .info-item strong {
+            color: var(--text-primary);
+        }
+
+        /* Hours Card */
+        .hours-card .hours-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .hours-card .hours-row:last-child {
+            border-bottom: none;
+        }
+
+        .hours-card .hours-label {
+            color: var(--text-secondary);
+        }
+
+        .hours-card .hours-value {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .hours-card .hours-value.closed {
+            color: var(--toy-error);
+        }
+
+        /* Quick Links */
+        .quick-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            border-radius: var(--radius-md);
+            transition: all 0.2s;
+            text-decoration: none;
+        }
+
+        .quick-link:hover {
+            background: var(--bg-primary);
+        }
+
+        .quick-link-icon {
+            width: 40px;
+            height: 40px;
+            background: rgba(0, 206, 201, 0.1);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .quick-link-icon i {
+            width: 20px;
+            height: 20px;
+            color: var(--toy-cyan);
+        }
+
+        .quick-link span {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        /* Contact Card */
+        .contact-card {
+            background: linear-gradient(135deg, var(--toy-cyan) 0%, var(--toy-cyan-light) 100%);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            text-align: center;
+            color: white;
+        }
+
+        .contact-card-icon {
+            width: 48px;
+            height: 48px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 12px;
+        }
+
+        .contact-card-icon i {
+            width: 24px;
+            height: 24px;
+        }
+
+        .contact-card-title {
+            font-weight: 700;
+            font-size: 18px;
+            margin-bottom: 4px;
+        }
+
+        .contact-card-phone {
+            font-size: 24px;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .contact-card-hours {
+            font-size: 14px;
+            opacity: 0.8;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border-color);
+            padding: 24px 40px;
+            margin-top: 48px;
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 700;
+            color: var(--text-secondary);
+        }
+
+        .footer-logo-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, var(--toy-cyan) 0%, var(--toy-cyan-light) 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .footer-logo-icon i {
+            width: 16px;
+            height: 16px;
+            color: white;
+        }
+
+        .footer-copyright {
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        /* ==================== Responsive Design ==================== */
+        /* Tablet (1024px) */
+        @media (max-width: 1024px) {
+            .header { padding: 12px 24px; }
+            .nav-links { gap: 16px; }
+            .nav-links a { padding: 6px 12px; font-size: 14px; }
+            .page-header { padding: 32px 24px; }
+            .page-header h1 { font-size: 28px; }
+            .main-content { padding: 32px 24px; }
+            .content-layout { gap: 24px; }
+            .write-sidebar { width: 280px; }
+        }
+
+        /* Mobile (768px) */
+        @media (max-width: 768px) {
+            .header { padding: 10px 16px; flex-wrap: wrap; gap: 10px; }
+            .header-left { flex: 1; min-width: 100%; justify-content: space-between; }
+            .nav-links { display: none; }
+            .header-right { flex: 1; min-width: 100%; justify-content: flex-end; }
+            .logo { font-size: 20px; }
+            .logo-icon { width: 36px; height: 36px; }
+            .header-icon { width: 40px; height: 40px; }
+            .page-header { padding: 24px 16px; }
+            .page-header h1 { font-size: 24px; }
+            .breadcrumb { font-size: 12px; }
+            .main-content { padding: 24px 16px; }
+            .content-layout { flex-direction: column; }
+            .write-main { padding-right: 0; }
+            .write-form { padding: 20px; }
+            .form-row { flex-direction: column; gap: 16px; }
+            .form-label { font-size: 13px; margin-bottom: 6px; }
+            .form-input, .form-select, .form-textarea { padding: 12px 14px; font-size: 14px; }
+            .file-upload-area { padding: 24px; }
+            .form-actions { flex-direction: column; gap: 12px; }
+            .btn-submit, .btn-cancel { width: 100%; justify-content: center; padding: 14px 24px; }
+            .write-sidebar { width: 100%; padding-left: 0; border-left: none; border-top: 1px solid var(--border-color); padding-top: 24px; margin-top: 24px; }
+            .notice-box, .faq-box { padding: 16px; }
+            .footer { padding: 32px 16px; flex-direction: column; gap: 16px; text-align: center; }
+        }
+
+        /* Small Mobile (480px) */
+        @media (max-width: 480px) {
+            .header { padding: 8px 12px; }
+            .logo { font-size: 18px; }
+            .logo-icon { width: 32px; height: 32px; }
+            .header-icon { width: 36px; height: 36px; }
+            .page-header { padding: 20px 12px; }
+            .page-header h1 { font-size: 20px; }
+            .main-content { padding: 16px 12px; }
+            .write-form { padding: 16px; }
+            .form-label { font-size: 12px; }
+            .form-input, .form-select { padding: 10px 12px; font-size: 13px; }
+            .form-textarea { padding: 10px 12px; min-height: 150px; }
+            .char-count { font-size: 11px; }
+            .file-upload-area { padding: 20px; }
+            .btn-submit, .btn-cancel { padding: 12px 20px; font-size: 14px; }
+            .notice-box, .faq-box { padding: 14px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <!-- Header -->
+    <div id="header"></div>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Breadcrumb -->
+        <div class="breadcrumb">
+            <a href="00_main_home.html">홈</a>
+            <i data-lucide="chevron-right"></i>
+            <a href="29_help_center.html">고객센터</a>
+            <i data-lucide="chevron-right"></i>
+            <a href="31_qna_list.html">1:1 문의</a>
+            <i data-lucide="chevron-right"></i>
+            <span>문의 작성</span>
+        </div>
+
+        <!-- Page Title -->
+        <div class="page-title">
+            <div class="page-title-icon">
+                <i data-lucide="message-square-plus"></i>
+            </div>
+            <div class="page-title-text">
+                <h1>1:1 문의 작성</h1>
+                <p>궁금하신 점을 남겨주시면 빠르게 답변 드리겠습니다</p>
+            </div>
+        </div>
+
+        <div class="content-grid">
+            <!-- Form Section -->
+            <div class="form-section">
+                <!-- Category Selection -->
+                <div class="card">
+                    <h3>문의 유형 선택</h3>
+
+                    <div class="form-group">
+                        <label class="form-label">
+                            문의 카테고리 <span class="required">*</span>
+                        </label>
+                        <select class="form-input form-select">
+                            <option value="">카테고리를 선택해 주세요</option>
+                            <option value="order">주문/결제</option>
+                            <option value="delivery">배송</option>
+                            <option value="return">교환/반품</option>
+                            <option value="product">상품문의</option>
+                            <option value="brickart">BrickArt</option>
+                            <option value="dotart">DotArt</option>
+                            <option value="creation">Creation</option>
+                            <option value="account">회원정보</option>
+                            <option value="other">기타</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">관련 주문 (선택)</label>
+                        <div class="order-select-row">
+                            <input type="text" class="form-input" placeholder="주문번호를 입력하거나 주문을 선택해 주세요" readonly style="flex: 1;">
+                            <button class="order-select-btn">
+                                <i data-lucide="search"></i>
+                                주문 선택
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Content Section -->
+                <div class="card">
+                    <h3>문의 내용</h3>
+
+                    <div class="form-group">
+                        <label class="form-label">
+                            제목 <span class="required">*</span>
+                        </label>
+                        <input type="text" class="form-input" placeholder="문의 제목을 입력해 주세요" maxlength="100">
+                        <div class="char-count">0 / 100</div>
+                    </div>
+
+                    <!-- Quick Templates -->
+                    <div class="form-group">
+                        <label class="form-label">빠른 템플릿</label>
+                        <div class="template-chips">
+                            <span class="template-chip">
+                                <i data-lucide="package"></i>
+                                배송 언제 오나요?
+                            </span>
+                            <span class="template-chip">
+                                <i data-lucide="rotate-ccw"></i>
+                                교환 요청합니다
+                            </span>
+                            <span class="template-chip">
+                                <i data-lucide="credit-card"></i>
+                                환불 요청합니다
+                            </span>
+                            <span class="template-chip">
+                                <i data-lucide="help-circle"></i>
+                                상품 문의드립니다
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">
+                            내용 <span class="required">*</span>
+                        </label>
+                        <textarea class="form-input form-textarea" placeholder="문의 내용을 자세히 작성해 주세요.
+
+- 주문/배송 관련 문의 시 주문번호를 함께 기재해 주세요.
+- 상품 불량/파손의 경우 사진을 첨부해 주시면 빠른 처리가 가능합니다." maxlength="2000"></textarea>
+                        <div class="char-count">0 / 2,000</div>
+                    </div>
+                </div>
+
+                <!-- File Attachment -->
+                <div class="card">
+                    <h3>파일 첨부 <span style="font-weight: 500; color: var(--text-muted); font-size: 14px;">(선택, 최대 5개)</span></h3>
+
+                    <div class="file-upload-zone">
+                        <div class="upload-icon">
+                            <i data-lucide="upload-cloud"></i>
+                        </div>
+                        <p class="upload-text">파일을 드래그하거나 클릭하여 업로드</p>
+                        <p class="upload-hint">JPG, PNG, GIF, PDF (최대 10MB)</p>
+                    </div>
+
+                    <!-- Attached Files Preview -->
+                    <div class="attached-file">
+                        <div class="file-icon">
+                            <i data-lucide="image"></i>
+                        </div>
+                        <div class="file-info">
+                            <div class="file-name">상품_파손_사진.jpg</div>
+                            <div class="file-size">2.4 MB</div>
+                        </div>
+                        <button class="file-remove">
+                            <i data-lucide="x"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Submit Buttons -->
+                <div class="btn-group">
+                    <button class="btn btn-secondary">취소</button>
+                    <button class="btn btn-primary">
+                        <i data-lucide="send"></i>
+                        문의 등록
+                    </button>
+                </div>
+            </div>
+
+            <!-- Sidebar -->
+            <div class="sidebar-section">
+                <!-- Info Box -->
+                <div class="info-box">
+                    <h4>
+                        <i data-lucide="info"></i>
+                        문의 전 확인해 주세요
+                    </h4>
+                    <div class="info-item">
+                        <i data-lucide="check-circle"></i>
+                        <p><strong>FAQ</strong>에서 자주 묻는 질문을 먼저 확인해 보세요!</p>
+                    </div>
+                    <div class="info-item">
+                        <i data-lucide="check-circle"></i>
+                        <p>영업일 기준 <strong>24시간 이내</strong> 답변 드립니다.</p>
+                    </div>
+                    <div class="info-item">
+                        <i data-lucide="check-circle"></i>
+                        <p>답변은 <strong>알림톡</strong>과 <strong>이메일</strong>로 발송됩니다.</p>
+                    </div>
+                </div>
+
+                <!-- Operating Hours -->
+                <div class="card hours-card">
+                    <h4 style="display: flex; align-items: center; gap: 8px; margin-bottom: 16px;">
+                        <i data-lucide="clock" style="width: 20px; height: 20px; color: var(--toy-cyan);"></i>
+                        고객센터 운영시간
+                    </h4>
+                    <div class="hours-row">
+                        <span class="hours-label">평일</span>
+                        <span class="hours-value">09:00 ~ 18:00</span>
+                    </div>
+                    <div class="hours-row">
+                        <span class="hours-label">점심시간</span>
+                        <span class="hours-value">12:00 ~ 13:00</span>
+                    </div>
+                    <div class="hours-row">
+                        <span class="hours-label">주말/공휴일</span>
+                        <span class="hours-value closed">휴무</span>
+                    </div>
+                </div>
+
+                <!-- Quick Links -->
+                <div class="card">
+                    <h4 style="display: flex; align-items: center; gap: 8px; margin-bottom: 16px;">
+                        <i data-lucide="link" style="width: 20px; height: 20px; color: var(--toy-cyan);"></i>
+                        바로가기
+                    </h4>
+                    <a href="#" class="quick-link">
+                        <div class="quick-link-icon">
+                            <i data-lucide="help-circle"></i>
+                        </div>
+                        <span>FAQ 보기</span>
+                    </a>
+                    <a href="#" class="quick-link">
+                        <div class="quick-link-icon">
+                            <i data-lucide="message-square"></i>
+                        </div>
+                        <span>내 문의 내역</span>
+                    </a>
+                    <a href="#" class="quick-link">
+                        <div class="quick-link-icon">
+                            <i data-lucide="phone"></i>
+                        </div>
+                        <span>전화 상담 예약</span>
+                    </a>
+                </div>
+
+                <!-- Contact Info -->
+                <div class="contact-card">
+                    <div class="contact-card-icon">
+                        <i data-lucide="headphones"></i>
+                    </div>
+                    <div class="contact-card-title">긴급 문의</div>
+                    <div class="contact-card-phone">1588-0000</div>
+                    <div class="contact-card-hours">평일 09:00 ~ 18:00</div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <!-- Footer -->
+    <div id="footer"></div>
+
+
+
+    <script>lucide.createIcons();</script>
+    <script src="common/loader.js"></script>
+</body>
+</html>

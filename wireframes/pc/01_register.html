@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>회원가입 - BrickGround</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="common/components.css">
+    <link rel="stylesheet" href="common/responsive.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #F8FAFC;
+            --bg-secondary: #FFFFFF;
+            --text-primary: #1E293B;
+            --text-secondary: #64748B;
+            --text-muted: #94A3B8;
+            --border-color: #E2E8F0;
+            --pixar-blue: #0066FF;
+            --toy-yellow: #FFD93D;
+            --toy-green: #6BCB77;
+            --toy-pink: #FF6B9D;
+            --pixar-radius: 20px;
+            --pixar-radius-sm: 12px;
+            --shadow-soft: 0 4px 20px rgba(0, 102, 255, 0.1);
+            --shadow-float: 0 8px 30px rgba(0, 102, 255, 0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: var(--bg-primary);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+        }
+
+        .main-content {
+            display: flex;
+            min-height: 700px;
+            width: 100%;
+            max-width: 1400px;
+            background: var(--bg-secondary);
+            border-radius: var(--pixar-radius);
+            box-shadow: var(--shadow-float);
+            overflow: hidden;
+        }
+
+        /* Left Side - Branding */
+        .brand-section {
+            flex: 1;
+            background: var(--pixar-blue);
+            padding: 60px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .brand-section::before {
+            content: '';
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            background: rgba(255, 217, 61, 0.2);
+            border-radius: 50%;
+            top: -100px;
+            right: -100px;
+        }
+
+        .brand-section::after {
+            content: '';
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            bottom: -50px;
+            left: -50px;
+        }
+
+        .brand-logo {
+            font-size: 48px;
+            font-weight: 800;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            z-index: 1;
+        }
+
+        .brand-tagline {
+            font-size: 18px;
+            opacity: 0.9;
+            text-align: center;
+            z-index: 1;
+        }
+
+        .brand-features {
+            margin-top: 40px;
+            z-index: 1;
+        }
+
+        .brand-feature {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+            font-size: 15px;
+        }
+
+        .brand-feature i {
+            width: 24px;
+            height: 24px;
+            color: var(--toy-yellow);
+        }
+
+        /* Right Side - Form */
+        .form-section {
+            flex: 1;
+            padding: 60px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .form-header {
+            margin-bottom: 32px;
+        }
+
+        .form-header h1 {
+            font-size: 32px;
+            font-weight: 800;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .form-header p {
+            color: var(--text-secondary);
+            font-size: 15px;
+        }
+
+        .social-login {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 32px;
+        }
+
+        .social-btn {
+            flex: 1;
+            padding: 14px;
+            border-radius: var(--pixar-radius-sm);
+            border: 2px solid var(--border-color);
+            background: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .social-btn:hover {
+            border-color: var(--pixar-blue);
+            transform: translateY(-2px);
+        }
+
+        .social-btn.kakao {
+            background: #FEE500;
+            border-color: #FEE500;
+            color: #000;
+        }
+
+        .social-btn.naver {
+            background: #03C75A;
+            border-color: #03C75A;
+            color: white;
+        }
+
+        .social-btn.google {
+            background: white;
+            color: var(--text-primary);
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--border-color);
+        }
+
+        .divider span {
+            color: var(--text-secondary);
+            font-size: 13px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input-wrapper i {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+            width: 20px;
+            height: 20px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 14px 16px 14px 48px;
+            border: 2px solid var(--border-color);
+            border-radius: var(--pixar-radius-sm);
+            font-size: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--pixar-blue);
+            box-shadow: 0 0 0 4px rgba(0, 102, 255, 0.1);
+        }
+
+        .form-group input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .input-hint {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-top: 6px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .input-hint i {
+            width: 14px;
+            height: 14px;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 16px;
+        }
+
+        .form-row .form-group {
+            flex: 1;
+        }
+
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 24px;
+            padding: 16px;
+            background: var(--bg-primary);
+            border-radius: var(--pixar-radius-sm);
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            accent-color: var(--pixar-blue);
+        }
+
+        .checkbox-item label {
+            font-size: 14px;
+            color: var(--text-primary);
+            cursor: pointer;
+        }
+
+        .checkbox-item label a {
+            color: var(--pixar-blue);
+            text-decoration: none;
+        }
+
+        .checkbox-item.required label::after {
+            content: ' *';
+            color: #FF6B6B;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 16px;
+            background: var(--pixar-blue);
+            color: white;
+            border: none;
+            border-radius: var(--pixar-radius-sm);
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-float);
+        }
+
+        .submit-btn i {
+            width: 20px;
+            height: 20px;
+        }
+
+        .form-footer {
+            text-align: center;
+            margin-top: 24px;
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .form-footer a {
+            color: var(--pixar-blue);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        /* Navigation */
+        .nav-links {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+            justify-content: center;
+        }
+
+        .nav-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 10px 20px;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            text-decoration: none;
+            border-radius: var(--pixar-radius-sm);
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover {
+            background: var(--pixar-blue);
+            color: white;
+        }
+
+        .nav-link i {
+            width: 16px;
+            height: 16px;
+        }
+
+        /* ==================== Responsive Design ==================== */
+        /* Tablet (1024px) */
+        @media (max-width: 1024px) {
+            body { padding: 24px; }
+            .main-content { min-height: auto; }
+            .brand-section { padding: 40px; }
+            .form-section { padding: 40px; }
+            .brand-logo { font-size: 36px; }
+            .form-header h1 { font-size: 28px; }
+        }
+
+        /* Mobile (768px) */
+        @media (max-width: 768px) {
+            body { padding: 16px; }
+            .main-content {
+                flex-direction: column;
+                min-height: auto;
+            }
+            .brand-section {
+                padding: 32px 24px;
+                min-height: auto;
+            }
+            .brand-logo { font-size: 28px; }
+            .brand-logo i { width: 36px !important; height: 36px !important; }
+            .brand-tagline { font-size: 14px; }
+            .brand-features { display: none; }
+
+            .form-section { padding: 32px 24px; }
+            .form-header h1 { font-size: 24px; }
+            .form-header p { font-size: 14px; }
+
+            .social-login { flex-direction: column; gap: 10px; }
+            .social-btn { padding: 12px; }
+
+            .form-row { flex-direction: column; gap: 0; }
+
+            .nav-links { flex-wrap: wrap; justify-content: center; }
+        }
+
+        /* Small Mobile (480px) */
+        @media (max-width: 480px) {
+            body { padding: 12px; }
+            .brand-section { padding: 24px 16px; }
+            .brand-logo { font-size: 24px; gap: 8px; }
+            .brand-logo i { width: 28px !important; height: 28px !important; }
+            .brand-tagline { font-size: 13px; }
+
+            .form-section { padding: 24px 16px; }
+            .form-header { margin-bottom: 24px; }
+            .form-header h1 { font-size: 20px; }
+            .form-header p { font-size: 13px; }
+
+            .social-btn { padding: 10px; font-size: 13px; }
+
+            .form-group { margin-bottom: 16px; }
+            .form-group label { font-size: 13px; }
+            .form-group input { padding: 12px 12px 12px 42px; font-size: 14px; }
+            .input-wrapper i { left: 12px; width: 18px; height: 18px; }
+
+            .checkbox-group { padding: 12px; }
+            .checkbox-item label { font-size: 13px; }
+
+            .submit-btn { padding: 14px; font-size: 15px; }
+
+            .nav-links { gap: 8px; }
+            .nav-link { padding: 8px 14px; font-size: 13px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="main-content">
+        <div class="brand-section">
+            <div class="brand-logo">
+                <i data-lucide="box" style="width: 48px; height: 48px;"></i>
+                BrickGround
+            </div>
+            <p class="brand-tagline">3D 가상 쇼핑의 새로운 경험</p>
+
+            <div class="brand-features">
+                <div class="brand-feature">
+                    <i data-lucide="shopping-bag"></i>
+                    VR 쇼핑몰에서 실감나는 쇼핑
+                </div>
+                <div class="brand-feature">
+                    <i data-lucide="palette"></i>
+                    나만의 픽셀 아트 창작
+                </div>
+                <div class="brand-feature">
+                    <i data-lucide="cube"></i>
+                    3D 창작물 전시 및 판매
+                </div>
+                <div class="brand-feature">
+                    <i data-lucide="gift"></i>
+                    다양한 혜택과 이벤트
+                </div>
+            </div>
+        </div>
+
+        <div class="form-section">
+            <div class="form-header">
+                <h1>회원가입</h1>
+                <p>BrickGround와 함께 새로운 쇼핑 경험을 시작하세요</p>
+            </div>
+
+            <div class="social-login">
+                <button class="social-btn kakao">
+                    <i data-lucide="message-circle" style="width: 20px; height: 20px;"></i>
+                    카카오
+                </button>
+                <button class="social-btn naver">
+                    <span style="font-weight: 800;">N</span>
+                    네이버
+                </button>
+                <button class="social-btn google">
+                    <i data-lucide="chrome" style="width: 20px; height: 20px;"></i>
+                    구글
+                </button>
+            </div>
+
+            <div class="divider">
+                <span>또는 이메일로 가입</span>
+            </div>
+
+            <form>
+                <div class="form-group">
+                    <label>이메일</label>
+                    <div class="input-wrapper">
+                        <i data-lucide="mail"></i>
+                        <input type="email" placeholder="example@email.com">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>비밀번호</label>
+                    <div class="input-wrapper">
+                        <i data-lucide="lock"></i>
+                        <input type="password" placeholder="8자 이상, 영문+숫자+특수문자">
+                    </div>
+                    <p class="input-hint">
+                        <i data-lucide="info"></i>
+                        영문, 숫자, 특수문자를 조합하여 8자 이상
+                    </p>
+                </div>
+
+                <div class="form-group">
+                    <label>비밀번호 확인</label>
+                    <div class="input-wrapper">
+                        <i data-lucide="lock"></i>
+                        <input type="password" placeholder="비밀번호를 다시 입력해주세요">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>이름</label>
+                        <div class="input-wrapper">
+                            <i data-lucide="user"></i>
+                            <input type="text" placeholder="홍길동">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>닉네임</label>
+                        <div class="input-wrapper">
+                            <i data-lucide="at-sign"></i>
+                            <input type="text" placeholder="사용할 닉네임">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>휴대폰 번호</label>
+                    <div class="input-wrapper">
+                        <i data-lucide="smartphone"></i>
+                        <input type="tel" placeholder="010-0000-0000">
+                    </div>
+                </div>
+
+                <div class="checkbox-group">
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="all">
+                        <label for="all"><strong>전체 동의</strong></label>
+                    </div>
+                    <div class="checkbox-item required">
+                        <input type="checkbox" id="terms">
+                        <label for="terms"><a href="00_main_home.html">이용약관</a> 동의</label>
+                    </div>
+                    <div class="checkbox-item required">
+                        <input type="checkbox" id="privacy">
+                        <label for="privacy"><a href="00_main_home.html">개인정보처리방침</a> 동의</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="marketing">
+                        <label for="marketing">마케팅 정보 수신 동의 (선택)</label>
+                    </div>
+                </div>
+
+                <button type="submit" class="submit-btn">
+                    <i data-lucide="user-plus"></i>
+                    회원가입
+                </button>
+            </form>
+
+            <p class="form-footer">
+                이미 계정이 있으신가요? <a href="02_login.html">로그인</a>
+            </p>
+
+            <div class="nav-links">
+                <a href="02_login.html" class="nav-link">
+                    <i data-lucide="log-in"></i>
+                    로그인
+                </a>
+                <a href="03_password.html" class="nav-link">
+                    <i data-lucide="key"></i>
+                    비밀번호 찾기
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>

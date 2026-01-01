@@ -1,0 +1,2285 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BrickGround Wireframes - 인증 및 사용자 관리</title>
+    <link href="https://cdn.jsdelivr.net/npm/pretendard@1.3.9/dist/web/static/pretendard.min.css" rel="stylesheet">
+    <style>
+        :root {
+            /* Pixar Style Colors */
+            --pixar-primary: #0066FF;
+            --pixar-primary-hover: #0052CC;
+            --pixar-secondary: #FFD93D;
+            --pixar-accent-green: #6BCB77;
+            --pixar-accent-orange: #FF6B35;
+            --pixar-bg: #F8FAFC;
+            --pixar-card: #FFFFFF;
+            --pixar-text: #2D3748;
+            --pixar-text-secondary: #718096;
+            --pixar-border: #E2E8F0;
+            --pixar-success: #6BCB77;
+            --pixar-error: #FF6B6B;
+
+            /* Admin Colors */
+            --admin-bg: #FAFAFA;
+            --admin-card: #FFFFFF;
+            --admin-text: #0F172A;
+            --admin-text-secondary: #64748B;
+            --admin-border: #E2E8F0;
+            --admin-primary: #0F172A;
+
+            /* Shadows */
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
+            --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.08);
+            --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.12);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #f0f4f8;
+            color: var(--pixar-text);
+            line-height: 1.6;
+        }
+
+        /* Header */
+        .doc-header {
+            background: linear-gradient(135deg, var(--pixar-primary), #0052CC);
+            color: white;
+            padding: 60px 20px;
+            text-align: center;
+        }
+
+        .doc-header h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+
+        .doc-header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        /* Navigation */
+        .nav-container {
+            background: white;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .nav-list {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            padding: 16px 20px;
+            list-style: none;
+        }
+
+        .nav-list a {
+            display: inline-block;
+            padding: 8px 16px;
+            background: var(--pixar-bg);
+            color: var(--pixar-text);
+            text-decoration: none;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .nav-list a:hover {
+            background: var(--pixar-primary);
+            color: white;
+        }
+
+        .nav-list a.admin {
+            background: var(--admin-bg);
+            border: 1px solid var(--admin-border);
+        }
+
+        .nav-list a.admin:hover {
+            background: var(--admin-primary);
+            color: white;
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* Section */
+        .section {
+            margin-bottom: 60px;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 30px;
+            padding-bottom: 16px;
+            border-bottom: 3px solid var(--pixar-primary);
+        }
+
+        .section-header.admin {
+            border-bottom-color: var(--admin-primary);
+        }
+
+        .section-number {
+            width: 48px;
+            height: 48px;
+            background: var(--pixar-primary);
+            color: white;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .section-number.admin {
+            background: var(--admin-primary);
+            border-radius: 8px;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+
+        .section-badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .badge-pixar {
+            background: linear-gradient(135deg, var(--pixar-primary), var(--pixar-secondary));
+            color: white;
+        }
+
+        .badge-admin {
+            background: var(--admin-primary);
+            color: white;
+        }
+
+        /* Wireframe Grid */
+        .wireframe-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 30px;
+        }
+
+        /* Wireframe Card */
+        .wireframe-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .wireframe-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .wireframe-card.admin {
+            border-radius: 12px;
+        }
+
+        .wireframe-card.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .card-header {
+            background: var(--pixar-bg);
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--pixar-border);
+        }
+
+        .card-header.admin {
+            background: var(--admin-bg);
+        }
+
+        .card-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--pixar-text);
+        }
+
+        .card-url {
+            font-size: 0.85rem;
+            color: var(--pixar-text-secondary);
+            font-family: 'JetBrains Mono', monospace;
+            margin-top: 4px;
+        }
+
+        .card-body {
+            padding: 20px;
+        }
+
+        /* Wireframe Preview */
+        .wireframe-preview {
+            background: #FAFBFC;
+            border: 2px solid var(--pixar-border);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        .wireframe-preview.admin {
+            border-radius: 8px;
+        }
+
+        /* Mock Browser */
+        .browser-bar {
+            background: #E8ECF0;
+            padding: 10px 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .browser-dots {
+            display: flex;
+            gap: 6px;
+        }
+
+        .browser-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .browser-dot.red { background: #FF6B6B; }
+        .browser-dot.yellow { background: #FFD93D; }
+        .browser-dot.green { background: #6BCB77; }
+
+        .browser-url {
+            flex: 1;
+            background: white;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            color: var(--pixar-text-secondary);
+        }
+
+        /* Wireframe Content - Pixar Style */
+        .wf-content {
+            padding: 20px;
+            min-height: 400px;
+        }
+
+        .wf-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 20px;
+            background: white;
+            border-bottom: 1px solid var(--pixar-border);
+            margin: -20px -20px 20px -20px;
+        }
+
+        .wf-logo {
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: var(--pixar-primary);
+        }
+
+        .wf-nav {
+            display: flex;
+            gap: 16px;
+        }
+
+        .wf-nav-item {
+            padding: 8px 16px;
+            background: var(--pixar-bg);
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: var(--pixar-text-secondary);
+        }
+
+        /* Form Elements */
+        .wf-form {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 30px;
+            background: white;
+            border-radius: 24px;
+            box-shadow: var(--shadow-md);
+        }
+
+        .wf-form.admin {
+            border-radius: 12px;
+        }
+
+        .wf-form-title {
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 24px;
+            color: var(--pixar-text);
+        }
+
+        .wf-form-icon {
+            font-size: 2rem;
+            margin-bottom: 8px;
+        }
+
+        .wf-input-group {
+            margin-bottom: 16px;
+        }
+
+        .wf-label {
+            display: block;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: var(--pixar-text);
+        }
+
+        .wf-input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid var(--pixar-border);
+            border-radius: 12px;
+            font-size: 1rem;
+            background: var(--pixar-bg);
+            color: var(--pixar-text-secondary);
+        }
+
+        .wf-input.admin {
+            border-radius: 6px;
+            padding: 10px 12px;
+        }
+
+        .wf-input-hint {
+            font-size: 0.8rem;
+            color: var(--pixar-success);
+            margin-top: 4px;
+        }
+
+        .wf-input-hint.error {
+            color: var(--pixar-error);
+        }
+
+        .wf-btn {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 16px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 8px;
+            transition: all 0.2s;
+        }
+
+        .wf-btn.admin {
+            border-radius: 6px;
+            padding: 12px;
+        }
+
+        .wf-btn-primary {
+            background: var(--pixar-primary);
+            color: white;
+        }
+
+        .wf-btn-secondary {
+            background: var(--pixar-bg);
+            color: var(--pixar-text);
+            border: 2px solid var(--pixar-border);
+        }
+
+        .wf-btn-kakao {
+            background: #FEE500;
+            color: #3C1E1E;
+        }
+
+        .wf-btn-naver {
+            background: #03C75A;
+            color: white;
+        }
+
+        .wf-btn-google {
+            background: white;
+            color: var(--pixar-text);
+            border: 2px solid var(--pixar-border);
+        }
+
+        .wf-divider {
+            display: flex;
+            align-items: center;
+            margin: 20px 0;
+            color: var(--pixar-text-secondary);
+            font-size: 0.85rem;
+        }
+
+        .wf-divider::before,
+        .wf-divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--pixar-border);
+        }
+
+        .wf-divider span {
+            padding: 0 16px;
+        }
+
+        .wf-link {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 0.9rem;
+            color: var(--pixar-text-secondary);
+        }
+
+        .wf-link a {
+            color: var(--pixar-primary);
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        /* Checkbox */
+        .wf-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px;
+            background: var(--pixar-bg);
+            border-radius: 12px;
+            margin-bottom: 8px;
+        }
+
+        .wf-checkbox-box {
+            width: 24px;
+            height: 24px;
+            border: 2px solid var(--pixar-border);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: white;
+        }
+
+        .wf-checkbox-box.checked {
+            background: var(--pixar-primary);
+            border-color: var(--pixar-primary);
+            color: white;
+        }
+
+        /* Card Grid */
+        .wf-card-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-top: 20px;
+        }
+
+        .wf-stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 16px;
+            text-align: center;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .wf-stat-card.admin {
+            border-radius: 8px;
+        }
+
+        .wf-stat-icon {
+            font-size: 1.5rem;
+            margin-bottom: 8px;
+        }
+
+        .wf-stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--pixar-text);
+        }
+
+        .wf-stat-label {
+            font-size: 0.85rem;
+            color: var(--pixar-text-secondary);
+        }
+
+        /* Profile Card */
+        .wf-profile {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 24px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .wf-avatar {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--pixar-primary), var(--pixar-secondary));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: white;
+        }
+
+        .wf-profile-info h3 {
+            font-size: 1.3rem;
+            font-weight: 700;
+        }
+
+        .wf-profile-info p {
+            color: var(--pixar-text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .wf-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            background: var(--pixar-secondary);
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-top: 8px;
+        }
+
+        /* Order Card */
+        .wf-order-card {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 12px;
+        }
+
+        .wf-order-img {
+            width: 60px;
+            height: 60px;
+            background: var(--pixar-bg);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .wf-order-info {
+            flex: 1;
+        }
+
+        .wf-order-name {
+            font-weight: 600;
+        }
+
+        .wf-order-meta {
+            font-size: 0.85rem;
+            color: var(--pixar-text-secondary);
+        }
+
+        .wf-order-status {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .wf-order-status.shipping {
+            background: #E6F4FF;
+            color: var(--pixar-primary);
+        }
+
+        .wf-order-status.complete {
+            background: #E6FFF0;
+            color: var(--pixar-success);
+        }
+
+        /* Admin Sidebar */
+        .wf-admin-layout {
+            display: flex;
+            min-height: 500px;
+        }
+
+        .wf-sidebar {
+            width: 220px;
+            background: var(--admin-primary);
+            color: white;
+            padding: 20px 0;
+        }
+
+        .wf-sidebar-logo {
+            padding: 0 20px 20px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .wf-sidebar-menu {
+            padding: 20px 0;
+        }
+
+        .wf-sidebar-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 20px;
+            color: rgba(255,255,255,0.7);
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+
+        .wf-sidebar-item:hover,
+        .wf-sidebar-item.active {
+            background: rgba(255,255,255,0.1);
+            color: white;
+        }
+
+        .wf-admin-main {
+            flex: 1;
+            padding: 24px;
+            background: var(--admin-bg);
+        }
+
+        .wf-admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .wf-admin-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--admin-text);
+        }
+
+        /* Data Table */
+        .wf-table {
+            width: 100%;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .wf-table-header {
+            display: flex;
+            padding: 16px 20px;
+            background: var(--admin-bg);
+            border-bottom: 1px solid var(--admin-border);
+            gap: 12px;
+        }
+
+        .wf-search-box {
+            flex: 1;
+            max-width: 300px;
+            padding: 8px 12px;
+            border: 1px solid var(--admin-border);
+            border-radius: 6px;
+            font-size: 0.9rem;
+        }
+
+        .wf-filter-btn {
+            padding: 8px 16px;
+            background: white;
+            border: 1px solid var(--admin-border);
+            border-radius: 6px;
+            font-size: 0.9rem;
+            color: var(--admin-text-secondary);
+        }
+
+        .wf-table-row {
+            display: grid;
+            grid-template-columns: 40px 2fr 2fr 1fr 1fr 1fr;
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--admin-border);
+            align-items: center;
+            font-size: 0.9rem;
+        }
+
+        .wf-table-row.header {
+            background: var(--admin-bg);
+            font-weight: 600;
+            color: var(--admin-text-secondary);
+        }
+
+        .wf-table-row:hover:not(.header) {
+            background: #F8FAFC;
+        }
+
+        .wf-status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 6px;
+        }
+
+        .wf-status-dot.active { background: var(--pixar-success); }
+        .wf-status-dot.inactive { background: var(--admin-text-secondary); }
+        .wf-status-dot.blocked { background: var(--pixar-error); }
+
+        /* Dialog */
+        .wf-dialog {
+            max-width: 480px;
+            margin: 20px auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: var(--shadow-lg);
+            overflow: hidden;
+        }
+
+        .wf-dialog-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--admin-border);
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .wf-dialog-body {
+            padding: 24px;
+        }
+
+        .wf-dialog-footer {
+            padding: 16px 24px;
+            background: var(--admin-bg);
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+
+        /* Mobile Preview */
+        .wf-mobile {
+            max-width: 375px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 32px;
+            box-shadow: var(--shadow-lg);
+            overflow: hidden;
+            border: 8px solid #1a1a1a;
+        }
+
+        .wf-mobile-notch {
+            width: 150px;
+            height: 30px;
+            background: #1a1a1a;
+            margin: 0 auto;
+            border-radius: 0 0 20px 20px;
+        }
+
+        .wf-mobile-content {
+            padding: 20px;
+            min-height: 600px;
+        }
+
+        .wf-mobile-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .wf-mobile-back {
+            font-size: 1.2rem;
+        }
+
+        .wf-mobile-title {
+            font-weight: 600;
+        }
+
+        .wf-mobile-nav {
+            display: flex;
+            justify-content: space-around;
+            padding: 16px;
+            background: white;
+            border-top: 1px solid var(--pixar-border);
+            margin: 20px -20px -20px;
+        }
+
+        .wf-mobile-nav-item {
+            text-align: center;
+            font-size: 0.75rem;
+            color: var(--pixar-text-secondary);
+        }
+
+        .wf-mobile-nav-item span {
+            display: block;
+            font-size: 1.2rem;
+            margin-bottom: 4px;
+        }
+
+        /* Success Page */
+        .wf-success {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .wf-success-icon {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, var(--pixar-success), #4CAF50);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: white;
+            margin: 0 auto 24px;
+        }
+
+        .wf-success h2 {
+            font-size: 1.5rem;
+            margin-bottom: 12px;
+        }
+
+        .wf-success p {
+            color: var(--pixar-text-secondary);
+            margin-bottom: 24px;
+        }
+
+        .wf-benefits {
+            background: var(--pixar-bg);
+            padding: 20px;
+            border-radius: 16px;
+            text-align: left;
+            margin: 24px 0;
+        }
+
+        .wf-benefits h4 {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .wf-benefits ul {
+            list-style: none;
+        }
+
+        .wf-benefits li {
+            padding: 6px 0;
+            color: var(--pixar-text-secondary);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .wireframe-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .wf-card-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-list {
+                justify-content: center;
+            }
+        }
+
+        /* Print Styles */
+        @media print {
+            .nav-container {
+                position: relative;
+            }
+
+            .wireframe-card {
+                break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Document Header -->
+    <header class="doc-header">
+        <h1>BrickGround Wireframes</h1>
+        <p>EP-01: 인증 및 사용자 관리 화면 설계</p>
+    </header>
+
+    <!-- Navigation -->
+    <nav class="nav-container">
+        <ul class="nav-list">
+            <li><a href="#register">1. 회원가입</a></li>
+            <li><a href="#login">2. 로그인</a></li>
+            <li><a href="#password">3. 비밀번호 관리</a></li>
+            <li><a href="#mypage">4. 마이페이지</a></li>
+            <li><a href="#seller">5. 판매자 대시보드</a></li>
+            <li><a href="#admin" class="admin">6. 관리자 회원관리</a></li>
+        </ul>
+    </nav>
+
+    <main class="container">
+        <!-- Section 1: 회원가입 -->
+        <section id="register" class="section">
+            <div class="section-header">
+                <div class="section-number">1</div>
+                <h2 class="section-title">회원가입</h2>
+                <span class="section-badge badge-pixar">Pixar Style</span>
+            </div>
+
+            <div class="wireframe-grid">
+                <!-- 회원가입 메인 -->
+                <div class="wireframe-card">
+                    <div class="card-header">
+                        <div class="card-title">회원가입 메인</div>
+                        <div class="card-url">/auth/register</div>
+                    </div>
+                    <div class="card-body">
+                        <div class="wireframe-preview">
+                            <div class="browser-bar">
+                                <div class="browser-dots">
+                                    <span class="browser-dot red"></span>
+                                    <span class="browser-dot yellow"></span>
+                                    <span class="browser-dot green"></span>
+                                </div>
+                                <div class="browser-url">brickground.com/auth/register</div>
+                            </div>
+                            <div class="wf-content">
+                                <div class="wf-form">
+                                    <div class="wf-form-title">
+                                        <div class="wf-form-icon">🎨</div>
+                                        BrickGround<br>회원가입
+                                    </div>
+
+                                    <div class="wf-divider"><span>소셜 계정으로 가입</span></div>
+
+                                    <button class="wf-btn wf-btn-kakao">🟡 카카오로 시작하기</button>
+                                    <button class="wf-btn wf-btn-naver">🟢 네이버로 시작하기</button>
+                                    <button class="wf-btn wf-btn-google">🔵 Google로 시작하기</button>
+
+                                    <div class="wf-divider"><span>또는</span></div>
+
+                                    <button class="wf-btn wf-btn-secondary">✉️ 이메일로 가입하기</button>
+
+                                    <div class="wf-link">
+                                        이미 계정이 있으신가요? <a href="#">로그인</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 이메일 회원가입 폼 -->
+                <div class="wireframe-card">
+                    <div class="card-header">
+                        <div class="card-title">이메일 회원가입 폼</div>
+                        <div class="card-url">/auth/register/email</div>
+                    </div>
+                    <div class="card-body">
+                        <div class="wireframe-preview">
+                            <div class="browser-bar">
+                                <div class="browser-dots">
+                                    <span class="browser-dot red"></span>
+                                    <span class="browser-dot yellow"></span>
+                                    <span class="browser-dot green"></span>
+                                </div>
+                                <div class="browser-url">brickground.com/auth/register/email</div>
+                            </div>
+                            <div class="wf-content">
+                                <div class="wf-form">
+                                    <div class="wf-form-title">
+                                        <div class="wf-form-icon">✉️</div>
+                                        이메일 가입
+                                    </div>
+
+                                    <div class="wf-input-group">
+                                        <label class="wf-label">이메일 *</label>
+                                        <div class="wf-input">example@email.com</div>
+                                        <div class="wf-input-hint">✓ 사용 가능한 이메일입니다</div>
+                                    </div>
+
+                                    <div class="wf-input-group">
+                                        <label class="wf-label">비밀번호 *</label>
+                                        <div class="wf-input">••••••••••••</div>
+                                        <div class="wf-input-hint">✓ 8자 이상 ✓ 영문 ✓ 숫자 ✓ 특수문자</div>
+                                    </div>
+
+                                    <div class="wf-input-group">
+                                        <label class="wf-label">비밀번호 확인 *</label>
+                                        <div class="wf-input">••••••••••••</div>
+                                        <div class="wf-input-hint">✓ 비밀번호가 일치합니다</div>
+                                    </div>
+
+                                    <div class="wf-input-group">
+                                        <label class="wf-label">이름 *</label>
+                                        <div class="wf-input">홍길동</div>
+                                    </div>
+
+                                    <button class="wf-btn wf-btn-primary">다음</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 약관 동의 -->
+                <div class="wireframe-card">
+                    <div class="card-header">
+                        <div class="card-title">약관 동의</div>
+                        <div class="card-url">/auth/register/terms</div>
+                    </div>
+                    <div class="card-body">
+                        <div class="wireframe-preview">
+                            <div class="browser-bar">
+                                <div class="browser-dots">
+                                    <span class="browser-dot red"></span>
+                                    <span class="browser-dot yellow"></span>
+                                    <span class="browser-dot green"></span>
+                                </div>
+                                <div class="browser-url">brickground.com/auth/register/terms</div>
+                            </div>
+                            <div class="wf-content">
+                                <div class="wf-form">
+                                    <div class="wf-form-title">
+                                        <div class="wf-form-icon">📋</div>
+                                        약관 동의
+                                    </div>
+
+                                    <div class="wf-checkbox" style="background: var(--pixar-primary); color: white;">
+                                        <div class="wf-checkbox-box checked">✓</div>
+                                        <span>전체 동의하기</span>
+                                    </div>
+
+                                    <hr style="margin: 16px 0; border: none; border-top: 1px solid var(--pixar-border);">
+
+                                    <div class="wf-checkbox">
+                                        <div class="wf-checkbox-box checked">✓</div>
+                                        <span>[필수] 이용약관 동의</span>
+                                    </div>
+
+                                    <div class="wf-checkbox">
+                                        <div class="wf-checkbox-box checked">✓</div>
+                                        <span>[필수] 개인정보 처리방침 동의</span>
+                                    </div>
+
+                                    <div class="wf-checkbox">
+                                        <div class="wf-checkbox-box checked">✓</div>
+                                        <span>[필수] 만 14세 이상입니다</span>
+                                    </div>
+
+                                    <hr style="margin: 16px 0; border: none; border-top: 1px solid var(--pixar-border);">
+
+                                    <div class="wf-checkbox">
+                                        <div class="wf-checkbox-box"></div>
+                                        <span>[선택] 마케팅 정보 수신 동의</span>
+                                    </div>
+
+                                    <button class="wf-btn wf-btn-primary" style="margin-top: 24px;">가입 완료하기</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 회원가입 완료 -->
+                <div class="wireframe-card">
+                    <div class="card-header">
+                        <div class="card-title">회원가입 완료</div>
+                        <div class="card-url">/auth/register/complete</div>
+                    </div>
+                    <div class="card-body">
+                        <div class="wireframe-preview">
+                            <div class="browser-bar">
+                                <div class="browser-dots">
+                                    <span class="browser-dot red"></span>
+                                    <span class="browser-dot yellow"></span>
+                                    <span class="browser-dot green"></span>
+                                </div>
+                                <div class="browser-url">brickground.com/auth/register/complete</div>
+                            </div>
+                            <div class="wf-content">
+                                <div class="wf-form">
+                                    <div class="wf-success">
+                                        <div class="wf-success-icon">🎉</div>
+                                        <h2>회원가입이 완료되었습니다!</h2>
+                                        <p>홍길동님, BrickGround에 오신 것을 환영합니다!</p>
+
+                                        <div class="wf-benefits">
+                                            <h4>🎁 신규 가입 혜택</h4>
+                                            <ul>
+                                                <li>• 1,000P 적립금 지급</li>
+                                                <li>• 첫 구매 10% 할인 쿠폰</li>
+                                                <li>• 무료배송 쿠폰 1장</li>
+                                            </ul>
+                                        </div>
+
+                                        <button class="wf-btn wf-btn-primary">쇼핑 시작하기</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 모바일 버전 -->
+                <div class="wireframe-card">
+                    <div class="card-header">
+                        <div class="card-title">회원가입 - 모바일</div>
+                        <div class="card-url">Mobile View</div>
+                    </div>
+                    <div class="card-body">
+                        <div class="wf-mobile">
+                            <div class="wf-mobile-notch"></div>
+                            <div class="wf-mobile-content">
+                                <div class="wf-mobile-header">
+                                    <span class="wf-mobile-back">←</span>
+                                    <span class="wf-mobile-title">회원가입</span>
+                                    <span></span>
+                                </div>
+
+                                <div style="text-align: center; margin-bottom: 24px;">
+                                    <div style="font-size: 2rem;">🎨</div>
+                                    <div style="font-weight: 700;">BrickGround</div>
+                                </div>
+
+                                <button class="wf-btn wf-btn-kakao" style="margin-bottom: 10px;">🟡 카카오로 시작하기</button>
+                                <button class="wf-btn wf-btn-naver" style="margin-bottom: 10px;">🟢 네이버로 시작하기</button>
+                                <button class="wf-btn wf-btn-google" style="margin-bottom: 10px;">🔵 Google로 시작하기</button>
+
+                                <div class="wf-divider"><span>또는</span></div>
+
+                                <button class="wf-btn wf-btn-secondary">✉️ 이메일로 가입하기</button>
+
+                                <div class="wf-link">
+                                    이미 계정이 있으신가요? <a href="#">로그인</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: 로그인 -->
+        <section id="login" class="section">
+            <div class="section-header">
+                <div class="section-number">2</div>
+                <h2 class="section-title">로그인</h2>
+                <span class="section-badge badge-pixar">Pixar Style</span>
+            </div>
+
+            <div class="wireframe-grid">
+                <!-- 로그인 메인 -->
+                <div class="wireframe-card">
+                    <div class="card-header">
+                        <div class="card-title">로그인 메인</div>
+                        <div class="card-url">/auth/login</div>
+                    </div>
+                    <div class="card-body">
+                        <div class="wireframe-preview">
+                            <div class="browser-bar">
+                                <div class="browser-dots">
+                                    <span class="browser-dot red"></span>
+                                    <span class="browser-dot yellow"></span>
+                                    <span class="browser-dot green"></span>
+                                </div>
+                                <div class="browser-url">brickground.com/auth/login</div>
+                            </div>
+                            <div class="wf-content">
+                                <div class="wf-form">
+                                    <div class="wf-form-title">
+                                        <div class="wf-form-icon">🎨</div>
+                                        BrickGround<br>로그인
+                                    </div>
+
+                                    <div class="wf-divider"><span>소셜 계정으로 로그인</span></div>
+
+                                    <button class="wf-btn wf-btn-kakao">🟡 카카오로 로그인</button>
+                                    <button class="wf-btn wf-btn-naver">🟢 네이버로 로그인</button>
+                                    <button class="wf-btn wf-btn-google">🔵 Google로 로그인</button>
+
+                                    <div class="wf-divider"><span>또는</span></div>
+
+                                    <div class="wf-input-group">
+                                        <label class="wf-label">이메일</label>
+                                        <div class="wf-input">example@email.com</div>
+                                    </div>
+
+                                    <div class="wf-input-group">
+                                        <label class="wf-label">비밀번호</label>
+                                        <div class="wf-input">••••••••••••</div>
+                                    </div>
+
+                                    <div style="display: flex; justify-content: space-between; align-items: center; margin: 12px 0;">
+                                        <label style="display: flex; align-items: center; gap: 8px; font-size: 0.9rem;">
+                                            <input type="checkbox"> 자동 로그인
+                                        </label>
+                                        <a href="#" style="font-size: 0.9rem; color: var(--pixar-text-secondary);">비밀번호 찾기</a>
+                                    </div>
+
+                                    <button class="wf-btn wf-btn-primary">로그인</button>
+
+                                    <div class="wf-link">
+                                        계정이 없으신가요? <a href="#">회원가입</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 로그인 에러 -->
+                <div class="wireframe-card">
+                    <div class="card-header">
+                        <div class="card-title">로그인 에러 상태</div>
+                        <div class="card-url">/auth/login (error)</div>
+                    </div>
+                    <div class="card-body">
+                        <div class="wireframe-preview">
+                            <div class="browser-bar">
+                                <div class="browser-dots">
+                                    <span class="browser-dot red"></span>
+                                    <span class="browser-dot yellow"></span>
+                                    <span class="browser-dot green"></span>
+                                </div>
+                                <div class="browser-url">brickground.com/auth/login</div>
+                            </div>
+                            <div class="wf-content">
+                                <div class="wf-form">
+                                    <div style="background: #FFF0F0; border: 1px solid var(--pixar-error); border-radius: 12px; padding: 16px; margin-bottom: 20px; text-align: center;">
+                                        <div style="color: var(--pixar-error); font-weight: 600;">⚠️ 로그인 실패</div>
+                                        <div style="font-size: 0.9rem; color: var(--pixar-text-secondary); margin-top: 4px;">
+                                            이메일 또는 비밀번호가 올바르지 않습니다.<br>(남은 시도: 3회)
+                                        </div>
+                                    </div>
+
+                                    <div class="wf-input-group">
+                                        <label class="wf-label">이메일</label>
+                                        <div class="wf-input" style="border-color: var(--pixar-error);">wrong@email.com</div>
+                                    </div>
+
+                                    <div class="wf-input-group">
+                                        <label class="wf-label">비밀번호</label>
+                                        <div class="wf-input" style="border-color: var(--pixar-error);">••••••••</div>
+                                    </div>
+
+                                    <button class="wf-btn wf-btn-primary">로그인</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 계정 잠금 -->
+                <div class="wireframe-card">
+                    <div class="card-header">
+                        <div class="card-title">계정 잠금 상태</div>
+                        <div class="card-url">/auth/login (locked)</div>
+                    </div>
+                    <div class="card-body">
+                        <div class="wireframe-preview">
+                            <div class="browser-bar">
+                                <div class="browser-dots">
+                                    <span class="browser-dot red"></span>
+                                    <span class="browser-dot yellow"></span>
+                                    <span class="browser-dot green"></span>
+                                </div>
+                                <div class="browser-url">brickground.com/auth/login</div>
+                            </div>
+                            <div class="wf-content">
+                                <div class="wf-form">
+                                    <div class="wf-success">
+                                        <div class="wf-success-icon" style="background: var(--pixar-error);">🔒</div>
+                                        <h2>계정이 잠겼습니다</h2>
+                                        <p>로그인 시도 횟수 초과로<br>계정이 30분간 잠겼습니다.</p>
+                                        <div style="font-size: 1.5rem; font-weight: 700; color: var(--pixar-error); margin: 20px 0;">
+                                            남은 시간: 28:45
+                                        </div>
+                                        <button class="wf-btn wf-btn-primary">비밀번호 재설정</button>
+                                        <button class="wf-btn wf-btn-secondary" style="margin-top: 10px;">고객센터 문의하기</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 헤더 로그인 상태 -->
+                <div class="wireframe-card full-width">
+                    <div class="card-header">
+                        <div class="card-title">헤더 - 로그인 전/후 상태</div>
+                        <div class="card-url">Header Component</div>
+                    </div>
+                    <div class="card-body">
+                        <div style="margin-bottom: 20px;">
+                            <div style="font-weight: 600; margin-bottom: 10px;">로그인 전:</div>
+                            <div style="display: flex; align-items: center; justify-content: space-between; padding: 16px 24px; background: white; border-radius: 12px; border: 2px solid var(--pixar-border);">
+                                <div style="font-size: 1.2rem; font-weight: 800; color: var(--pixar-primary);">🎨 BrickGround</div>
+                                <div style="flex: 1; max-width: 400px; margin: 0 40px; padding: 12px 20px; background: var(--pixar-bg); border-radius: 24px; color: var(--pixar-text-secondary);">
+                                    🔍 상품, VR Mall 검색...
+                                </div>
+                                <div style="display: flex; gap: 12px;">
+                                    <span style="padding: 10px;">🛒</span>
+                                    <button class="wf-btn wf-btn-secondary" style="width: auto; padding: 10px 20px; margin: 0;">로그인</button>
+                                    <button class="wf-btn wf-btn-primary" style="width: auto; padding: 10px 20px; margin: 0;">회원가입</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <div style="font-weight: 600; margin-bottom: 10px;">로그인 후:</div>
+                            <div style="display: flex; align-items: center; justify-content: space-between; padding: 16px 24px; background: white; border-radius: 12px; border: 2px solid var(--pixar-border);">
+                                <div style="font-size: 1.2rem; font-weight: 800; color: var(--pixar-primary);">🎨 BrickGround</div>
+                                <div style="flex: 1; max-width: 400px; margin: 0 40px; padding: 12px 20px; background: var(--pixar-bg); border-radius: 24px; color: var(--pixar-text-secondary);">
+                                    🔍 상품, VR Mall 검색...
+                                </div>
+                                <div style="display: flex; align-items: center; gap: 16px;">
+                                    <span style="position: relative;">🛒<span style="position: absolute; top: -4px; right: -8px; background: var(--pixar-error); color: white; font-size: 0.7rem; padding: 2px 6px; border-radius: 10px;">3</span></span>
+                                    <span>❤️</span>
+                                    <div style="display: flex; align-items: center; gap: 8px; padding: 8px 16px; background: var(--pixar-bg); border-radius: 20px;">
+                                        <span style="width: 32px; height: 32px; background: var(--pixar-primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white;">👤</span>
+                                        <span style="font-weight: 600;">홍길동</span>
+                                        <span>▼</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="position: relative;">
+                                <div style="position: absolute; right: 0; top: 10px; background: white; border-radius: 12px; box-shadow: var(--shadow-lg); padding: 16px; width: 220px;">
+                                    <div style="padding-bottom: 12px; border-bottom: 1px solid var(--pixar-border); margin-bottom: 12px;">
+                                        <div style="font-weight: 600;">👤 홍길동</div>
+                                        <div style="font-size: 0.85rem; color: var(--pixar-text-secondary);">example@mail.com</div>
+                                    </div>
+                                    <div style="font-size: 0.9rem;">
+                                        <div style="padding: 8px 0;">📦 주문 내역</div>
+                                        <div style="padding: 8px 0;">❤️ 찜 목록</div>
+                                        <div style="padding: 8px 0;">🎨 내 DotArt</div>
+                                        <div style="padding: 8px 0;">🏪 내 VR Mall</div>
+                                        <div style="border-top: 1px solid var(--pixar-border); margin: 8px 0;"></div>
+                                        <div style="padding: 8px 0;">⚙️ 계정 설정</div>
+                                        <div style="padding: 8px 0;">🎫 쿠폰함</div>
+                                        <div style="padding: 8px 0;">💰 포인트: 1,320P</div>
+                                        <div style="border-top: 1px solid var(--pixar-border); margin: 8px 0;"></div>
+                                        <div style="padding: 8px 0; color: var(--pixar-error);">🚪 로그아웃</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: 비밀번호 관리 -->
+        <section id="password" class="section">
+            <div class="section-header">
+                <div class="section-number">3</div>
+                <h2 class="section-title">비밀번호 관리</h2>
+                <span class="section-badge badge-pixar">Pixar Style</span>
+            </div>
+
+            <div class="wireframe-grid">
+                <!-- 비밀번호 찾기 -->
+                <div class="wireframe-card">
+                    <div class="card-header">
+                        <div class="card-title">비밀번호 찾기</div>
+                        <div class="card-url">/auth/forgot-password</div>
+                    </div>
+                    <div class="card-body">
+                        <div class="wireframe-preview">
+                            <div class="browser-bar">
+                                <div class="browser-dots">
+                                    <span class="browser-dot red"></span>
+                                    <span class="browser-dot yellow"></span>
+                                    <span class="browser-dot green"></span>
+                                </div>
+                                <div class="browser-url">brickground.com/auth/forgot-password</div>
+                            </div>
+                            <div class="wf-content">
+                                <div class="wf-form">
+                                    <div style="margin-bottom: 20px;">
+                                        <a href="#" style="color: var(--pixar-text-secondary); text-decoration: none;">← 로그인으로 돌아가기</a>
+                                    </div>
+
+                                    <div class="wf-form-title">
+                                        <div class="wf-form-icon">🔑</div>
+                                        비밀번호 찾기
+                                    </div>
+
+                                    <p style="text-align: center; color: var(--pixar-text-secondary); margin-bottom: 24px;">
+                                        가입 시 등록한 이메일 주소를 입력해 주세요.<br>
+                                        비밀번호 재설정 링크를 보내드립니다.
+                                    </p>
+
+                                    <div class="wf-input-group">
+                                        <label class="wf-label">이메일</label>
+                                        <div class="wf-input">example@email.com</div>
+                                    </div>
+
+                                    <button class="wf-btn wf-btn-primary">재설정 링크 발송</button>
+
+                                    <div class="wf-divider"><span></span></div>
+
+                                    <p style="text-align: center; font-size: 0.9rem; color: var(--pixar-text-secondary);">
+                                        혹시 소셜 계정으로 가입하셨나요?<br>
+                                        <a href="#" style="color: var(--pixar-primary);">소셜 로그인으로 돌아가기</a>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 이메일 발송 완료 -->
+                <div class="wireframe-card">
+                    <div class="card-header">
+                        <div class="card-title">이메일 발송 완료</div>
+                        <div class="card-url">/auth/forgot-password/sent</div>
+                    </div>
+                    <div class="card-body">
+                        <div class="wireframe-preview">
+                            <div class="browser-bar">
+                                <div class="browser-dots">
+                                    <span class="browser-dot red"></span>
+                                    <span class="browser-dot yellow"></span>
+                                    <span class="browser-dot green"></span>
+                                </div>
+                                <div class="browser-url">brickground.com/auth/forgot-password/sent</div>
+                            </div>
+                            <div class="wf-content">
+                                <div class="wf-form">
+                                    <div class="wf-success">
+                                        <div class="wf-success-icon" style="background: var(--pixar-primary);">✉️</div>
+                                        <h2>이메일을 발송했습니다</h2>
+                                        <p>
+                                            <strong>example@email.com</strong>으로<br>
+                                            비밀번호 재설정 링크를 보냈습니다.<br><br>
+                                            이메일을 확인해 주세요.<br>
+                                            <span style="font-size: 0.9rem;">(링크는 30분간 유효합니다)</span>
+                                        </p>
+
+                                        <button class="wf-btn wf-btn-primary">로그인으로 돌아가기</button>
+
+                                        <div style="margin-top: 24px; padding: 16px; background: var(--pixar-bg); border-radius: 12px; text-align: left; font-size: 0.9rem;">
+                                            <div style="font-weight: 600; margin-bottom: 8px;">이메일을 받지 못하셨나요?</div>
+                                            <ul style="color: var(--pixar-text-secondary); padding-left: 16px;">
+                                                <li>스팸/정크 메일함을 확인해 주세요</li>
+                                                <li><a href="#" style="color: var(--pixar-primary);">이메일 다시 보내기</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 비밀번호 재설정 -->
+                <div class="wireframe-card">
+                    <div class="card-header">
+                        <div class="card-title">비밀번호 재설정</div>
+                        <div class="card-url">/auth/reset-password</div>
+                    </div>
+                    <div class="card-body">
+                        <div class="wireframe-preview">
+                            <div class="browser-bar">
+                                <div class="browser-dots">
+                                    <span class="browser-dot red"></span>
+                                    <span class="browser-dot yellow"></span>
+                                    <span class="browser-dot green"></span>
+                                </div>
+                                <div class="browser-url">brickground.com/auth/reset-password?token=xxx</div>
+                            </div>
+                            <div class="wf-content">
+                                <div class="wf-form">
+                                    <div class="wf-form-title">
+                                        <div class="wf-form-icon">🔐</div>
+                                        비밀번호 재설정
+                                    </div>
+
+                                    <p style="text-align: center; color: var(--pixar-text-secondary); margin-bottom: 24px;">
+                                        새로운 비밀번호를 입력해 주세요.
+                                    </p>
+
+                                    <div class="wf-input-group">
+                                        <label class="wf-label">새 비밀번호 *</label>
+                                        <div class="wf-input">••••••••••••</div>
+                                        <div style="height: 6px; background: linear-gradient(90deg, var(--pixar-success) 80%, #eee 80%); border-radius: 3px; margin: 8px 0;"></div>
+                                        <div class="wf-input-hint">✓ 8자 이상 ✓ 영문 ✓ 숫자 ✓ 특수문자</div>
+                                    </div>
+
+                                    <div class="wf-input-group">
+                                        <label class="wf-label">새 비밀번호 확인 *</label>
+                                        <div class="wf-input">••••••••••••</div>
+                                        <div class="wf-input-hint">✓ 비밀번호가 일치합니다</div>
+                                    </div>
+
+                                    <button class="wf-btn wf-btn-primary">비밀번호 변경하기</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 변경 완료 -->
+                <div class="wireframe-card">
+                    <div class="card-header">
+                        <div class="card-title">비밀번호 변경 완료</div>
+                        <div class="card-url">/auth/reset-password/complete</div>
+                    </div>
+                    <div class="card-body">
+                        <div class="wireframe-preview">
+                            <div class="browser-bar">
+                                <div class="browser-dots">
+                                    <span class="browser-dot red"></span>
+                                    <span class="browser-dot yellow"></span>
+                                    <span class="browser-dot green"></span>
+                                </div>
+                                <div class="browser-url">brickground.com/auth/reset-password/complete</div>
+                            </div>
+                            <div class="wf-content">
+                                <div class="wf-form">
+                                    <div class="wf-success">
+                                        <div class="wf-success-icon">✅</div>
+                                        <h2>비밀번호가 변경되었습니다!</h2>
+                                        <p>새 비밀번호로 로그인해 주세요.</p>
+                                        <button class="wf-btn wf-btn-primary">로그인하기</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4: 마이페이지 -->
+        <section id="mypage" class="section">
+            <div class="section-header">
+                <div class="section-number">4</div>
+                <h2 class="section-title">마이페이지</h2>
+                <span class="section-badge badge-pixar">Pixar Style</span>
+            </div>
+
+            <div class="wireframe-grid">
+                <!-- 마이페이지 메인 -->
+                <div class="wireframe-card full-width">
+                    <div class="card-header">
+                        <div class="card-title">마이페이지 메인</div>
+                        <div class="card-url">/mypage</div>
+                    </div>
+                    <div class="card-body">
+                        <div class="wireframe-preview">
+                            <div class="browser-bar">
+                                <div class="browser-dots">
+                                    <span class="browser-dot red"></span>
+                                    <span class="browser-dot yellow"></span>
+                                    <span class="browser-dot green"></span>
+                                </div>
+                                <div class="browser-url">brickground.com/mypage</div>
+                            </div>
+                            <div class="wf-content">
+                                <div class="wf-header">
+                                    <div class="wf-logo">🎨 BrickGround</div>
+                                    <div class="wf-nav">
+                                        <span class="wf-nav-item">VR Mall</span>
+                                        <span class="wf-nav-item">DotArt</span>
+                                        <span class="wf-nav-item">Shop</span>
+                                    </div>
+                                </div>
+
+                                <!-- Profile Section -->
+                                <div class="wf-profile" style="margin-bottom: 24px;">
+                                    <div class="wf-avatar">👤</div>
+                                    <div class="wf-profile-info" style="flex: 1;">
+                                        <h3>홍길동 님</h3>
+                                        <p>example@email.com</p>
+                                        <span class="wf-badge">🥈 실버 회원</span>
+                                    </div>
+                                    <button class="wf-btn wf-btn-secondary" style="width: auto; padding: 10px 20px;">프로필 수정</button>
+                                </div>
+
+                                <!-- Stats -->
+                                <div class="wf-card-grid">
+                                    <div class="wf-stat-card">
+                                        <div class="wf-stat-icon">💰</div>
+                                        <div class="wf-stat-value">1,320P</div>
+                                        <div class="wf-stat-label">포인트</div>
+                                    </div>
+                                    <div class="wf-stat-card">
+                                        <div class="wf-stat-icon">🎫</div>
+                                        <div class="wf-stat-value">5장</div>
+                                        <div class="wf-stat-label">쿠폰</div>
+                                    </div>
+                                    <div class="wf-stat-card">
+                                        <div class="wf-stat-icon">❤️</div>
+                                        <div class="wf-stat-value">12개</div>
+                                        <div class="wf-stat-label">찜 목록</div>
+                                    </div>
+                                </div>
+
+                                <!-- Orders -->
+                                <div style="margin-top: 24px;">
+                                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                                        <h3>📦 최근 주문 내역</h3>
+                                        <a href="#" style="color: var(--pixar-primary); font-size: 0.9rem;">더보기 →</a>
+                                    </div>
+
+                                    <div class="wf-order-card">
+                                        <div class="wf-order-img">📦</div>
+                                        <div class="wf-order-info">
+                                            <div class="wf-order-name">브릭 조립 세트 A</div>
+                                            <div class="wf-order-meta">2026.01.01 주문 │ ₩58,000</div>
+                                        </div>
+                                        <span class="wf-order-status shipping">📦 배송중</span>
+                                    </div>
+
+                                    <div class="wf-order-card">
+                                        <div class="wf-order-img">🤖</div>
+                                        <div class="wf-order-info">
+                                            <div class="wf-order-name">미니 로봇 키트</div>
+                                            <div class="wf-order-meta">2025.12.28 주문 │ ₩35,000</div>
+                                        </div>
+                                        <span class="wf-order-status complete">✓ 배송완료</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 개인정보 수정 -->
+                <div class="wireframe-card">
+                    <div class="card-header">
+                        <div class="card-title">개인정보 수정</div>
+                        <div class="card-url">/mypage/profile</div>
+                    </div>
+                    <div class="card-body">
+                        <div class="wireframe-preview">
+                            <div class="browser-bar">
+                                <div class="browser-dots">
+                                    <span class="browser-dot red"></span>
+                                    <span class="browser-dot yellow"></span>
+                                    <span class="browser-dot green"></span>
+                                </div>
+                                <div class="browser-url">brickground.com/mypage/profile</div>
+                            </div>
+                            <div class="wf-content">
+                                <div style="margin-bottom: 20px;">
+                                    <a href="#" style="color: var(--pixar-text-secondary); text-decoration: none;">← 마이페이지</a>
+                                    <span style="margin-left: 8px; font-weight: 600;">👤 개인정보 수정</span>
+                                </div>
+
+                                <div class="wf-form" style="max-width: 100%;">
+                                    <div style="text-align: center; margin-bottom: 24px;">
+                                        <div class="wf-avatar" style="margin: 0 auto 12px;">👤</div>
+                                        <button class="wf-btn wf-btn-secondary" style="width: auto; padding: 8px 16px;">사진 변경</button>
+                                    </div>
+
+                                    <div class="wf-input-group">
+                                        <label class="wf-label">이메일 (변경불가)</label>
+                                        <div class="wf-input" style="background: #eee;">example@email.com 🔒</div>
+                                    </div>
+
+                                    <div class="wf-input-group">
+                                        <label class="wf-label">이름 *</label>
+                                        <div class="wf-input">홍길동</div>
+                                    </div>
+
+                                    <div class="wf-input-group">
+                                        <label class="wf-label">연락처 *</label>
+                                        <div class="wf-input">010-1234-5678</div>
+                                    </div>
+
+                                    <div class="wf-input-group">
+                                        <label class="wf-label">생년월일</label>
+                                        <div class="wf-input">1990-01-15</div>
+                                    </div>
+
+                                    <button class="wf-btn wf-btn-primary">저장하기</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 배송지 관리 -->
+                <div class="wireframe-card">
+                    <div class="card-header">
+                        <div class="card-title">배송지 관리</div>
+                        <div class="card-url">/mypage/addresses</div>
+                    </div>
+                    <div class="card-body">
+                        <div class="wireframe-preview">
+                            <div class="browser-bar">
+                                <div class="browser-dots">
+                                    <span class="browser-dot red"></span>
+                                    <span class="browser-dot yellow"></span>
+                                    <span class="browser-dot green"></span>
+                                </div>
+                                <div class="browser-url">brickground.com/mypage/addresses</div>
+                            </div>
+                            <div class="wf-content">
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                                    <div>
+                                        <a href="#" style="color: var(--pixar-text-secondary); text-decoration: none;">← 마이페이지</a>
+                                        <span style="margin-left: 8px; font-weight: 600;">📍 배송지 관리</span>
+                                    </div>
+                                    <button class="wf-btn wf-btn-primary" style="width: auto; padding: 10px 20px;">+ 새 배송지</button>
+                                </div>
+
+                                <div style="background: white; border-radius: 16px; padding: 20px; margin-bottom: 12px; border: 2px solid var(--pixar-primary);">
+                                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                                        <span style="color: var(--pixar-primary); font-weight: 600;">● 기본 배송지</span>
+                                        <button style="padding: 6px 12px; background: var(--pixar-bg); border: none; border-radius: 8px; font-size: 0.85rem;">수정</button>
+                                    </div>
+                                    <div style="font-weight: 600;">홍길동 │ 010-1234-5678</div>
+                                    <div style="color: var(--pixar-text-secondary); font-size: 0.9rem; margin-top: 4px;">
+                                        [06234] 서울시 강남구 테헤란로 123번길 45<br>
+                                        브릭타워 1234호
+                                    </div>
+                                </div>
+
+                                <div style="background: white; border-radius: 16px; padding: 20px; margin-bottom: 12px; border: 2px solid var(--pixar-border);">
+                                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                                        <span style="color: var(--pixar-text-secondary);">○ 회사</span>
+                                        <div>
+                                            <button style="padding: 6px 12px; background: var(--pixar-bg); border: none; border-radius: 8px; font-size: 0.85rem; margin-right: 8px;">기본 설정</button>
+                                            <button style="padding: 6px 12px; background: var(--pixar-bg); border: none; border-radius: 8px; font-size: 0.85rem;">수정</button>
+                                        </div>
+                                    </div>
+                                    <div style="font-weight: 600;">홍길동 │ 010-1234-5678</div>
+                                    <div style="color: var(--pixar-text-secondary); font-size: 0.9rem; margin-top: 4px;">
+                                        [04527] 서울시 중구 세종대로 110<br>
+                                        서울시청 3층
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 마이페이지 모바일 -->
+                <div class="wireframe-card">
+                    <div class="card-header">
+                        <div class="card-title">마이페이지 - 모바일</div>
+                        <div class="card-url">Mobile View</div>
+                    </div>
+                    <div class="card-body">
+                        <div class="wf-mobile">
+                            <div class="wf-mobile-notch"></div>
+                            <div class="wf-mobile-content">
+                                <div class="wf-mobile-header">
+                                    <span class="wf-mobile-back">←</span>
+                                    <span class="wf-mobile-title">마이페이지</span>
+                                    <span></span>
+                                </div>
+
+                                <div style="text-align: center; padding: 20px; background: white; border-radius: 16px; margin-bottom: 16px;">
+                                    <div class="wf-avatar" style="width: 60px; height: 60px; font-size: 1.5rem; margin: 0 auto 12px;">👤</div>
+                                    <div style="font-weight: 700;">홍길동 님</div>
+                                    <div style="font-size: 0.85rem; color: var(--pixar-text-secondary);">example@mail.com</div>
+                                    <span class="wf-badge" style="margin-top: 8px;">🥈 실버 회원</span>
+                                </div>
+
+                                <div style="display: flex; gap: 8px; margin-bottom: 16px;">
+                                    <div class="wf-stat-card" style="flex: 1; padding: 12px;">
+                                        <div style="font-size: 1rem;">💰</div>
+                                        <div style="font-weight: 700;">1,320P</div>
+                                    </div>
+                                    <div class="wf-stat-card" style="flex: 1; padding: 12px;">
+                                        <div style="font-size: 1rem;">🎫</div>
+                                        <div style="font-weight: 700;">5장</div>
+                                    </div>
+                                    <div class="wf-stat-card" style="flex: 1; padding: 12px;">
+                                        <div style="font-size: 1rem;">❤️</div>
+                                        <div style="font-weight: 700;">12개</div>
+                                    </div>
+                                </div>
+
+                                <div style="background: white; border-radius: 12px; overflow: hidden;">
+                                    <div style="padding: 16px; border-bottom: 1px solid var(--pixar-border);">👤 개인정보 수정 →</div>
+                                    <div style="padding: 16px; border-bottom: 1px solid var(--pixar-border);">🔐 비밀번호 변경 →</div>
+                                    <div style="padding: 16px; border-bottom: 1px solid var(--pixar-border);">📍 배송지 관리 →</div>
+                                    <div style="padding: 16px; border-bottom: 1px solid var(--pixar-border);">🔔 알림 설정 →</div>
+                                    <div style="padding: 16px; color: var(--pixar-error);">🚪 회원 탈퇴 →</div>
+                                </div>
+
+                                <div class="wf-mobile-nav">
+                                    <div class="wf-mobile-nav-item"><span>🏠</span>홈</div>
+                                    <div class="wf-mobile-nav-item"><span>🔍</span>검색</div>
+                                    <div class="wf-mobile-nav-item"><span>🛒</span>장바구니</div>
+                                    <div class="wf-mobile-nav-item" style="color: var(--pixar-primary);"><span>👤</span>MY</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 5: 판매자 대시보드 -->
+        <section id="seller" class="section">
+            <div class="section-header">
+                <div class="section-number">5</div>
+                <h2 class="section-title">판매자 대시보드</h2>
+                <span class="section-badge badge-pixar">Pixar Style Light</span>
+            </div>
+
+            <div class="wireframe-grid">
+                <!-- 판매자 대시보드 메인 -->
+                <div class="wireframe-card full-width">
+                    <div class="card-header">
+                        <div class="card-title">판매자 대시보드 메인</div>
+                        <div class="card-url">/seller</div>
+                    </div>
+                    <div class="card-body">
+                        <div class="wireframe-preview">
+                            <div class="browser-bar">
+                                <div class="browser-dots">
+                                    <span class="browser-dot red"></span>
+                                    <span class="browser-dot yellow"></span>
+                                    <span class="browser-dot green"></span>
+                                </div>
+                                <div class="browser-url">brickground.com/seller</div>
+                            </div>
+                            <div class="wf-admin-layout" style="background: var(--pixar-bg);">
+                                <div class="wf-sidebar" style="background: white; color: var(--pixar-text); border-right: 1px solid var(--pixar-border);">
+                                    <div class="wf-sidebar-logo" style="color: var(--pixar-primary);">🎨 판매자 센터</div>
+                                    <div class="wf-sidebar-menu">
+                                        <div class="wf-sidebar-item active" style="color: var(--pixar-primary); background: var(--pixar-bg);">📊 대시보드</div>
+                                        <div class="wf-sidebar-item" style="color: var(--pixar-text-secondary);">📦 상품 관리</div>
+                                        <div class="wf-sidebar-item" style="color: var(--pixar-text-secondary);">🛒 주문 관리</div>
+                                        <div class="wf-sidebar-item" style="color: var(--pixar-text-secondary);">📈 통계</div>
+                                        <div class="wf-sidebar-item" style="color: var(--pixar-text-secondary);">🚚 배송 정책</div>
+                                        <div class="wf-sidebar-item" style="color: var(--pixar-text-secondary);">⚙️ 설정</div>
+                                    </div>
+                                </div>
+                                <div class="wf-admin-main">
+                                    <div class="wf-admin-header">
+                                        <div class="wf-admin-title">📊 대시보드</div>
+                                        <span style="color: var(--pixar-text-secondary);">2026년 1월 1일</span>
+                                    </div>
+
+                                    <div class="wf-card-grid" style="margin-bottom: 24px;">
+                                        <div class="wf-stat-card">
+                                            <div class="wf-stat-icon">💰</div>
+                                            <div class="wf-stat-value">₩2.5M</div>
+                                            <div class="wf-stat-label">오늘 매출</div>
+                                            <div style="color: var(--pixar-success); font-size: 0.85rem;">▲ 15.2% vs 어제</div>
+                                        </div>
+                                        <div class="wf-stat-card">
+                                            <div class="wf-stat-icon">📦</div>
+                                            <div class="wf-stat-value">23건</div>
+                                            <div class="wf-stat-label">오늘 주문</div>
+                                            <div style="color: var(--pixar-success); font-size: 0.85rem;">▲ 8.3% vs 어제</div>
+                                        </div>
+                                        <div class="wf-stat-card">
+                                            <div class="wf-stat-icon">👁️</div>
+                                            <div class="wf-stat-value">456명</div>
+                                            <div class="wf-stat-label">방문자</div>
+                                            <div style="color: var(--pixar-success); font-size: 0.85rem;">▲ 12.1% vs 어제</div>
+                                        </div>
+                                    </div>
+
+                                    <div style="background: white; border-radius: 16px; padding: 20px; margin-bottom: 24px;">
+                                        <h4 style="margin-bottom: 16px;">🔔 처리 필요</h4>
+                                        <div style="padding: 12px; background: #FFF8E6; border-radius: 8px; margin-bottom: 8px; display: flex; justify-content: space-between;">
+                                            <span>• 신규 주문 5건 확인 필요</span>
+                                            <span style="color: var(--pixar-primary);">→</span>
+                                        </div>
+                                        <div style="padding: 12px; background: #FFF0F0; border-radius: 8px; margin-bottom: 8px; display: flex; justify-content: space-between;">
+                                            <span>• 문의 2건 답변 대기</span>
+                                            <span style="color: var(--pixar-primary);">→</span>
+                                        </div>
+                                        <div style="padding: 12px; background: #F0F8FF; border-radius: 8px; display: flex; justify-content: space-between;">
+                                            <span>• 재고 부족 상품 1건</span>
+                                            <span style="color: var(--pixar-primary);">→</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 상품 관리 -->
+                <div class="wireframe-card full-width">
+                    <div class="card-header">
+                        <div class="card-title">상품 관리</div>
+                        <div class="card-url">/seller/products</div>
+                    </div>
+                    <div class="card-body">
+                        <div class="wireframe-preview">
+                            <div class="browser-bar">
+                                <div class="browser-dots">
+                                    <span class="browser-dot red"></span>
+                                    <span class="browser-dot yellow"></span>
+                                    <span class="browser-dot green"></span>
+                                </div>
+                                <div class="browser-url">brickground.com/seller/products</div>
+                            </div>
+                            <div class="wf-content" style="background: var(--pixar-bg);">
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                                    <h3>📦 상품 관리</h3>
+                                    <button class="wf-btn wf-btn-primary" style="width: auto; padding: 12px 24px;">+ 상품 등록</button>
+                                </div>
+
+                                <div style="background: white; border-radius: 16px; overflow: hidden;">
+                                    <div style="display: flex; gap: 12px; padding: 16px; border-bottom: 1px solid var(--pixar-border);">
+                                        <input type="text" placeholder="🔍 상품명 검색..." style="flex: 1; padding: 10px 16px; border: 2px solid var(--pixar-border); border-radius: 12px;">
+                                        <select style="padding: 10px 16px; border: 2px solid var(--pixar-border); border-radius: 12px;">
+                                            <option>상태: 전체</option>
+                                        </select>
+                                        <select style="padding: 10px 16px; border: 2px solid var(--pixar-border); border-radius: 12px;">
+                                            <option>카테고리: 전체</option>
+                                        </select>
+                                    </div>
+
+                                    <table style="width: 100%; border-collapse: collapse;">
+                                        <thead>
+                                            <tr style="background: var(--pixar-bg);">
+                                                <th style="padding: 12px; text-align: left; width: 40px;">☐</th>
+                                                <th style="padding: 12px; text-align: left;">상품정보</th>
+                                                <th style="padding: 12px; text-align: right;">가격</th>
+                                                <th style="padding: 12px; text-align: center;">재고</th>
+                                                <th style="padding: 12px; text-align: center;">상태</th>
+                                                <th style="padding: 12px; text-align: center;">관리</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr style="border-bottom: 1px solid var(--pixar-border);">
+                                                <td style="padding: 12px;">☐</td>
+                                                <td style="padding: 12px; display: flex; align-items: center; gap: 12px;">
+                                                    <div style="width: 50px; height: 50px; background: var(--pixar-bg); border-radius: 8px;"></div>
+                                                    브릭 조립 세트 A
+                                                </td>
+                                                <td style="padding: 12px; text-align: right;">₩29,000</td>
+                                                <td style="padding: 12px; text-align: center;">45</td>
+                                                <td style="padding: 12px; text-align: center;"><span style="color: var(--pixar-success);">● 판매중</span></td>
+                                                <td style="padding: 12px; text-align: center;">
+                                                    <button style="padding: 6px 12px; border: none; background: var(--pixar-bg); border-radius: 8px; margin-right: 4px;">수정</button>
+                                                    <button style="padding: 6px 12px; border: none; background: #FFF0F0; border-radius: 8px; color: var(--pixar-error);">삭제</button>
+                                                </td>
+                                            </tr>
+                                            <tr style="border-bottom: 1px solid var(--pixar-border);">
+                                                <td style="padding: 12px;">☐</td>
+                                                <td style="padding: 12px; display: flex; align-items: center; gap: 12px;">
+                                                    <div style="width: 50px; height: 50px; background: var(--pixar-bg); border-radius: 8px;"></div>
+                                                    우주선 세트
+                                                </td>
+                                                <td style="padding: 12px; text-align: right;">₩58,000</td>
+                                                <td style="padding: 12px; text-align: center; color: var(--pixar-error);">⚠️ 3</td>
+                                                <td style="padding: 12px; text-align: center;"><span style="color: var(--pixar-accent-orange);">● 재고부족</span></td>
+                                                <td style="padding: 12px; text-align: center;">
+                                                    <button style="padding: 6px 12px; border: none; background: var(--pixar-bg); border-radius: 8px; margin-right: 4px;">수정</button>
+                                                    <button style="padding: 6px 12px; border: none; background: #FFF0F0; border-radius: 8px; color: var(--pixar-error);">삭제</button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 6: 관리자 회원 관리 -->
+        <section id="admin" class="section">
+            <div class="section-header admin">
+                <div class="section-number admin">6</div>
+                <h2 class="section-title">관리자 회원 관리</h2>
+                <span class="section-badge badge-admin">shadcn/ui</span>
+            </div>
+
+            <div class="wireframe-grid">
+                <!-- 관리자 회원 목록 -->
+                <div class="wireframe-card admin full-width">
+                    <div class="card-header admin">
+                        <div class="card-title">관리자 회원 목록</div>
+                        <div class="card-url">/admin/users</div>
+                    </div>
+                    <div class="card-body">
+                        <div class="wireframe-preview admin">
+                            <div class="browser-bar">
+                                <div class="browser-dots">
+                                    <span class="browser-dot red"></span>
+                                    <span class="browser-dot yellow"></span>
+                                    <span class="browser-dot green"></span>
+                                </div>
+                                <div class="browser-url">brickground.com/admin/users</div>
+                            </div>
+                            <div class="wf-admin-layout">
+                                <div class="wf-sidebar">
+                                    <div class="wf-sidebar-logo">Admin</div>
+                                    <div class="wf-sidebar-menu">
+                                        <div class="wf-sidebar-item">📊 대시보드</div>
+                                        <div class="wf-sidebar-item active">👥 회원 관리</div>
+                                        <div class="wf-sidebar-item">📦 상품 관리</div>
+                                        <div class="wf-sidebar-item">🛒 주문 관리</div>
+                                        <div class="wf-sidebar-item">📝 콘텐츠 관리</div>
+                                        <div class="wf-sidebar-item">📢 마케팅</div>
+                                        <div class="wf-sidebar-item">📊 통계</div>
+                                        <div class="wf-sidebar-item">⚙️ 설정</div>
+                                    </div>
+                                </div>
+                                <div class="wf-admin-main">
+                                    <div class="wf-admin-header">
+                                        <div class="wf-admin-title">👥 회원 관리</div>
+                                    </div>
+
+                                    <div style="display: flex; gap: 16px; margin-bottom: 16px; padding: 12px; background: white; border-radius: 8px;">
+                                        <div style="text-align: center; padding: 8px 16px; background: var(--admin-bg); border-radius: 6px;">
+                                            <div style="font-size: 1.2rem; font-weight: 700;">1,234</div>
+                                            <div style="font-size: 0.8rem; color: var(--admin-text-secondary);">총 회원</div>
+                                        </div>
+                                        <div style="text-align: center; padding: 8px 16px; background: var(--admin-bg); border-radius: 6px;">
+                                            <div style="font-size: 1.2rem; font-weight: 700;">12</div>
+                                            <div style="font-size: 0.8rem; color: var(--admin-text-secondary);">오늘 가입</div>
+                                        </div>
+                                        <div style="text-align: center; padding: 8px 16px; background: var(--admin-bg); border-radius: 6px;">
+                                            <div style="font-size: 1.2rem; font-weight: 700;">1,100</div>
+                                            <div style="font-size: 0.8rem; color: var(--admin-text-secondary);">활성 회원</div>
+                                        </div>
+                                    </div>
+
+                                    <div class="wf-table">
+                                        <div class="wf-table-header">
+                                            <input type="text" class="wf-search-box" placeholder="🔍 이름, 이메일 검색...">
+                                            <button class="wf-filter-btn">상태 ▼</button>
+                                            <button class="wf-filter-btn">등급 ▼</button>
+                                            <button class="wf-filter-btn">가입일 ▼</button>
+                                            <button class="wf-filter-btn" style="margin-left: auto;">엑셀 내보내기</button>
+                                        </div>
+
+                                        <div class="wf-table-row header">
+                                            <div>☐</div>
+                                            <div>회원정보</div>
+                                            <div>이메일</div>
+                                            <div>등급</div>
+                                            <div>상태</div>
+                                            <div>관리</div>
+                                        </div>
+
+                                        <div class="wf-table-row">
+                                            <div>☐</div>
+                                            <div>
+                                                <div style="font-weight: 600;">홍길동</div>
+                                                <div style="font-size: 0.8rem; color: var(--admin-text-secondary);">2026-01-01 가입</div>
+                                            </div>
+                                            <div>hong@email.com</div>
+                                            <div>🥈 실버</div>
+                                            <div><span class="wf-status-dot active"></span>활성</div>
+                                            <div><button class="wf-filter-btn">상세</button></div>
+                                        </div>
+
+                                        <div class="wf-table-row">
+                                            <div>☐</div>
+                                            <div>
+                                                <div style="font-weight: 600;">김철수</div>
+                                                <div style="font-size: 0.8rem; color: var(--admin-text-secondary);">2025-12-15 가입</div>
+                                            </div>
+                                            <div>kim@email.com</div>
+                                            <div>🥇 골드</div>
+                                            <div><span class="wf-status-dot active"></span>활성</div>
+                                            <div><button class="wf-filter-btn">상세</button></div>
+                                        </div>
+
+                                        <div class="wf-table-row">
+                                            <div>☐</div>
+                                            <div>
+                                                <div style="font-weight: 600;">이영희</div>
+                                                <div style="font-size: 0.8rem; color: var(--admin-text-secondary);">2025-06-01 가입</div>
+                                            </div>
+                                            <div>lee@email.com</div>
+                                            <div>🥉 브론즈</div>
+                                            <div><span class="wf-status-dot inactive"></span>휴면</div>
+                                            <div><button class="wf-filter-btn">상세</button></div>
+                                        </div>
+
+                                        <div class="wf-table-row">
+                                            <div>☐</div>
+                                            <div>
+                                                <div style="font-weight: 600;">박지민</div>
+                                                <div style="font-size: 0.8rem; color: var(--admin-text-secondary);">2025-03-20 가입</div>
+                                            </div>
+                                            <div>park@email.com</div>
+                                            <div>👤 일반</div>
+                                            <div><span class="wf-status-dot blocked"></span>정지</div>
+                                            <div><button class="wf-filter-btn">상세</button></div>
+                                        </div>
+                                    </div>
+
+                                    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 16px;">
+                                        <div style="font-size: 0.9rem; color: var(--admin-text-secondary);">
+                                            선택: 0건
+                                            <button class="wf-filter-btn" style="margin-left: 12px;">상태 변경 ▼</button>
+                                            <button class="wf-filter-btn">등급 변경 ▼</button>
+                                        </div>
+                                        <div style="display: flex; gap: 8px;">
+                                            <button class="wf-filter-btn">‹</button>
+                                            <button class="wf-filter-btn" style="background: var(--admin-primary); color: white;">1</button>
+                                            <button class="wf-filter-btn">2</button>
+                                            <button class="wf-filter-btn">3</button>
+                                            <button class="wf-filter-btn">›</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 포인트 지급 다이얼로그 -->
+                <div class="wireframe-card admin">
+                    <div class="card-header admin">
+                        <div class="card-title">포인트 지급 다이얼로그</div>
+                        <div class="card-url">Dialog Component</div>
+                    </div>
+                    <div class="card-body">
+                        <div class="wf-dialog">
+                            <div class="wf-dialog-header">
+                                포인트 지급
+                            </div>
+                            <div class="wf-dialog-body">
+                                <div style="margin-bottom: 16px;">
+                                    <div style="font-size: 0.9rem; color: var(--admin-text-secondary);">대상 회원</div>
+                                    <div style="font-weight: 600;">홍길동 (hong@email.com)</div>
+                                    <div style="font-size: 0.9rem; color: var(--admin-text-secondary);">현재 포인트: 1,320 P</div>
+                                </div>
+
+                                <div class="wf-input-group">
+                                    <label class="wf-label">지급 유형</label>
+                                    <div style="display: flex; gap: 8px;">
+                                        <label style="padding: 8px 16px; background: var(--admin-bg); border-radius: 6px; font-size: 0.9rem;">
+                                            <input type="radio" name="type"> 적립
+                                        </label>
+                                        <label style="padding: 8px 16px; background: var(--admin-primary); color: white; border-radius: 6px; font-size: 0.9rem;">
+                                            <input type="radio" name="type" checked> 지급
+                                        </label>
+                                        <label style="padding: 8px 16px; background: var(--admin-bg); border-radius: 6px; font-size: 0.9rem;">
+                                            <input type="radio" name="type"> 보상
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="wf-input-group">
+                                    <label class="wf-label">지급 포인트</label>
+                                    <div class="wf-input admin">1000 P</div>
+                                </div>
+
+                                <div class="wf-input-group">
+                                    <label class="wf-label">지급 사유</label>
+                                    <div class="wf-input admin">고객 불편 사항 보상</div>
+                                </div>
+
+                                <div style="padding: 12px; background: var(--admin-bg); border-radius: 6px; margin-top: 16px;">
+                                    지급 후 포인트: <strong>2,320 P</strong>
+                                </div>
+                            </div>
+                            <div class="wf-dialog-footer">
+                                <button class="wf-btn wf-btn-secondary admin" style="width: auto; padding: 10px 20px;">취소</button>
+                                <button class="wf-btn admin" style="width: auto; padding: 10px 20px; background: var(--admin-primary); color: white;">지급하기</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 상태 변경 다이얼로그 -->
+                <div class="wireframe-card admin">
+                    <div class="card-header admin">
+                        <div class="card-title">회원 상태 변경 다이얼로그</div>
+                        <div class="card-url">Dialog Component</div>
+                    </div>
+                    <div class="card-body">
+                        <div class="wf-dialog">
+                            <div class="wf-dialog-header">
+                                회원 상태 변경
+                            </div>
+                            <div class="wf-dialog-body">
+                                <div style="margin-bottom: 16px;">
+                                    <div style="font-size: 0.9rem; color: var(--admin-text-secondary);">대상 회원</div>
+                                    <div style="font-weight: 600;">홍길동 (hong@email.com)</div>
+                                    <div style="font-size: 0.9rem;">현재 상태: <span class="wf-status-dot active"></span>활성</div>
+                                </div>
+
+                                <div class="wf-input-group">
+                                    <label class="wf-label">변경할 상태</label>
+                                    <div style="background: var(--admin-bg); border-radius: 6px; padding: 8px;">
+                                        <div style="padding: 10px; border-radius: 4px;">
+                                            <input type="radio" name="status"> <strong>활성</strong>
+                                            <div style="font-size: 0.85rem; color: var(--admin-text-secondary); margin-left: 20px;">정상적으로 서비스 이용 가능</div>
+                                        </div>
+                                        <div style="padding: 10px; border-radius: 4px;">
+                                            <input type="radio" name="status"> <strong>휴면</strong>
+                                            <div style="font-size: 0.85rem; color: var(--admin-text-secondary); margin-left: 20px;">장기간 미접속 계정</div>
+                                        </div>
+                                        <div style="padding: 10px; background: white; border-radius: 4px; border: 2px solid var(--admin-primary);">
+                                            <input type="radio" name="status" checked> <strong>정지</strong>
+                                            <div style="font-size: 0.85rem; color: var(--admin-text-secondary); margin-left: 20px;">서비스 이용 제한</div>
+                                        </div>
+                                        <div style="padding: 10px; border-radius: 4px;">
+                                            <input type="radio" name="status"> <strong>탈퇴</strong>
+                                            <div style="font-size: 0.85rem; color: var(--admin-text-secondary); margin-left: 20px;">회원 탈퇴 처리</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="wf-input-group">
+                                    <label class="wf-label">정지 사유</label>
+                                    <div class="wf-input admin">이용약관 위반 - 부적절한 콘텐츠 게시</div>
+                                </div>
+
+                                <div class="wf-input-group">
+                                    <label class="wf-label">정지 기간</label>
+                                    <div style="display: flex; gap: 8px;">
+                                        <label style="padding: 8px 16px; background: var(--admin-bg); border-radius: 6px; font-size: 0.9rem;">
+                                            <input type="radio" name="period"> 7일
+                                        </label>
+                                        <label style="padding: 8px 16px; background: var(--admin-bg); border-radius: 6px; font-size: 0.9rem;">
+                                            <input type="radio" name="period"> 30일
+                                        </label>
+                                        <label style="padding: 8px 16px; background: var(--admin-primary); color: white; border-radius: 6px; font-size: 0.9rem;">
+                                            <input type="radio" name="period" checked> 영구
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div style="padding: 12px; background: #FFF8E6; border-radius: 6px; margin-top: 16px; font-size: 0.9rem;">
+                                    ⚠️ 회원에게 상태 변경 안내 이메일이 발송됩니다.
+                                </div>
+                            </div>
+                            <div class="wf-dialog-footer">
+                                <button class="wf-btn wf-btn-secondary admin" style="width: auto; padding: 10px 20px;">취소</button>
+                                <button class="wf-btn admin" style="width: auto; padding: 10px 20px; background: var(--pixar-error); color: white;">상태 변경</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer style="background: var(--admin-primary); color: white; padding: 40px 20px; text-align: center;">
+        <div style="max-width: 1400px; margin: 0 auto;">
+            <h3 style="margin-bottom: 8px;">BrickGround Wireframes</h3>
+            <p style="opacity: 0.7;">EP-01: 인증 및 사용자 관리</p>
+            <p style="opacity: 0.5; margin-top: 16px; font-size: 0.9rem;">
+                문서 버전: 1.0 | 작성일: 2026-01-01 | 기반 문서: 02_BACKLOG.md, 05_UI_UX.md
+            </p>
+        </div>
+    </footer>
+</body>
+</html>

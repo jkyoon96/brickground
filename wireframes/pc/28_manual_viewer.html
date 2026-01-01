@@ -1,0 +1,1120 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>매뉴얼 뷰어 - BrickGround</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="common/components.css">
+    <link rel="stylesheet" href="common/responsive.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #F8FAFC;
+            --bg-secondary: #FFFFFF;
+            --bg-dark: #1E1E2E;
+            --bg-dark-secondary: #2D2D3F;
+            --text-primary: #1E293B;
+            --text-secondary: #64748B;
+            --text-muted: #94A3B8;
+            --border-color: #E2E8F0;
+            --pixar-blue: #0066FF;
+            --toy-purple: #9B59B6;
+            --toy-yellow: #FFD93D;
+            --toy-success: #6BCB77;
+            --toy-indigo: #5C6BC0;
+            --radius-lg: 20px;
+            --radius-md: 12px;
+            --shadow: 0 4px 20px rgba(155, 89, 182, 0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Nunito', 'Nanum Square Round', sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Top Bar */
+        .top-bar {
+            background: var(--bg-secondary);
+            padding: 12px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: var(--shadow);
+        }
+
+        .top-bar-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .back-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--bg-primary);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .back-btn i {
+            width: 20px;
+            height: 20px;
+            color: var(--text-primary);
+        }
+
+        .manual-info {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .manual-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--toy-purple), var(--toy-indigo));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .manual-icon i {
+            width: 24px;
+            height: 24px;
+            color: white;
+        }
+
+        .manual-title-section h1 {
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        .manual-title-section .product-link {
+            font-size: 13px;
+            color: var(--toy-purple);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .manual-title-section .product-link i {
+            width: 12px;
+            height: 12px;
+        }
+
+        .top-bar-center {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .page-indicator {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--bg-primary);
+            padding: 8px 16px;
+            border-radius: 20px;
+        }
+
+        .page-indicator input {
+            width: 50px;
+            text-align: center;
+            border: none;
+            background: white;
+            padding: 6px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .page-indicator span {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .nav-btn {
+            width: 36px;
+            height: 36px;
+            background: var(--bg-primary);
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .nav-btn:hover {
+            background: var(--toy-purple);
+        }
+
+        .nav-btn:hover i {
+            color: white;
+        }
+
+        .nav-btn i {
+            width: 18px;
+            height: 18px;
+            color: var(--text-primary);
+        }
+
+        .top-bar-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .tool-btn {
+            width: 40px;
+            height: 40px;
+            background: var(--bg-primary);
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .tool-btn:hover {
+            background: var(--toy-purple);
+        }
+
+        .tool-btn:hover i {
+            color: white;
+        }
+
+        .tool-btn.active {
+            background: var(--toy-purple);
+        }
+
+        .tool-btn.active i {
+            color: white;
+        }
+
+        .tool-btn i {
+            width: 20px;
+            height: 20px;
+            color: var(--text-primary);
+        }
+
+        .tool-divider {
+            width: 1px;
+            height: 24px;
+            background: var(--border-color);
+        }
+
+        .zoom-control {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--bg-primary);
+            padding: 6px 12px;
+            border-radius: 10px;
+        }
+
+        .zoom-control button {
+            width: 28px;
+            height: 28px;
+            background: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .zoom-control button i {
+            width: 16px;
+            height: 16px;
+            color: var(--text-primary);
+        }
+
+        .zoom-control span {
+            font-size: 13px;
+            font-weight: 600;
+            min-width: 50px;
+            text-align: center;
+        }
+
+        .download-btn {
+            padding: 10px 20px;
+            background: var(--toy-purple);
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .download-btn i {
+            width: 18px;
+            height: 18px;
+        }
+
+        /* Main Viewer Area */
+        .viewer-container {
+            flex: 1;
+            display: flex;
+            overflow: hidden;
+        }
+
+        /* Sidebar - Thumbnails */
+        .sidebar {
+            width: 200px;
+            background: var(--bg-dark-secondary);
+            padding: 16px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .sidebar-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-bottom: 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar-header span {
+            font-size: 13px;
+            font-weight: 600;
+            color: white;
+        }
+
+        .sidebar-toggle {
+            width: 28px;
+            height: 28px;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .sidebar-toggle i {
+            width: 14px;
+            height: 14px;
+            color: white;
+        }
+
+        .thumbnail-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .thumbnail {
+            background: white;
+            border-radius: 8px;
+            padding: 4px;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.2s ease;
+        }
+
+        .thumbnail:hover {
+            border-color: var(--toy-purple);
+        }
+
+        .thumbnail.active {
+            border-color: var(--toy-purple);
+        }
+
+        .thumbnail-preview {
+            width: 100%;
+            aspect-ratio: 3/4;
+            background: #f5f5f5;
+            border-radius: 4px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 8px;
+        }
+
+        .thumbnail-preview .line {
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin-bottom: 4px;
+        }
+
+        .thumbnail-preview .line.short {
+            width: 50%;
+        }
+
+        .thumbnail-preview .line.medium {
+            width: 70%;
+        }
+
+        .thumbnail-label {
+            text-align: center;
+            font-size: 11px;
+            color: white;
+            margin-top: 6px;
+        }
+
+        /* PDF Viewer */
+        .pdf-viewer {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            overflow: auto;
+        }
+
+        .pdf-page {
+            background: white;
+            border-radius: var(--radius-lg);
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.3);
+            width: 680px;
+            aspect-ratio: 0.707;
+            display: flex;
+            flex-direction: column;
+            padding: 48px;
+        }
+
+        .page-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 32px;
+        }
+
+        .page-logo {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #FF6B35, #FFD93D);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .page-logo i {
+            width: 24px;
+            height: 24px;
+            color: white;
+        }
+
+        .page-title-text {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--text-primary);
+        }
+
+        .page-step {
+            background: var(--bg-primary);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+
+        .step-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .step-number {
+            width: 36px;
+            height: 36px;
+            background: var(--toy-purple);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            font-weight: 800;
+        }
+
+        .step-title {
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .step-content {
+            display: flex;
+            gap: 24px;
+        }
+
+        .step-image {
+            flex: 1;
+            aspect-ratio: 4/3;
+            background: linear-gradient(135deg, #e0e0e0, #f5f5f5);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .step-image i {
+            width: 48px;
+            height: 48px;
+            color: var(--text-secondary);
+        }
+
+        .step-parts {
+            width: 140px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .part-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px;
+            background: white;
+            border-radius: 8px;
+        }
+
+        .part-icon {
+            width: 28px;
+            height: 28px;
+            background: var(--toy-yellow);
+            border-radius: 6px;
+        }
+
+        .part-info {
+            font-size: 11px;
+            color: var(--text-secondary);
+        }
+
+        .part-info strong {
+            display: block;
+            color: var(--text-primary);
+            font-size: 12px;
+        }
+
+        .page-footer {
+            margin-top: auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 24px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .page-number {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .page-progress {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .progress-bar {
+            width: 120px;
+            height: 6px;
+            background: var(--border-color);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            width: 25%;
+            height: 100%;
+            background: var(--toy-purple);
+            border-radius: 3px;
+        }
+
+        .progress-text {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        /* Right Panel - Info */
+        .info-panel {
+            width: 280px;
+            background: var(--bg-dark-secondary);
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .info-section {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 16px;
+        }
+
+        .info-section-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: white;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .info-section-title i {
+            width: 16px;
+            height: 16px;
+            color: var(--toy-purple);
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .info-row:last-child {
+            border-bottom: none;
+        }
+
+        .info-label {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .info-value {
+            font-size: 13px;
+            color: white;
+            font-weight: 600;
+        }
+
+        /* Related Product */
+        .related-product {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 16px;
+        }
+
+        .product-card {
+            display: flex;
+            gap: 12px;
+        }
+
+        .product-image {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #FF6B35, #FFD93D);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .product-image i {
+            width: 32px;
+            height: 32px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .product-info {
+            flex: 1;
+        }
+
+        .product-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: white;
+            margin-bottom: 4px;
+        }
+
+        .product-price {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--toy-yellow);
+            margin-bottom: 8px;
+        }
+
+        .product-btn {
+            width: 100%;
+            padding: 8px;
+            background: var(--toy-purple);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+        }
+
+        .product-btn i {
+            width: 14px;
+            height: 14px;
+        }
+
+        /* Table of Contents */
+        .toc-list {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .toc-item {
+            padding: 10px 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .toc-item:hover {
+            background: rgba(155, 89, 182, 0.2);
+        }
+
+        .toc-item.active {
+            background: var(--toy-purple);
+        }
+
+        .toc-number {
+            width: 24px;
+            height: 24px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: 700;
+            color: white;
+        }
+
+        .toc-item.active .toc-number {
+            background: white;
+            color: var(--toy-purple);
+        }
+
+        .toc-text {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .toc-item.active .toc-text {
+            color: white;
+        }
+
+        /* Floating Controls */
+        .floating-nav {
+            position: fixed;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--bg-secondary);
+            padding: 12px 24px;
+            border-radius: 28px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .floating-btn {
+            width: 44px;
+            height: 44px;
+            background: var(--bg-primary);
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .floating-btn:hover {
+            background: var(--toy-purple);
+        }
+
+        .floating-btn:hover i {
+            color: white;
+        }
+
+        .floating-btn i {
+            width: 22px;
+            height: 22px;
+            color: var(--text-primary);
+        }
+
+        .floating-page {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-primary);
+            min-width: 80px;
+            text-align: center;
+        }
+
+        .floating-slider {
+            width: 200px;
+            height: 6px;
+            background: var(--border-color);
+            border-radius: 3px;
+            position: relative;
+        }
+
+        .slider-fill {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 25%;
+            height: 100%;
+            background: var(--toy-purple);
+            border-radius: 3px;
+        }
+
+        .slider-handle {
+            position: absolute;
+            left: 25%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 16px;
+            height: 16px;
+            background: var(--toy-purple);
+            border: 3px solid white;
+            border-radius: 50%;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        /* ==================== Responsive Design ==================== */
+        /* Tablet (1024px) */
+        @media (max-width: 1024px) {
+            .top-bar { padding: 10px 16px; }
+            .manual-icon { width: 40px; height: 40px; }
+            .manual-title-section h1 { font-size: 14px; }
+            .page-btn { width: 36px; height: 36px; }
+            .sidebar { width: 280px; }
+            .toc-list { padding: 16px; }
+        }
+
+        /* Mobile (768px) */
+        @media (max-width: 768px) {
+            .top-bar { flex-wrap: wrap; gap: 8px; padding: 8px 12px; }
+            .top-bar-left { flex: 1; min-width: 100%; }
+            .top-bar-center { display: none; }
+            .top-bar-right { flex: 1; min-width: 100%; justify-content: flex-end; }
+            .back-btn { width: 36px; height: 36px; }
+            .manual-icon { width: 36px; height: 36px; }
+            .manual-info { gap: 12px; }
+            .manual-title-section h1 { font-size: 13px; }
+            .action-btn { width: 36px; height: 36px; }
+            .main-layout { flex-direction: column; }
+            .viewer-area { flex: none; height: 60vh; }
+            .viewer-controls { bottom: 80px; }
+            .control-btn { width: 40px; height: 40px; }
+            .page-navigation { bottom: 16px; padding: 8px 16px; }
+            .page-btn { width: 32px; height: 32px; }
+            .sidebar { width: 100%; max-height: 40vh; border-left: none; border-top: 1px solid var(--border-color); }
+            .toc-list { padding: 12px; }
+            .toc-chapter { padding: 12px; }
+        }
+
+        /* Small Mobile (480px) */
+        @media (max-width: 480px) {
+            .top-bar { padding: 6px 10px; }
+            .back-btn { width: 32px; height: 32px; }
+            .manual-icon { width: 32px; height: 32px; }
+            .manual-title-section h1 { font-size: 12px; }
+            .manual-title-section .product-link { display: none; }
+            .action-btn { width: 32px; height: 32px; }
+            .viewer-area { height: 50vh; }
+            .page-content { max-width: 95%; }
+            .viewer-controls { bottom: 70px; gap: 4px; }
+            .control-btn { width: 36px; height: 36px; }
+            .page-navigation { padding: 6px 12px; }
+            .page-btn { width: 28px; height: 28px; }
+            .page-display { font-size: 12px; min-width: 60px; }
+            .sidebar { max-height: 35vh; }
+            .toc-list { padding: 10px; }
+            .toc-chapter { padding: 10px; font-size: 13px; }
+            .toc-pages { padding-left: 16px; }
+            .toc-page { padding: 8px; font-size: 12px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <div class="top-bar-left">
+            <button class="back-btn"><i data-lucide="arrow-left"></i></button>
+            <div class="manual-info">
+                <div class="manual-icon"><i data-lucide="book-open"></i></div>
+                <div class="manual-title-section">
+                    <h1>레고 테크닉 람보르기니 시안 FKP 37 조립 설명서</h1>
+                    <a href="19_product_list.html" class="product-link">
+                        <i data-lucide="external-link"></i>
+                        상품 페이지 보기
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="top-bar-center">
+            <button class="nav-btn"><i data-lucide="chevron-left"></i></button>
+            <div class="page-indicator">
+                <input type="text" value="92">
+                <span>/ 368</span>
+            </div>
+            <button class="nav-btn"><i data-lucide="chevron-right"></i></button>
+        </div>
+
+        <div class="top-bar-right">
+            <button class="tool-btn"><i data-lucide="bookmark"></i></button>
+            <button class="tool-btn"><i data-lucide="search"></i></button>
+            <button class="tool-btn active"><i data-lucide="panel-left"></i></button>
+            <div class="tool-divider"></div>
+            <div class="zoom-control">
+                <button><i data-lucide="minus"></i></button>
+                <span>100%</span>
+                <button><i data-lucide="plus"></i></button>
+            </div>
+            <button class="tool-btn"><i data-lucide="maximize"></i></button>
+            <div class="tool-divider"></div>
+            <button class="download-btn">
+                <i data-lucide="download"></i>
+                다운로드
+            </button>
+        </div>
+    </div>
+
+    <!-- Main Viewer -->
+    <div class="viewer-container">
+        <!-- Sidebar - Thumbnails -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <span>페이지</span>
+                <button class="sidebar-toggle"><i data-lucide="panel-left-close"></i></button>
+            </div>
+            <div class="thumbnail-list">
+                <div class="thumbnail">
+                    <div class="thumbnail-preview">
+                        <div class="line short"></div>
+                        <div class="line"></div>
+                        <div class="line medium"></div>
+                    </div>
+                    <div class="thumbnail-label">91</div>
+                </div>
+                <div class="thumbnail active">
+                    <div class="thumbnail-preview">
+                        <div class="line short"></div>
+                        <div class="line"></div>
+                        <div class="line medium"></div>
+                    </div>
+                    <div class="thumbnail-label">92</div>
+                </div>
+                <div class="thumbnail">
+                    <div class="thumbnail-preview">
+                        <div class="line short"></div>
+                        <div class="line"></div>
+                        <div class="line medium"></div>
+                    </div>
+                    <div class="thumbnail-label">93</div>
+                </div>
+                <div class="thumbnail">
+                    <div class="thumbnail-preview">
+                        <div class="line short"></div>
+                        <div class="line"></div>
+                        <div class="line medium"></div>
+                    </div>
+                    <div class="thumbnail-label">94</div>
+                </div>
+                <div class="thumbnail">
+                    <div class="thumbnail-preview">
+                        <div class="line short"></div>
+                        <div class="line"></div>
+                        <div class="line medium"></div>
+                    </div>
+                    <div class="thumbnail-label">95</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PDF Viewer -->
+        <div class="pdf-viewer">
+            <div class="pdf-page">
+                <div class="page-header">
+                    <div class="page-logo"><i data-lucide="box"></i></div>
+                    <span class="page-title-text">STEP 47</span>
+                </div>
+
+                <div class="page-step">
+                    <div class="step-header">
+                        <div class="step-number">1</div>
+                        <span class="step-title">리어 서스펜션 조립</span>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-image">
+                            <i data-lucide="image"></i>
+                        </div>
+                        <div class="step-parts">
+                            <div class="part-item">
+                                <div class="part-icon"></div>
+                                <div class="part-info">
+                                    <strong>2x</strong>
+                                    Technic Beam
+                                </div>
+                            </div>
+                            <div class="part-item">
+                                <div class="part-icon"></div>
+                                <div class="part-info">
+                                    <strong>4x</strong>
+                                    Connector Pin
+                                </div>
+                            </div>
+                            <div class="part-item">
+                                <div class="part-icon"></div>
+                                <div class="part-info">
+                                    <strong>1x</strong>
+                                    Axle 6L
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="page-footer">
+                    <span class="page-number">92 / 368</span>
+                    <div class="page-progress">
+                        <div class="progress-bar">
+                            <div class="progress-fill"></div>
+                        </div>
+                        <span class="progress-text">25% 완료</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Panel - Info -->
+        <div class="info-panel">
+            <div class="info-section">
+                <div class="info-section-title">
+                    <i data-lucide="info"></i>
+                    매뉴얼 정보
+                </div>
+                <div class="info-row">
+                    <span class="info-label">총 페이지</span>
+                    <span class="info-value">368 페이지</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">파일 크기</span>
+                    <span class="info-value">45.2 MB</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">언어</span>
+                    <span class="info-value">한국어</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">업데이트</span>
+                    <span class="info-value">2025.12.15</span>
+                </div>
+            </div>
+
+            <div class="related-product">
+                <div class="info-section-title">
+                    <i data-lucide="package"></i>
+                    연관 상품
+                </div>
+                <div class="product-card">
+                    <div class="product-image">
+                        <i data-lucide="box"></i>
+                    </div>
+                    <div class="product-info">
+                        <div class="product-name">레고 테크닉 람보르기니 시안 FKP 37</div>
+                        <div class="product-price">489,000원</div>
+                        <button class="product-btn">
+                            <i data-lucide="shopping-cart"></i>
+                            장바구니 담기
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-section">
+                <div class="info-section-title">
+                    <i data-lucide="list"></i>
+                    목차
+                </div>
+                <div class="toc-list">
+                    <div class="toc-item">
+                        <div class="toc-number">1</div>
+                        <span class="toc-text">프론트 섀시 (1-45)</span>
+                    </div>
+                    <div class="toc-item active">
+                        <div class="toc-number">2</div>
+                        <span class="toc-text">리어 섀시 (46-120)</span>
+                    </div>
+                    <div class="toc-item">
+                        <div class="toc-number">3</div>
+                        <span class="toc-text">엔진 & 기어박스 (121-210)</span>
+                    </div>
+                    <div class="toc-item">
+                        <div class="toc-number">4</div>
+                        <span class="toc-text">바디 조립 (211-320)</span>
+                    </div>
+                    <div class="toc-item">
+                        <div class="toc-number">5</div>
+                        <span class="toc-text">마무리 (321-368)</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating Navigation -->
+    <div class="floating-nav">
+        <button class="floating-btn"><i data-lucide="chevron-first"></i></button>
+        <button class="floating-btn"><i data-lucide="chevron-left"></i></button>
+        <span class="floating-page">92 / 368</span>
+        <div class="floating-slider">
+            <div class="slider-fill"></div>
+            <div class="slider-handle"></div>
+        </div>
+        <button class="floating-btn"><i data-lucide="chevron-right"></i></button>
+        <button class="floating-btn"><i data-lucide="chevron-last"></i></button>
+    </div>
+    <!-- Footer -->
+    <div id="footer"></div>
+
+
+
+    <script>lucide.createIcons();</script>
+    <script src="common/loader.js"></script>
+</body>
+</html>

@@ -1,0 +1,1203 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BrickGround - 메인 홈</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="common/components.css">
+    <link rel="stylesheet" href="common/responsive.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+
+        * { font-family: 'Nunito', sans-serif; }
+
+        :root {
+            --bg-primary: #F8FAFC;
+            --bg-secondary: #FFFFFF;
+            --text-primary: #1E293B;
+            --text-secondary: #64748B;
+            --text-muted: #94A3B8;
+            --border-color: #E2E8F0;
+            --pixar-blue: #0066FF;
+            --pixar-blue-light: #3D8BFF;
+            --toy-yellow: #FFD93D;
+            --toy-orange: #FF9F43;
+            --toy-pink: #FF6B9D;
+            --toy-green: #6BCB77;
+            --toy-purple: #A29BFE;
+            --toy-cyan: #00CEC9;
+        }
+
+        body { background: var(--bg-primary); color: var(--text-primary); }
+
+        .nav-link {
+            color: var(--text-secondary);
+            font-weight: 600;
+            font-size: 15px;
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .nav-link:hover { color: var(--pixar-blue); }
+
+        .nav-link.active {
+            color: var(--pixar-blue);
+        }
+
+        .nav-link.active::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--pixar-blue);
+            border-radius: 2px;
+        }
+
+        .header-icon {
+            width: 40px; height: 40px;
+            background: var(--bg-primary);
+            border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            color: var(--text-secondary);
+            transition: all 0.2s;
+            border: 1px solid var(--border-color);
+            position: relative;
+        }
+
+        .header-icon:hover {
+            color: var(--pixar-blue);
+            border-color: var(--pixar-blue);
+        }
+
+        .header-icon .badge {
+            position: absolute;
+            top: -4px; right: -4px;
+            width: 18px; height: 18px;
+            background: var(--toy-pink);
+            color: white;
+            border-radius: 50%;
+            font-size: 10px;
+            font-weight: 700;
+            display: flex; align-items: center; justify-content: center;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            background: linear-gradient(135deg, var(--pixar-blue) 0%, var(--pixar-blue-light) 50%, var(--toy-cyan) 100%);
+            padding: 60px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: -100px; right: -100px;
+            width: 400px; height: 400px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+        }
+
+        .hero-section::after {
+            content: '';
+            position: absolute;
+            bottom: -150px; left: -100px;
+            width: 500px; height: 500px;
+            background: rgba(255, 217, 61, 0.15);
+            border-radius: 50%;
+        }
+
+        .hero-banner {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            padding: 48px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .banner-dots {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            margin-top: 24px;
+        }
+
+        .banner-dot {
+            width: 10px; height: 10px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.4);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .banner-dot.active {
+            background: white;
+            width: 32px;
+            border-radius: 5px;
+        }
+
+        /* Quick Access */
+        .quick-access {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+            margin-top: -60px;
+            position: relative;
+            z-index: 20;
+        }
+
+        .quick-card {
+            background: var(--bg-secondary);
+            border-radius: 24px;
+            padding: 32px;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            border: 1px solid var(--border-color);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .quick-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 60px rgba(0, 102, 255, 0.15);
+        }
+
+        .quick-icon {
+            width: 80px; height: 80px;
+            border-radius: 24px;
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 16px;
+        }
+
+        /* Section */
+        .section-title {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
+        }
+
+        .section-title h2 {
+            font-size: 28px;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .section-title a {
+            color: var(--pixar-blue);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        /* Product Card */
+        .product-card {
+            background: var(--bg-secondary);
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s;
+        }
+
+        .product-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+            border-color: var(--pixar-blue);
+        }
+
+        .product-image {
+            height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .product-badge {
+            position: absolute;
+            top: 12px; left: 12px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .product-heart {
+            position: absolute;
+            top: 12px; right: 12px;
+            width: 36px; height: 36px;
+            background: white;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .product-heart:hover {
+            transform: scale(1.1);
+        }
+
+        .product-info {
+            padding: 16px;
+        }
+
+        /* BrickArt Card */
+        .brickart-card {
+            background: var(--bg-secondary);
+            border-radius: 24px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s;
+        }
+
+        .brickart-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .brickart-preview {
+            height: 180px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .brickart-3d-badge {
+            position: absolute;
+            bottom: 12px; right: 12px;
+            padding: 6px 12px;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+            color: white;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .brickart-info {
+            padding: 20px;
+        }
+
+        /* Category Pills */
+        .category-pills {
+            display: flex;
+            gap: 12px;
+            overflow-x: auto;
+            padding-bottom: 8px;
+        }
+
+        .category-pill {
+            padding: 10px 24px;
+            background: var(--bg-secondary);
+            border: 2px solid var(--border-color);
+            border-radius: 50px;
+            font-weight: 600;
+            white-space: nowrap;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .category-pill:hover {
+            border-color: var(--pixar-blue);
+            color: var(--pixar-blue);
+        }
+
+        .category-pill.active {
+            background: var(--pixar-blue);
+            border-color: var(--pixar-blue);
+            color: white;
+        }
+
+        /* Newsletter */
+        .newsletter {
+            background: linear-gradient(135deg, var(--toy-yellow) 0%, var(--toy-orange) 100%);
+            border-radius: 32px;
+            padding: 48px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .newsletter::before {
+            content: '';
+            position: absolute;
+            top: -50px; right: -50px;
+            width: 200px; height: 200px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+        }
+
+        /* Manual Card */
+        .manual-card {
+            background: var(--bg-secondary);
+            border-radius: 20px;
+            padding: 20px;
+            border: 1px solid var(--border-color);
+            display: flex;
+            gap: 16px;
+            transition: all 0.3s;
+        }
+
+        .manual-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            border-color: var(--toy-purple);
+        }
+
+        .manual-thumb {
+            width: 80px; height: 100px;
+            border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .animate-fade-in { animation: fadeIn 0.5s ease-out forwards; }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .float { animation: float 3s ease-in-out infinite; }
+
+        /* =====================================================
+           반응형 스타일
+           ===================================================== */
+
+        /* 태블릿 (1024px 이하) */
+        @media (max-width: 1024px) {
+            .hero-banner {
+                padding: 32px;
+            }
+
+            .hero-content {
+                grid-template-columns: 1fr;
+                gap: 32px;
+            }
+
+            .hero-text {
+                text-align: center;
+            }
+
+            .hero-text h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero-text .flex.gap-4 {
+                justify-content: center;
+            }
+
+            .hero-icon {
+                order: -1;
+            }
+
+            .hero-icon-circle {
+                width: 180px;
+                height: 180px;
+            }
+
+            .hero-icon-svg {
+                width: 80px;
+                height: 80px;
+            }
+
+            .quick-access {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 16px;
+                margin-top: -40px;
+            }
+
+            .quick-card {
+                padding: 24px;
+            }
+
+            .quick-icon {
+                width: 60px;
+                height: 60px;
+            }
+
+            .section-title h2 {
+                font-size: 22px;
+            }
+
+            /* 4열 → 2열 */
+            .grid-cols-4 {
+                grid-template-columns: repeat(2, 1fr) !important;
+            }
+
+            /* 3열 → 2열 */
+            .grid-cols-3 {
+                grid-template-columns: repeat(2, 1fr) !important;
+            }
+
+            .newsletter {
+                padding: 32px;
+            }
+        }
+
+        /* 모바일 (768px 이하) */
+        @media (max-width: 768px) {
+            .hero-section {
+                padding: 40px 0;
+            }
+
+            .hero-section::before {
+                width: 200px;
+                height: 200px;
+                top: -50px;
+                right: -50px;
+            }
+
+            .hero-section::after {
+                width: 250px;
+                height: 250px;
+                bottom: -75px;
+                left: -50px;
+            }
+
+            .hero-banner {
+                padding: 24px;
+                border-radius: 20px;
+            }
+
+            .hero-text h1 {
+                font-size: 1.875rem;
+                line-height: 1.3;
+            }
+
+            .hero-text p {
+                font-size: 0.95rem;
+            }
+
+            .hero-text .flex.gap-4 {
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .hero-text .flex.gap-4 button {
+                width: 100%;
+                padding: 14px 24px;
+                font-size: 1rem;
+            }
+
+            .hero-icon-circle {
+                width: 140px;
+                height: 140px;
+            }
+
+            .hero-icon-svg {
+                width: 64px;
+                height: 64px;
+            }
+
+            .banner-dots {
+                margin-top: 16px;
+            }
+
+            .quick-access {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
+                margin-top: -30px;
+            }
+
+            .quick-card {
+                padding: 20px 16px;
+                border-radius: 20px;
+            }
+
+            .quick-card h3 {
+                font-size: 1rem;
+            }
+
+            .quick-card p {
+                font-size: 0.75rem;
+            }
+
+            .quick-icon {
+                width: 56px;
+                height: 56px;
+                border-radius: 16px;
+                margin-bottom: 12px;
+            }
+
+            .quick-icon i {
+                width: 28px;
+                height: 28px;
+            }
+
+            .section-title {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+
+            .section-title h2 {
+                font-size: 20px;
+            }
+
+            .section-title a {
+                font-size: 14px;
+            }
+
+            /* 2열 → 2열 유지 */
+            .grid-cols-4,
+            .grid-cols-3 {
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 12px !important;
+            }
+
+            .product-card {
+                border-radius: 16px;
+            }
+
+            .product-image {
+                height: 140px;
+            }
+
+            .product-info {
+                padding: 12px;
+            }
+
+            .product-info h3 {
+                font-size: 0.875rem;
+            }
+
+            .manual-card {
+                flex-direction: column;
+                text-align: center;
+                padding: 16px;
+            }
+
+            .manual-thumb {
+                width: 100%;
+                height: 80px;
+            }
+
+            .newsletter {
+                padding: 24px;
+                border-radius: 24px;
+            }
+
+            .newsletter h2 {
+                font-size: 1.5rem;
+            }
+
+            .newsletter p {
+                font-size: 0.875rem;
+            }
+
+            .newsletter .flex.gap-3 {
+                flex-direction: column;
+            }
+
+            .newsletter input,
+            .newsletter button {
+                width: 100%;
+            }
+
+            .category-pills {
+                gap: 8px;
+                padding-bottom: 12px;
+            }
+
+            .category-pill {
+                padding: 8px 16px;
+                font-size: 0.875rem;
+            }
+
+            /* 섹션 패딩 조정 */
+            .max-w-7xl {
+                padding-left: 16px !important;
+                padding-right: 16px !important;
+            }
+
+            .py-12 {
+                padding-top: 32px !important;
+                padding-bottom: 32px !important;
+            }
+
+            .pb-16 {
+                padding-bottom: 40px !important;
+            }
+        }
+
+        /* 소형 모바일 (480px 이하) */
+        @media (max-width: 480px) {
+            .hero-text h1 {
+                font-size: 1.5rem;
+            }
+
+            .hero-icon-circle {
+                width: 120px;
+                height: 120px;
+            }
+
+            .hero-icon-svg {
+                width: 56px;
+                height: 56px;
+            }
+
+            .quick-access {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+            }
+
+            .quick-card {
+                padding: 16px 12px;
+            }
+
+            .quick-icon {
+                width: 48px;
+                height: 48px;
+            }
+
+            .section-title h2 {
+                font-size: 18px;
+            }
+
+            .product-image {
+                height: 120px;
+            }
+
+            .product-info {
+                padding: 10px;
+            }
+
+            .product-info h3 {
+                font-size: 0.8rem;
+            }
+
+            .product-info .text-sm {
+                font-size: 0.7rem;
+            }
+
+            .newsletter h2 {
+                font-size: 1.25rem;
+            }
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <!-- Header -->
+    <!-- Header -->
+    <div id="header"></div>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="hero-banner animate-fade-in">
+                <div class="hero-content grid grid-cols-2 gap-12 items-center">
+                    <div class="hero-text text-white">
+                        <span class="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold mb-4" style="background: rgba(255, 217, 61, 0.3);">
+                            <i data-lucide="sparkles" class="w-4 h-4"></i>
+                            NEW COLLECTION
+                        </span>
+                        <h1 class="text-5xl font-extrabold mb-4 leading-tight">
+                            나만의 브릭 세상을<br>만들어보세요!
+                        </h1>
+                        <p class="text-lg opacity-90 mb-8">
+                            BrickArt에서 3D 공간을 경험하고,<br>
+                            DotArt로 픽셀 아트를 창작해보세요.
+                        </p>
+                        <div class="flex gap-4">
+                            <button id="btn-get-started" class="px-8 py-4 rounded-2xl font-bold text-lg transition-all hover:scale-105" style="background: var(--toy-yellow); color: var(--text-primary);">
+                                <i data-lucide="play" class="w-5 h-5 inline mr-2"></i>
+                                시작하기
+                            </button>
+                            <button id="btn-explore" class="px-8 py-4 rounded-2xl font-bold text-lg transition-all hover:scale-105" style="background: rgba(255, 255, 255, 0.2); color: white;">
+                                <i data-lucide="compass" class="w-5 h-5 inline mr-2"></i>
+                                둘러보기
+                            </button>
+                        </div>
+                    </div>
+                    <div class="hero-icon text-center">
+                        <div class="hero-icon-circle w-64 h-64 mx-auto rounded-full flex items-center justify-center float" style="background: rgba(255, 255, 255, 0.15);">
+                            <i data-lucide="boxes" class="hero-icon-svg w-32 h-32 text-white opacity-80"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="banner-dots">
+                    <div class="banner-dot active"></div>
+                    <div class="banner-dot"></div>
+                    <div class="banner-dot"></div>
+                    <div class="banner-dot"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quick Access -->
+    <section class="max-w-7xl mx-auto px-6 pb-16">
+        <div class="quick-access">
+            <a href="07_brickart_list.html" class="quick-card animate-fade-in" style="animation-delay: 0.1s;">
+                <div class="quick-icon" style="background: linear-gradient(135deg, rgba(0, 102, 255, 0.1) 0%, rgba(0, 206, 201, 0.1) 100%);">
+                    <i data-lucide="building-2" class="w-10 h-10" style="color: var(--pixar-blue);"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-2">BrickArt</h3>
+                <p class="text-sm" style="color: var(--text-secondary);">3D 브릭 공간에서<br>창작물을 전시하세요</p>
+            </a>
+            <a href="11_dotart_list.html" class="quick-card animate-fade-in" style="animation-delay: 0.2s;">
+                <div class="quick-icon" style="background: linear-gradient(135deg, rgba(162, 155, 254, 0.2) 0%, rgba(129, 140, 248, 0.1) 100%);">
+                    <i data-lucide="palette" class="w-10 h-10" style="color: var(--toy-purple);"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-2">DotArt</h3>
+                <p class="text-sm" style="color: var(--text-secondary);">픽셀 아트를 만들고<br>음악과 함께 감상</p>
+            </a>
+            <a href="15_creation_list.html" class="quick-card animate-fade-in" style="animation-delay: 0.3s;">
+                <div class="quick-icon" style="background: linear-gradient(135deg, rgba(255, 159, 67, 0.2) 0%, rgba(255, 217, 61, 0.1) 100%);">
+                    <i data-lucide="sparkles" class="w-10 h-10" style="color: var(--toy-orange);"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-2">Creation</h3>
+                <p class="text-sm" style="color: var(--text-secondary);">3D 창작물을 만들고<br>공유하세요</p>
+            </a>
+            <a href="19_product_list.html" class="quick-card animate-fade-in" style="animation-delay: 0.4s;">
+                <div class="quick-icon" style="background: linear-gradient(135deg, rgba(107, 203, 119, 0.2) 0%, rgba(116, 226, 145, 0.1) 100%);">
+                    <i data-lucide="shopping-bag" class="w-10 h-10" style="color: var(--toy-green);"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-2">Shop</h3>
+                <p class="text-sm" style="color: var(--text-secondary);">다양한 브릭 상품을<br>만나보세요</p>
+            </a>
+        </div>
+    </section>
+
+    <!-- Recommended BrickArt -->
+    <section id="featured-brickart" class="max-w-7xl mx-auto px-6 py-12">
+        <div class="section-title">
+            <h2>
+                <span class="w-10 h-10 rounded-xl flex items-center justify-center" style="background: linear-gradient(135deg, var(--pixar-blue) 0%, var(--toy-cyan) 100%);">
+                    <i data-lucide="building-2" class="w-5 h-5 text-white"></i>
+                </span>
+                추천 BrickArt
+            </h2>
+            <a href="07_brickart_list.html">더보기 <i data-lucide="chevron-right" class="w-4 h-4"></i></a>
+        </div>
+        <div class="grid grid-cols-4 gap-5">
+            <div class="product-card">
+                <a href="08_brickart_viewer.html" class="product-image" style="background: #f8f8f8; padding: 0; overflow: hidden; display: block;">
+                    <img src="assets/images/brickart/sopoong (1).jpg" alt="BrickArt" style="width: 100%; height: 100%; object-fit: cover;">
+                    <span class="product-badge" style="background: var(--pixar-blue); color: white;">HOT</span>
+                    <div class="brickart-3d-badge">
+                        <i data-lucide="box" class="w-3 h-3"></i>
+                        3D
+                    </div>
+                </a>
+                <div class="product-info">
+                    <p class="text-xs mb-1" style="color: var(--pixar-blue);">테크닉</p>
+                    <a href="09_brickart_product.html"><h3 class="font-bold mb-2 line-clamp-2" style="cursor: pointer;">테크닉 갤러리</h3></a>
+                    <div class="flex items-center gap-3">
+                        <div class="flex items-center gap-1">
+                            <i data-lucide="heart" class="w-4 h-4" style="color: var(--toy-pink);"></i>
+                            <span class="text-sm">3,245</span>
+                        </div>
+                        <div class="flex items-center gap-1">
+                            <i data-lucide="eye" class="w-4 h-4" style="color: var(--text-muted);"></i>
+                            <span class="text-sm">12.5K</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="product-card">
+                <a href="08_brickart_viewer.html" class="product-image" style="background: #f8f8f8; padding: 0; overflow: hidden; display: block;">
+                    <img src="assets/images/brickart/sopoong (2).jpg" alt="BrickArt" style="width: 100%; height: 100%; object-fit: cover;">
+                    <span class="product-badge" style="background: var(--toy-pink); color: white;">NEW</span>
+                    <div class="brickart-3d-badge">
+                        <i data-lucide="box" class="w-3 h-3"></i>
+                        3D
+                    </div>
+                </a>
+                <div class="product-info">
+                    <p class="text-xs mb-1" style="color: var(--pixar-blue);">미니어처</p>
+                    <a href="09_brickart_product.html"><h3 class="font-bold mb-2 line-clamp-2" style="cursor: pointer;">미니 하우스 컬렉션</h3></a>
+                    <div class="flex items-center gap-3">
+                        <div class="flex items-center gap-1">
+                            <i data-lucide="heart" class="w-4 h-4" style="color: var(--toy-pink);"></i>
+                            <span class="text-sm">2,891</span>
+                        </div>
+                        <div class="flex items-center gap-1">
+                            <i data-lucide="eye" class="w-4 h-4" style="color: var(--text-muted);"></i>
+                            <span class="text-sm">8.3K</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="product-card">
+                <a href="08_brickart_viewer.html" class="product-image" style="background: #f8f8f8; padding: 0; overflow: hidden; display: block;">
+                    <img src="assets/images/brickart/sopoong (3).jpg" alt="BrickArt" style="width: 100%; height: 100%; object-fit: cover;">
+                    <div class="brickart-3d-badge">
+                        <i data-lucide="box" class="w-3 h-3"></i>
+                        3D
+                    </div>
+                </a>
+                <div class="product-info">
+                    <p class="text-xs mb-1" style="color: var(--pixar-blue);">우주</p>
+                    <a href="09_brickart_product.html"><h3 class="font-bold mb-2 line-clamp-2" style="cursor: pointer;">우주 탐험관</h3></a>
+                    <div class="flex items-center gap-3">
+                        <div class="flex items-center gap-1">
+                            <i data-lucide="heart" class="w-4 h-4" style="color: var(--toy-pink);"></i>
+                            <span class="text-sm">4,123</span>
+                        </div>
+                        <div class="flex items-center gap-1">
+                            <i data-lucide="eye" class="w-4 h-4" style="color: var(--text-muted);"></i>
+                            <span class="text-sm">15.2K</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="product-card">
+                <a href="08_brickart_viewer.html" class="product-image" style="background: #f8f8f8; padding: 0; overflow: hidden; display: block;">
+                    <img src="assets/images/brickart/sopoong (4).jpg" alt="BrickArt" style="width: 100%; height: 100%; object-fit: cover;">
+                    <div class="brickart-3d-badge">
+                        <i data-lucide="box" class="w-3 h-3"></i>
+                        3D
+                    </div>
+                </a>
+                <div class="product-info">
+                    <p class="text-xs mb-1" style="color: var(--pixar-blue);">자동차</p>
+                    <a href="09_brickart_product.html"><h3 class="font-bold mb-2 line-clamp-2" style="cursor: pointer;">슈퍼카 쇼룸</h3></a>
+                    <div class="flex items-center gap-3">
+                        <div class="flex items-center gap-1">
+                            <i data-lucide="heart" class="w-4 h-4" style="color: var(--toy-pink);"></i>
+                            <span class="text-sm">1,987</span>
+                        </div>
+                        <div class="flex items-center gap-1">
+                            <i data-lucide="eye" class="w-4 h-4" style="color: var(--text-muted);"></i>
+                            <span class="text-sm">9.8K</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Best DotArt -->
+    <section class="max-w-7xl mx-auto px-6 py-12">
+        <div class="section-title">
+            <h2>
+                <span class="w-10 h-10 rounded-xl flex items-center justify-center" style="background: linear-gradient(135deg, var(--toy-purple) 0%, #818CF8 100%);">
+                    <i data-lucide="palette" class="w-5 h-5 text-white"></i>
+                </span>
+                베스트 DotArt
+            </h2>
+            <a href="11_dotart_list.html">더보기 <i data-lucide="chevron-right" class="w-4 h-4"></i></a>
+        </div>
+        <div class="grid grid-cols-4 gap-5">
+            <div class="product-card">
+                <a href="13_dotart_viewer.html" class="product-image" style="background: #f8f8f8; padding: 0; overflow: hidden; display: block;">
+                    <img src="assets/images/dotart/FECB4076891B40628C74FBBD965D2784.jpg" alt="픽셀아트" style="width: 100%; height: 100%; object-fit: cover;">
+                    <span class="product-badge" style="background: var(--toy-purple); color: white;">HOT</span>
+                    <div class="product-heart">
+                        <i data-lucide="heart" class="w-5 h-5" style="color: var(--toy-pink); fill: var(--toy-pink);"></i>
+                    </div>
+                </a>
+                <div class="product-info">
+                    <p class="text-xs mb-1" style="color: var(--toy-purple);">캐릭터</p>
+                    <a href="14_dotart_detail.html"><h3 class="font-bold mb-2 line-clamp-2" style="cursor: pointer;">픽셀 캐릭터</h3></a>
+                    <div class="flex items-center gap-3">
+                        <div class="flex items-center gap-1">
+                            <i data-lucide="heart" class="w-4 h-4" style="color: var(--toy-pink);"></i>
+                            <span class="text-sm">2,345</span>
+                        </div>
+                        <div class="flex items-center gap-1">
+                            <i data-lucide="eye" class="w-4 h-4" style="color: var(--text-muted);"></i>
+                            <span class="text-sm">12.5K</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="product-card">
+                <a href="13_dotart_viewer.html" class="product-image" style="background: #f8f8f8; padding: 0; overflow: hidden; display: block;">
+                    <img src="assets/images/dotart/947CA2BC16A54E86A0F9081F64C7E926.jpg" alt="픽셀 아트" style="width: 100%; height: 100%; object-fit: cover;">
+                    <span class="product-badge" style="background: var(--toy-pink); color: white;">NEW</span>
+                    <div class="product-heart">
+                        <i data-lucide="heart" class="w-5 h-5" style="color: var(--text-muted);"></i>
+                    </div>
+                </a>
+                <div class="product-info">
+                    <p class="text-xs mb-1" style="color: var(--toy-purple);">풍경</p>
+                    <a href="14_dotart_detail.html"><h3 class="font-bold mb-2 line-clamp-2" style="cursor: pointer;">노을 진 바다</h3></a>
+                    <div class="flex items-center gap-3">
+                        <div class="flex items-center gap-1">
+                            <i data-lucide="heart" class="w-4 h-4" style="color: var(--toy-pink);"></i>
+                            <span class="text-sm">1,892</span>
+                        </div>
+                        <div class="flex items-center gap-1">
+                            <i data-lucide="eye" class="w-4 h-4" style="color: var(--text-muted);"></i>
+                            <span class="text-sm">8.7K</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="product-card">
+                <a href="13_dotart_viewer.html" class="product-image" style="background: #f8f8f8; padding: 0; overflow: hidden; display: block;">
+                    <img src="assets/images/dotart/3105110224BF47199A0CE27CA56909AA.jpg" alt="픽셀 아트" style="width: 100%; height: 100%; object-fit: cover;">
+                    <div class="product-heart">
+                        <i data-lucide="heart" class="w-5 h-5" style="color: var(--text-muted);"></i>
+                    </div>
+                </a>
+                <div class="product-info">
+                    <p class="text-xs mb-1" style="color: var(--toy-purple);">동물</p>
+                    <a href="14_dotart_detail.html"><h3 class="font-bold mb-2 line-clamp-2" style="cursor: pointer;">귀여운 고양이</h3></a>
+                    <div class="flex items-center gap-3">
+                        <div class="flex items-center gap-1">
+                            <i data-lucide="heart" class="w-4 h-4" style="color: var(--toy-pink);"></i>
+                            <span class="text-sm">1,567</span>
+                        </div>
+                        <div class="flex items-center gap-1">
+                            <i data-lucide="eye" class="w-4 h-4" style="color: var(--text-muted);"></i>
+                            <span class="text-sm">6.3K</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="product-card">
+                <a href="13_dotart_viewer.html" class="product-image" style="background: #f8f8f8; padding: 0; overflow: hidden; display: block;">
+                    <img src="assets/images/dotart/F2DA2CDA0C3345FC890CADE531CD9546.jpg" alt="픽셀 아트" style="width: 100%; height: 100%; object-fit: cover;">
+                    <div class="product-heart">
+                        <i data-lucide="heart" class="w-5 h-5" style="color: var(--toy-pink); fill: var(--toy-pink);"></i>
+                    </div>
+                </a>
+                <div class="product-info">
+                    <p class="text-xs mb-1" style="color: var(--toy-purple);">캐릭터</p>
+                    <a href="14_dotart_detail.html"><h3 class="font-bold mb-2 line-clamp-2" style="cursor: pointer;">픽셀 아트</h3></a>
+                    <div class="flex items-center gap-3">
+                        <div class="flex items-center gap-1">
+                            <i data-lucide="heart" class="w-4 h-4" style="color: var(--toy-pink);"></i>
+                            <span class="text-sm">1,234</span>
+                        </div>
+                        <div class="flex items-center gap-1">
+                            <i data-lucide="eye" class="w-4 h-4" style="color: var(--text-muted);"></i>
+                            <span class="text-sm">5.1K</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Recommended Products -->
+    <section class="max-w-7xl mx-auto px-6 py-12" style="background: var(--bg-secondary); margin: 0 auto; border-radius: 0;">
+        <div class="section-title">
+            <h2>
+                <span class="w-10 h-10 rounded-xl flex items-center justify-center" style="background: var(--toy-orange);">
+                    <i data-lucide="shopping-bag" class="w-5 h-5 text-white"></i>
+                </span>
+                추천 상품
+            </h2>
+            <a href="19_product_list.html">더보기 <i data-lucide="chevron-right" class="w-4 h-4"></i></a>
+        </div>
+
+        <!-- Category Pills -->
+        <div class="category-pills mb-6">
+            <div class="category-pill active">전체</div>
+            <div class="category-pill">테크닉</div>
+            <div class="category-pill">크리에이터</div>
+            <div class="category-pill">아키텍처</div>
+            <div class="category-pill">아트</div>
+            <div class="category-pill">스타워즈</div>
+        </div>
+
+        <div class="grid grid-cols-4 gap-5">
+            <div class="product-card">
+                <div class="product-image" style="background: #f8f8f8; padding: 0; overflow: hidden;">
+                    <img src="assets/images/shop/1000000054.jpg" alt="상품" style="width: 100%; height: 100%; object-fit: cover;">
+                    <span class="product-badge" style="background: var(--toy-pink); color: white;">BEST</span>
+                    <div class="product-heart">
+                        <i data-lucide="heart" class="w-5 h-5" style="color: var(--toy-pink);"></i>
+                    </div>
+                </div>
+                <div class="product-info">
+                    <p class="text-xs mb-1" style="color: var(--pixar-blue);">테크닉</p>
+                    <h3 class="font-bold mb-2 line-clamp-2">포르쉐 911 GT3 RS</h3>
+                    <div class="flex items-center gap-1 mb-2">
+                        <i data-lucide="star" class="w-4 h-4" style="color: var(--toy-yellow); fill: var(--toy-yellow);"></i>
+                        <span class="text-sm font-semibold">4.9</span>
+                        <span class="text-xs" style="color: var(--text-muted);">(328)</span>
+                    </div>
+                    <div class="flex items-baseline gap-2">
+                        <span class="text-xs line-through" style="color: var(--text-muted);">159,000원</span>
+                        <span class="font-bold" style="color: var(--toy-pink);">129,000원</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="product-image" style="background: #f8f8f8; padding: 0; overflow: hidden;">
+                    <img src="assets/images/shop/1000000062.jpg" alt="상품" style="width: 100%; height: 100%; object-fit: cover;">
+                    <span class="product-badge" style="background: var(--toy-green); color: white;">NEW</span>
+                    <div class="product-heart">
+                        <i data-lucide="heart" class="w-5 h-5" style="color: var(--text-muted);"></i>
+                    </div>
+                </div>
+                <div class="product-info">
+                    <p class="text-xs mb-1" style="color: var(--pixar-blue);">아키텍처</p>
+                    <h3 class="font-bold mb-2 line-clamp-2">에펠탑 아키텍처</h3>
+                    <div class="flex items-center gap-1 mb-2">
+                        <i data-lucide="star" class="w-4 h-4" style="color: var(--toy-yellow); fill: var(--toy-yellow);"></i>
+                        <span class="text-sm font-semibold">4.8</span>
+                        <span class="text-xs" style="color: var(--text-muted);">(156)</span>
+                    </div>
+                    <span class="font-bold">89,000원</span>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="product-image" style="background: #f8f8f8; padding: 0; overflow: hidden;">
+                    <img src="assets/images/shop/1000000065.jpg" alt="상품" style="width: 100%; height: 100%; object-fit: cover;">
+                    <div class="product-heart">
+                        <i data-lucide="heart" class="w-5 h-5" style="color: var(--text-muted);"></i>
+                    </div>
+                </div>
+                <div class="product-info">
+                    <p class="text-xs mb-1" style="color: var(--pixar-blue);">크리에이터</p>
+                    <h3 class="font-bold mb-2 line-clamp-2">보타닉 가든 세트</h3>
+                    <div class="flex items-center gap-1 mb-2">
+                        <i data-lucide="star" class="w-4 h-4" style="color: var(--toy-yellow); fill: var(--toy-yellow);"></i>
+                        <span class="text-sm font-semibold">4.7</span>
+                        <span class="text-xs" style="color: var(--text-muted);">(89)</span>
+                    </div>
+                    <span class="font-bold">65,000원</span>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="product-image" style="background: #f8f8f8; padding: 0; overflow: hidden;">
+                    <img src="assets/images/shop/1000000069.jpg" alt="상품" style="width: 100%; height: 100%; object-fit: cover;">
+                    <span class="product-badge" style="background: var(--toy-orange); color: white;">15% OFF</span>
+                    <div class="product-heart">
+                        <i data-lucide="heart" class="w-5 h-5" style="color: var(--toy-pink); fill: var(--toy-pink);"></i>
+                    </div>
+                </div>
+                <div class="product-info">
+                    <p class="text-xs mb-1" style="color: var(--pixar-blue);">아트</p>
+                    <h3 class="font-bold mb-2 line-clamp-2">픽셀 아트 프레임</h3>
+                    <div class="flex items-center gap-1 mb-2">
+                        <i data-lucide="star" class="w-4 h-4" style="color: var(--toy-yellow); fill: var(--toy-yellow);"></i>
+                        <span class="text-sm font-semibold">4.9</span>
+                        <span class="text-xs" style="color: var(--text-muted);">(245)</span>
+                    </div>
+                    <div class="flex items-baseline gap-2">
+                        <span class="text-xs line-through" style="color: var(--text-muted);">45,000원</span>
+                        <span class="font-bold" style="color: var(--toy-orange);">38,250원</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Recommended Manuals -->
+    <section class="max-w-7xl mx-auto px-6 py-12">
+        <div class="section-title">
+            <h2>
+                <span class="w-10 h-10 rounded-xl flex items-center justify-center" style="background: linear-gradient(135deg, var(--toy-purple) 0%, #818CF8 100%);">
+                    <i data-lucide="book-open" class="w-5 h-5 text-white"></i>
+                </span>
+                추천 매뉴얼
+            </h2>
+            <a href="27_manual_list.html">더보기 <i data-lucide="chevron-right" class="w-4 h-4"></i></a>
+        </div>
+        <div class="grid grid-cols-3 gap-5">
+            <div class="manual-card">
+                <div class="manual-thumb" style="background: linear-gradient(135deg, #E8E4FF 0%, #F3F0FF 100%);">
+                    <i data-lucide="file-text" class="w-10 h-10" style="color: var(--toy-purple);"></i>
+                </div>
+                <div class="flex-1">
+                    <span class="text-xs font-semibold px-2 py-1 rounded-lg" style="background: rgba(162, 155, 254, 0.1); color: var(--toy-purple);">테크닉</span>
+                    <h3 class="font-bold mt-2 mb-1">포르쉐 911 GT3 RS 조립 가이드</h3>
+                    <p class="text-sm" style="color: var(--text-muted);">328페이지 - PDF</p>
+                </div>
+            </div>
+            <div class="manual-card">
+                <div class="manual-thumb" style="background: linear-gradient(135deg, #E0F7FA 0%, #E8F5E9 100%);">
+                    <i data-lucide="file-text" class="w-10 h-10" style="color: var(--toy-cyan);"></i>
+                </div>
+                <div class="flex-1">
+                    <span class="text-xs font-semibold px-2 py-1 rounded-lg" style="background: rgba(0, 206, 201, 0.1); color: var(--toy-cyan);">아키텍처</span>
+                    <h3 class="font-bold mt-2 mb-1">에펠탑 아키텍처 조립 가이드</h3>
+                    <p class="text-sm" style="color: var(--text-muted);">156페이지 - PDF</p>
+                </div>
+            </div>
+            <div class="manual-card">
+                <div class="manual-thumb" style="background: linear-gradient(135deg, #FFF8E1 0%, #FFFDE7 100%);">
+                    <i data-lucide="file-text" class="w-10 h-10" style="color: var(--toy-orange);"></i>
+                </div>
+                <div class="flex-1">
+                    <span class="text-xs font-semibold px-2 py-1 rounded-lg" style="background: rgba(255, 159, 67, 0.1); color: var(--toy-orange);">아트</span>
+                    <h3 class="font-bold mt-2 mb-1">픽셀 아트 프레임 조립 가이드</h3>
+                    <p class="text-sm" style="color: var(--text-muted);">48페이지 - PDF</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter -->
+    <section class="max-w-7xl mx-auto px-6 py-12">
+        <div class="newsletter">
+            <div class="relative z-10 text-center">
+                <h2 class="text-3xl font-extrabold mb-3" style="color: var(--text-primary);">
+                    뉴스레터 구독하고 특별 혜택 받기!
+                </h2>
+                <p class="mb-6" style="color: var(--text-secondary);">
+                    신상품 소식과 회원 전용 할인 쿠폰을 가장 먼저 받아보세요.
+                </p>
+                <div class="flex gap-3 justify-center max-w-md mx-auto">
+                    <input type="email" placeholder="이메일 주소 입력" class="flex-1 px-5 py-4 rounded-2xl text-sm" style="background: white; border: none;">
+                    <button class="px-8 py-4 rounded-2xl font-bold text-white" style="background: var(--text-primary);">
+                        구독하기
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <div id="footer"></div>
+
+
+
+    <script>lucide.createIcons();</script>
+    <script src="common/loader.js"></script>
+    <script>
+        // =====================================================
+        // Hero 버튼 기능
+        // =====================================================
+
+        // 시작하기 버튼: DotArt 에디터로 바로 이동
+        document.getElementById('btn-get-started').addEventListener('click', () => {
+            location.href = '12_dotart_editor.html';
+        });
+
+        // 둘러보기 버튼: 추천 BrickArt 섹션으로 스무스 스크롤
+        document.getElementById('btn-explore').addEventListener('click', () => {
+            const section = document.getElementById('featured-brickart');
+            if (section) {
+                // Quick Access 카드 높이를 고려한 오프셋 (약 100px)
+                const offset = 100;
+                const elementPosition = section.getBoundingClientRect().top + window.pageYOffset;
+                const offsetPosition = elementPosition - offset;
+
+                window.scrollTo({
+                    top: offsetPosition,
+                    behavior: 'smooth'
+                });
+            }
+        });
+    </script>
+</body>
+</html>

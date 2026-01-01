@@ -1,0 +1,1045 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BrickArt 목록 - BrickGround</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="common/components.css">
+    <link rel="stylesheet" href="common/responsive.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #F8FAFC;
+            --bg-secondary: #FFFFFF;
+            --text-primary: #1E293B;
+            --text-secondary: #64748B;
+            --text-muted: #94A3B8;
+            --border-color: #E2E8F0;
+            --pixar-blue: #0066FF;
+            --toy-cyan: #00CEC9;
+            --pixar-secondary: #FFD93D;
+            --pixar-success: #6BCB77;
+            --pixar-error: #FF6B6B;
+            --pixar-radius: 20px;
+            --pixar-radius-sm: 12px;
+            --shadow-soft: 0 4px 20px rgba(0, 102, 255, 0.1);
+            --shadow-float: 0 8px 30px rgba(0, 102, 255, 0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: var(--bg-primary);
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .site-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 32px;
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--pixar-blue);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .logo i {
+            width: 28px;
+            height: 28px;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 32px;
+        }
+
+        .nav-item {
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 15px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 0;
+            border-bottom: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .nav-item.active {
+            color: var(--pixar-blue);
+            border-bottom-color: var(--pixar-blue);
+        }
+
+        .nav-item i {
+            width: 18px;
+            height: 18px;
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .icon-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--bg-primary);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .icon-btn i {
+            width: 20px;
+            height: 20px;
+            color: var(--text-primary);
+        }
+
+        .badge {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            background: var(--pixar-error);
+            color: white;
+            font-size: 10px;
+            font-weight: 700;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--pixar-blue) 0%, #0052CC 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            background: linear-gradient(135deg, var(--pixar-blue) 0%, #0052CC 100%);
+            padding: 60px 32px;
+            text-align: center;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            background: rgba(255, 217, 61, 0.15);
+            border-radius: 50%;
+            top: -150px;
+            right: -100px;
+        }
+
+        .hero-section::after {
+            content: '';
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            bottom: -100px;
+            left: -50px;
+        }
+
+        .hero-title {
+            font-size: 42px;
+            font-weight: 800;
+            margin-bottom: 12px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-subtitle {
+            font-size: 18px;
+            opacity: 0.9;
+            margin-bottom: 24px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-search {
+            max-width: 600px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-search input {
+            width: 100%;
+            padding: 16px 24px 16px 56px;
+            border: none;
+            border-radius: 50px;
+            font-size: 16px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .hero-search i {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 24px;
+            height: 24px;
+            color: var(--text-secondary);
+        }
+
+        /* Main Content */
+        .main-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 32px;
+            background: var(--bg-primary);
+        }
+
+        /* Filter Bar */
+        .filter-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .filter-left {
+            display: flex;
+            gap: 12px;
+        }
+
+        .category-tabs {
+            display: flex;
+            gap: 8px;
+        }
+
+        .category-tab {
+            padding: 10px 20px;
+            background: var(--bg-secondary);
+            border: 2px solid var(--border-color);
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .category-tab:hover {
+            border-color: var(--pixar-blue);
+        }
+
+        .category-tab.active {
+            background: linear-gradient(135deg, var(--pixar-blue) 0%, #0052CC 100%);
+            border-color: var(--pixar-blue);
+            color: white;
+        }
+
+        .filter-right {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .sort-select {
+            padding: 10px 40px 10px 16px;
+            background: var(--bg-secondary);
+            border: 2px solid var(--border-color);
+            border-radius: var(--pixar-radius-sm);
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%2364748B' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+        }
+
+        .view-toggle {
+            display: flex;
+            background: var(--bg-secondary);
+            border: 2px solid var(--border-color);
+            border-radius: var(--pixar-radius-sm);
+            overflow: hidden;
+        }
+
+        .view-btn {
+            padding: 10px 14px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .view-btn.active {
+            background: linear-gradient(135deg, var(--pixar-blue) 0%, #0052CC 100%);
+        }
+
+        .view-btn.active i {
+            color: white;
+        }
+
+        .view-btn i {
+            width: 18px;
+            height: 18px;
+            color: var(--text-secondary);
+        }
+
+        /* Mall Grid */
+        .mall-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+
+        .mall-card {
+            background: var(--bg-secondary);
+            border-radius: var(--pixar-radius);
+            overflow: hidden;
+            box-shadow: var(--shadow-soft);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .mall-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-float);
+        }
+
+        .mall-thumbnail {
+            aspect-ratio: 4/3;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .mall-thumbnail.theme-blue {
+            background: linear-gradient(135deg, #0066FF 0%, #0052CC 100%);
+        }
+
+        .mall-thumbnail.theme-purple {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .mall-thumbnail.theme-pink {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .mall-thumbnail.theme-green {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+        }
+
+        .mall-3d-icon {
+            width: 80px;
+            height: 80px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .mall-3d-icon i {
+            width: 40px;
+            height: 40px;
+            color: white;
+        }
+
+        .mall-badge {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            padding: 6px 12px;
+            background: var(--pixar-secondary);
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .mall-favorite {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            width: 36px;
+            height: 36px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .mall-favorite i {
+            width: 18px;
+            height: 18px;
+            color: var(--pixar-error);
+        }
+
+        .mall-info {
+            padding: 20px;
+        }
+
+        .mall-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .mall-seller {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .mall-seller i {
+            width: 14px;
+            height: 14px;
+        }
+
+        .mall-stats {
+            display: flex;
+            gap: 16px;
+        }
+
+        .mall-stat {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .mall-stat i {
+            width: 16px;
+            height: 16px;
+        }
+
+        .mall-products {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .mall-products span {
+            font-size: 13px;
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        .mall-products i {
+            width: 16px;
+            height: 16px;
+            color: var(--pixar-blue);
+        }
+
+        /* Load More */
+        .load-more {
+            text-align: center;
+        }
+
+        .load-more-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 14px 40px;
+            background: var(--bg-secondary);
+            border: 2px solid var(--pixar-blue);
+            border-radius: 50px;
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--pixar-blue);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .load-more-btn:hover {
+            background: linear-gradient(135deg, var(--pixar-blue) 0%, #0052CC 100%);
+            color: white;
+        }
+
+        .load-more-btn i {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* Create FAB */
+        .create-fab {
+            position: fixed;
+            bottom: 40px;
+            right: 40px;
+            background: linear-gradient(135deg, var(--pixar-blue), #0052CC);
+            border: none;
+            padding: 18px 32px;
+            border-radius: 32px;
+            color: white;
+            font-size: 16px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 6px 25px rgba(0, 102, 255, 0.4);
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .create-fab:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(0, 102, 255, 0.5);
+        }
+
+        .create-fab i {
+            width: 22px;
+            height: 22px;
+        }
+
+        /* Navigation */
+        .nav-links-bottom {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+            justify-content: center;
+        }
+
+        .nav-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 10px 20px;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            text-decoration: none;
+            border-radius: var(--pixar-radius-sm);
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-soft);
+        }
+
+        .nav-link:hover {
+            background: linear-gradient(135deg, var(--pixar-blue) 0%, #0052CC 100%);
+            color: white;
+        }
+
+        .nav-link i {
+            width: 16px;
+            height: 16px;
+        }
+
+        /* ========== Responsive Design ========== */
+        /* Tablet (1024px) */
+        @media (max-width: 1024px) {
+            .site-header { padding: 12px 24px; }
+            .nav-menu { gap: 16px; }
+            .nav-item { font-size: 14px; }
+
+            .hero-section { padding: 40px 24px; }
+            .hero-title { font-size: 32px; }
+            .hero-subtitle { font-size: 16px; }
+            .hero-search { max-width: 500px; }
+
+            .main-content { padding: 24px; }
+
+            .filter-bar { flex-wrap: wrap; gap: 16px; }
+            .filter-left { width: 100%; }
+            .category-tabs {
+                overflow-x: auto;
+                flex-wrap: nowrap;
+                padding-bottom: 8px;
+                -webkit-overflow-scrolling: touch;
+            }
+            .category-tab { flex-shrink: 0; padding: 8px 16px; font-size: 13px; }
+
+            .mall-grid {
+                grid-template-columns: repeat(3, 1fr) !important;
+                gap: 16px;
+            }
+        }
+
+        /* Mobile (768px) */
+        @media (max-width: 768px) {
+            .site-header { padding: 12px 16px; }
+            .logo { font-size: 20px; }
+            .logo i { width: 24px; height: 24px; }
+            .nav-menu { display: none; }
+            .icon-btn { width: 36px; height: 36px; }
+            .icon-btn i { width: 18px; height: 18px; }
+            .avatar { width: 36px; height: 36px; }
+            .user-menu { gap: 10px; }
+
+            .hero-section { padding: 32px 16px; }
+            .hero-title { font-size: 26px; margin-bottom: 8px; }
+            .hero-subtitle { font-size: 14px; margin-bottom: 20px; }
+            .hero-search input { padding: 14px 20px 14px 48px; font-size: 14px; }
+            .hero-search i { left: 16px; width: 20px; height: 20px; }
+
+            .main-content { padding: 16px; }
+
+            .filter-bar { flex-direction: column; align-items: stretch; }
+            .filter-left, .filter-right { width: 100%; }
+            .filter-right { justify-content: space-between; }
+            .category-tab { padding: 8px 14px; font-size: 12px; }
+            .sort-select { flex: 1; }
+
+            .mall-grid {
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 12px;
+            }
+
+            .mall-info { padding: 14px; }
+            .mall-title { font-size: 15px; }
+            .mall-seller { font-size: 12px; }
+            .mall-stats { gap: 12px; }
+            .mall-stat { font-size: 12px; }
+            .mall-products span { font-size: 12px; }
+
+            .create-fab {
+                bottom: 20px;
+                right: 20px;
+                padding: 14px 24px;
+                font-size: 14px;
+            }
+            .create-fab i { width: 18px; height: 18px; }
+
+            .load-more-btn { padding: 12px 32px; font-size: 14px; }
+        }
+
+        /* Small Mobile (480px) */
+        @media (max-width: 480px) {
+            .site-header { padding: 10px 12px; }
+            .logo { font-size: 18px; }
+            .user-menu { gap: 8px; }
+            .icon-btn { width: 32px; height: 32px; }
+            .avatar { width: 32px; height: 32px; font-size: 12px; }
+
+            .hero-section { padding: 24px 12px; }
+            .hero-title { font-size: 22px; }
+            .hero-subtitle { font-size: 13px; }
+            .hero-search input { padding: 12px 16px 12px 42px; font-size: 13px; }
+
+            .main-content { padding: 12px; }
+
+            .category-tabs { gap: 6px; }
+            .category-tab { padding: 6px 12px; font-size: 11px; }
+
+            .mall-grid {
+                grid-template-columns: 1fr !important;
+            }
+
+            .mall-card:hover { transform: none; }
+            .mall-thumbnail { aspect-ratio: 16/10; }
+            .mall-info { padding: 12px; }
+
+            .load-more-btn { width: 100%; justify-content: center; }
+
+            .create-fab {
+                bottom: 16px;
+                right: 16px;
+                left: 16px;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div id="header"></div>
+
+    <!-- Hero Section -->
+    <div class="hero-section">
+        <h1 class="hero-title">BrickArt</h1>
+        <p class="hero-subtitle">나만의 3D 브릭 공간에서 창작물을 전시하고 공유하세요</p>
+        <div class="hero-search">
+            <i data-lucide="search"></i>
+            <input type="text" placeholder="BrickArt 검색...">
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Filter Bar -->
+        <div class="filter-bar">
+            <div class="filter-left">
+                <div class="category-tabs">
+                    <button class="category-tab active">전체</button>
+                    <button class="category-tab">인기</button>
+                    <button class="category-tab">신규</button>
+                    <button class="category-tab">취미/DIY</button>
+                    <button class="category-tab">피규어</button>
+                    <button class="category-tab">인테리어</button>
+                </div>
+            </div>
+            <div class="filter-right">
+                <select class="sort-select">
+                    <option>인기순</option>
+                    <option>최신순</option>
+                    <option>조회순</option>
+                    <option>좋아요순</option>
+                </select>
+                <div class="view-toggle">
+                    <button class="view-btn active">
+                        <i data-lucide="grid-3x3"></i>
+                    </button>
+                    <button class="view-btn">
+                        <i data-lucide="list"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mall Grid -->
+        <div class="mall-grid">
+            <div class="mall-card">
+                <a href="08_brickart_viewer.html" class="mall-thumbnail-link">
+                <div class="mall-thumbnail" style="background: #f8f8f8; padding: 0;">
+                    <img src="assets/images/brickart/sopoong (1).jpg" alt="BrickArt" style="width: 100%; height: 100%; object-fit: cover;">
+                    <span class="mall-badge">HOT</span>
+                    <button class="mall-favorite">
+                        <i data-lucide="heart"></i>
+                    </button>
+                </div>
+                </a>
+                <a href="09_brickart_product.html" class="mall-info-link">
+                    <div class="mall-info">
+                    <h3 class="mall-title">미니어처 하우스 컬렉션</h3>
+                    <div class="mall-seller">
+                        <i data-lucide="user"></i>
+                        홍길동의 공방
+                    </div>
+                    <div class="mall-stats">
+                        <span class="mall-stat">
+                            <i data-lucide="eye"></i>
+                            12.5K
+                        </span>
+                        <span class="mall-stat">
+                            <i data-lucide="heart"></i>
+                            2.3K
+                        </span>
+                    </div>
+                    <div class="mall-products">
+                        <i data-lucide="package"></i>
+                        <span>상품 24개</span>
+                    </div>
+                </div>
+            </a>
+            </div>
+
+            <div class="mall-card">
+                <a href="08_brickart_viewer.html" class="mall-thumbnail-link">
+                <div class="mall-thumbnail" style="background: #f8f8f8; padding: 0;">
+                    <img src="assets/images/brickart/sopoong (2).jpg" alt="BrickArt" style="width: 100%; height: 100%; object-fit: cover;">
+                    <span class="mall-badge">NEW</span>
+                    <button class="mall-favorite">
+                        <i data-lucide="heart"></i>
+                    </button>
+                </div>
+                </a>
+                <a href="09_brickart_product.html" class="mall-info-link">
+                    <div class="mall-info">
+                    <h3 class="mall-title">판타지 피규어 월드</h3>
+                    <div class="mall-seller">
+                        <i data-lucide="user"></i>
+                        크리에이터 스튜디오
+                    </div>
+                    <div class="mall-stats">
+                        <span class="mall-stat">
+                            <i data-lucide="eye"></i>
+                            8.2K
+                        </span>
+                        <span class="mall-stat">
+                            <i data-lucide="heart"></i>
+                            1.8K
+                        </span>
+                    </div>
+                    <div class="mall-products">
+                        <i data-lucide="package"></i>
+                        <span>상품 18개</span>
+                    </div>
+                </div>
+            </a>
+            </div>
+
+            <div class="mall-card">
+                <a href="08_brickart_viewer.html" class="mall-thumbnail-link">
+                <div class="mall-thumbnail" style="background: #f8f8f8; padding: 0;">
+                    <img src="assets/images/brickart/sopoong (3).jpg" alt="BrickArt" style="width: 100%; height: 100%; object-fit: cover;">
+                    <button class="mall-favorite">
+                        <i data-lucide="heart"></i>
+                    </button>
+                </div>
+                </a>
+                <a href="09_brickart_product.html" class="mall-info-link">
+                    <div class="mall-info">
+                    <h3 class="mall-title">픽셀 아트 DIY 숍</h3>
+                    <div class="mall-seller">
+                        <i data-lucide="user"></i>
+                        도트 공방
+                    </div>
+                    <div class="mall-stats">
+                        <span class="mall-stat">
+                            <i data-lucide="eye"></i>
+                            6.7K
+                        </span>
+                        <span class="mall-stat">
+                            <i data-lucide="heart"></i>
+                            1.2K
+                        </span>
+                    </div>
+                    <div class="mall-products">
+                        <i data-lucide="package"></i>
+                        <span>상품 32개</span>
+                    </div>
+                </div>
+            </a>
+            </div>
+
+            <div class="mall-card">
+                <a href="08_brickart_viewer.html" class="mall-thumbnail-link">
+                <div class="mall-thumbnail" style="background: #f8f8f8; padding: 0;">
+                    <img src="assets/images/brickart/sopoong (4).jpg" alt="BrickArt" style="width: 100%; height: 100%; object-fit: cover;">
+                    <button class="mall-favorite">
+                        <i data-lucide="heart"></i>
+                    </button>
+                </div>
+                </a>
+                <a href="09_brickart_product.html" class="mall-info-link">
+                    <div class="mall-info">
+                    <h3 class="mall-title">미니 정원 컬렉션</h3>
+                    <div class="mall-seller">
+                        <i data-lucide="user"></i>
+                        그린 가든
+                    </div>
+                    <div class="mall-stats">
+                        <span class="mall-stat">
+                            <i data-lucide="eye"></i>
+                            5.1K
+                        </span>
+                        <span class="mall-stat">
+                            <i data-lucide="heart"></i>
+                            980
+                        </span>
+                    </div>
+                    <div class="mall-products">
+                        <i data-lucide="package"></i>
+                        <span>상품 15개</span>
+                    </div>
+                </div>
+            </a>
+            </div>
+
+            <div class="mall-card">
+                <a href="08_brickart_viewer.html" class="mall-thumbnail-link">
+                <div class="mall-thumbnail" style="background: #f8f8f8; padding: 0;">
+                    <img src="assets/images/brickart/sopoong (5).jpg" alt="BrickArt" style="width: 100%; height: 100%; object-fit: cover;">
+                    <button class="mall-favorite">
+                        <i data-lucide="heart"></i>
+                    </button>
+                </div>
+                </a>
+                <a href="09_brickart_product.html" class="mall-info-link">
+                    <div class="mall-info">
+                    <h3 class="mall-title">클래식 카 모델</h3>
+                    <div class="mall-seller">
+                        <i data-lucide="user"></i>
+                        모델 팩토리
+                    </div>
+                    <div class="mall-stats">
+                        <span class="mall-stat">
+                            <i data-lucide="eye"></i>
+                            4.3K
+                        </span>
+                        <span class="mall-stat">
+                            <i data-lucide="heart"></i>
+                            756
+                        </span>
+                    </div>
+                    <div class="mall-products">
+                        <i data-lucide="package"></i>
+                        <span>상품 12개</span>
+                    </div>
+                </div>
+            </a>
+            </div>
+
+            <div class="mall-card">
+                <a href="08_brickart_viewer.html" class="mall-thumbnail-link">
+                <div class="mall-thumbnail" style="background: #f8f8f8; padding: 0;">
+                    <img src="assets/images/brickart/sopoong (6).jpg" alt="BrickArt" style="width: 100%; height: 100%; object-fit: cover;">
+                    <button class="mall-favorite">
+                        <i data-lucide="heart"></i>
+                    </button>
+                </div>
+                </a>
+                <a href="09_brickart_product.html" class="mall-info-link">
+                    <div class="mall-info">
+                    <h3 class="mall-title">건축 모형 갤러리</h3>
+                    <div class="mall-seller">
+                        <i data-lucide="user"></i>
+                        아키텍트 랩
+                    </div>
+                    <div class="mall-stats">
+                        <span class="mall-stat">
+                            <i data-lucide="eye"></i>
+                            3.8K
+                        </span>
+                        <span class="mall-stat">
+                            <i data-lucide="heart"></i>
+                            621
+                        </span>
+                    </div>
+                    <div class="mall-products">
+                        <i data-lucide="package"></i>
+                        <span>상품 8개</span>
+                    </div>
+                </div>
+            </a>
+            </div>
+
+            <div class="mall-card">
+                <a href="08_brickart_viewer.html" class="mall-thumbnail-link">
+                <div class="mall-thumbnail" style="background: #f8f8f8; padding: 0;">
+                    <img src="assets/images/brickart/sopoong (7).jpg" alt="BrickArt" style="width: 100%; height: 100%; object-fit: cover;">
+                    <button class="mall-favorite">
+                        <i data-lucide="heart"></i>
+                    </button>
+                </div>
+                </a>
+                <a href="09_brickart_product.html" class="mall-info-link">
+                    <div class="mall-info">
+                    <h3 class="mall-title">뮤직 인스트루먼트</h3>
+                    <div class="mall-seller">
+                        <i data-lucide="user"></i>
+                        사운드 크래프트
+                    </div>
+                    <div class="mall-stats">
+                        <span class="mall-stat">
+                            <i data-lucide="eye"></i>
+                            2.9K
+                        </span>
+                        <span class="mall-stat">
+                            <i data-lucide="heart"></i>
+                            512
+                        </span>
+                    </div>
+                    <div class="mall-products">
+                        <i data-lucide="package"></i>
+                        <span>상품 20개</span>
+                    </div>
+                </div>
+            </a>
+            </div>
+
+            <div class="mall-card">
+                <a href="08_brickart_viewer.html" class="mall-thumbnail-link">
+                <div class="mall-thumbnail" style="background: #f8f8f8; padding: 0;">
+                    <img src="assets/images/brickart/sopoong (8).jpg" alt="BrickArt" style="width: 100%; height: 100%; object-fit: cover;">
+                    <span class="mall-badge">NEW</span>
+                    <button class="mall-favorite">
+                        <i data-lucide="heart"></i>
+                    </button>
+                </div>
+                </a>
+                <a href="09_brickart_product.html" class="mall-info-link">
+                    <div class="mall-info">
+                    <h3 class="mall-title">레트로 게임 컬렉션</h3>
+                    <div class="mall-seller">
+                        <i data-lucide="user"></i>
+                        게임 아카이브
+                    </div>
+                    <div class="mall-stats">
+                        <span class="mall-stat">
+                            <i data-lucide="eye"></i>
+                            2.1K
+                        </span>
+                        <span class="mall-stat">
+                            <i data-lucide="heart"></i>
+                            385
+                        </span>
+                    </div>
+                    <div class="mall-products">
+                        <i data-lucide="package"></i>
+                        <span>상품 28개</span>
+                    </div>
+                </div>
+            </a>
+            </div>
+        </div>
+
+        <!-- Load More -->
+        <div class="load-more">
+            <button class="load-more-btn">
+                <i data-lucide="plus"></i>
+                더 보기
+            </button>
+        </div>
+    </div>
+
+    <!-- Create FAB -->
+    <a href="10_brickart_create.html" class="create-fab">
+        <i data-lucide="plus"></i>
+        BrickArt 생성
+    </a>
+
+    <!-- Footer -->
+    <div id="footer"></div>
+
+
+
+    <script>
+        lucide.createIcons();
+    </script>
+    <script src="common/loader.js"></script>
+</body>
+</html>

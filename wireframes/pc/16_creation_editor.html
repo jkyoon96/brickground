@@ -1,0 +1,2840 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Creation Editor - BrickGround</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="common/components.css">
+    <link rel="stylesheet" href="common/responsive.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Three.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/TransformControls.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/exporters/STLExporter.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/exporters/GLTFExporter.js"></script>
+
+    <style>
+        :root {
+            --bg-primary: #F8FAFC;
+            --bg-secondary: #FFFFFF;
+            --text-primary: #1E293B;
+            --text-secondary: #64748B;
+            --text-muted: #94A3B8;
+            --border-color: #E2E8F0;
+            --pixar-blue: #0066FF;
+            --toy-orange: #FF9F43;
+            --pixar-teal: #00CEC9;
+            --pixar-cyan: #00D4FF;
+            --pixar-success: #6BCB77;
+            --pixar-error: #FF6B6B;
+            --pixar-yellow: #FFD93D;
+            --editor-bg: #1a1a2e;
+            --editor-card: #252542;
+            --editor-border: #3d3d5c;
+            --editor-text: #FFFFFF;
+            --editor-text-light: #a0a0b0;
+            --pixar-radius: 16px;
+            --pixar-radius-sm: 10px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Nunito', 'Nanum Square Round', sans-serif;
+            background: var(--editor-bg);
+            color: var(--editor-text);
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Top Toolbar */
+        .top-toolbar {
+            background: var(--editor-card);
+            padding: 12px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--editor-border);
+        }
+
+        .toolbar-left { display: flex; align-items: center; gap: 20px; }
+
+        .back-btn {
+            width: 40px; height: 40px;
+            border-radius: 50%;
+            background: var(--editor-bg);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--editor-text);
+        }
+        .back-btn i { width: 20px; height: 20px; }
+
+        .project-info { display: flex; align-items: center; gap: 12px; }
+        .project-name {
+            font-size: 18px;
+            font-weight: 700;
+            background: transparent;
+            border: none;
+            color: var(--editor-text);
+            width: 200px;
+            outline: none;
+        }
+        .project-name:focus { border-bottom: 2px solid var(--pixar-teal); }
+        .project-meta {
+            font-size: 13px;
+            color: var(--editor-text-light);
+            background: var(--editor-bg);
+            padding: 4px 12px;
+            border-radius: 12px;
+        }
+
+        .toolbar-center { display: flex; align-items: center; gap: 8px; }
+
+        .tool-group {
+            display: flex;
+            gap: 4px;
+            background: var(--editor-bg);
+            padding: 4px;
+            border-radius: var(--pixar-radius-sm);
+        }
+
+        .tool-btn {
+            width: 40px; height: 40px;
+            border: none;
+            background: transparent;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--editor-text-light);
+            transition: all 0.2s ease;
+        }
+        .tool-btn:hover { background: var(--editor-border); color: var(--editor-text); }
+        .tool-btn.active { background: var(--pixar-teal); color: white; }
+        .tool-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+        .tool-btn i { width: 20px; height: 20px; }
+
+        .tool-divider { width: 1px; height: 32px; background: var(--editor-border); margin: 0 8px; }
+
+        .toolbar-right { display: flex; align-items: center; gap: 12px; }
+
+        .btn-secondary {
+            padding: 10px 20px;
+            border: 2px solid var(--editor-border);
+            background: transparent;
+            color: var(--editor-text);
+            border-radius: var(--pixar-radius-sm);
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+        }
+        .btn-secondary:hover { border-color: var(--pixar-teal); color: var(--pixar-teal); }
+        .btn-secondary i { width: 18px; height: 18px; }
+
+        .btn-primary {
+            padding: 10px 20px;
+            border: none;
+            background: linear-gradient(135deg, var(--pixar-teal), var(--pixar-cyan));
+            color: white;
+            border-radius: var(--pixar-radius-sm);
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+        }
+        .btn-primary:hover { transform: translateY(-1px); }
+        .btn-primary i { width: 18px; height: 18px; }
+
+        /* Main Layout */
+        .editor-layout { display: flex; height: calc(100vh - 64px); }
+
+        /* Left Panel - Elements */
+        .left-panel {
+            width: 280px;
+            background: var(--editor-card);
+            border-right: 1px solid var(--editor-border);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .panel-header {
+            padding: 16px;
+            border-bottom: 1px solid var(--editor-border);
+        }
+
+        .panel-title {
+            font-size: 14px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+        .panel-title i { width: 18px; height: 18px; color: var(--pixar-teal); }
+
+        .panel-tabs { display: flex; gap: 4px; }
+        .panel-tab {
+            flex: 1;
+            padding: 8px;
+            background: var(--editor-bg);
+            border: none;
+            border-radius: 8px;
+            color: var(--editor-text-light);
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .panel-tab:hover { color: var(--editor-text); }
+        .panel-tab.active { background: var(--pixar-teal); color: white; }
+
+        .panel-content { flex: 1; overflow-y: auto; padding: 16px; }
+
+        /* Element Cards */
+        .element-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+
+        .element-card {
+            aspect-ratio: 1;
+            background: var(--editor-bg);
+            border: 2px solid var(--editor-border);
+            border-radius: var(--pixar-radius-sm);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .element-card:hover { border-color: var(--pixar-teal); background: rgba(0, 206, 201, 0.1); }
+        .element-card i { width: 28px; height: 28px; color: var(--editor-text-light); }
+        .element-card span { font-size: 11px; color: var(--editor-text-light); }
+
+        /* Canvas Area */
+        .canvas-area {
+            flex: 1;
+            position: relative;
+            background: radial-gradient(circle at center, #252542 0%, #1a1a2e 100%);
+            overflow: hidden;
+        }
+
+        #threejs-canvas {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Canvas Controls */
+        .canvas-controls {
+            position: absolute;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 8px;
+            background: var(--editor-card);
+            padding: 10px;
+            border-radius: 28px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .canvas-ctrl-btn {
+            width: 44px; height: 44px;
+            border: none;
+            background: var(--editor-bg);
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--editor-text);
+            transition: all 0.2s ease;
+        }
+        .canvas-ctrl-btn:hover, .canvas-ctrl-btn.active { background: var(--pixar-teal); }
+        .canvas-ctrl-btn i { width: 20px; height: 20px; }
+
+        /* View Mode Toggle */
+        .view-mode {
+            position: absolute;
+            top: 24px;
+            left: 24px;
+            display: flex;
+            gap: 4px;
+            background: var(--editor-card);
+            padding: 4px;
+            border-radius: var(--pixar-radius-sm);
+        }
+
+        .view-btn {
+            padding: 10px 16px;
+            background: transparent;
+            border: none;
+            border-radius: 8px;
+            color: var(--editor-text-light);
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+        }
+        .view-btn:hover { color: var(--editor-text); }
+        .view-btn.active { background: var(--pixar-teal); color: white; }
+        .view-btn i { width: 16px; height: 16px; }
+
+        /* Object Info */
+        .object-info {
+            position: absolute;
+            top: 24px;
+            right: 24px;
+            background: var(--editor-card);
+            padding: 12px 16px;
+            border-radius: var(--pixar-radius-sm);
+            font-size: 13px;
+            display: none;
+        }
+        .object-info.visible { display: block; }
+        .object-info .label { color: var(--editor-text-light); margin-right: 8px; }
+
+        /* Right Panel - Properties */
+        .right-panel {
+            width: 320px;
+            background: var(--editor-card);
+            border-left: 1px solid var(--editor-border);
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+
+        .panel-section {
+            padding: 20px;
+            border-bottom: 1px solid var(--editor-border);
+        }
+
+        /* Property Inputs */
+        .property-group { margin-bottom: 16px; }
+        .property-label {
+            font-size: 12px;
+            color: var(--editor-text-light);
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .property-input {
+            width: 100%;
+            padding: 10px 14px;
+            background: var(--editor-bg);
+            border: 2px solid var(--editor-border);
+            border-radius: 8px;
+            color: var(--editor-text);
+            font-size: 14px;
+        }
+        .property-input:focus { border-color: var(--pixar-teal); outline: none; }
+
+        .property-row { display: flex; gap: 10px; }
+        .property-row .property-group { flex: 1; }
+
+        /* Transform Controls */
+        .transform-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+
+        .transform-input-group { text-align: center; }
+        .transform-input-group label {
+            font-size: 10px;
+            color: var(--editor-text-light);
+            margin-bottom: 4px;
+            display: block;
+        }
+        .transform-input-group label.x-axis { color: #FF6B6B; }
+        .transform-input-group label.y-axis { color: #6BCB77; }
+        .transform-input-group label.z-axis { color: #4D96FF; }
+
+        .transform-input {
+            width: 100%;
+            padding: 8px;
+            background: var(--editor-bg);
+            border: 2px solid var(--editor-border);
+            border-radius: 6px;
+            color: var(--editor-text);
+            font-size: 13px;
+            text-align: center;
+        }
+        .transform-input:focus { border-color: var(--pixar-teal); outline: none; }
+
+        /* Color Picker */
+        .color-options { display: flex; gap: 8px; flex-wrap: wrap; }
+        .color-swatch {
+            width: 32px; height: 32px;
+            border-radius: 8px;
+            cursor: pointer;
+            border: 3px solid transparent;
+            transition: all 0.2s ease;
+        }
+        .color-swatch:hover { transform: scale(1.1); }
+        .color-swatch.active { border-color: white; box-shadow: 0 0 0 2px var(--pixar-teal); }
+
+        /* Layer List */
+        .layer-list { display: flex; flex-direction: column; gap: 8px; max-height: 300px; overflow-y: auto; }
+
+        .layer-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 12px;
+            background: var(--editor-bg);
+            border-radius: var(--pixar-radius-sm);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .layer-item:hover { background: rgba(0, 206, 201, 0.1); }
+        .layer-item.active { background: rgba(0, 206, 201, 0.2); border: 1px solid var(--pixar-teal); }
+
+        .layer-visibility {
+            width: 24px; height: 24px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            color: var(--editor-text-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .layer-visibility.hidden { color: var(--editor-border); }
+        .layer-visibility i { width: 16px; height: 16px; }
+
+        .layer-icon {
+            width: 32px; height: 32px;
+            background: linear-gradient(135deg, var(--pixar-teal), var(--pixar-cyan));
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .layer-icon i { width: 16px; height: 16px; color: white; }
+
+        .layer-name {
+            flex: 1;
+            font-size: 13px;
+            font-weight: 600;
+            background: transparent;
+            border: none;
+            color: var(--editor-text);
+            outline: none;
+        }
+
+        .layer-delete {
+            width: 24px; height: 24px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            color: var(--editor-text-light);
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+        .layer-item:hover .layer-delete { opacity: 1; }
+        .layer-delete:hover { color: var(--pixar-error); }
+        .layer-delete i { width: 14px; height: 14px; }
+
+        .add-layer-btn {
+            width: 100%;
+            padding: 12px;
+            border: 2px dashed var(--editor-border);
+            background: transparent;
+            border-radius: var(--pixar-radius-sm);
+            color: var(--editor-text-light);
+            font-size: 13px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+        }
+        .add-layer-btn:hover { border-color: var(--pixar-teal); color: var(--pixar-teal); }
+        .add-layer-btn i { width: 16px; height: 16px; }
+
+        /* Export Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        .modal-overlay.visible { display: flex; }
+
+        .modal-content {
+            background: var(--editor-card);
+            border-radius: var(--pixar-radius);
+            padding: 24px;
+            width: 90%;
+            max-width: 400px;
+        }
+
+        .modal-content h3 {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+
+        .export-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .export-option {
+            padding: 20px;
+            background: var(--editor-bg);
+            border: 2px solid var(--editor-border);
+            border-radius: var(--pixar-radius-sm);
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s ease;
+        }
+        .export-option:hover { border-color: var(--pixar-teal); }
+        .export-option i { width: 32px; height: 32px; margin-bottom: 8px; color: var(--pixar-teal); }
+        .export-option span { display: block; font-size: 14px; font-weight: 600; }
+
+        .modal-close {
+            margin-top: 20px;
+            width: 100%;
+            padding: 12px;
+            background: var(--editor-bg);
+            border: 2px solid var(--editor-border);
+            border-radius: var(--pixar-radius-sm);
+            color: var(--editor-text);
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--editor-card);
+            color: var(--editor-text);
+            padding: 12px 24px;
+            border-radius: 24px;
+            font-size: 14px;
+            font-weight: 600;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            display: none;
+            z-index: 1001;
+        }
+        .toast.visible { display: block; animation: fadeInUp 0.3s ease; }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateX(-50%) translateY(20px); }
+            to { opacity: 1; transform: translateX(-50%) translateY(0); }
+        }
+
+        /* Selection box style */
+        .selectBox {
+            border: 1px solid var(--pixar-teal);
+            background-color: rgba(0, 206, 201, 0.1);
+            position: fixed;
+        }
+
+        /* ===============================================
+           Wizard Modal Styles
+           =============================================== */
+        .wizard-modal {
+            background: var(--editor-card);
+            border-radius: var(--pixar-radius);
+            width: 90%;
+            max-width: 700px;
+            max-height: 90vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .wizard-header {
+            padding: 24px;
+            border-bottom: 1px solid var(--editor-border);
+        }
+
+        .wizard-steps {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .wizard-step {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: var(--editor-bg);
+            border-radius: 20px;
+            font-size: 13px;
+            color: var(--editor-text-light);
+            transition: all 0.3s ease;
+        }
+
+        .wizard-step.active {
+            background: var(--pixar-teal);
+            color: white;
+        }
+
+        .wizard-step.completed {
+            background: var(--pixar-success);
+            color: white;
+        }
+
+        .wizard-step-number {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 12px;
+        }
+
+        .wizard-step.completed .wizard-step-number i {
+            width: 14px;
+            height: 14px;
+        }
+
+        .wizard-title {
+            font-size: 20px;
+            font-weight: 700;
+            text-align: center;
+        }
+
+        .wizard-body {
+            padding: 24px;
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        .wizard-footer {
+            padding: 20px 24px;
+            border-top: 1px solid var(--editor-border);
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .wizard-btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            min-width: 100px;
+            justify-content: center;
+        }
+
+        .wizard-btn i { width: 18px; height: 18px; }
+
+        .wizard-btn-secondary {
+            background: var(--editor-bg);
+            border: 1px solid var(--editor-border);
+            color: var(--editor-text);
+        }
+
+        .wizard-btn-primary {
+            background: linear-gradient(135deg, var(--pixar-teal), var(--pixar-cyan));
+            border: none;
+            color: white;
+        }
+
+        /* Form Styles */
+        .form-group { margin-bottom: 20px; }
+
+        .form-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--editor-text);
+        }
+
+        .form-label .required {
+            color: var(--pixar-error);
+            margin-left: 4px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px 16px;
+            background: var(--editor-bg);
+            border: 2px solid var(--editor-border);
+            border-radius: var(--pixar-radius-sm);
+            color: var(--editor-text);
+            font-size: 14px;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--pixar-teal);
+        }
+
+        .form-textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .form-hint {
+            font-size: 12px;
+            color: var(--editor-text-light);
+            margin-top: 6px;
+        }
+
+        /* Category Grid */
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+        }
+
+        .category-item {
+            padding: 12px;
+            background: var(--editor-bg);
+            border: 2px solid var(--editor-border);
+            border-radius: var(--pixar-radius-sm);
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 13px;
+        }
+
+        .category-item:hover { border-color: var(--pixar-teal); }
+
+        .category-item.active {
+            background: var(--pixar-teal);
+            border-color: var(--pixar-teal);
+            color: white;
+        }
+
+        .category-item i {
+            display: block;
+            width: 24px;
+            height: 24px;
+            margin: 0 auto 8px;
+        }
+
+        /* Tags */
+        .tags-input-wrapper {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            padding: 12px;
+            background: var(--editor-bg);
+            border: 2px solid var(--editor-border);
+            border-radius: var(--pixar-radius-sm);
+            min-height: 50px;
+        }
+
+        .tag-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            background: var(--pixar-teal);
+            color: white;
+            border-radius: 16px;
+            font-size: 13px;
+        }
+
+        .tag-chip button {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            padding: 0;
+            display: flex;
+        }
+
+        .tag-chip button i { width: 14px; height: 14px; }
+
+        .tag-input {
+            flex: 1;
+            min-width: 100px;
+            background: none;
+            border: none;
+            color: var(--editor-text);
+            font-size: 14px;
+            outline: none;
+        }
+
+        /* Thumbnail */
+        .thumbnail-section {
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+        }
+
+        .thumbnail-preview {
+            width: 160px;
+            height: 160px;
+            background: var(--editor-bg);
+            border: 2px dashed var(--editor-border);
+            border-radius: var(--pixar-radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .thumbnail-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .thumbnail-preview.empty {
+            flex-direction: column;
+            gap: 8px;
+            color: var(--editor-text-light);
+            font-size: 13px;
+        }
+
+        .thumbnail-preview.empty i { width: 32px; height: 32px; }
+
+        .thumbnail-options { flex: 1; }
+
+        .thumbnail-btn {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 8px;
+            background: var(--editor-bg);
+            border: 2px solid var(--editor-border);
+            border-radius: var(--pixar-radius-sm);
+            color: var(--editor-text);
+            font-size: 13px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .thumbnail-btn:hover { border-color: var(--pixar-teal); }
+        .thumbnail-btn i { width: 18px; height: 18px; }
+
+        /* Visibility Options */
+        .visibility-options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .visibility-option {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            padding: 16px;
+            background: var(--editor-bg);
+            border: 2px solid var(--editor-border);
+            border-radius: var(--pixar-radius-sm);
+            cursor: pointer;
+        }
+
+        .visibility-option:hover { border-color: var(--pixar-teal); }
+
+        .visibility-option.active {
+            border-color: var(--pixar-teal);
+            background: rgba(0, 206, 201, 0.1);
+        }
+
+        .visibility-radio {
+            width: 24px;
+            height: 24px;
+            border: 2px solid var(--editor-border);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .visibility-option.active .visibility-radio {
+            border-color: var(--pixar-teal);
+            background: var(--pixar-teal);
+        }
+
+        .visibility-option.active .visibility-radio::after {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: white;
+            border-radius: 50%;
+        }
+
+        .visibility-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--editor-border);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .visibility-option.active .visibility-icon { background: var(--pixar-teal); }
+        .visibility-icon i { width: 20px; height: 20px; }
+
+        .visibility-content { flex: 1; }
+
+        .visibility-title {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .visibility-desc {
+            font-size: 13px;
+            color: var(--editor-text-light);
+        }
+
+        /* License Options */
+        .license-section {
+            margin-top: 24px;
+            padding-top: 24px;
+            border-top: 1px solid var(--editor-border);
+        }
+
+        .license-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .license-option {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px;
+            background: var(--editor-bg);
+            border: 2px solid var(--editor-border);
+            border-radius: var(--pixar-radius-sm);
+            cursor: pointer;
+        }
+
+        .license-option:hover { border-color: var(--pixar-teal); }
+
+        .license-option.active {
+            border-color: var(--pixar-teal);
+            background: rgba(0, 206, 201, 0.1);
+        }
+
+        .license-checkbox {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--editor-border);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .license-option.active .license-checkbox {
+            border-color: var(--pixar-teal);
+            background: var(--pixar-teal);
+        }
+
+        .license-option.active .license-checkbox i {
+            width: 14px;
+            height: 14px;
+            color: white;
+        }
+
+        .license-label {
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        /* Review Section */
+        .review-section {
+            background: var(--editor-bg);
+            border-radius: var(--pixar-radius-sm);
+            padding: 20px;
+            margin-bottom: 16px;
+        }
+
+        .review-section-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--pixar-teal);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .review-section-title i { width: 16px; height: 16px; }
+
+        .review-row {
+            display: flex;
+            margin-bottom: 8px;
+        }
+
+        .review-label {
+            width: 100px;
+            font-size: 13px;
+            color: var(--editor-text-light);
+        }
+
+        .review-value {
+            flex: 1;
+            font-size: 13px;
+        }
+
+        .review-thumbnail {
+            width: 80px;
+            height: 80px;
+            border-radius: 8px;
+            overflow: hidden;
+            background: var(--editor-border);
+        }
+
+        .review-thumbnail img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .review-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .review-tag {
+            padding: 4px 10px;
+            background: var(--editor-border);
+            border-radius: 12px;
+            font-size: 12px;
+        }
+
+        /* Success Animation */
+        .success-animation {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .success-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--pixar-success);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 24px;
+            animation: successPop 0.5s ease;
+        }
+
+        .success-icon i {
+            width: 40px;
+            height: 40px;
+            color: white;
+        }
+
+        @keyframes successPop {
+            0% { transform: scale(0); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        .success-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .success-message {
+            font-size: 14px;
+            color: var(--editor-text-light);
+            margin-bottom: 24px;
+        }
+
+        .success-actions {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        /* ==================== Responsive Design ==================== */
+        /* Tablet (1024px) */
+        @media (max-width: 1024px) {
+            .top-toolbar { padding: 10px 16px; }
+            .project-name { width: 150px; font-size: 16px; }
+            .tool-btn { width: 36px; height: 36px; }
+            .left-panel { width: 70px; }
+            .side-tool { width: 50px; height: 50px; }
+            .side-tool i { width: 20px; height: 20px; }
+            .side-tool span { font-size: 9px; }
+            .right-panel { width: 280px; }
+            .panel-section { padding: 16px; }
+        }
+
+        /* Mobile (768px) */
+        @media (max-width: 768px) {
+            .top-toolbar { padding: 8px 12px; flex-wrap: wrap; gap: 8px; }
+            .toolbar-left { flex: 1; min-width: 100%; justify-content: space-between; }
+            .toolbar-center { display: none; }
+            .toolbar-right { flex: 1; min-width: 100%; justify-content: flex-end; }
+            .back-btn { width: 36px; height: 36px; }
+            .project-name { width: 120px; font-size: 14px; }
+            .project-meta { font-size: 11px; padding: 3px 8px; }
+            .btn-secondary, .btn-primary { padding: 8px 12px; font-size: 12px; }
+            .editor-layout { flex-direction: column; height: auto; }
+            .left-panel { width: 100%; flex-direction: row; padding: 8px; overflow-x: auto; border-right: none; border-bottom: 1px solid var(--editor-border); }
+            .side-tool { width: 44px; height: 44px; flex-shrink: 0; }
+            .side-divider { width: 1px; height: 32px; margin: 0 4px; }
+            .canvas-area { min-height: 50vh; }
+            .canvas-controls { bottom: 12px; padding: 4px; border-radius: 20px; }
+            .canvas-ctrl-btn { width: 32px; height: 32px; }
+            .right-panel { width: 100%; max-height: 40vh; border-left: none; border-top: 1px solid var(--editor-border); }
+            .panel-section { padding: 12px; }
+        }
+
+        /* Small Mobile (480px) */
+        @media (max-width: 480px) {
+            .top-toolbar { padding: 6px 10px; }
+            .back-btn { width: 32px; height: 32px; }
+            .project-name { width: 100px; font-size: 13px; }
+            .project-meta { display: none; }
+            .btn-secondary { display: none; }
+            .btn-primary { padding: 6px 10px; font-size: 11px; }
+            .left-panel { padding: 6px; }
+            .side-tool { width: 40px; height: 40px; }
+            .side-tool i { width: 18px; height: 18px; }
+            .side-tool span { display: none; }
+            .canvas-area { min-height: 40vh; }
+            .canvas-controls { gap: 4px; }
+            .canvas-ctrl-btn { width: 28px; height: 28px; }
+            .right-panel { max-height: 35vh; }
+            .panel-section { padding: 10px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Toolbar -->
+    <div class="top-toolbar">
+        <div class="toolbar-left">
+            <button class="back-btn" onclick="confirmExit()"><i data-lucide="arrow-left"></i></button>
+            <div class="project-info">
+                <input type="text" class="project-name" id="project-name" value="새 창작물" placeholder="창작물 이름">
+                <span class="project-meta" id="object-count">0개 오브젝트</span>
+            </div>
+        </div>
+        <div class="toolbar-center">
+            <div class="tool-group">
+                <button class="tool-btn" id="btn-undo" title="실행취소 (Ctrl+Z)" disabled><i data-lucide="undo-2"></i></button>
+                <button class="tool-btn" id="btn-redo" title="다시실행 (Ctrl+Y)" disabled><i data-lucide="redo-2"></i></button>
+            </div>
+            <div class="tool-divider"></div>
+            <div class="tool-group">
+                <button class="tool-btn active" data-mode="select" title="선택 (V)"><i data-lucide="mouse-pointer-2"></i></button>
+                <button class="tool-btn" data-mode="translate" title="이동 (G)"><i data-lucide="move"></i></button>
+                <button class="tool-btn" data-mode="rotate" title="회전 (R)"><i data-lucide="rotate-3d"></i></button>
+                <button class="tool-btn" data-mode="scale" title="크기 (S)"><i data-lucide="scaling"></i></button>
+            </div>
+            <div class="tool-divider"></div>
+            <div class="tool-group">
+                <button class="tool-btn" id="btn-copy" title="복사 (Ctrl+C)"><i data-lucide="copy"></i></button>
+                <button class="tool-btn" id="btn-delete" title="삭제 (Delete)"><i data-lucide="trash-2"></i></button>
+            </div>
+        </div>
+        <div class="toolbar-right">
+            <button class="btn-secondary" id="btn-export"><i data-lucide="download"></i>내보내기</button>
+            <button class="btn-primary" id="btn-save"><i data-lucide="save"></i>저장</button>
+        </div>
+    </div>
+
+    <!-- Main Layout -->
+    <div class="editor-layout">
+        <!-- Left Panel - Elements -->
+        <div class="left-panel">
+            <div class="panel-header">
+                <h3 class="panel-title"><i data-lucide="shapes"></i>요소 추가</h3>
+                <div class="panel-tabs">
+                    <button class="panel-tab active" data-tab="basic">기본</button>
+                    <button class="panel-tab" data-tab="lights">조명</button>
+                    <button class="panel-tab" data-tab="helpers">도우미</button>
+                </div>
+            </div>
+            <div class="panel-content">
+                <div class="element-grid" id="element-grid">
+                    <!-- Basic shapes -->
+                    <div class="element-card" data-shape="box"><i data-lucide="box"></i><span>큐브</span></div>
+                    <div class="element-card" data-shape="sphere"><i data-lucide="circle"></i><span>구</span></div>
+                    <div class="element-card" data-shape="cylinder"><i data-lucide="cylinder"></i><span>원기둥</span></div>
+                    <div class="element-card" data-shape="cone"><i data-lucide="triangle"></i><span>콘</span></div>
+                    <div class="element-card" data-shape="torus"><i data-lucide="octagon"></i><span>토러스</span></div>
+                    <div class="element-card" data-shape="plane"><i data-lucide="square"></i><span>평면</span></div>
+                    <div class="element-card" data-shape="dodecahedron"><i data-lucide="pentagon"></i><span>12면체</span></div>
+                    <div class="element-card" data-shape="icosahedron"><i data-lucide="hexagon"></i><span>20면체</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Canvas Area -->
+        <div class="canvas-area" id="canvas-area">
+            <div id="threejs-canvas"></div>
+
+            <!-- View Mode -->
+            <div class="view-mode">
+                <button class="view-btn active" data-view="perspective"><i data-lucide="box"></i>3D</button>
+                <button class="view-btn" data-view="front"><i data-lucide="square"></i>정면</button>
+                <button class="view-btn" data-view="top"><i data-lucide="layout-grid"></i>상단</button>
+                <button class="view-btn" data-view="side"><i data-lucide="sidebar"></i>측면</button>
+            </div>
+
+            <!-- Object Info -->
+            <div class="object-info" id="object-info">
+                <span class="label">선택:</span>
+                <span id="selected-name">-</span>
+            </div>
+
+            <!-- Canvas Controls -->
+            <div class="canvas-controls">
+                <button class="canvas-ctrl-btn" id="btn-reset-view" title="시점 초기화"><i data-lucide="home"></i></button>
+                <button class="canvas-ctrl-btn" id="btn-zoom-in" title="확대"><i data-lucide="zoom-in"></i></button>
+                <button class="canvas-ctrl-btn" id="btn-zoom-out" title="축소"><i data-lucide="zoom-out"></i></button>
+                <button class="canvas-ctrl-btn" id="btn-focus" title="선택 오브젝트에 맞추기"><i data-lucide="scan"></i></button>
+                <button class="canvas-ctrl-btn" id="btn-grid" title="그리드 토글"><i data-lucide="grid-3x3"></i></button>
+                <button class="canvas-ctrl-btn" id="btn-fullscreen" title="전체화면"><i data-lucide="maximize"></i></button>
+            </div>
+        </div>
+
+        <!-- Right Panel - Properties -->
+        <div class="right-panel">
+            <!-- Transform -->
+            <div class="panel-section">
+                <h3 class="panel-title"><i data-lucide="move-3d"></i>변환</h3>
+
+                <div class="property-group">
+                    <span class="property-label">위치 (Position)</span>
+                    <div class="transform-grid">
+                        <div class="transform-input-group">
+                            <label class="x-axis">X</label>
+                            <input type="number" class="transform-input" id="pos-x" value="0" step="0.1">
+                        </div>
+                        <div class="transform-input-group">
+                            <label class="y-axis">Y</label>
+                            <input type="number" class="transform-input" id="pos-y" value="0" step="0.1">
+                        </div>
+                        <div class="transform-input-group">
+                            <label class="z-axis">Z</label>
+                            <input type="number" class="transform-input" id="pos-z" value="0" step="0.1">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="property-group">
+                    <span class="property-label">회전 (Rotation)</span>
+                    <div class="transform-grid">
+                        <div class="transform-input-group">
+                            <label class="x-axis">X</label>
+                            <input type="number" class="transform-input" id="rot-x" value="0" step="1">
+                        </div>
+                        <div class="transform-input-group">
+                            <label class="y-axis">Y</label>
+                            <input type="number" class="transform-input" id="rot-y" value="0" step="1">
+                        </div>
+                        <div class="transform-input-group">
+                            <label class="z-axis">Z</label>
+                            <input type="number" class="transform-input" id="rot-z" value="0" step="1">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="property-group">
+                    <span class="property-label">크기 (Scale)</span>
+                    <div class="transform-grid">
+                        <div class="transform-input-group">
+                            <label class="x-axis">X</label>
+                            <input type="number" class="transform-input" id="scale-x" value="1" step="0.1">
+                        </div>
+                        <div class="transform-input-group">
+                            <label class="y-axis">Y</label>
+                            <input type="number" class="transform-input" id="scale-y" value="1" step="0.1">
+                        </div>
+                        <div class="transform-input-group">
+                            <label class="z-axis">Z</label>
+                            <input type="number" class="transform-input" id="scale-z" value="1" step="0.1">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Material -->
+            <div class="panel-section">
+                <h3 class="panel-title"><i data-lucide="palette"></i>재질</h3>
+                <div class="property-group">
+                    <span class="property-label">색상</span>
+                    <div class="color-options" id="color-options">
+                        <div class="color-swatch active" data-color="#00CEC9" style="background: #00CEC9;"></div>
+                        <div class="color-swatch" data-color="#00D4FF" style="background: #00D4FF;"></div>
+                        <div class="color-swatch" data-color="#0066FF" style="background: #0066FF;"></div>
+                        <div class="color-swatch" data-color="#9B5DE5" style="background: #9B5DE5;"></div>
+                        <div class="color-swatch" data-color="#F15BB5" style="background: #F15BB5;"></div>
+                        <div class="color-swatch" data-color="#FF6B6B" style="background: #FF6B6B;"></div>
+                        <div class="color-swatch" data-color="#FFD93D" style="background: #FFD93D;"></div>
+                        <div class="color-swatch" data-color="#6BCB77" style="background: #6BCB77;"></div>
+                        <div class="color-swatch" data-color="#FFFFFF" style="background: #FFFFFF;"></div>
+                        <div class="color-swatch" data-color="#808080" style="background: #808080;"></div>
+                        <div class="color-swatch" data-color="#333333" style="background: #333333;"></div>
+                        <div class="color-swatch" data-color="#FF9F43" style="background: #FF9F43;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Layers -->
+            <div class="panel-section">
+                <h3 class="panel-title"><i data-lucide="layers"></i>씬 구성 요소</h3>
+                <div class="layer-list" id="layer-list">
+                    <!-- Dynamic layer items -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Export Modal -->
+    <div class="modal-overlay" id="export-modal">
+        <div class="modal-content">
+            <h3>내보내기</h3>
+            <div class="export-options">
+                <div class="export-option" onclick="exportPNG()">
+                    <i data-lucide="image"></i>
+                    <span>PNG 이미지</span>
+                </div>
+                <div class="export-option" onclick="exportGLTF()">
+                    <i data-lucide="box"></i>
+                    <span>GLTF 3D</span>
+                </div>
+                <div class="export-option" onclick="exportSTL()">
+                    <i data-lucide="printer"></i>
+                    <span>STL (3D 프린트)</span>
+                </div>
+                <div class="export-option" onclick="exportOBJ()">
+                    <i data-lucide="file"></i>
+                    <span>OBJ</span>
+                </div>
+            </div>
+            <button class="modal-close" onclick="closeExportModal()">닫기</button>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast"></div>
+
+    <!-- Save Wizard Modal -->
+    <div class="modal-overlay" id="wizardModal">
+        <div class="wizard-modal">
+            <div class="wizard-header">
+                <div class="wizard-steps">
+                    <div class="wizard-step active" data-step="1">
+                        <span class="wizard-step-number">1</span>
+                        <span>작품 정보</span>
+                    </div>
+                    <div class="wizard-step" data-step="2">
+                        <span class="wizard-step-number">2</span>
+                        <span>공개 설정</span>
+                    </div>
+                    <div class="wizard-step" data-step="3">
+                        <span class="wizard-step-number">3</span>
+                        <span>검토 및 저장</span>
+                    </div>
+                </div>
+                <h2 class="wizard-title" id="wizardTitle">작품 정보 입력</h2>
+            </div>
+            <div class="wizard-body" id="wizardBody">
+                <!-- Step 1: 작품 정보 -->
+                <div class="wizard-step-content" id="step1Content">
+                    <div class="form-group">
+                        <label class="form-label">작품명 <span class="required">*</span></label>
+                        <input type="text" class="form-input" id="wizardTitleInput" placeholder="작품의 제목을 입력하세요" value="새 창작물">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">작품 설명</label>
+                        <textarea class="form-input form-textarea" id="wizardDescription" placeholder="작품에 대한 설명을 입력하세요"></textarea>
+                        <p class="form-hint">작품의 특징이나 제작 의도를 설명해주세요</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">카테고리 <span class="required">*</span></label>
+                        <div class="category-grid">
+                            <div class="category-item" data-category="character">
+                                <i data-lucide="smile"></i>
+                                캐릭터
+                            </div>
+                            <div class="category-item" data-category="architecture">
+                                <i data-lucide="building-2"></i>
+                                건축물
+                            </div>
+                            <div class="category-item" data-category="vehicle">
+                                <i data-lucide="car"></i>
+                                탈것
+                            </div>
+                            <div class="category-item" data-category="interior">
+                                <i data-lucide="home"></i>
+                                인테리어
+                            </div>
+                            <div class="category-item" data-category="abstract">
+                                <i data-lucide="sparkles"></i>
+                                추상/아트
+                            </div>
+                            <div class="category-item" data-category="mechanical">
+                                <i data-lucide="settings"></i>
+                                기계장치
+                            </div>
+                            <div class="category-item" data-category="nature">
+                                <i data-lucide="tree-pine"></i>
+                                자연
+                            </div>
+                            <div class="category-item" data-category="other">
+                                <i data-lucide="shapes"></i>
+                                기타
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">태그</label>
+                        <div class="tags-input-wrapper" id="tagsWrapper">
+                            <input type="text" class="tag-input" id="tagInput" placeholder="태그 입력 후 Enter">
+                        </div>
+                        <p class="form-hint">쉼표 또는 Enter로 태그를 추가하세요 (최대 10개)</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">썸네일</label>
+                        <div class="thumbnail-section">
+                            <div class="thumbnail-preview empty" id="thumbnailPreview">
+                                <i data-lucide="image"></i>
+                                <span>미리보기</span>
+                            </div>
+                            <div class="thumbnail-options">
+                                <button class="thumbnail-btn" id="btnAutoThumbnail">
+                                    <i data-lucide="camera"></i>
+                                    현재 뷰에서 캡처
+                                </button>
+                                <button class="thumbnail-btn" id="btnUploadThumbnail">
+                                    <i data-lucide="upload"></i>
+                                    이미지 업로드
+                                </button>
+                                <p class="form-hint">권장 크기: 400x400px</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 2: 공개 설정 -->
+                <div class="wizard-step-content" id="step2Content" style="display: none;">
+                    <div class="form-group">
+                        <label class="form-label">공개 범위 <span class="required">*</span></label>
+                        <div class="visibility-options">
+                            <div class="visibility-option active" data-visibility="public">
+                                <div class="visibility-radio"></div>
+                                <div class="visibility-icon">
+                                    <i data-lucide="globe"></i>
+                                </div>
+                                <div class="visibility-content">
+                                    <div class="visibility-title">전체 공개</div>
+                                    <div class="visibility-desc">모든 사용자가 작품을 볼 수 있습니다. 검색 결과와 갤러리에 노출됩니다.</div>
+                                </div>
+                            </div>
+                            <div class="visibility-option" data-visibility="link">
+                                <div class="visibility-radio"></div>
+                                <div class="visibility-icon">
+                                    <i data-lucide="link"></i>
+                                </div>
+                                <div class="visibility-content">
+                                    <div class="visibility-title">링크 공유</div>
+                                    <div class="visibility-desc">링크를 아는 사람만 볼 수 있습니다. 검색 결과에는 노출되지 않습니다.</div>
+                                </div>
+                            </div>
+                            <div class="visibility-option" data-visibility="private">
+                                <div class="visibility-radio"></div>
+                                <div class="visibility-icon">
+                                    <i data-lucide="lock"></i>
+                                </div>
+                                <div class="visibility-content">
+                                    <div class="visibility-title">비공개</div>
+                                    <div class="visibility-desc">나만 볼 수 있습니다. 다른 사용자에게 노출되지 않습니다.</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="license-section">
+                        <label class="form-label">라이선스 설정</label>
+                        <p class="form-hint" style="margin-bottom: 12px;">다른 사용자가 이 작품을 어떻게 사용할 수 있는지 설정합니다.</p>
+                        <div class="license-options">
+                            <div class="license-option active" data-license="view">
+                                <div class="license-checkbox">
+                                    <i data-lucide="check"></i>
+                                </div>
+                                <span class="license-label">보기 허용</span>
+                            </div>
+                            <div class="license-option" data-license="download">
+                                <div class="license-checkbox">
+                                    <i data-lucide="check"></i>
+                                </div>
+                                <span class="license-label">다운로드 허용</span>
+                            </div>
+                            <div class="license-option" data-license="remix">
+                                <div class="license-checkbox">
+                                    <i data-lucide="check"></i>
+                                </div>
+                                <span class="license-label">수정/리믹스 허용</span>
+                            </div>
+                            <div class="license-option" data-license="commercial">
+                                <div class="license-checkbox">
+                                    <i data-lucide="check"></i>
+                                </div>
+                                <span class="license-label">상업적 이용 허용</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 3: 검토 및 저장 -->
+                <div class="wizard-step-content" id="step3Content" style="display: none;">
+                    <div class="review-section">
+                        <div class="review-section-title">
+                            <i data-lucide="file-text"></i>
+                            작품 정보
+                        </div>
+                        <div class="review-row">
+                            <span class="review-label">작품명</span>
+                            <span class="review-value" id="reviewTitle">-</span>
+                        </div>
+                        <div class="review-row">
+                            <span class="review-label">설명</span>
+                            <span class="review-value" id="reviewDescription">-</span>
+                        </div>
+                        <div class="review-row">
+                            <span class="review-label">카테고리</span>
+                            <span class="review-value" id="reviewCategory">-</span>
+                        </div>
+                        <div class="review-row">
+                            <span class="review-label">태그</span>
+                            <div class="review-value">
+                                <div class="review-tags" id="reviewTags"></div>
+                            </div>
+                        </div>
+                        <div class="review-row">
+                            <span class="review-label">썸네일</span>
+                            <div class="review-thumbnail" id="reviewThumbnail">
+                                <img src="" alt="썸네일">
+                            </div>
+                        </div>
+                        <div class="review-row">
+                            <span class="review-label">오브젝트 수</span>
+                            <span class="review-value" id="reviewObjectCount">0개</span>
+                        </div>
+                    </div>
+
+                    <div class="review-section">
+                        <div class="review-section-title">
+                            <i data-lucide="eye"></i>
+                            공개 설정
+                        </div>
+                        <div class="review-row">
+                            <span class="review-label">공개 범위</span>
+                            <span class="review-value" id="reviewVisibility">-</span>
+                        </div>
+                        <div class="review-row">
+                            <span class="review-label">라이선스</span>
+                            <span class="review-value" id="reviewLicense">-</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 4: 완료 -->
+                <div class="wizard-step-content" id="step4Content" style="display: none;">
+                    <div class="success-animation">
+                        <div class="success-icon">
+                            <i data-lucide="check"></i>
+                        </div>
+                        <h3 class="success-title">저장이 완료되었습니다!</h3>
+                        <p class="success-message">창작물이 성공적으로 저장되었습니다.<br>갤러리에서 작품을 확인할 수 있습니다.</p>
+                        <div class="success-actions">
+                            <button class="wizard-btn wizard-btn-secondary" onclick="closeWizardAndContinue()">
+                                <i data-lucide="edit"></i>
+                                계속 편집
+                            </button>
+                            <button class="wizard-btn wizard-btn-primary" onclick="goToGallery()">
+                                <i data-lucide="images"></i>
+                                갤러리로 이동
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="wizard-footer" id="wizardFooter">
+                <button class="wizard-btn wizard-btn-secondary" id="wizardPrev" onclick="wizardPrevStep()">
+                    <i data-lucide="arrow-left"></i>
+                    이전
+                </button>
+                <div style="display: flex; gap: 12px;">
+                    <button class="wizard-btn wizard-btn-secondary" onclick="closeWizard()">취소</button>
+                    <button class="wizard-btn wizard-btn-primary" id="wizardNext" onclick="wizardNextStep()">
+                        다음
+                        <i data-lucide="arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hidden file input for thumbnail -->
+    <input type="file" id="thumbnailImport" accept="image/*" style="display: none;">
+
+    <script>
+        // ===============================================
+        // Global Variables
+        // ===============================================
+        let scene, camera, renderer, orbitControls, transformControls;
+        let assetGroup;
+        let selectedObject = null;
+        let currentColor = '#00CEC9';
+        let currentMode = 'select';
+        let gridHelper;
+        let objectCounter = 0;
+
+        // Undo/Redo
+        let undoStack = [];
+        let redoStack = [];
+        const MAX_HISTORY = 50;
+
+        // Object map for layers
+        const objectMap = new Map();
+
+        // ===============================================
+        // Initialize
+        // ===============================================
+        document.addEventListener('DOMContentLoaded', function() {
+            lucide.createIcons();
+            initThreeJS();
+            initEventListeners();
+        });
+
+        // ===============================================
+        // Three.js Initialization
+        // ===============================================
+        function initThreeJS() {
+            const container = document.getElementById('threejs-canvas');
+            const width = container.clientWidth;
+            const height = container.clientHeight;
+
+            // Scene
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x1a1a2e);
+
+            // Camera
+            camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
+            camera.position.set(10, 10, 10);
+            camera.lookAt(0, 0, 0);
+
+            // Renderer
+            renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
+            renderer.setSize(width, height);
+            renderer.setPixelRatio(window.devicePixelRatio);
+            renderer.shadowMap.enabled = true;
+            renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+            container.appendChild(renderer.domElement);
+
+            // Asset Group
+            assetGroup = new THREE.Group();
+            assetGroup.name = 'AssetGroup';
+            scene.add(assetGroup);
+
+            // Orbit Controls
+            orbitControls = new THREE.OrbitControls(camera, renderer.domElement);
+            orbitControls.enableDamping = true;
+            orbitControls.dampingFactor = 0.05;
+            orbitControls.target.set(0, 0, 0);
+            orbitControls.update();
+
+            // Transform Controls
+            transformControls = new THREE.TransformControls(camera, renderer.domElement);
+            transformControls.setTranslationSnap(0.5);
+            transformControls.setRotationSnap(THREE.MathUtils.degToRad(15));
+            transformControls.addEventListener('change', render);
+            transformControls.addEventListener('dragging-changed', function(event) {
+                orbitControls.enabled = !event.value;
+                if (!event.value && selectedObject) {
+                    updateTransformInputs();
+                    saveToUndo();
+                }
+            });
+            scene.add(transformControls);
+
+            // Lighting
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+            scene.add(ambientLight);
+
+            const directionalLight1 = new THREE.DirectionalLight(0xffffff, 0.8);
+            directionalLight1.position.set(5, 10, 5);
+            directionalLight1.castShadow = true;
+            scene.add(directionalLight1);
+
+            const directionalLight2 = new THREE.DirectionalLight(0xffffff, 0.3);
+            directionalLight2.position.set(-5, 5, -5);
+            scene.add(directionalLight2);
+
+            // Grid
+            gridHelper = new THREE.GridHelper(20, 20, 0x00CEC9, 0x3d3d5c);
+            scene.add(gridHelper);
+
+            // Ground plane (invisible for shadows)
+            const groundGeometry = new THREE.PlaneGeometry(100, 100);
+            const groundMaterial = new THREE.ShadowMaterial({ opacity: 0.3 });
+            const ground = new THREE.Mesh(groundGeometry, groundMaterial);
+            ground.rotation.x = -Math.PI / 2;
+            ground.receiveShadow = true;
+            ground.name = '__ground__';
+            scene.add(ground);
+
+            // Raycaster for selection
+            window.raycaster = new THREE.Raycaster();
+            window.mouse = new THREE.Vector2();
+
+            // Window resize
+            window.addEventListener('resize', onWindowResize);
+
+            // Start animation loop
+            animate();
+        }
+
+        function onWindowResize() {
+            const container = document.getElementById('threejs-canvas');
+            const width = container.clientWidth;
+            const height = container.clientHeight;
+
+            camera.aspect = width / height;
+            camera.updateProjectionMatrix();
+            renderer.setSize(width, height);
+            render();
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            orbitControls.update();
+            render();
+        }
+
+        function render() {
+            renderer.render(scene, camera);
+        }
+
+        // ===============================================
+        // Object Creation
+        // ===============================================
+        function createShape(type) {
+            let geometry, mesh;
+            const material = new THREE.MeshStandardMaterial({
+                color: new THREE.Color(currentColor),
+                roughness: 0.5,
+                metalness: 0.1
+            });
+
+            switch(type) {
+                case 'box':
+                    geometry = new THREE.BoxGeometry(1, 1, 1);
+                    break;
+                case 'sphere':
+                    geometry = new THREE.SphereGeometry(0.5, 32, 32);
+                    break;
+                case 'cylinder':
+                    geometry = new THREE.CylinderGeometry(0.5, 0.5, 1, 32);
+                    break;
+                case 'cone':
+                    geometry = new THREE.ConeGeometry(0.5, 1, 32);
+                    break;
+                case 'torus':
+                    geometry = new THREE.TorusGeometry(0.5, 0.2, 16, 32);
+                    break;
+                case 'plane':
+                    geometry = new THREE.PlaneGeometry(2, 2);
+                    break;
+                case 'dodecahedron':
+                    geometry = new THREE.DodecahedronGeometry(0.5);
+                    break;
+                case 'icosahedron':
+                    geometry = new THREE.IcosahedronGeometry(0.5);
+                    break;
+                default:
+                    geometry = new THREE.BoxGeometry(1, 1, 1);
+            }
+
+            mesh = new THREE.Mesh(geometry, material);
+            mesh.castShadow = true;
+            mesh.receiveShadow = true;
+
+            objectCounter++;
+            mesh.name = `${getShapeName(type)}_${objectCounter}`;
+            mesh.userData.type = type;
+            mesh.userData.color = currentColor;
+
+            // Position slightly above ground
+            if (type !== 'plane') {
+                mesh.position.y = 0.5;
+            }
+
+            assetGroup.add(mesh);
+            objectMap.set(mesh.uuid, mesh);
+
+            selectObject(mesh);
+            updateLayerList();
+            updateObjectCount();
+            saveToUndo();
+
+            showToast(`${getShapeName(type)} 추가됨`);
+        }
+
+        function getShapeName(type) {
+            const names = {
+                'box': '큐브',
+                'sphere': '구',
+                'cylinder': '원기둥',
+                'cone': '콘',
+                'torus': '토러스',
+                'plane': '평면',
+                'dodecahedron': '12면체',
+                'icosahedron': '20면체'
+            };
+            return names[type] || type;
+        }
+
+        // ===============================================
+        // Selection
+        // ===============================================
+        function selectObject(obj) {
+            if (selectedObject) {
+                // Deselect previous
+            }
+
+            selectedObject = obj;
+
+            if (obj) {
+                if (currentMode !== 'select') {
+                    transformControls.attach(obj);
+                } else {
+                    transformControls.detach();
+                }
+                updateTransformInputs();
+                updateColorSelection();
+                document.getElementById('object-info').classList.add('visible');
+                document.getElementById('selected-name').textContent = obj.name;
+
+                // Highlight in layer list
+                document.querySelectorAll('.layer-item').forEach(item => {
+                    item.classList.toggle('active', item.dataset.uuid === obj.uuid);
+                });
+            } else {
+                transformControls.detach();
+                document.getElementById('object-info').classList.remove('visible');
+                document.querySelectorAll('.layer-item').forEach(item => {
+                    item.classList.remove('active');
+                });
+                clearTransformInputs();
+            }
+        }
+
+        function updateTransformInputs() {
+            if (!selectedObject) return;
+
+            document.getElementById('pos-x').value = selectedObject.position.x.toFixed(2);
+            document.getElementById('pos-y').value = selectedObject.position.y.toFixed(2);
+            document.getElementById('pos-z').value = selectedObject.position.z.toFixed(2);
+
+            document.getElementById('rot-x').value = THREE.MathUtils.radToDeg(selectedObject.rotation.x).toFixed(0);
+            document.getElementById('rot-y').value = THREE.MathUtils.radToDeg(selectedObject.rotation.y).toFixed(0);
+            document.getElementById('rot-z').value = THREE.MathUtils.radToDeg(selectedObject.rotation.z).toFixed(0);
+
+            document.getElementById('scale-x').value = selectedObject.scale.x.toFixed(2);
+            document.getElementById('scale-y').value = selectedObject.scale.y.toFixed(2);
+            document.getElementById('scale-z').value = selectedObject.scale.z.toFixed(2);
+        }
+
+        function clearTransformInputs() {
+            document.getElementById('pos-x').value = '0';
+            document.getElementById('pos-y').value = '0';
+            document.getElementById('pos-z').value = '0';
+            document.getElementById('rot-x').value = '0';
+            document.getElementById('rot-y').value = '0';
+            document.getElementById('rot-z').value = '0';
+            document.getElementById('scale-x').value = '1';
+            document.getElementById('scale-y').value = '1';
+            document.getElementById('scale-z').value = '1';
+        }
+
+        function updateColorSelection() {
+            if (!selectedObject || !selectedObject.material) return;
+
+            const color = '#' + selectedObject.material.color.getHexString().toUpperCase();
+            document.querySelectorAll('.color-swatch').forEach(swatch => {
+                swatch.classList.toggle('active', swatch.dataset.color.toUpperCase() === color);
+            });
+        }
+
+        // ===============================================
+        // Transform Mode
+        // ===============================================
+        function setTransformMode(mode) {
+            currentMode = mode;
+
+            document.querySelectorAll('[data-mode]').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.mode === mode);
+            });
+
+            if (mode === 'select') {
+                transformControls.detach();
+            } else if (selectedObject) {
+                transformControls.setMode(mode);
+                transformControls.attach(selectedObject);
+            }
+        }
+
+        // ===============================================
+        // Object Operations
+        // ===============================================
+        function copyObject() {
+            if (!selectedObject) {
+                showToast('선택된 오브젝트가 없습니다');
+                return;
+            }
+
+            const clone = selectedObject.clone();
+            clone.material = selectedObject.material.clone();
+            objectCounter++;
+            clone.name = selectedObject.name.replace(/_\d+$/, '') + '_' + objectCounter;
+            clone.position.x += 1;
+            clone.userData = { ...selectedObject.userData };
+
+            assetGroup.add(clone);
+            objectMap.set(clone.uuid, clone);
+
+            selectObject(clone);
+            updateLayerList();
+            updateObjectCount();
+            saveToUndo();
+
+            showToast('오브젝트 복사됨');
+        }
+
+        function deleteObject() {
+            if (!selectedObject) {
+                showToast('선택된 오브젝트가 없습니다');
+                return;
+            }
+
+            const name = selectedObject.name;
+            assetGroup.remove(selectedObject);
+            objectMap.delete(selectedObject.uuid);
+
+            selectedObject.geometry.dispose();
+            selectedObject.material.dispose();
+
+            selectObject(null);
+            updateLayerList();
+            updateObjectCount();
+            saveToUndo();
+
+            showToast(`${name} 삭제됨`);
+        }
+
+        // ===============================================
+        // Undo / Redo
+        // ===============================================
+        function saveToUndo() {
+            const state = [];
+            assetGroup.children.forEach(obj => {
+                state.push({
+                    uuid: obj.uuid,
+                    name: obj.name,
+                    type: obj.userData.type,
+                    position: obj.position.clone(),
+                    rotation: obj.rotation.clone(),
+                    scale: obj.scale.clone(),
+                    color: '#' + obj.material.color.getHexString()
+                });
+            });
+
+            undoStack.push(JSON.stringify(state));
+            if (undoStack.length > MAX_HISTORY) undoStack.shift();
+            redoStack = [];
+            updateUndoRedoButtons();
+        }
+
+        function undo() {
+            if (undoStack.length < 2) return;
+
+            redoStack.push(undoStack.pop());
+            const state = JSON.parse(undoStack[undoStack.length - 1]);
+            restoreState(state);
+            updateUndoRedoButtons();
+        }
+
+        function redo() {
+            if (redoStack.length === 0) return;
+
+            const stateStr = redoStack.pop();
+            undoStack.push(stateStr);
+            const state = JSON.parse(stateStr);
+            restoreState(state);
+            updateUndoRedoButtons();
+        }
+
+        function restoreState(state) {
+            // Clear current objects
+            while (assetGroup.children.length > 0) {
+                const obj = assetGroup.children[0];
+                assetGroup.remove(obj);
+                obj.geometry.dispose();
+                obj.material.dispose();
+            }
+            objectMap.clear();
+
+            // Recreate objects
+            state.forEach(data => {
+                let geometry;
+                switch(data.type) {
+                    case 'box': geometry = new THREE.BoxGeometry(1, 1, 1); break;
+                    case 'sphere': geometry = new THREE.SphereGeometry(0.5, 32, 32); break;
+                    case 'cylinder': geometry = new THREE.CylinderGeometry(0.5, 0.5, 1, 32); break;
+                    case 'cone': geometry = new THREE.ConeGeometry(0.5, 1, 32); break;
+                    case 'torus': geometry = new THREE.TorusGeometry(0.5, 0.2, 16, 32); break;
+                    case 'plane': geometry = new THREE.PlaneGeometry(2, 2); break;
+                    case 'dodecahedron': geometry = new THREE.DodecahedronGeometry(0.5); break;
+                    case 'icosahedron': geometry = new THREE.IcosahedronGeometry(0.5); break;
+                    default: geometry = new THREE.BoxGeometry(1, 1, 1);
+                }
+
+                const material = new THREE.MeshStandardMaterial({
+                    color: new THREE.Color(data.color),
+                    roughness: 0.5,
+                    metalness: 0.1
+                });
+
+                const mesh = new THREE.Mesh(geometry, material);
+                mesh.name = data.name;
+                mesh.userData.type = data.type;
+                mesh.userData.color = data.color;
+                mesh.position.set(data.position.x, data.position.y, data.position.z);
+                mesh.rotation.set(data.rotation._x, data.rotation._y, data.rotation._z);
+                mesh.scale.set(data.scale.x, data.scale.y, data.scale.z);
+                mesh.castShadow = true;
+                mesh.receiveShadow = true;
+
+                assetGroup.add(mesh);
+                objectMap.set(mesh.uuid, mesh);
+            });
+
+            selectObject(null);
+            updateLayerList();
+            updateObjectCount();
+        }
+
+        function updateUndoRedoButtons() {
+            document.getElementById('btn-undo').disabled = undoStack.length < 2;
+            document.getElementById('btn-redo').disabled = redoStack.length === 0;
+        }
+
+        // ===============================================
+        // Layer Management
+        // ===============================================
+        function updateLayerList() {
+            const container = document.getElementById('layer-list');
+            container.innerHTML = '';
+
+            assetGroup.children.forEach(obj => {
+                const item = document.createElement('div');
+                item.className = 'layer-item' + (selectedObject === obj ? ' active' : '');
+                item.dataset.uuid = obj.uuid;
+
+                const iconColor = obj.userData.color || '#00CEC9';
+                item.innerHTML = `
+                    <button class="layer-visibility${obj.visible ? '' : ' hidden'}" data-uuid="${obj.uuid}">
+                        <i data-lucide="${obj.visible ? 'eye' : 'eye-off'}"></i>
+                    </button>
+                    <div class="layer-icon" style="background: ${iconColor};">
+                        <i data-lucide="box"></i>
+                    </div>
+                    <input type="text" class="layer-name" value="${obj.name}" data-uuid="${obj.uuid}">
+                    <button class="layer-delete" data-uuid="${obj.uuid}">
+                        <i data-lucide="trash-2"></i>
+                    </button>
+                `;
+
+                item.addEventListener('click', (e) => {
+                    if (e.target.closest('.layer-visibility') || e.target.closest('.layer-delete') || e.target.classList.contains('layer-name')) return;
+                    const obj = objectMap.get(item.dataset.uuid);
+                    if (obj) selectObject(obj);
+                });
+
+                container.appendChild(item);
+            });
+
+            lucide.createIcons();
+
+            // Event listeners for layer controls
+            container.querySelectorAll('.layer-visibility').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const obj = objectMap.get(btn.dataset.uuid);
+                    if (obj) {
+                        obj.visible = !obj.visible;
+                        updateLayerList();
+                    }
+                });
+            });
+
+            container.querySelectorAll('.layer-delete').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const obj = objectMap.get(btn.dataset.uuid);
+                    if (obj) {
+                        if (selectedObject === obj) selectObject(null);
+                        assetGroup.remove(obj);
+                        objectMap.delete(obj.uuid);
+                        obj.geometry.dispose();
+                        obj.material.dispose();
+                        updateLayerList();
+                        updateObjectCount();
+                        saveToUndo();
+                    }
+                });
+            });
+
+            container.querySelectorAll('.layer-name').forEach(input => {
+                input.addEventListener('change', (e) => {
+                    const obj = objectMap.get(input.dataset.uuid);
+                    if (obj) {
+                        obj.name = input.value;
+                        if (selectedObject === obj) {
+                            document.getElementById('selected-name').textContent = obj.name;
+                        }
+                    }
+                });
+            });
+        }
+
+        function updateObjectCount() {
+            document.getElementById('object-count').textContent = `${assetGroup.children.length}개 오브젝트`;
+        }
+
+        // ===============================================
+        // View Controls
+        // ===============================================
+        function setViewPreset(view) {
+            document.querySelectorAll('[data-view]').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.view === view);
+            });
+
+            const distance = 15;
+            switch(view) {
+                case 'perspective':
+                    camera.position.set(10, 10, 10);
+                    break;
+                case 'front':
+                    camera.position.set(0, 0, distance);
+                    break;
+                case 'top':
+                    camera.position.set(0, distance, 0.01);
+                    break;
+                case 'side':
+                    camera.position.set(distance, 0, 0);
+                    break;
+            }
+            orbitControls.target.set(0, 0, 0);
+            orbitControls.update();
+        }
+
+        function resetView() {
+            camera.position.set(10, 10, 10);
+            orbitControls.target.set(0, 0, 0);
+            orbitControls.update();
+            setViewPreset('perspective');
+        }
+
+        function focusOnSelected() {
+            if (!selectedObject) return;
+
+            const box = new THREE.Box3().setFromObject(selectedObject);
+            const center = box.getCenter(new THREE.Vector3());
+            const size = box.getSize(new THREE.Vector3());
+            const maxDim = Math.max(size.x, size.y, size.z);
+
+            orbitControls.target.copy(center);
+            camera.position.set(center.x + maxDim * 2, center.y + maxDim * 2, center.z + maxDim * 2);
+            orbitControls.update();
+        }
+
+        function toggleGrid() {
+            gridHelper.visible = !gridHelper.visible;
+            document.getElementById('btn-grid').classList.toggle('active', gridHelper.visible);
+        }
+
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                document.getElementById('canvas-area').requestFullscreen();
+            } else {
+                document.exitFullscreen();
+            }
+        }
+
+        // ===============================================
+        // Export Functions
+        // ===============================================
+        function showExportModal() {
+            document.getElementById('export-modal').classList.add('visible');
+            lucide.createIcons();
+        }
+
+        function closeExportModal() {
+            document.getElementById('export-modal').classList.remove('visible');
+        }
+
+        function exportPNG() {
+            render();
+            const link = document.createElement('a');
+            link.download = `${document.getElementById('project-name').value || 'creation'}.png`;
+            link.href = renderer.domElement.toDataURL('image/png');
+            link.click();
+            closeExportModal();
+            showToast('PNG 저장 완료');
+        }
+
+        function exportGLTF() {
+            const exporter = new THREE.GLTFExporter();
+            exporter.parse(assetGroup, function(gltf) {
+                const blob = new Blob([JSON.stringify(gltf)], { type: 'application/json' });
+                const link = document.createElement('a');
+                link.download = `${document.getElementById('project-name').value || 'creation'}.gltf`;
+                link.href = URL.createObjectURL(blob);
+                link.click();
+            });
+            closeExportModal();
+            showToast('GLTF 저장 완료');
+        }
+
+        function exportSTL() {
+            const exporter = new THREE.STLExporter();
+            const stl = exporter.parse(assetGroup, { binary: true });
+            const blob = new Blob([stl], { type: 'application/octet-stream' });
+            const link = document.createElement('a');
+            link.download = `${document.getElementById('project-name').value || 'creation'}.stl`;
+            link.href = URL.createObjectURL(blob);
+            link.click();
+            closeExportModal();
+            showToast('STL 저장 완료');
+        }
+
+        function exportOBJ() {
+            // Simple OBJ export
+            let objContent = '# Created by BrickGround Creation Editor\n';
+            let vertexOffset = 1;
+
+            assetGroup.children.forEach(mesh => {
+                if (!mesh.geometry) return;
+
+                objContent += `o ${mesh.name}\n`;
+
+                const positions = mesh.geometry.attributes.position;
+                const indices = mesh.geometry.index;
+
+                // Vertices
+                for (let i = 0; i < positions.count; i++) {
+                    const x = positions.getX(i) * mesh.scale.x + mesh.position.x;
+                    const y = positions.getY(i) * mesh.scale.y + mesh.position.y;
+                    const z = positions.getZ(i) * mesh.scale.z + mesh.position.z;
+                    objContent += `v ${x.toFixed(4)} ${y.toFixed(4)} ${z.toFixed(4)}\n`;
+                }
+
+                // Faces
+                if (indices) {
+                    for (let i = 0; i < indices.count; i += 3) {
+                        const a = indices.getX(i) + vertexOffset;
+                        const b = indices.getX(i + 1) + vertexOffset;
+                        const c = indices.getX(i + 2) + vertexOffset;
+                        objContent += `f ${a} ${b} ${c}\n`;
+                    }
+                }
+
+                vertexOffset += positions.count;
+            });
+
+            const blob = new Blob([objContent], { type: 'text/plain' });
+            const link = document.createElement('a');
+            link.download = `${document.getElementById('project-name').value || 'creation'}.obj`;
+            link.href = URL.createObjectURL(blob);
+            link.click();
+            closeExportModal();
+            showToast('OBJ 저장 완료');
+        }
+
+        // ===============================================
+        // Utility Functions
+        // ===============================================
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('visible');
+            setTimeout(() => toast.classList.remove('visible'), 2000);
+        }
+
+        function confirmExit() {
+            if (assetGroup.children.length > 0) {
+                if (confirm('저장하지 않은 변경사항이 있습니다. 나가시겠습니까?')) {
+                    history.back();
+                }
+            } else {
+                history.back();
+            }
+        }
+
+        // ===============================================
+        // Event Listeners
+        // ===============================================
+        function initEventListeners() {
+            // Canvas click for selection
+            document.getElementById('threejs-canvas').addEventListener('click', (e) => {
+                if (currentMode !== 'select') return;
+                if (transformControls.dragging) return;
+
+                const rect = renderer.domElement.getBoundingClientRect();
+                window.mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+                window.mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+
+                window.raycaster.setFromCamera(window.mouse, camera);
+                const intersects = window.raycaster.intersectObjects(assetGroup.children, true);
+
+                if (intersects.length > 0) {
+                    let target = intersects[0].object;
+                    while (target.parent && target.parent !== assetGroup) {
+                        target = target.parent;
+                    }
+                    selectObject(target);
+                } else {
+                    selectObject(null);
+                }
+            });
+
+            // Element cards (shape creation)
+            document.querySelectorAll('.element-card[data-shape]').forEach(card => {
+                card.addEventListener('click', () => {
+                    createShape(card.dataset.shape);
+                });
+            });
+
+            // Transform mode buttons
+            document.querySelectorAll('[data-mode]').forEach(btn => {
+                btn.addEventListener('click', () => setTransformMode(btn.dataset.mode));
+            });
+
+            // View preset buttons
+            document.querySelectorAll('[data-view]').forEach(btn => {
+                btn.addEventListener('click', () => setViewPreset(btn.dataset.view));
+            });
+
+            // Color swatches
+            document.querySelectorAll('.color-swatch').forEach(swatch => {
+                swatch.addEventListener('click', () => {
+                    currentColor = swatch.dataset.color;
+                    document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('active'));
+                    swatch.classList.add('active');
+
+                    if (selectedObject && selectedObject.material) {
+                        selectedObject.material.color.set(currentColor);
+                        selectedObject.userData.color = currentColor;
+                        updateLayerList();
+                        saveToUndo();
+                    }
+                });
+            });
+
+            // Transform inputs
+            ['pos-x', 'pos-y', 'pos-z'].forEach(id => {
+                document.getElementById(id).addEventListener('change', (e) => {
+                    if (!selectedObject) return;
+                    const axis = id.split('-')[1];
+                    selectedObject.position[axis] = parseFloat(e.target.value) || 0;
+                    saveToUndo();
+                });
+            });
+
+            ['rot-x', 'rot-y', 'rot-z'].forEach(id => {
+                document.getElementById(id).addEventListener('change', (e) => {
+                    if (!selectedObject) return;
+                    const axis = id.split('-')[1];
+                    selectedObject.rotation[axis] = THREE.MathUtils.degToRad(parseFloat(e.target.value) || 0);
+                    saveToUndo();
+                });
+            });
+
+            ['scale-x', 'scale-y', 'scale-z'].forEach(id => {
+                document.getElementById(id).addEventListener('change', (e) => {
+                    if (!selectedObject) return;
+                    const axis = id.split('-')[1];
+                    selectedObject.scale[axis] = parseFloat(e.target.value) || 1;
+                    saveToUndo();
+                });
+            });
+
+            // Toolbar buttons
+            document.getElementById('btn-undo').addEventListener('click', undo);
+            document.getElementById('btn-redo').addEventListener('click', redo);
+            document.getElementById('btn-copy').addEventListener('click', copyObject);
+            document.getElementById('btn-delete').addEventListener('click', deleteObject);
+            document.getElementById('btn-export').addEventListener('click', showExportModal);
+            document.getElementById('btn-save').addEventListener('click', showSaveWizard);
+
+            // Initialize Wizard
+            initWizardEventListeners();
+
+            // Canvas controls
+            document.getElementById('btn-reset-view').addEventListener('click', resetView);
+            document.getElementById('btn-zoom-in').addEventListener('click', () => {
+                camera.position.multiplyScalar(0.8);
+                orbitControls.update();
+            });
+            document.getElementById('btn-zoom-out').addEventListener('click', () => {
+                camera.position.multiplyScalar(1.2);
+                orbitControls.update();
+            });
+            document.getElementById('btn-focus').addEventListener('click', focusOnSelected);
+            document.getElementById('btn-grid').addEventListener('click', toggleGrid);
+            document.getElementById('btn-fullscreen').addEventListener('click', toggleFullscreen);
+
+            // Panel tabs
+            document.querySelectorAll('.panel-tab').forEach(tab => {
+                tab.addEventListener('click', () => {
+                    document.querySelectorAll('.panel-tab').forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    // Could switch element grid content based on tab
+                });
+            });
+
+            // Keyboard shortcuts
+            document.addEventListener('keydown', (e) => {
+                if (e.target.tagName === 'INPUT') return;
+
+                if (e.ctrlKey || e.metaKey) {
+                    switch(e.key.toLowerCase()) {
+                        case 'z': e.preventDefault(); undo(); break;
+                        case 'y': e.preventDefault(); redo(); break;
+                        case 'c': e.preventDefault(); copyObject(); break;
+                        case 's': e.preventDefault(); showToast('저장 기능은 서버 연동 후 사용 가능합니다'); break;
+                    }
+                } else {
+                    switch(e.key.toLowerCase()) {
+                        case 'v': setTransformMode('select'); break;
+                        case 'g': setTransformMode('translate'); break;
+                        case 'r': setTransformMode('rotate'); break;
+                        case 's': setTransformMode('scale'); break;
+                        case 'delete': case 'backspace': deleteObject(); break;
+                        case 'escape':
+                            selectObject(null);
+                            setTransformMode('select');
+                            break;
+                        case 'f': focusOnSelected(); break;
+                    }
+                }
+            });
+
+            // Prevent leaving page
+            window.addEventListener('beforeunload', (e) => {
+                if (assetGroup.children.length > 0) {
+                    e.preventDefault();
+                    e.returnValue = '';
+                }
+            });
+
+            // Initial undo state
+            saveToUndo();
+        }
+
+        // ===============================================
+        // Save Wizard
+        // ===============================================
+        let wizardStep = 1;
+        let wizardData = {
+            title: '새 창작물',
+            description: '',
+            category: '',
+            tags: [],
+            thumbnail: null,
+            visibility: 'public',
+            licenses: ['view']
+        };
+
+        function initWizardEventListeners() {
+            // Category selection
+            document.querySelectorAll('.category-item').forEach(item => {
+                item.addEventListener('click', () => {
+                    document.querySelectorAll('.category-item').forEach(i => i.classList.remove('active'));
+                    item.classList.add('active');
+                    wizardData.category = item.dataset.category;
+                });
+            });
+
+            // Tags input
+            const tagInput = document.getElementById('tagInput');
+            if (tagInput) {
+                tagInput.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' || e.key === ',') {
+                        e.preventDefault();
+                        addTag(tagInput.value.trim());
+                        tagInput.value = '';
+                    }
+                });
+            }
+
+            // Visibility selection
+            document.querySelectorAll('.visibility-option').forEach(option => {
+                option.addEventListener('click', () => {
+                    document.querySelectorAll('.visibility-option').forEach(o => o.classList.remove('active'));
+                    option.classList.add('active');
+                    wizardData.visibility = option.dataset.visibility;
+                });
+            });
+
+            // License selection
+            document.querySelectorAll('.license-option').forEach(option => {
+                option.addEventListener('click', () => {
+                    option.classList.toggle('active');
+                    const license = option.dataset.license;
+                    if (option.classList.contains('active')) {
+                        if (!wizardData.licenses.includes(license)) {
+                            wizardData.licenses.push(license);
+                        }
+                    } else {
+                        wizardData.licenses = wizardData.licenses.filter(l => l !== license);
+                    }
+                    lucide.createIcons();
+                });
+            });
+
+            // Auto-generate thumbnail
+            document.getElementById('btnAutoThumbnail').addEventListener('click', generateThumbnail);
+
+            // Upload thumbnail
+            document.getElementById('btnUploadThumbnail').addEventListener('click', () => {
+                document.getElementById('thumbnailImport').click();
+            });
+
+            document.getElementById('thumbnailImport').addEventListener('change', (e) => {
+                if (e.target.files[0]) {
+                    const reader = new FileReader();
+                    reader.onload = (event) => {
+                        wizardData.thumbnail = event.target.result;
+                        updateThumbnailPreview();
+                    };
+                    reader.readAsDataURL(e.target.files[0]);
+                }
+            });
+        }
+
+        function showSaveWizard() {
+            wizardStep = 1;
+
+            // Pre-fill title
+            const projectName = document.getElementById('project-name').value;
+            document.getElementById('wizardTitleInput').value = projectName;
+            wizardData.title = projectName;
+
+            // Generate thumbnail automatically
+            generateThumbnail();
+
+            // Reset wizard state
+            updateWizardStep();
+            document.getElementById('wizardModal').classList.add('visible');
+            lucide.createIcons();
+        }
+
+        function closeWizard() {
+            document.getElementById('wizardModal').classList.remove('visible');
+        }
+
+        function closeWizardAndContinue() {
+            closeWizard();
+            showToast('편집을 계속합니다');
+        }
+
+        function goToGallery() {
+            window.location.href = '15_creation_list.html';
+        }
+
+        function generateThumbnail() {
+            try {
+                const dataUrl = renderer.domElement.toDataURL('image/png');
+                wizardData.thumbnail = dataUrl;
+                updateThumbnailPreview();
+                showToast('썸네일이 생성되었습니다');
+            } catch (e) {
+                showToast('썸네일 생성 실패');
+            }
+        }
+
+        function updateThumbnailPreview() {
+            const preview = document.getElementById('thumbnailPreview');
+            if (wizardData.thumbnail) {
+                preview.classList.remove('empty');
+                preview.innerHTML = `<img src="${wizardData.thumbnail}" alt="썸네일">`;
+            }
+        }
+
+        function addTag(tag) {
+            if (!tag || wizardData.tags.length >= 10) return;
+            if (wizardData.tags.includes(tag)) return;
+
+            wizardData.tags.push(tag);
+            renderTags();
+        }
+
+        function removeTag(tag) {
+            wizardData.tags = wizardData.tags.filter(t => t !== tag);
+            renderTags();
+        }
+
+        function renderTags() {
+            const wrapper = document.getElementById('tagsWrapper');
+            const input = document.getElementById('tagInput');
+
+            // Remove existing chips
+            wrapper.querySelectorAll('.tag-chip').forEach(chip => chip.remove());
+
+            // Add new chips
+            wizardData.tags.forEach(tag => {
+                const chip = document.createElement('div');
+                chip.className = 'tag-chip';
+                chip.innerHTML = `
+                    ${tag}
+                    <button onclick="removeTag('${tag}')">
+                        <i data-lucide="x"></i>
+                    </button>
+                `;
+                wrapper.insertBefore(chip, input);
+            });
+
+            lucide.createIcons();
+        }
+
+        function wizardNextStep() {
+            // Validate current step
+            if (wizardStep === 1) {
+                wizardData.title = document.getElementById('wizardTitleInput').value.trim();
+                wizardData.description = document.getElementById('wizardDescription').value.trim();
+
+                if (!wizardData.title) {
+                    showToast('작품명을 입력해주세요');
+                    return;
+                }
+                if (!wizardData.category) {
+                    showToast('카테고리를 선택해주세요');
+                    return;
+                }
+            }
+
+            if (wizardStep === 3) {
+                // Save action
+                saveProjectData();
+                return;
+            }
+
+            wizardStep++;
+            updateWizardStep();
+        }
+
+        function wizardPrevStep() {
+            if (wizardStep > 1) {
+                wizardStep--;
+                updateWizardStep();
+            }
+        }
+
+        function updateWizardStep() {
+            // Update step indicators
+            document.querySelectorAll('.wizard-step').forEach(step => {
+                const stepNum = parseInt(step.dataset.step);
+                step.classList.remove('active', 'completed');
+                if (stepNum < wizardStep) {
+                    step.classList.add('completed');
+                    step.querySelector('.wizard-step-number').innerHTML = '<i data-lucide="check"></i>';
+                } else if (stepNum === wizardStep) {
+                    step.classList.add('active');
+                    step.querySelector('.wizard-step-number').textContent = stepNum;
+                } else {
+                    step.querySelector('.wizard-step-number').textContent = stepNum;
+                }
+            });
+
+            // Update title
+            const titles = {
+                1: '작품 정보 입력',
+                2: '공개 설정',
+                3: '검토 및 저장',
+                4: '저장 완료'
+            };
+            document.getElementById('wizardTitle').textContent = titles[wizardStep];
+
+            // Show/hide content
+            document.querySelectorAll('.wizard-step-content').forEach(content => {
+                content.style.display = 'none';
+            });
+            document.getElementById(`step${wizardStep}Content`).style.display = 'block';
+
+            // Update buttons
+            const prevBtn = document.getElementById('wizardPrev');
+            const nextBtn = document.getElementById('wizardNext');
+            const footer = document.getElementById('wizardFooter');
+
+            if (wizardStep === 1) {
+                prevBtn.style.visibility = 'hidden';
+            } else {
+                prevBtn.style.visibility = 'visible';
+            }
+
+            if (wizardStep === 3) {
+                nextBtn.innerHTML = '<i data-lucide="save"></i> 저장하기';
+            } else {
+                nextBtn.innerHTML = '다음 <i data-lucide="arrow-right"></i>';
+            }
+
+            if (wizardStep === 4) {
+                footer.style.display = 'none';
+            } else {
+                footer.style.display = 'flex';
+            }
+
+            // Update review step
+            if (wizardStep === 3) {
+                updateReviewStep();
+            }
+
+            lucide.createIcons();
+        }
+
+        function updateReviewStep() {
+            document.getElementById('reviewTitle').textContent = wizardData.title || '-';
+            document.getElementById('reviewDescription').textContent = wizardData.description || '(설명 없음)';
+
+            const categoryNames = {
+                'character': '캐릭터',
+                'architecture': '건축물',
+                'vehicle': '탈것',
+                'interior': '인테리어',
+                'abstract': '추상/아트',
+                'mechanical': '기계장치',
+                'nature': '자연',
+                'other': '기타'
+            };
+            document.getElementById('reviewCategory').textContent = categoryNames[wizardData.category] || '-';
+
+            // Tags
+            const tagsContainer = document.getElementById('reviewTags');
+            tagsContainer.innerHTML = wizardData.tags.length > 0
+                ? wizardData.tags.map(tag => `<span class="review-tag">${tag}</span>`).join('')
+                : '<span style="color: var(--editor-text-light);">(태그 없음)</span>';
+
+            // Thumbnail
+            const thumbnailContainer = document.getElementById('reviewThumbnail');
+            if (wizardData.thumbnail) {
+                thumbnailContainer.innerHTML = `<img src="${wizardData.thumbnail}" alt="썸네일">`;
+            }
+
+            // Object count
+            document.getElementById('reviewObjectCount').textContent = `${assetGroup.children.length}개`;
+
+            // Visibility
+            const visibilityNames = {
+                'public': '전체 공개',
+                'link': '링크 공유',
+                'private': '비공개'
+            };
+            document.getElementById('reviewVisibility').textContent = visibilityNames[wizardData.visibility] || '-';
+
+            // License
+            const licenseNames = {
+                'view': '보기',
+                'download': '다운로드',
+                'remix': '수정/리믹스',
+                'commercial': '상업적 이용'
+            };
+            const activeLicenses = wizardData.licenses.map(l => licenseNames[l]).join(', ');
+            document.getElementById('reviewLicense').textContent = activeLicenses || '(없음)';
+        }
+
+        function saveProjectData() {
+            // Simulate saving
+            showToast('저장 중...');
+
+            setTimeout(() => {
+                const projectData = {
+                    title: wizardData.title,
+                    description: wizardData.description,
+                    category: wizardData.category,
+                    tags: wizardData.tags,
+                    thumbnail: wizardData.thumbnail,
+                    visibility: wizardData.visibility,
+                    licenses: wizardData.licenses,
+                    objects: assetGroup.children.map(obj => ({
+                        name: obj.name,
+                        type: obj.userData.type,
+                        position: obj.position.toArray(),
+                        rotation: [obj.rotation.x, obj.rotation.y, obj.rotation.z],
+                        scale: obj.scale.toArray(),
+                        color: obj.material.color ? obj.material.color.getHex() : 0xffffff
+                    }))
+                };
+
+                localStorage.setItem('creation-project', JSON.stringify(projectData));
+
+                // Update project name
+                document.getElementById('project-name').value = wizardData.title;
+
+                // Show success step
+                wizardStep = 4;
+                updateWizardStep();
+
+                // Reset history
+                undoStack = [];
+                redoStack = [];
+                updateUndoRedoButtons();
+            }, 1000);
+        }
+    </script>
+    <script src="common/loader.js"></script>
+</body>
+</html>

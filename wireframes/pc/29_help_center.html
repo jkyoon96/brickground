@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>고객센터 - BrickGround</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="common/components.css">
+    <link rel="stylesheet" href="common/responsive.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #F8FAFC;
+            --bg-secondary: #FFFFFF;
+            --text-primary: #1E293B;
+            --text-secondary: #64748B;
+            --text-muted: #94A3B8;
+            --border-color: #E2E8F0;
+            --pixar-blue: #0066FF;
+            --toy-cyan: #00CEC9;
+            --toy-cyan-light: #00D4FF;
+            --toy-yellow: #FFD93D;
+            --toy-success: #6BCB77;
+            --toy-error: #FF6B6B;
+            --radius-lg: 20px;
+            --radius-md: 12px;
+            --shadow: 0 4px 20px rgba(0, 206, 201, 0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Nunito', 'Nanum Square Round', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            background: var(--bg-secondary);
+            padding: 16px 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: var(--shadow);
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 32px;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--pixar-blue);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .logo i {
+            width: 32px;
+            height: 32px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 24px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-weight: 600;
+            padding: 8px 16px;
+            border-radius: var(--radius-md);
+        }
+
+        .nav-links a.active {
+            color: var(--toy-cyan);
+            background: rgba(0, 206, 201, 0.1);
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .header-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: var(--bg-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .header-icon i {
+            width: 22px;
+            height: 22px;
+            color: var(--text-primary);
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, var(--toy-cyan) 0%, var(--toy-cyan-light) 100%);
+            padding: 60px 40px;
+            text-align: center;
+            color: white;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 10px 20px;
+            border-radius: 24px;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .hero-badge i {
+            width: 18px;
+            height: 18px;
+        }
+
+        .hero h1 {
+            font-size: 42px;
+            font-weight: 800;
+            margin-bottom: 16px;
+        }
+
+        .hero p {
+            font-size: 18px;
+            opacity: 0.9;
+            margin-bottom: 32px;
+        }
+
+        .hero-search {
+            max-width: 600px;
+            margin: 0 auto;
+            display: flex;
+            gap: 12px;
+        }
+
+        .hero-search-input {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px 24px;
+            background: white;
+            border-radius: 28px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .hero-search-input i {
+            width: 22px;
+            height: 22px;
+            color: var(--text-secondary);
+        }
+
+        .hero-search-input input {
+            border: none;
+            outline: none;
+            font-size: 16px;
+            flex: 1;
+        }
+
+        .hero-search-btn {
+            padding: 16px 32px;
+            background: var(--toy-yellow);
+            border: none;
+            border-radius: 28px;
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text-primary);
+            cursor: pointer;
+        }
+
+        /* Quick Links */
+        .quick-links {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            margin-top: 32px;
+        }
+
+        .quick-link {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            color: white;
+            text-decoration: none;
+        }
+
+        .quick-link:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .quick-link i {
+            width: 16px;
+            height: 16px;
+        }
+
+        /* Main Content */
+        .main-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px;
+        }
+
+        /* Category Cards */
+        .category-section {
+            margin-bottom: 48px;
+        }
+
+        .section-title {
+            font-size: 24px;
+            font-weight: 800;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title i {
+            width: 28px;
+            height: 28px;
+            color: var(--toy-cyan);
+        }
+
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+
+        .category-card {
+            background: var(--bg-secondary);
+            border-radius: var(--radius-lg);
+            padding: 28px;
+            text-align: center;
+            box-shadow: var(--shadow);
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .category-card:hover {
+            transform: translateY(-6px);
+        }
+
+        .category-icon {
+            width: 64px;
+            height: 64px;
+            background: linear-gradient(135deg, rgba(0, 206, 201, 0.15), rgba(0, 212, 255, 0.15));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+        }
+
+        .category-icon i {
+            width: 32px;
+            height: 32px;
+            color: var(--toy-cyan);
+        }
+
+        .category-title {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .category-desc {
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        /* Notices & FAQ Section */
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 32px;
+            margin-bottom: 48px;
+        }
+
+        .content-card {
+            background: var(--bg-secondary);
+            border-radius: var(--radius-lg);
+            padding: 28px;
+            box-shadow: var(--shadow);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card-title i {
+            width: 22px;
+            height: 22px;
+            color: var(--toy-cyan);
+        }
+
+        .card-link {
+            font-size: 14px;
+            color: var(--pixar-blue);
+            text-decoration: none;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .card-link i {
+            width: 16px;
+            height: 16px;
+        }
+
+        /* Notice List */
+        .notice-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .notice-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 16px;
+            background: var(--bg-primary);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+        }
+
+        .notice-item:hover {
+            background: rgba(0, 206, 201, 0.1);
+        }
+
+        .notice-badge {
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .notice-badge.important {
+            background: var(--toy-error);
+            color: white;
+        }
+
+        .notice-badge.update {
+            background: var(--toy-cyan);
+            color: white;
+        }
+
+        .notice-badge.event {
+            background: var(--toy-yellow);
+            color: var(--text-primary);
+        }
+
+        .notice-title {
+            font-size: 14px;
+            font-weight: 600;
+            flex: 1;
+        }
+
+        .notice-date {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        /* FAQ List */
+        .faq-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .faq-item {
+            background: var(--bg-primary);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+        }
+
+        .faq-question {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 16px;
+            cursor: pointer;
+        }
+
+        .faq-question:hover {
+            background: rgba(0, 206, 201, 0.1);
+        }
+
+        .faq-icon {
+            width: 28px;
+            height: 28px;
+            background: var(--toy-cyan);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 14px;
+            font-weight: 800;
+            flex-shrink: 0;
+        }
+
+        .faq-text {
+            font-size: 14px;
+            font-weight: 600;
+            flex: 1;
+        }
+
+        .faq-toggle {
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .faq-toggle i {
+            width: 18px;
+            height: 18px;
+            color: var(--text-secondary);
+        }
+
+        .faq-answer {
+            padding: 0 16px 14px 56px;
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            display: none;
+        }
+
+        .faq-item.open .faq-answer {
+            display: block;
+        }
+
+        .faq-item.open .faq-toggle i {
+            transform: rotate(180deg);
+        }
+
+        /* Contact Section */
+        .contact-section {
+            background: linear-gradient(135deg, var(--toy-cyan) 0%, var(--toy-cyan-light) 100%);
+            border-radius: var(--radius-lg);
+            padding: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: white;
+        }
+
+        .contact-info h3 {
+            font-size: 24px;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .contact-info p {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        .contact-methods {
+            display: flex;
+            gap: 16px;
+        }
+
+        .contact-card {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: var(--radius-md);
+            padding: 20px 28px;
+            text-align: center;
+        }
+
+        .contact-card i {
+            width: 28px;
+            height: 28px;
+            margin-bottom: 8px;
+        }
+
+        .contact-value {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .contact-label {
+            font-size: 12px;
+            opacity: 0.8;
+        }
+
+        .inquiry-btn {
+            padding: 16px 32px;
+            background: white;
+            border: none;
+            border-radius: var(--radius-lg);
+            color: var(--toy-cyan);
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .inquiry-btn i {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* Popular FAQ */
+        .popular-faq {
+            margin-top: 48px;
+        }
+
+        .popular-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .popular-card {
+            background: var(--bg-secondary);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            box-shadow: var(--shadow);
+            cursor: pointer;
+        }
+
+        .popular-card:hover {
+            box-shadow: 0 8px 30px rgba(0, 206, 201, 0.2);
+        }
+
+        .popular-category {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            background: var(--bg-primary);
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--toy-cyan);
+            margin-bottom: 12px;
+        }
+
+        .popular-category i {
+            width: 14px;
+            height: 14px;
+        }
+
+        .popular-question {
+            font-size: 15px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            line-height: 1.4;
+        }
+
+        .popular-views {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .popular-views i {
+            width: 14px;
+            height: 14px;
+        }
+
+        /* ==================== Responsive Design ==================== */
+        /* Tablet (1024px) */
+        @media (max-width: 1024px) {
+            .header { padding: 12px 24px; }
+            .nav-links { gap: 16px; }
+            .nav-links a { padding: 6px 12px; font-size: 14px; }
+            .hero { padding: 48px 24px; }
+            .hero h1 { font-size: 32px; }
+            .hero-search { max-width: 500px; }
+            .hero-search-input { padding: 14px 20px; }
+            .hero-search-btn { padding: 14px 24px; font-size: 14px; }
+            .main-content { padding: 32px 24px; }
+            .category-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+            .content-grid { grid-template-columns: 1fr; gap: 24px; }
+            .contact-section { flex-direction: column; gap: 24px; text-align: center; }
+            .contact-methods { justify-content: center; }
+            .popular-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        /* Mobile (768px) */
+        @media (max-width: 768px) {
+            .header { padding: 10px 16px; flex-wrap: wrap; gap: 10px; }
+            .header-left { flex: 1; min-width: 100%; justify-content: space-between; }
+            .nav-links { display: none; }
+            .header-right { flex: 1; min-width: 100%; justify-content: flex-end; }
+            .logo { font-size: 20px; }
+            .logo i { width: 28px; height: 28px; }
+            .header-icon { width: 40px; height: 40px; }
+            .hero { padding: 32px 16px; }
+            .hero h1 { font-size: 26px; margin-bottom: 12px; }
+            .hero p { font-size: 14px; margin-bottom: 20px; }
+            .hero-search { flex-direction: column; gap: 10px; }
+            .hero-search-input { padding: 14px 16px; border-radius: 20px; }
+            .hero-search-btn { width: 100%; border-radius: 20px; padding: 14px; }
+            .quick-links { flex-wrap: wrap; gap: 10px; justify-content: center; }
+            .quick-link { padding: 8px 14px; font-size: 13px; }
+            .main-content { padding: 24px 16px; }
+            .section-title { font-size: 18px; margin-bottom: 16px; }
+            .category-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+            .category-card { padding: 20px; }
+            .category-icon { width: 52px; height: 52px; margin-bottom: 12px; }
+            .category-icon i { width: 26px; height: 26px; }
+            .category-title { font-size: 14px; }
+            .category-desc { font-size: 12px; }
+            .content-card { padding: 20px; }
+            .notice-item { padding: 12px; flex-wrap: wrap; }
+            .notice-title { min-width: 100%; margin-top: 8px; order: 3; }
+            .faq-question { padding: 12px; }
+            .faq-answer { padding: 0 12px 12px 44px; font-size: 13px; }
+            .contact-section { padding: 28px 20px; flex-direction: column; gap: 20px; text-align: center; }
+            .contact-info h3 { font-size: 20px; }
+            .contact-info p { font-size: 14px; }
+            .contact-methods { flex-direction: column; gap: 12px; width: 100%; }
+            .contact-card { padding: 16px 20px; }
+            .inquiry-btn { width: 100%; justify-content: center; padding: 14px; }
+            .popular-grid { grid-template-columns: 1fr; gap: 12px; }
+            .popular-card { padding: 20px; }
+        }
+
+        /* Small Mobile (480px) */
+        @media (max-width: 480px) {
+            .header { padding: 8px 12px; }
+            .logo { font-size: 18px; }
+            .header-icon { width: 36px; height: 36px; }
+            .hero { padding: 24px 12px; }
+            .hero-badge { padding: 8px 14px; font-size: 12px; }
+            .hero h1 { font-size: 22px; }
+            .hero p { font-size: 13px; }
+            .hero-search-input { padding: 12px 14px; }
+            .hero-search-input input { font-size: 14px; }
+            .hero-search-btn { padding: 12px; font-size: 13px; }
+            .quick-link { padding: 6px 12px; font-size: 12px; }
+            .main-content { padding: 20px 12px; }
+            .section-title { font-size: 16px; }
+            .category-grid { gap: 10px; }
+            .category-card { padding: 16px; }
+            .category-icon { width: 44px; height: 44px; }
+            .category-icon i { width: 22px; height: 22px; }
+            .category-title { font-size: 13px; margin-bottom: 4px; }
+            .category-desc { font-size: 11px; }
+            .content-card { padding: 16px; }
+            .card-title { font-size: 16px; }
+            .notice-item { padding: 10px; }
+            .notice-badge { font-size: 10px; padding: 3px 8px; }
+            .notice-title { font-size: 13px; }
+            .contact-section { padding: 24px 16px; }
+            .contact-info h3 { font-size: 18px; }
+            .contact-card { padding: 14px 16px; }
+            .contact-value { font-size: 15px; }
+            .popular-card { padding: 16px; }
+            .popular-question { font-size: 14px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <!-- Header -->
+    <div id="header"></div>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-badge"><i data-lucide="headphones"></i>Help Center</div>
+        <h1>무엇을 도와드릴까요?</h1>
+        <p>궁금하신 점을 검색하거나 카테고리에서 찾아보세요</p>
+        <div class="hero-search">
+            <div class="hero-search-input">
+                <i data-lucide="search"></i>
+                <input type="text" placeholder="궁금한 점을 검색해보세요...">
+            </div>
+            <button class="hero-search-btn">검색</button>
+        </div>
+        <div class="quick-links">
+            <a href="#" class="quick-link"><i data-lucide="truck"></i>배송 조회</a>
+            <a href="#" class="quick-link"><i data-lucide="refresh-ccw"></i>교환/반품</a>
+            <a href="#" class="quick-link"><i data-lucide="credit-card"></i>결제/환불</a>
+            <a href="#" class="quick-link"><i data-lucide="user"></i>회원정보</a>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Category Section -->
+        <div class="category-section">
+            <h2 class="section-title"><i data-lucide="layout-grid"></i>도움말 카테고리</h2>
+            <div class="category-grid">
+                <div class="category-card">
+                    <div class="category-icon"><i data-lucide="shopping-bag"></i></div>
+                    <h3 class="category-title">주문/결제</h3>
+                    <p class="category-desc">주문, 결제, 쿠폰, 포인트 관련 안내</p>
+                </div>
+                <div class="category-card">
+                    <div class="category-icon"><i data-lucide="truck"></i></div>
+                    <h3 class="category-title">배송</h3>
+                    <p class="category-desc">배송 조회, 배송비, 해외배송 안내</p>
+                </div>
+                <div class="category-card">
+                    <div class="category-icon"><i data-lucide="refresh-ccw"></i></div>
+                    <h3 class="category-title">교환/반품/환불</h3>
+                    <p class="category-desc">교환, 반품, 환불 절차 안내</p>
+                </div>
+                <div class="category-card">
+                    <div class="category-icon"><i data-lucide="user-cog"></i></div>
+                    <h3 class="category-title">회원/계정</h3>
+                    <p class="category-desc">회원가입, 정보변경, 탈퇴 안내</p>
+                </div>
+                <div class="category-card">
+                    <div class="category-icon"><i data-lucide="building-2"></i></div>
+                    <h3 class="category-title">BrickArt</h3>
+                    <p class="category-desc">BrickArt 이용 방법 안내</p>
+                </div>
+                <div class="category-card">
+                    <div class="category-icon"><i data-lucide="palette"></i></div>
+                    <h3 class="category-title">DotArt/Creation</h3>
+                    <p class="category-desc">창작 기능 사용법 안내</p>
+                </div>
+                <div class="category-card">
+                    <div class="category-icon"><i data-lucide="store"></i></div>
+                    <h3 class="category-title">판매자 문의</h3>
+                    <p class="category-desc">입점, 판매자 센터 이용 안내</p>
+                </div>
+                <div class="category-card">
+                    <div class="category-icon"><i data-lucide="settings"></i></div>
+                    <h3 class="category-title">기타</h3>
+                    <p class="category-desc">서비스 이용 관련 기타 문의</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Notices & FAQ -->
+        <div class="content-grid">
+            <!-- Notices -->
+            <div class="content-card">
+                <div class="card-header">
+                    <h3 class="card-title"><i data-lucide="megaphone"></i>공지사항</h3>
+                    <a href="20_product_detail.html" class="card-link">전체보기 <i data-lucide="chevron-right"></i></a>
+                </div>
+                <div class="notice-list">
+                    <div class="notice-item">
+                        <span class="notice-badge important">중요</span>
+                        <span class="notice-title">[안내] 설 연휴 배송 및 고객센터 운영 안내</span>
+                        <span class="notice-date">01.15</span>
+                    </div>
+                    <div class="notice-item">
+                        <span class="notice-badge update">업데이트</span>
+                        <span class="notice-title">BrickArt 2.0 업데이트 안내</span>
+                        <span class="notice-date">01.10</span>
+                    </div>
+                    <div class="notice-item">
+                        <span class="notice-badge event">이벤트</span>
+                        <span class="notice-title">신규 회원 가입 혜택 안내</span>
+                        <span class="notice-date">01.05</span>
+                    </div>
+                    <div class="notice-item">
+                        <span class="notice-badge update">업데이트</span>
+                        <span class="notice-title">DotArt 뮤직 모드 기능 추가</span>
+                        <span class="notice-date">01.02</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FAQ -->
+            <div class="content-card">
+                <div class="card-header">
+                    <h3 class="card-title"><i data-lucide="help-circle"></i>자주 묻는 질문</h3>
+                    <a href="20_product_detail.html" class="card-link">전체보기 <i data-lucide="chevron-right"></i></a>
+                </div>
+                <div class="faq-list">
+                    <div class="faq-item open">
+                        <div class="faq-question">
+                            <span class="faq-icon">Q</span>
+                            <span class="faq-text">배송은 얼마나 걸리나요?</span>
+                            <span class="faq-toggle"><i data-lucide="chevron-down"></i></span>
+                        </div>
+                        <div class="faq-answer">
+                            일반 배송은 결제 완료 후 2-3일 이내 도착합니다. 도서산간 지역은 1-2일 추가 소요될 수 있습니다.
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span class="faq-icon">Q</span>
+                            <span class="faq-text">교환/반품은 어떻게 하나요?</span>
+                            <span class="faq-toggle"><i data-lucide="chevron-down"></i></span>
+                        </div>
+                        <div class="faq-answer">
+                            마이페이지 > 주문내역에서 교환/반품 신청이 가능합니다.
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span class="faq-icon">Q</span>
+                            <span class="faq-text">무료배송 조건이 어떻게 되나요?</span>
+                            <span class="faq-toggle"><i data-lucide="chevron-down"></i></span>
+                        </div>
+                        <div class="faq-answer">
+                            5만원 이상 구매 시 무료배송입니다.
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span class="faq-icon">Q</span>
+                            <span class="faq-text">BrickArt는 어떻게 이용하나요?</span>
+                            <span class="faq-toggle"><i data-lucide="chevron-down"></i></span>
+                        </div>
+                        <div class="faq-answer">
+                            BrickArt 메뉴에서 원하는 공간을 선택하면 3D로 창작물을 감상할 수 있습니다.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contact Section -->
+        <div class="contact-section">
+            <div class="contact-info">
+                <h3>아직 궁금한 점이 있으신가요?</h3>
+                <p>고객센터에 문의해 주세요. 빠르게 답변드리겠습니다.</p>
+            </div>
+            <div class="contact-methods">
+                <div class="contact-card">
+                    <i data-lucide="phone"></i>
+                    <div class="contact-value">1588-1234</div>
+                    <div class="contact-label">평일 09:00-18:00</div>
+                </div>
+                <div class="contact-card">
+                    <i data-lucide="mail"></i>
+                    <div class="contact-value">help@brickground.com</div>
+                    <div class="contact-label">24시간 접수</div>
+                </div>
+            </div>
+            <button class="inquiry-btn">
+                <i data-lucide="message-circle"></i>
+                1:1 문의하기
+            </button>
+        </div>
+
+        <!-- Popular FAQ -->
+        <div class="popular-faq">
+            <h2 class="section-title"><i data-lucide="trending-up"></i>인기 FAQ</h2>
+            <div class="popular-grid">
+                <div class="popular-card">
+                    <div class="popular-category"><i data-lucide="truck"></i>배송</div>
+                    <h4 class="popular-question">배송 조회는 어디서 할 수 있나요?</h4>
+                    <div class="popular-views"><i data-lucide="eye"></i>12,345회</div>
+                </div>
+                <div class="popular-card">
+                    <div class="popular-category"><i data-lucide="credit-card"></i>결제</div>
+                    <h4 class="popular-question">결제 수단은 어떤 것들이 있나요?</h4>
+                    <div class="popular-views"><i data-lucide="eye"></i>9,876회</div>
+                </div>
+                <div class="popular-card">
+                    <div class="popular-category"><i data-lucide="refresh-ccw"></i>교환/반품</div>
+                    <h4 class="popular-question">교환/반품 기간은 얼마인가요?</h4>
+                    <div class="popular-views"><i data-lucide="eye"></i>8,543회</div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <!-- Footer -->
+    <div id="footer"></div>
+
+
+
+    <script>lucide.createIcons();</script>
+    <script src="common/loader.js"></script>
+</body>
+</html>

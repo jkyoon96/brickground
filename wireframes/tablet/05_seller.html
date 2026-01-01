@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>판매자 대시보드 - Tablet Wireframe</title>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --pixar-primary: #0066FF;
+            --pixar-secondary: #FFD93D;
+            --pixar-success: #6BCB77;
+            --pixar-error: #FF6B6B;
+            --pixar-bg: #F8FAFF;
+            --pixar-card: #FFFFFF;
+            --pixar-text: #2D3748;
+            --pixar-text-light: #718096;
+            --pixar-border: #E2E8F0;
+            --pixar-radius: 20px;
+            --pixar-radius-sm: 12px;
+            --shadow-soft: 0 4px 20px rgba(0, 102, 255, 0.1);
+            --shadow-float: 0 8px 30px rgba(0, 102, 255, 0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Nunito', '나눔스퀘어라운드', sans-serif;
+            background: var(--pixar-bg);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+        }
+
+        .page-container {
+            width: 100%;
+            max-width: 900px;
+        }
+
+        .wireframe-label {
+            background: var(--pixar-secondary);
+            color: var(--pixar-text);
+            padding: 8px 16px;
+            border-radius: var(--pixar-radius-sm);
+            font-size: 14px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .tablet-mockup {
+            background: #1a1a1a;
+            border-radius: 32px;
+            padding: 20px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+
+        .tablet-screen {
+            background: var(--pixar-bg);
+            border-radius: 16px;
+            overflow: hidden;
+            min-height: 900px;
+            display: flex;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 200px;
+            background: linear-gradient(180deg, var(--pixar-primary) 0%, #0052CC 100%);
+            padding: 20px 12px;
+            color: white;
+        }
+
+        .seller-brand {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px;
+            margin-bottom: 20px;
+        }
+
+        .seller-brand i {
+            width: 24px;
+            height: 24px;
+        }
+
+        .seller-brand-text {
+            font-size: 16px;
+            font-weight: 800;
+        }
+
+        .shop-info {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: var(--pixar-radius-sm);
+            padding: 12px;
+            margin-bottom: 20px;
+        }
+
+        .shop-name {
+            font-weight: 700;
+            font-size: 13px;
+            margin-bottom: 4px;
+        }
+
+        .shop-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 11px;
+            opacity: 0.9;
+        }
+
+        .status-dot {
+            width: 6px;
+            height: 6px;
+            background: var(--pixar-success);
+            border-radius: 50%;
+        }
+
+        .sidebar-nav {
+            list-style: none;
+        }
+
+        .nav-section-title {
+            font-size: 10px;
+            text-transform: uppercase;
+            opacity: 0.6;
+            padding: 8px 12px;
+            letter-spacing: 0.5px;
+        }
+
+        .sidebar-nav a {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 12px;
+            color: white;
+            text-decoration: none;
+            border-radius: var(--pixar-radius-sm);
+            font-size: 13px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            opacity: 0.8;
+        }
+
+        .sidebar-nav a:hover {
+            background: rgba(255, 255, 255, 0.1);
+            opacity: 1;
+        }
+
+        .sidebar-nav a.active {
+            background: rgba(255, 255, 255, 0.2);
+            opacity: 1;
+        }
+
+        .sidebar-nav a i {
+            width: 18px;
+            height: 18px;
+        }
+
+        .nav-badge {
+            margin-left: auto;
+            background: var(--pixar-error);
+            color: white;
+            font-size: 10px;
+            font-weight: 700;
+            padding: 2px 6px;
+            border-radius: 8px;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .content-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .page-title {
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--pixar-text);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .page-title i {
+            width: 24px;
+            height: 24px;
+            color: var(--pixar-primary);
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 10px 16px;
+            border-radius: var(--pixar-radius-sm);
+            font-size: 13px;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: var(--pixar-primary);
+            color: white;
+        }
+
+        .btn-outline {
+            background: white;
+            color: var(--pixar-text);
+            border: 2px solid var(--pixar-border);
+        }
+
+        .btn i {
+            width: 16px;
+            height: 16px;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: var(--pixar-radius);
+            padding: 16px;
+            box-shadow: var(--shadow-soft);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 3px;
+            height: 100%;
+        }
+
+        .stat-card.blue::before { background: var(--pixar-primary); }
+        .stat-card.yellow::before { background: var(--pixar-secondary); }
+        .stat-card.green::before { background: var(--pixar-success); }
+        .stat-card.red::before { background: var(--pixar-error); }
+
+        .stat-label {
+            font-size: 11px;
+            color: var(--pixar-text-light);
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .stat-value {
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--pixar-text);
+        }
+
+        .stat-change {
+            display: inline-flex;
+            align-items: center;
+            gap: 2px;
+            font-size: 10px;
+            font-weight: 600;
+            margin-top: 4px;
+        }
+
+        .stat-change.up {
+            color: var(--pixar-success);
+        }
+
+        .stat-change i {
+            width: 12px;
+            height: 12px;
+        }
+
+        /* Content Grid */
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr;
+            gap: 16px;
+        }
+
+        .card {
+            background: white;
+            border-radius: var(--pixar-radius);
+            box-shadow: var(--shadow-soft);
+            overflow: hidden;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px;
+            border-bottom: 1px solid var(--pixar-border);
+        }
+
+        .card-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--pixar-text);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .card-title i {
+            width: 16px;
+            height: 16px;
+            color: var(--pixar-primary);
+        }
+
+        .card-body {
+            padding: 16px;
+        }
+
+        /* Chart Placeholder */
+        .chart-placeholder {
+            height: 180px;
+            background: linear-gradient(135deg, var(--pixar-bg) 0%, #EBF4FF 100%);
+            border-radius: var(--pixar-radius-sm);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: var(--pixar-text-light);
+        }
+
+        .chart-placeholder i {
+            width: 36px;
+            height: 36px;
+            margin-bottom: 8px;
+            opacity: 0.5;
+        }
+
+        .chart-placeholder span {
+            font-size: 12px;
+        }
+
+        /* Todo List */
+        .todo-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .todo-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            background: var(--pixar-bg);
+            border-radius: var(--pixar-radius-sm);
+        }
+
+        .todo-check {
+            width: 18px;
+            height: 18px;
+            border: 2px solid var(--pixar-border);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .todo-check.done {
+            background: var(--pixar-success);
+            border-color: var(--pixar-success);
+        }
+
+        .todo-check.done i {
+            width: 10px;
+            height: 10px;
+            color: white;
+        }
+
+        .todo-text {
+            flex: 1;
+            font-size: 12px;
+            color: var(--pixar-text);
+        }
+
+        .todo-priority {
+            font-size: 10px;
+            font-weight: 600;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        .todo-priority.high {
+            background: rgba(255, 107, 107, 0.1);
+            color: var(--pixar-error);
+        }
+
+        /* Order Table */
+        .order-table {
+            width: 100%;
+        }
+
+        .order-row {
+            display: flex;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--pixar-border);
+        }
+
+        .order-row:last-child {
+            border-bottom: none;
+        }
+
+        .order-id {
+            width: 80px;
+            font-weight: 600;
+            color: var(--pixar-primary);
+            font-size: 11px;
+        }
+
+        .order-product {
+            flex: 1;
+            font-weight: 600;
+            color: var(--pixar-text);
+            font-size: 12px;
+        }
+
+        .order-amount {
+            width: 80px;
+            text-align: right;
+            font-weight: 700;
+            color: var(--pixar-text);
+            font-size: 12px;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 600;
+        }
+
+        .status-badge.new {
+            background: rgba(0, 102, 255, 0.1);
+            color: var(--pixar-primary);
+        }
+
+        .status-badge.processing {
+            background: rgba(255, 217, 61, 0.2);
+            color: #B8860B;
+        }
+
+        /* Navigation */
+        .nav-links {
+            display: flex;
+            gap: 8px;
+            margin-top: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .nav-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 16px;
+            background: white;
+            color: var(--pixar-text);
+            text-decoration: none;
+            border-radius: var(--pixar-radius-sm);
+            font-size: 13px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-soft);
+        }
+
+        .nav-link:hover {
+            background: var(--pixar-primary);
+            color: white;
+        }
+
+        .nav-link i {
+            width: 14px;
+            height: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="page-container">
+        <div class="wireframe-label">
+            <i data-lucide="tablet"></i>
+            Tablet Wireframe - 판매자 대시보드 (ST-01-06)
+        </div>
+
+        <div class="tablet-mockup">
+            <div class="tablet-screen">
+                <!-- Sidebar -->
+                <aside class="sidebar">
+                    <div class="seller-brand">
+                        <i data-lucide="store"></i>
+                        <div class="seller-brand-text">Seller</div>
+                    </div>
+
+                    <div class="shop-info">
+                        <div class="shop-name">홍길동의 공방</div>
+                        <div class="shop-status">
+                            <span class="status-dot"></span>
+                            영업중
+                        </div>
+                    </div>
+
+                    <ul class="sidebar-nav">
+                        <li>
+                            <a href="#" class="active">
+                                <i data-lucide="layout-dashboard"></i>
+                                대시보드
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <i data-lucide="package"></i>
+                                상품 관리
+                                <span class="nav-badge">24</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <i data-lucide="shopping-cart"></i>
+                                주문 관리
+                                <span class="nav-badge">5</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <i data-lucide="truck"></i>
+                                배송 관리
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <i data-lucide="bar-chart-2"></i>
+                                매출 분석
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <i data-lucide="wallet"></i>
+                                정산 관리
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <i data-lucide="message-square"></i>
+                                문의 관리
+                                <span class="nav-badge">3</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <i data-lucide="settings"></i>
+                                설정
+                            </a>
+                        </li>
+                    </ul>
+                </aside>
+
+                <!-- Main Content -->
+                <main class="main-content">
+                    <div class="content-header">
+                        <h1 class="page-title">
+                            <i data-lucide="layout-dashboard"></i>
+                            대시보드
+                        </h1>
+                        <div class="header-actions">
+                            <button class="btn btn-outline">
+                                <i data-lucide="download"></i>
+                                리포트
+                            </button>
+                            <button class="btn btn-primary">
+                                <i data-lucide="plus"></i>
+                                상품 등록
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Stats -->
+                    <div class="stats-grid">
+                        <div class="stat-card blue">
+                            <div class="stat-label">오늘 주문</div>
+                            <div class="stat-value">12건</div>
+                            <div class="stat-change up">
+                                <i data-lucide="trending-up"></i>
+                                +15%
+                            </div>
+                        </div>
+                        <div class="stat-card yellow">
+                            <div class="stat-label">오늘 매출</div>
+                            <div class="stat-value">₩584K</div>
+                            <div class="stat-change up">
+                                <i data-lucide="trending-up"></i>
+                                +23%
+                            </div>
+                        </div>
+                        <div class="stat-card green">
+                            <div class="stat-label">배송 대기</div>
+                            <div class="stat-value">5건</div>
+                        </div>
+                        <div class="stat-card red">
+                            <div class="stat-label">미답변</div>
+                            <div class="stat-value">3건</div>
+                        </div>
+                    </div>
+
+                    <!-- Content Grid -->
+                    <div class="content-grid">
+                        <div class="card">
+                            <div class="card-header">
+                                <h2 class="card-title">
+                                    <i data-lucide="bar-chart-2"></i>
+                                    매출 현황
+                                </h2>
+                            </div>
+                            <div class="card-body">
+                                <div class="chart-placeholder">
+                                    <i data-lucide="bar-chart-2"></i>
+                                    <span>매출 차트</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-header">
+                                <h2 class="card-title">
+                                    <i data-lucide="check-square"></i>
+                                    오늘 할 일
+                                </h2>
+                            </div>
+                            <div class="card-body">
+                                <div class="todo-list">
+                                    <div class="todo-item">
+                                        <div class="todo-check"></div>
+                                        <span class="todo-text">신규 주문 확인</span>
+                                        <span class="todo-priority high">긴급</span>
+                                    </div>
+                                    <div class="todo-item">
+                                        <div class="todo-check done">
+                                            <i data-lucide="check"></i>
+                                        </div>
+                                        <span class="todo-text">배송 준비</span>
+                                    </div>
+                                    <div class="todo-item">
+                                        <div class="todo-check"></div>
+                                        <span class="todo-text">문의 답변</span>
+                                        <span class="todo-priority high">긴급</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recent Orders -->
+                    <div class="card" style="margin-top: 16px;">
+                        <div class="card-header">
+                            <h2 class="card-title">
+                                <i data-lucide="shopping-bag"></i>
+                                최근 주문
+                            </h2>
+                        </div>
+                        <div class="card-body">
+                            <div class="order-table">
+                                <div class="order-row">
+                                    <span class="order-id">#2401</span>
+                                    <span class="order-product">3D 미니어처 하우스 키트</span>
+                                    <span class="status-badge new">신규</span>
+                                    <span class="order-amount">₩45,000</span>
+                                </div>
+                                <div class="order-row">
+                                    <span class="order-id">#2400</span>
+                                    <span class="order-product">픽셀 아트 DIY 키트</span>
+                                    <span class="status-badge processing">준비중</span>
+                                    <span class="order-amount">₩32,000</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </main>
+            </div>
+        </div>
+
+        <div class="nav-links">
+            <a href="04_mypage.html" class="nav-link">
+                <i data-lucide="user"></i>
+                마이페이지
+            </a>
+            <a href="06_admin_users.html" class="nav-link">
+                <i data-lucide="shield"></i>
+                관리자
+            </a>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>

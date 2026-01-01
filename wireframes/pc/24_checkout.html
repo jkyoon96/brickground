@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>결제하기 - PC Wireframe</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="common/components.css">
+    <link rel="stylesheet" href="common/responsive.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #F8FAFC;
+            --bg-secondary: #FFFFFF;
+            --text-primary: #1E293B;
+            --text-secondary: #64748B;
+            --text-muted: #94A3B8;
+            --border-color: #E2E8F0;
+            --pixar-blue: #0066FF;
+            --toy-orange: #FF6B35;
+            --toy-yellow: #FFD93D;
+            --toy-green: #6BCB77;
+            --pixar-error: #FF6B6B;
+            --pixar-radius: 20px;
+            --pixar-radius-sm: 12px;
+            --pixar-shadow: 0 4px 20px rgba(255, 107, 53, 0.15);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            background: var(--bg-secondary);
+            padding: 16px 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: var(--pixar-shadow);
+        }
+
+        .header-left { display: flex; align-items: center; gap: 24px; }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--pixar-blue);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .logo i { width: 32px; height: 32px; }
+
+        .checkout-steps {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .step {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+        .step.active { background: var(--toy-orange); color: white; }
+        .step.completed { color: var(--toy-green); }
+        .step i { width: 18px; height: 18px; }
+        .step-num {
+            width: 24px; height: 24px;
+            background: var(--border-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+        }
+        .step.active .step-num { background: white; color: var(--toy-orange); }
+        .step.completed .step-num { background: var(--toy-green); color: white; }
+
+        .step-divider { width: 40px; height: 2px; background: var(--border-color); }
+
+        .header-right { display: flex; align-items: center; gap: 16px; }
+
+        .secure-badge {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            color: var(--toy-green);
+        }
+        .secure-badge i { width: 18px; height: 18px; }
+
+        /* Page Header */
+        .page-header {
+            background: var(--toy-orange);
+            padding: 32px 40px;
+            color: white;
+        }
+
+        .page-header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .page-header h1 {
+            font-size: 28px;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .page-header h1 i { width: 32px; height: 32px; }
+
+        /* Main Content */
+        .main-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 32px;
+        }
+
+        /* Section */
+        .section {
+            background: var(--bg-secondary);
+            border-radius: var(--pixar-radius);
+            padding: 28px;
+            box-shadow: var(--pixar-shadow);
+            margin-bottom: 24px;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .section-title i { width: 22px; height: 22px; color: var(--toy-orange); }
+
+        .section-action {
+            font-size: 14px;
+            color: var(--pixar-blue);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        /* Delivery Info */
+        .delivery-card {
+            background: var(--bg-primary);
+            border-radius: var(--pixar-radius-sm);
+            padding: 20px;
+            border: 2px solid var(--border-color);
+        }
+        .delivery-card.selected { border-color: var(--toy-orange); }
+
+        .delivery-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .delivery-badge {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .delivery-badge span {
+            padding: 4px 10px;
+            background: var(--toy-orange);
+            color: white;
+            font-size: 11px;
+            font-weight: 700;
+            border-radius: 6px;
+        }
+        .delivery-name { font-size: 16px; font-weight: 700; margin-left: 8px; }
+
+        .delivery-edit {
+            padding: 6px 14px;
+            background: transparent;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 13px;
+            cursor: pointer;
+        }
+
+        .delivery-info { line-height: 1.8; color: var(--text-secondary); font-size: 14px; }
+        .delivery-info strong { color: var(--text-primary); font-weight: 600; }
+
+        /* Request Input */
+        .request-input {
+            margin-top: 20px;
+        }
+        .request-input label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        .request-input select {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid var(--border-color);
+            border-radius: var(--pixar-radius-sm);
+            font-size: 14px;
+            background: white;
+        }
+
+        /* Order Items */
+        .order-item {
+            display: flex;
+            gap: 16px;
+            padding: 16px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .order-item:last-child { border-bottom: none; }
+
+        .order-item-image {
+            width: 80px; height: 80px;
+            border-radius: var(--pixar-radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .order-item-image i { width: 32px; height: 32px; color: rgba(255,255,255,0.5); }
+
+        .order-item-details { flex: 1; }
+        .order-item-brand { font-size: 12px; color: var(--text-secondary); margin-bottom: 4px; }
+        .order-item-name { font-size: 14px; font-weight: 600; margin-bottom: 6px; }
+        .order-item-option { font-size: 12px; color: var(--text-secondary); }
+
+        .order-item-price { text-align: right; }
+        .order-item-price .current { font-size: 16px; font-weight: 700; }
+        .order-item-price .qty { font-size: 12px; color: var(--text-secondary); }
+
+        /* Coupon/Points */
+        .discount-row {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .discount-box {
+            flex: 1;
+            background: var(--bg-primary);
+            border-radius: var(--pixar-radius-sm);
+            padding: 16px;
+        }
+
+        .discount-label {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .discount-label i { width: 16px; height: 16px; color: var(--toy-orange); }
+
+        .discount-input-group {
+            display: flex;
+            gap: 8px;
+        }
+        .discount-input-group input {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 14px;
+        }
+        .discount-input-group button {
+            padding: 12px 16px;
+            background: var(--text-primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .points-available { font-size: 12px; color: var(--text-secondary); margin-top: 8px; }
+
+        /* Payment Methods */
+        .payment-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .payment-option {
+            padding: 20px;
+            border: 2px solid var(--border-color);
+            border-radius: var(--pixar-radius-sm);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .payment-option:hover { border-color: var(--toy-orange); }
+        .payment-option.selected {
+            border-color: var(--toy-orange);
+            background: rgba(255, 107, 53, 0.05);
+        }
+
+        .payment-radio {
+            width: 22px; height: 22px;
+            border: 2px solid var(--border-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .payment-option.selected .payment-radio {
+            border-color: var(--toy-orange);
+        }
+        .payment-option.selected .payment-radio::after {
+            content: '';
+            width: 12px; height: 12px;
+            background: var(--toy-orange);
+            border-radius: 50%;
+        }
+
+        .payment-icon {
+            width: 44px; height: 44px;
+            background: var(--bg-primary);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .payment-icon i { width: 24px; height: 24px; color: var(--text-primary); }
+
+        .payment-info { flex: 1; }
+        .payment-name { font-size: 15px; font-weight: 600; }
+        .payment-desc { font-size: 12px; color: var(--text-secondary); }
+
+        /* Order Summary Sidebar */
+        .order-summary {
+            position: sticky;
+            top: 40px;
+            height: fit-content;
+        }
+
+        .summary-card {
+            background: var(--bg-secondary);
+            border-radius: var(--pixar-radius);
+            padding: 28px;
+            box-shadow: var(--pixar-shadow);
+            margin-bottom: 20px;
+        }
+
+        .summary-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .summary-title i { width: 22px; height: 22px; color: var(--toy-orange); }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            font-size: 14px;
+        }
+        .summary-row .label { color: var(--text-secondary); }
+        .summary-row .value { font-weight: 600; }
+        .summary-row .value.discount { color: var(--pixar-error); }
+        .summary-row .value.free { color: var(--toy-green); }
+
+        .summary-divider {
+            height: 1px;
+            background: var(--border-color);
+            margin: 16px 0;
+        }
+
+        .summary-total {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            padding: 16px 0;
+        }
+        .summary-total .label { font-size: 16px; font-weight: 700; }
+        .summary-total .price { font-size: 28px; font-weight: 800; color: var(--toy-orange); }
+        .summary-total .won { font-size: 16px; }
+
+        /* Agreement */
+        .agreement-section { margin-bottom: 20px; }
+
+        .agreement-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 0;
+        }
+
+        .checkbox {
+            width: 22px; height: 22px;
+            border: 2px solid var(--border-color);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+        .checkbox.checked {
+            background: var(--toy-orange);
+            border-color: var(--toy-orange);
+        }
+        .checkbox.checked i { color: white; width: 14px; height: 14px; }
+
+        .agreement-label { font-size: 14px; color: var(--text-primary); flex: 1; }
+        .agreement-label.main { font-weight: 600; }
+        .agreement-link {
+            font-size: 13px;
+            color: var(--text-secondary);
+            text-decoration: underline;
+        }
+
+        /* Pay Button */
+        .pay-btn {
+            width: 100%;
+            padding: 20px;
+            background: linear-gradient(135deg, var(--toy-orange), var(--toy-yellow));
+            border: none;
+            border-radius: var(--pixar-radius);
+            color: white;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            box-shadow: 0 6px 20px rgba(255, 107, 53, 0.4);
+        }
+        .pay-btn i { width: 24px; height: 24px; }
+
+        .security-note {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 16px;
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+        .security-note i { width: 16px; height: 16px; color: var(--toy-green); }
+
+        /* ==================== Responsive Design ==================== */
+        /* Tablet (1024px) */
+        @media (max-width: 1024px) {
+            .header { padding: 16px 24px; }
+            .page-header { padding: 24px; }
+            .main-content { padding: 32px 24px; gap: 24px; }
+
+            .checkout-steps { display: none; }
+
+            .payment-grid { grid-template-columns: 1fr; }
+
+            .discount-row { flex-direction: column; }
+        }
+
+        /* Mobile (768px) */
+        @media (max-width: 768px) {
+            .header { padding: 12px 16px; }
+            .header-left { gap: 16px; }
+            .logo { font-size: 20px; }
+            .logo i { width: 28px; height: 28px; }
+
+            .page-header { padding: 20px 16px; }
+            .page-header h1 { font-size: 22px; }
+            .page-header h1 i { width: 26px; height: 26px; }
+
+            .main-content {
+                padding: 20px 16px;
+                grid-template-columns: 1fr !important;
+                gap: 20px;
+            }
+
+            .section { padding: 20px; }
+            .section-title { font-size: 16px; }
+
+            .order-item { gap: 12px; padding: 12px 0; }
+            .order-item-image { width: 60px; height: 60px; }
+            .order-item-image i { width: 24px; height: 24px; }
+            .order-item-name { font-size: 13px; }
+            .order-item-price .current { font-size: 14px; }
+
+            .payment-option { padding: 14px; }
+            .payment-icon { width: 36px; height: 36px; }
+            .payment-name { font-size: 14px; }
+
+            .order-summary { position: static; }
+            .summary-card { padding: 20px; }
+            .summary-total .price { font-size: 24px; }
+
+            .agreement-item { gap: 8px; }
+            .agreement-label { font-size: 13px; }
+        }
+
+        /* Small Mobile (480px) */
+        @media (max-width: 480px) {
+            .header { padding: 10px 12px; }
+            .logo { font-size: 18px; }
+            .header-icon { width: 38px; height: 38px; }
+            .secure-badge { font-size: 11px; }
+
+            .page-header { padding: 16px 12px; }
+            .page-header h1 { font-size: 18px; gap: 8px; }
+            .page-header h1 i { width: 22px; height: 22px; }
+
+            .main-content { padding: 16px 12px; }
+
+            .section { padding: 16px; margin-bottom: 16px; }
+            .section-header { margin-bottom: 16px; }
+            .section-title { font-size: 15px; gap: 8px; }
+            .section-title i { width: 18px; height: 18px; }
+
+            .delivery-card { padding: 14px; }
+            .delivery-header { flex-direction: column; align-items: flex-start; gap: 10px; }
+            .delivery-info { font-size: 13px; }
+
+            .order-item-image { width: 50px; height: 50px; }
+            .order-item-brand { font-size: 11px; }
+            .order-item-name { font-size: 12px; }
+            .order-item-option { font-size: 11px; }
+
+            .discount-box { padding: 12px; }
+            .discount-label { font-size: 13px; }
+            .discount-input-group { flex-direction: column; }
+            .discount-input-group button { width: 100%; padding: 10px; }
+
+            .payment-option { gap: 10px; padding: 12px; }
+            .payment-radio { width: 18px; height: 18px; }
+            .payment-icon { width: 32px; height: 32px; }
+            .payment-icon i { width: 18px; height: 18px; }
+            .payment-name { font-size: 13px; }
+            .payment-desc { font-size: 11px; }
+
+            .summary-card { padding: 16px; margin-bottom: 16px; }
+            .summary-title { font-size: 16px; margin-bottom: 16px; }
+            .summary-row { padding: 8px 0; font-size: 13px; }
+            .summary-total .label { font-size: 14px; }
+            .summary-total .price { font-size: 22px; }
+
+            .checkbox { width: 20px; height: 20px; }
+            .agreement-label { font-size: 12px; }
+
+            .pay-btn { padding: 16px; font-size: 16px; }
+            .pay-btn i { width: 20px; height: 20px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <!-- Header -->
+    <div id="header"></div>
+
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="page-header-content">
+            <h1><i data-lucide="credit-card"></i>결제하기</h1>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="checkout-form">
+            <!-- Delivery Info -->
+            <div class="section">
+                <div class="section-header">
+                    <h2 class="section-title"><i data-lucide="map-pin"></i>배송지 정보</h2>
+                    <a href="#" class="section-action">배송지 변경</a>
+                </div>
+                <div class="delivery-card selected">
+                    <div class="delivery-header">
+                        <div class="delivery-badge">
+                            <span>기본</span>
+                            <span class="delivery-name">홍길동</span>
+                        </div>
+                        <button class="delivery-edit">수정</button>
+                    </div>
+                    <div class="delivery-info">
+                        <strong>010-1234-5678</strong><br>
+                        [12345] 서울특별시 강남구 테헤란로 123<br>
+                        브릭타워 5층 502호
+                    </div>
+                </div>
+                <div class="request-input">
+                    <label>배송 요청사항</label>
+                    <select>
+                        <option>배송 요청사항을 선택해주세요</option>
+                        <option>문 앞에 놓아주세요</option>
+                        <option>경비실에 맡겨주세요</option>
+                        <option>배송 전 연락주세요</option>
+                        <option>부재시 문 앞에 놓아주세요</option>
+                        <option>직접 입력</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Order Items -->
+            <div class="section">
+                <div class="section-header">
+                    <h2 class="section-title"><i data-lucide="package"></i>주문 상품 (3개)</h2>
+                </div>
+                <div class="order-item">
+                    <div class="order-item-image" style="background: linear-gradient(135deg, #FF6B35, #FFD93D);">
+                        <i data-lucide="box"></i>
+                    </div>
+                    <div class="order-item-details">
+                        <div class="order-item-brand">레고 / 테크닉</div>
+                        <div class="order-item-name">레고 테크닉 람보르기니 시안 FKP 37</div>
+                        <div class="order-item-option">선물포장: O</div>
+                    </div>
+                    <div class="order-item-price">
+                        <div class="current">489,000</div>
+                        <div class="qty">수량: 1개</div>
+                    </div>
+                </div>
+                <div class="order-item">
+                    <div class="order-item-image" style="background: linear-gradient(135deg, #0066FF, #4ECDC4);">
+                        <i data-lucide="gamepad-2"></i>
+                    </div>
+                    <div class="order-item-details">
+                        <div class="order-item-brand">피규어 / 건담</div>
+                        <div class="order-item-name">건담 RG 1/144 사자비 스페셜 에디션</div>
+                        <div class="order-item-option"></div>
+                    </div>
+                    <div class="order-item-price">
+                        <div class="current">68,000</div>
+                        <div class="qty">수량: 1개</div>
+                    </div>
+                </div>
+                <div class="order-item">
+                    <div class="order-item-image" style="background: linear-gradient(135deg, #6BCB77, #9B59B6);">
+                        <i data-lucide="puzzle"></i>
+                    </div>
+                    <div class="order-item-details">
+                        <div class="order-item-brand">보드게임</div>
+                        <div class="order-item-name">카탄: 확장판 시나리오 컬렉션</div>
+                        <div class="order-item-option"></div>
+                    </div>
+                    <div class="order-item-price">
+                        <div class="current">70,000</div>
+                        <div class="qty">수량: 2개</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Coupon/Points -->
+            <div class="section">
+                <div class="section-header">
+                    <h2 class="section-title"><i data-lucide="percent"></i>할인 적용</h2>
+                </div>
+                <div class="discount-row">
+                    <div class="discount-box">
+                        <div class="discount-label"><i data-lucide="ticket"></i>쿠폰</div>
+                        <div class="discount-input-group">
+                            <input type="text" placeholder="쿠폰 선택">
+                            <button>적용</button>
+                        </div>
+                        <div class="points-available">사용 가능 쿠폰: 3장</div>
+                    </div>
+                    <div class="discount-box">
+                        <div class="discount-label"><i data-lucide="coins"></i>포인트</div>
+                        <div class="discount-input-group">
+                            <input type="text" placeholder="0">
+                            <button>전액사용</button>
+                        </div>
+                        <div class="points-available">보유 포인트: 5,000P</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Payment Methods -->
+            <div class="section">
+                <div class="section-header">
+                    <h2 class="section-title"><i data-lucide="wallet"></i>결제 수단</h2>
+                </div>
+                <div class="payment-grid">
+                    <div class="payment-option selected">
+                        <div class="payment-radio"></div>
+                        <div class="payment-icon"><i data-lucide="credit-card"></i></div>
+                        <div class="payment-info">
+                            <div class="payment-name">신용/체크카드</div>
+                            <div class="payment-desc">모든 카드 결제 가능</div>
+                        </div>
+                    </div>
+                    <div class="payment-option">
+                        <div class="payment-radio"></div>
+                        <div class="payment-icon"><i data-lucide="smartphone"></i></div>
+                        <div class="payment-info">
+                            <div class="payment-name">카카오페이</div>
+                            <div class="payment-desc">간편결제</div>
+                        </div>
+                    </div>
+                    <div class="payment-option">
+                        <div class="payment-radio"></div>
+                        <div class="payment-icon"><i data-lucide="wallet"></i></div>
+                        <div class="payment-info">
+                            <div class="payment-name">네이버페이</div>
+                            <div class="payment-desc">간편결제</div>
+                        </div>
+                    </div>
+                    <div class="payment-option">
+                        <div class="payment-radio"></div>
+                        <div class="payment-icon"><i data-lucide="building"></i></div>
+                        <div class="payment-info">
+                            <div class="payment-name">계좌이체</div>
+                            <div class="payment-desc">실시간 계좌이체</div>
+                        </div>
+                    </div>
+                    <div class="payment-option">
+                        <div class="payment-radio"></div>
+                        <div class="payment-icon"><i data-lucide="landmark"></i></div>
+                        <div class="payment-info">
+                            <div class="payment-name">가상계좌</div>
+                            <div class="payment-desc">무통장 입금</div>
+                        </div>
+                    </div>
+                    <div class="payment-option">
+                        <div class="payment-radio"></div>
+                        <div class="payment-icon"><i data-lucide="banknote"></i></div>
+                        <div class="payment-info">
+                            <div class="payment-name">토스페이</div>
+                            <div class="payment-desc">간편결제</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Order Summary -->
+        <div class="order-summary">
+            <div class="summary-card">
+                <h2 class="summary-title"><i data-lucide="receipt"></i>결제 금액</h2>
+
+                <div class="summary-row">
+                    <span class="label">상품 금액</span>
+                    <span class="value">717,000</span>
+                </div>
+                <div class="summary-row">
+                    <span class="label">상품 할인</span>
+                    <span class="value discount">-90,000</span>
+                </div>
+                <div class="summary-row">
+                    <span class="label">쿠폰 할인</span>
+                    <span class="value discount">-0</span>
+                </div>
+                <div class="summary-row">
+                    <span class="label">포인트 사용</span>
+                    <span class="value discount">-0</span>
+                </div>
+                <div class="summary-row">
+                    <span class="label">배송비</span>
+                    <span class="value free">무료</span>
+                </div>
+
+                <div class="summary-divider"></div>
+
+                <div class="summary-total">
+                    <span class="label">총 결제 금액</span>
+                    <span class="price">627,000<span class="won">원</span></span>
+                </div>
+            </div>
+
+            <!-- Agreements -->
+            <div class="summary-card">
+                <div class="agreement-section">
+                    <div class="agreement-item">
+                        <div class="checkbox checked"><i data-lucide="check"></i></div>
+                        <span class="agreement-label main">전체 동의하기</span>
+                    </div>
+                    <div class="agreement-item">
+                        <div class="checkbox checked"><i data-lucide="check"></i></div>
+                        <span class="agreement-label">[필수] 구매조건 확인 및 결제 진행 동의</span>
+                        <a href="#" class="agreement-link">보기</a>
+                    </div>
+                    <div class="agreement-item">
+                        <div class="checkbox checked"><i data-lucide="check"></i></div>
+                        <span class="agreement-label">[필수] 개인정보 제3자 제공 동의</span>
+                        <a href="#" class="agreement-link">보기</a>
+                    </div>
+                    <div class="agreement-item">
+                        <div class="checkbox"><i data-lucide="check"></i></div>
+                        <span class="agreement-label">[선택] 마케팅 정보 수신 동의</span>
+                        <a href="#" class="agreement-link">보기</a>
+                    </div>
+                </div>
+
+                <button class="pay-btn">
+                    <i data-lucide="lock"></i>
+                    627,000 결제하기
+                </button>
+
+                <div class="security-note">
+                    <i data-lucide="shield-check"></i>
+                    토스페이먼츠 안전 결제
+                </div>
+            </div>
+        </div>
+    </main>
+    <!-- Footer -->
+    <div id="footer"></div>
+
+
+
+    <script>lucide.createIcons();</script>
+    <script src="common/loader.js"></script>
+</body>
+</html>

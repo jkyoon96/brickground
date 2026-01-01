@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>포인트 내역 - BrickGround PC Wireframe</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="common/components.css">
+    <link rel="stylesheet" href="common/responsive.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Nunito', sans-serif;
+        }
+
+        :root {
+            --bg-primary: #F8FAFC;
+            --bg-secondary: #FFFFFF;
+            --text-primary: #1E293B;
+            --text-secondary: #64748B;
+            --text-muted: #94A3B8;
+            --border-color: #E2E8F0;
+            --pixar-blue: #0066FF;
+            --toy-yellow: #FFD93D;
+            --toy-green: #6BCB77;
+            --toy-pink: #FF6B9D;
+            --pixar-radius: 20px;
+            --pixar-radius-sm: 12px;
+            --shadow-soft: 0 4px 20px rgba(0, 102, 255, 0.1);
+            --purple-accent: #A29BFE;
+            --green-accent: #6BCB77;
+        }
+
+        body {
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+        }
+
+        .main-content {
+            display: flex;
+            min-height: calc(100vh - 73px);
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .sidebar {
+            width: 280px;
+            background: var(--bg-secondary);
+            border-right: 1px solid var(--border-color);
+            padding: 24px;
+            flex-shrink: 0;
+        }
+
+        .profile-card {
+            text-align: center;
+            padding: 24px;
+            background: linear-gradient(135deg, var(--bg-primary) 0%, #EBF4FF 100%);
+            border-radius: var(--pixar-radius);
+            margin-bottom: 24px;
+        }
+
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: var(--pixar-blue);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+            font-size: 32px;
+            color: white;
+            font-weight: 800;
+        }
+
+        .profile-name {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .profile-email {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 12px;
+        }
+
+        .profile-level {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            background: var(--toy-yellow);
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .sidebar-menu { list-style: none; }
+        .sidebar-menu li { margin-bottom: 4px; }
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            color: var(--text-primary);
+            text-decoration: none;
+            border-radius: var(--pixar-radius-sm);
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+        .sidebar-menu a:hover { background: var(--bg-primary); }
+        .sidebar-menu a.active { background: var(--pixar-blue); color: white; }
+        .sidebar-menu a i { width: 20px; height: 20px; }
+        .sidebar-divider { height: 1px; background: var(--border-color); margin: 16px 0; }
+
+        .content-area {
+            flex: 1;
+            padding: 32px;
+            background: var(--bg-primary);
+        }
+
+        .page-title {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--text-primary);
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .page-title i {
+            width: 32px;
+            height: 32px;
+            color: var(--pixar-blue);
+        }
+
+        .card {
+            background: var(--bg-secondary);
+            border-radius: var(--pixar-radius);
+            padding: 24px;
+            box-shadow: var(--shadow-soft);
+            margin-bottom: 24px;
+        }
+
+        .points-hero {
+            background: linear-gradient(135deg, var(--rose-primary) 0%, var(--coral-primary) 100%);
+            border-radius: 24px;
+            padding: 32px;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .points-hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 300px;
+            height: 300px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+        }
+
+        .points-stat {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 16px;
+            padding: 16px 24px;
+            text-align: center;
+        }
+
+        .filter-tab {
+            padding: 10px 20px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.2s;
+            color: var(--text-secondary);
+            border: 1px solid var(--border-color);
+        }
+
+        .filter-tab:hover {
+            border-color: var(--rose-primary);
+            color: var(--rose-primary);
+        }
+
+        .filter-tab.active {
+            background: linear-gradient(135deg, var(--rose-primary) 0%, var(--coral-primary) 100%);
+            color: white;
+            border-color: transparent;
+        }
+
+        .point-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 20px;
+            border-bottom: 1px solid var(--border-color);
+            transition: all 0.2s;
+        }
+
+        .point-item:last-child {
+            border-bottom: none;
+        }
+
+        .point-item:hover {
+            background: rgba(255, 107, 157, 0.03);
+        }
+
+        .point-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .point-earn {
+            color: var(--green-accent);
+            font-weight: 800;
+        }
+
+        .point-use {
+            color: var(--rose-primary);
+            font-weight: 800;
+        }
+
+        .point-expire {
+            color: var(--text-muted);
+            font-weight: 800;
+        }
+
+        .expire-warning {
+            background: linear-gradient(135deg, rgba(255, 107, 157, 0.1) 0%, rgba(255, 140, 140, 0.05) 100%);
+            border: 1px solid rgba(255, 107, 157, 0.2);
+            border-radius: 16px;
+            padding: 20px;
+        }
+
+        .tip-box {
+            background: linear-gradient(135deg, rgba(162, 155, 254, 0.1) 0%, rgba(129, 140, 248, 0.05) 100%);
+            border: 1px solid rgba(162, 155, 254, 0.2);
+            border-radius: 16px;
+            padding: 20px;
+        }
+
+        .profile-mini {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--rose-primary) 0%, var(--coral-primary) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 0.4s ease-out forwards;
+        }
+
+        /* ========== Load More Button ========== */
+        .load-more-container {
+            display: flex;
+            justify-content: center;
+            padding: 24px 0;
+        }
+
+        .load-more-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 14px 32px;
+            background: var(--bg-secondary);
+            border: 2px solid var(--border-color);
+            border-radius: 28px;
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .load-more-btn:hover {
+            border-color: var(--pixar-blue);
+            color: var(--pixar-blue);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 102, 255, 0.15);
+        }
+
+        .load-more-btn i {
+            width: 18px;
+            height: 18px;
+        }
+
+        .load-more-count {
+            background: var(--bg-primary);
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        /* ==================== Responsive Design ==================== */
+        /* Tablet (1024px) */
+        @media (max-width: 1024px) {
+            .main-content { flex-direction: column; }
+            .sidebar { width: 100%; border-right: none; border-bottom: 1px solid var(--border-color); padding: 16px; }
+            .profile-card { display: flex; align-items: center; gap: 16px; text-align: left; padding: 16px; margin-bottom: 16px; }
+            .profile-avatar { width: 60px; height: 60px; font-size: 24px; margin: 0; }
+            .profile-name { font-size: 16px; }
+            .sidebar-menu { display: flex; flex-wrap: wrap; gap: 4px; }
+            .sidebar-menu li { margin-bottom: 0; }
+            .sidebar-menu a { padding: 10px 14px; font-size: 13px; }
+            .sidebar-divider { display: none; }
+            .content-area { padding: 24px; }
+            .page-title { font-size: 24px; }
+            .grid-cols-3 { grid-template-columns: repeat(2, 1fr) !important; }
+        }
+
+        /* Mobile (768px) */
+        @media (max-width: 768px) {
+            .sidebar { padding: 12px; }
+            .profile-card { padding: 12px; gap: 12px; }
+            .profile-avatar { width: 48px; height: 48px; font-size: 20px; }
+            .profile-name { font-size: 14px; }
+            .profile-email { font-size: 12px; margin-bottom: 8px; }
+            .profile-level { font-size: 11px; padding: 4px 10px; }
+            .sidebar-menu a { padding: 8px 12px; font-size: 12px; gap: 8px; }
+            .sidebar-menu a i { width: 16px; height: 16px; }
+            .content-area { padding: 16px; }
+            .page-title { font-size: 20px; margin-bottom: 16px; }
+            .page-title i { width: 24px; height: 24px; }
+            .card { padding: 16px; margin-bottom: 16px; }
+            .points-hero { padding: 20px; border-radius: 16px; }
+            .points-hero h1 { font-size: 28px !important; }
+            .grid-cols-3 { grid-template-columns: 1fr !important; gap: 8px !important; }
+            .points-stat { padding: 12px 16px; }
+            .expire-warning { flex-direction: column; text-align: center; gap: 12px; }
+            .expire-warning button { width: 100%; }
+            .filter-tab { padding: 8px 14px; font-size: 13px; }
+            .point-item { padding: 16px; flex-direction: column; align-items: flex-start; gap: 12px; }
+            .point-item .text-right { text-align: left; }
+        }
+
+        /* Small Mobile (480px) */
+        @media (max-width: 480px) {
+            .sidebar { padding: 10px; }
+            .profile-card { padding: 10px; }
+            .profile-avatar { width: 40px; height: 40px; font-size: 16px; }
+            .content-area { padding: 12px; }
+            .page-title { font-size: 18px; }
+            .points-hero { padding: 16px; border-radius: 12px; }
+            .points-hero h1 { font-size: 24px !important; }
+            .points-stat { padding: 10px 12px; }
+            .points-stat p.text-xl { font-size: 16px !important; }
+            .filter-tab { padding: 6px 10px; font-size: 12px; }
+            .point-item { padding: 12px; }
+            .point-icon { width: 40px; height: 40px; }
+            .tip-box { padding: 16px; }
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <!-- Header -->
+    <!-- Header -->
+    <div id="header"></div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Mobile Navigation -->
+        <nav class="mypage-mobile-nav">
+            <a href="04_mypage.html">대시보드</a>
+            <a href="34_mypage_orders.html">주문 내역</a>
+            <a href="35_mypage_wishlist.html">위시리스트</a>
+            <a href="37_mypage_coupons.html">쿠폰함</a>
+            <a href="36_mypage_points.html" class="active">포인트</a>
+            <a href="38_mypage_profile.html">회원정보</a>
+            <a href="29_help_center.html">고객센터</a>
+        </nav>
+
+        <aside class="sidebar">
+            <div class="profile-card">
+                <div class="profile-avatar">홍</div>
+                <div class="profile-name">홍길동</div>
+                <div class="profile-email">hong@email.com</div>
+                <span class="profile-level">
+                    <i data-lucide="crown" style="width: 14px; height: 14px;"></i>
+                    VIP 회원
+                </span>
+            </div>
+            <ul class="sidebar-menu">
+                <li><a href="04_mypage.html"><i data-lucide="layout-dashboard"></i>마이페이지</a></li>
+                <li><a href="34_mypage_orders.html"><i data-lucide="package"></i>주문 내역</a></li>
+                <li><a href="35_mypage_wishlist.html"><i data-lucide="heart"></i>찜 목록</a></li>
+                <li><a href="36_mypage_points.html" class="active"><i data-lucide="coins"></i>포인트</a></li>
+                <li><a href="37_mypage_coupons.html"><i data-lucide="ticket"></i>쿠폰</a></li>
+                <li><a href="38_mypage_profile.html"><i data-lucide="settings"></i>회원정보</a></li>
+            </ul>
+            <div class="sidebar-divider"></div>
+            <ul class="sidebar-menu">
+                <li><a href="#"><i data-lucide="message-square"></i>1:1 문의</a></li>
+                <li><a href="#"><i data-lucide="log-out"></i>로그아웃</a></li>
+            </ul>
+        </aside>
+        <main class="content-area">
+            <h1 class="page-title">
+                <i data-lucide="coins"></i>
+                포인트
+            </h1>
+                <!-- Points Hero -->
+                <div class="points-hero animate-fade-in">
+                    <div class="relative z-10">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-14 h-14 rounded-2xl flex items-center justify-center" style="background: rgba(255, 255, 255, 0.2);">
+                                <i data-lucide="coins" class="w-7 h-7"></i>
+                            </div>
+                            <div>
+                                <p class="opacity-80">보유 포인트</p>
+                                <h1 class="text-4xl font-bold">12,500 P</h1>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-3 gap-4 mt-6">
+                            <div class="points-stat">
+                                <p class="text-sm opacity-80 mb-1">이번 달 적립</p>
+                                <p class="text-xl font-bold">+3,200 P</p>
+                            </div>
+                            <div class="points-stat">
+                                <p class="text-sm opacity-80 mb-1">이번 달 사용</p>
+                                <p class="text-xl font-bold">-5,000 P</p>
+                            </div>
+                            <div class="points-stat">
+                                <p class="text-sm opacity-80 mb-1">30일 내 소멸 예정</p>
+                                <p class="text-xl font-bold">2,000 P</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Expiration Warning -->
+                <div class="expire-warning flex items-center gap-4 animate-fade-in" style="animation-delay: 0.1s;">
+                    <div class="w-12 h-12 rounded-2xl flex items-center justify-center" style="background: rgba(255, 107, 157, 0.2);">
+                        <i data-lucide="alert-circle" class="w-6 h-6" style="color: var(--rose-primary);"></i>
+                    </div>
+                    <div class="flex-1">
+                        <p class="font-bold" style="color: var(--rose-primary);">2,000P가 30일 내 소멸 예정이에요!</p>
+                        <p class="text-sm" style="color: var(--text-secondary);">소멸 예정일: 2025.02.20</p>
+                    </div>
+                    <button class="px-4 py-2 rounded-xl font-semibold" style="background: var(--rose-primary); color: white;">
+                        쇼핑하러 가기
+                    </button>
+                </div>
+
+                <!-- Filter & History -->
+                <div class="card animate-fade-in" style="animation-delay: 0.2s;">
+                    <div class="flex items-center justify-between mb-6">
+                        <div class="flex gap-2">
+                            <button class="filter-tab active">전체</button>
+                            <button class="filter-tab">적립</button>
+                            <button class="filter-tab">사용</button>
+                            <button class="filter-tab">소멸</button>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <select class="px-4 py-2 rounded-xl text-sm" style="border: 1px solid var(--border-color);">
+                                <option>최근 1개월</option>
+                                <option>최근 3개월</option>
+                                <option>최근 6개월</option>
+                                <option>전체</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Points List -->
+                    <div>
+                        <div class="point-item">
+                            <div class="point-icon" style="background: rgba(107, 203, 119, 0.1);">
+                                <i data-lucide="plus-circle" class="w-6 h-6" style="color: var(--green-accent);"></i>
+                            </div>
+                            <div class="flex-1">
+                                <p class="font-semibold">상품 리뷰 작성</p>
+                                <p class="text-sm" style="color: var(--text-muted);">2025.01.18 14:32</p>
+                            </div>
+                            <div class="text-right">
+                                <p class="point-earn text-lg">+1,500 P</p>
+                                <p class="text-xs" style="color: var(--text-muted);">유효기간: 2026.01.18</p>
+                            </div>
+                        </div>
+
+                        <div class="point-item">
+                            <div class="point-icon" style="background: rgba(255, 107, 157, 0.1);">
+                                <i data-lucide="minus-circle" class="w-6 h-6" style="color: var(--rose-primary);"></i>
+                            </div>
+                            <div class="flex-1">
+                                <p class="font-semibold">상품 결제 사용</p>
+                                <p class="text-sm" style="color: var(--text-muted);">2025.01.15 10:15 · 주문번호 ORD-20250115-0038</p>
+                            </div>
+                            <div class="text-right">
+                                <p class="point-use text-lg">-5,000 P</p>
+                            </div>
+                        </div>
+
+                        <div class="point-item">
+                            <div class="point-icon" style="background: rgba(107, 203, 119, 0.1);">
+                                <i data-lucide="plus-circle" class="w-6 h-6" style="color: var(--green-accent);"></i>
+                            </div>
+                            <div class="flex-1">
+                                <p class="font-semibold">구매 적립 (3%)</p>
+                                <p class="text-sm" style="color: var(--text-muted);">2025.01.12 16:20 · 배송완료</p>
+                            </div>
+                            <div class="text-right">
+                                <p class="point-earn text-lg">+2,670 P</p>
+                                <p class="text-xs" style="color: var(--text-muted);">유효기간: 2026.01.12</p>
+                            </div>
+                        </div>
+
+                        <div class="point-item">
+                            <div class="point-icon" style="background: rgba(107, 203, 119, 0.1);">
+                                <i data-lucide="plus-circle" class="w-6 h-6" style="color: var(--green-accent);"></i>
+                            </div>
+                            <div class="flex-1">
+                                <p class="font-semibold">등급 업그레이드 보너스</p>
+                                <p class="text-sm" style="color: var(--text-muted);">2025.01.10 00:00 · SILVER &rarr; GOLD</p>
+                            </div>
+                            <div class="text-right">
+                                <p class="point-earn text-lg">+5,000 P</p>
+                                <p class="text-xs" style="color: var(--text-muted);">유효기간: 2026.01.10</p>
+                            </div>
+                        </div>
+
+                        <div class="point-item">
+                            <div class="point-icon" style="background: rgba(148, 163, 184, 0.1);">
+                                <i data-lucide="x-circle" class="w-6 h-6" style="color: var(--text-muted);"></i>
+                            </div>
+                            <div class="flex-1">
+                                <p class="font-semibold">유효기간 만료 소멸</p>
+                                <p class="text-sm" style="color: var(--text-muted);">2025.01.05 00:00</p>
+                            </div>
+                            <div class="text-right">
+                                <p class="point-expire text-lg">-1,200 P</p>
+                            </div>
+                        </div>
+
+                        <div class="point-item">
+                            <div class="point-icon" style="background: rgba(107, 203, 119, 0.1);">
+                                <i data-lucide="plus-circle" class="w-6 h-6" style="color: var(--green-accent);"></i>
+                            </div>
+                            <div class="flex-1">
+                                <p class="font-semibold">출석 체크 보너스</p>
+                                <p class="text-sm" style="color: var(--text-muted);">2025.01.01 09:30</p>
+                            </div>
+                            <div class="text-right">
+                                <p class="point-earn text-lg">+100 P</p>
+                                <p class="text-xs" style="color: var(--text-muted);">유효기간: 2026.01.01</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Load More Button -->
+                    <div class="load-more-container" style="border-top: 1px solid var(--border-color); margin-top: 16px;">
+                        <button class="load-more-btn">
+                            <i data-lucide="plus" class="w-5 h-5"></i>
+                            <span>더보기</span>
+                            <span class="load-more-count">8개 더보기</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Tip Box -->
+                <div class="tip-box animate-fade-in" style="animation-delay: 0.3s;">
+                    <h4 class="font-bold mb-3 flex items-center gap-2" style="color: var(--purple-accent);">
+                        <i data-lucide="lightbulb" class="w-5 h-5"></i>
+                        포인트 적립 TIP
+                    </h4>
+                    <ul class="space-y-2 text-sm" style="color: var(--text-secondary);">
+                        <li class="flex items-center gap-2">
+                            <i data-lucide="check" class="w-4 h-4" style="color: var(--purple-accent);"></i>
+                            상품 구매 시 결제금액의 <strong>최대 5%</strong> 적립 (등급별 상이)
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <i data-lucide="check" class="w-4 h-4" style="color: var(--purple-accent);"></i>
+                            상품 리뷰 작성 시 <strong>최대 1,500P</strong> 적립
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <i data-lucide="check" class="w-4 h-4" style="color: var(--purple-accent);"></i>
+                            출석 체크 시 <strong>매일 100P</strong> 적립
+                        </li>
+                    </ul>
+                </div>
+        </main>
+    </div>
+
+    <!-- Footer -->
+    <div id="footer"></div>
+
+    <script>
+        lucide.createIcons();
+    </script>
+    <script src="common/loader.js"></script>
+</body>
+</html>

@@ -1,0 +1,2827 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BrickArt 에디터 - BrickGround</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="common/components.css">
+    <link rel="stylesheet" href="common/responsive.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <!-- Three.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/TransformControls.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/exporters/STLExporter.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/exporters/GLTFExporter.js"></script>
+    <style>
+        :root {
+            --bg-primary: #F8FAFC;
+            --bg-secondary: #FFFFFF;
+            --bg-dark: #1a1a2e;
+            --text-primary: #1E293B;
+            --text-secondary: #64748B;
+            --text-muted: #94A3B8;
+            --border-color: #E2E8F0;
+            --pixar-blue: #0066FF;
+            --toy-cyan: #00CEC9;
+            --pixar-secondary: #FFD93D;
+            --pixar-success: #6BCB77;
+            --pixar-error: #FF6B6B;
+            --pixar-radius: 16px;
+            --pixar-radius-sm: 10px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: var(--bg-dark);
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        /* Editor Layout */
+        .editor-layout {
+            display: flex;
+            height: 100vh;
+        }
+
+        /* Left Sidebar - Asset Library */
+        .sidebar-left {
+            width: 280px;
+            background: var(--bg-secondary);
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar-header {
+            padding: 16px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .sidebar-header .logo {
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--pixar-blue);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .sidebar-header .logo i { width: 24px; height: 24px; }
+
+        .sidebar-tabs {
+            display: flex;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .sidebar-tab {
+            flex: 1;
+            padding: 12px;
+            background: none;
+            border: none;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+        }
+        .sidebar-tab:hover { color: var(--text-primary); }
+        .sidebar-tab.active { color: var(--pixar-blue); border-bottom-color: var(--pixar-blue); }
+
+        .sidebar-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px;
+        }
+
+        /* Asset Library */
+        .asset-category {
+            margin-bottom: 20px;
+        }
+
+        .category-title {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        .asset-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+        }
+
+        .asset-item {
+            background: var(--bg-primary);
+            border: 2px solid transparent;
+            border-radius: var(--pixar-radius-sm);
+            padding: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .asset-item:hover { border-color: var(--pixar-blue); transform: translateY(-2px); }
+        .asset-item.selected { border-color: var(--pixar-blue); background: rgba(0, 102, 255, 0.05); }
+
+        .asset-icon {
+            width: 40px;
+            height: 40px;
+            margin: 0 auto 8px;
+            background: var(--pixar-blue);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .asset-icon i { width: 20px; height: 20px; color: white; }
+
+        .asset-name {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        /* Color Palette */
+        .color-palette {
+            display: grid;
+            grid-template-columns: repeat(10, 1fr);
+            gap: 4px;
+            margin-top: 12px;
+        }
+
+        .color-swatch {
+            width: 100%;
+            aspect-ratio: 1;
+            border-radius: 4px;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.2s;
+        }
+        .color-swatch:hover { transform: scale(1.1); z-index: 1; }
+        .color-swatch.selected { border-color: var(--text-primary); box-shadow: 0 0 0 2px white; }
+
+        /* Main Editor */
+        .editor-main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        /* Toolbar */
+        .editor-toolbar {
+            background: var(--bg-secondary);
+            padding: 8px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .toolbar-group {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .toolbar-separator {
+            width: 1px;
+            height: 24px;
+            background: var(--border-color);
+            margin: 0 8px;
+        }
+
+        .toolbar-btn {
+            width: 36px;
+            height: 36px;
+            background: none;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            transition: all 0.2s;
+        }
+        .toolbar-btn:hover { background: var(--bg-primary); color: var(--text-primary); }
+        .toolbar-btn.active { background: var(--pixar-blue); color: white; }
+        .toolbar-btn i { width: 20px; height: 20px; }
+
+        .toolbar-btn-label {
+            padding: 8px 12px;
+            height: 36px;
+            background: none;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            transition: all 0.2s;
+        }
+        .toolbar-btn-label:hover { background: var(--bg-primary); color: var(--text-primary); }
+        .toolbar-btn-label.primary { background: var(--pixar-blue); color: white; }
+        .toolbar-btn-label.primary:hover { background: #0052cc; }
+        .toolbar-btn-label i { width: 18px; height: 18px; }
+
+        /* Canvas Area */
+        .canvas-container {
+            flex: 1;
+            position: relative;
+            background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
+        }
+
+        #editorCanvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        /* Selection Box */
+        .selectBox {
+            border: 1px solid var(--pixar-blue);
+            background: rgba(0, 102, 255, 0.1);
+            position: fixed;
+        }
+
+        /* Status Bar */
+        .status-bar {
+            background: #252538;
+            padding: 8px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 12px;
+            color: rgba(255,255,255,0.6);
+        }
+
+        .status-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .status-item i { width: 14px; height: 14px; }
+
+        .status-shortcuts {
+            display: flex;
+            gap: 16px;
+        }
+
+        .shortcut {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .shortcut kbd {
+            background: rgba(255,255,255,0.1);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 11px;
+        }
+
+        /* Right Sidebar - Properties */
+        .sidebar-right {
+            width: 300px;
+            background: var(--bg-secondary);
+            border-left: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .properties-header {
+            padding: 16px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .properties-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .properties-title i { width: 18px; height: 18px; color: var(--pixar-blue); }
+
+        .selected-name {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+
+        .properties-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px;
+        }
+
+        .property-group {
+            margin-bottom: 20px;
+        }
+
+        .property-label {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .property-row {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+
+        .property-input-group {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .property-input-group label {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            width: 16px;
+        }
+
+        .property-input {
+            flex: 1;
+            padding: 8px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 12px;
+            text-align: center;
+        }
+        .property-input:focus { outline: none; border-color: var(--pixar-blue); }
+
+        /* Scene Hierarchy */
+        .hierarchy-list {
+            border: 1px solid var(--border-color);
+            border-radius: var(--pixar-radius-sm);
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .hierarchy-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 12px;
+            cursor: pointer;
+            border-bottom: 1px solid var(--border-color);
+            transition: background 0.2s;
+        }
+        .hierarchy-item:last-child { border-bottom: none; }
+        .hierarchy-item:hover { background: var(--bg-primary); }
+        .hierarchy-item.selected { background: rgba(0, 102, 255, 0.1); }
+
+        .hierarchy-color {
+            width: 16px;
+            height: 16px;
+            border-radius: 4px;
+        }
+
+        .hierarchy-name {
+            flex: 1;
+            font-size: 12px;
+            font-weight: 600;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .hierarchy-actions {
+            display: flex;
+            gap: 4px;
+        }
+
+        .hierarchy-btn {
+            width: 24px;
+            height: 24px;
+            background: none;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+        }
+        .hierarchy-btn:hover { background: var(--bg-primary); color: var(--text-primary); }
+        .hierarchy-btn i { width: 14px; height: 14px; }
+
+        /* Assembly Panel */
+        .assembly-section {
+            border-top: 1px solid var(--border-color);
+            padding: 16px;
+        }
+
+        .assembly-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .assembly-title {
+            font-size: 13px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .assembly-title i { width: 16px; height: 16px; color: var(--pixar-secondary); }
+
+        .assembly-level-input {
+            width: 60px;
+            padding: 6px 8px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 12px;
+            text-align: center;
+        }
+
+        .assembly-slider {
+            width: 100%;
+            margin-top: 8px;
+        }
+
+        /* Loading Overlay */
+        .loading-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(26, 26, 46, 0.9);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+        }
+        .loading-overlay.hidden { display: none; }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(255,255,255,0.1);
+            border-top-color: var(--pixar-blue);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .loading-text {
+            color: white;
+            margin-top: 16px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%) translateY(50px);
+            background: rgba(0,0,0,0.85);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            z-index: 1000;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+        .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 200;
+        }
+        .modal-overlay.hidden { display: none; }
+
+        .modal {
+            background: white;
+            border-radius: var(--pixar-radius);
+            padding: 24px;
+            max-width: 400px;
+            width: 90%;
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .modal-content {
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+        }
+
+        .modal-btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .modal-btn-secondary {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+        }
+
+        .modal-btn-primary {
+            background: var(--pixar-blue);
+            border: none;
+            color: white;
+        }
+
+        /* ===============================================
+           Wizard Modal Styles
+           =============================================== */
+        .wizard-modal {
+            background: white;
+            border-radius: var(--pixar-radius);
+            width: 90%;
+            max-width: 700px;
+            max-height: 90vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .wizard-header {
+            padding: 24px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .wizard-steps {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .wizard-step {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: var(--bg-primary);
+            border-radius: 20px;
+            font-size: 13px;
+            color: var(--text-secondary);
+            transition: all 0.3s ease;
+        }
+
+        .wizard-step.active {
+            background: var(--pixar-blue);
+            color: white;
+        }
+
+        .wizard-step.completed {
+            background: var(--pixar-success);
+            color: white;
+        }
+
+        .wizard-step-number {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 12px;
+        }
+
+        .wizard-step.active .wizard-step-number,
+        .wizard-step.completed .wizard-step-number {
+            background: rgba(255,255,255,0.2);
+        }
+
+        .wizard-step.completed .wizard-step-number i {
+            width: 14px;
+            height: 14px;
+        }
+
+        .wizard-title {
+            font-size: 20px;
+            font-weight: 700;
+            text-align: center;
+            color: var(--text-primary);
+        }
+
+        .wizard-body {
+            padding: 24px;
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        .wizard-footer {
+            padding: 20px 24px;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .wizard-btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            min-width: 100px;
+            justify-content: center;
+        }
+
+        .wizard-btn i { width: 18px; height: 18px; }
+
+        .wizard-btn-secondary {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+        }
+
+        .wizard-btn-primary {
+            background: var(--pixar-blue);
+            border: none;
+            color: white;
+        }
+
+        .wizard-btn-primary:hover {
+            background: #0052cc;
+        }
+
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+        }
+
+        .form-label .required {
+            color: var(--pixar-error);
+            margin-left: 4px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px 16px;
+            background: var(--bg-primary);
+            border: 2px solid var(--border-color);
+            border-radius: var(--pixar-radius-sm);
+            color: var(--text-primary);
+            font-size: 14px;
+            transition: border-color 0.2s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--pixar-blue);
+        }
+
+        .form-textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .form-hint {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-top: 6px;
+        }
+
+        /* Category Grid */
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+        }
+
+        .category-item {
+            padding: 12px;
+            background: var(--bg-primary);
+            border: 2px solid var(--border-color);
+            border-radius: var(--pixar-radius-sm);
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 13px;
+        }
+
+        .category-item:hover {
+            border-color: var(--pixar-blue);
+        }
+
+        .category-item.active {
+            background: var(--pixar-blue);
+            border-color: var(--pixar-blue);
+            color: white;
+        }
+
+        .category-item i {
+            display: block;
+            width: 24px;
+            height: 24px;
+            margin: 0 auto 8px;
+        }
+
+        /* Tags */
+        .tags-input-wrapper {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            padding: 12px;
+            background: var(--bg-primary);
+            border: 2px solid var(--border-color);
+            border-radius: var(--pixar-radius-sm);
+            min-height: 50px;
+        }
+
+        .tag-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            background: var(--pixar-blue);
+            color: white;
+            border-radius: 16px;
+            font-size: 13px;
+        }
+
+        .tag-chip button {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            padding: 0;
+            display: flex;
+        }
+
+        .tag-chip button i { width: 14px; height: 14px; }
+
+        .tag-input {
+            flex: 1;
+            min-width: 100px;
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            font-size: 14px;
+            outline: none;
+        }
+
+        /* Thumbnail */
+        .thumbnail-section {
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+        }
+
+        .thumbnail-preview {
+            width: 160px;
+            height: 160px;
+            background: var(--bg-primary);
+            border: 2px dashed var(--border-color);
+            border-radius: var(--pixar-radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .thumbnail-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .thumbnail-preview.empty {
+            flex-direction: column;
+            gap: 8px;
+            color: var(--text-secondary);
+            font-size: 13px;
+        }
+
+        .thumbnail-preview.empty i { width: 32px; height: 32px; }
+
+        .thumbnail-options { flex: 1; }
+
+        .thumbnail-btn {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 8px;
+            background: var(--bg-primary);
+            border: 2px solid var(--border-color);
+            border-radius: var(--pixar-radius-sm);
+            color: var(--text-primary);
+            font-size: 13px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .thumbnail-btn:hover { border-color: var(--pixar-blue); }
+        .thumbnail-btn i { width: 18px; height: 18px; }
+
+        /* Visibility Options */
+        .visibility-options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .visibility-option {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            padding: 16px;
+            background: var(--bg-primary);
+            border: 2px solid var(--border-color);
+            border-radius: var(--pixar-radius-sm);
+            cursor: pointer;
+        }
+
+        .visibility-option:hover { border-color: var(--pixar-blue); }
+
+        .visibility-option.active {
+            border-color: var(--pixar-blue);
+            background: rgba(0, 102, 255, 0.05);
+        }
+
+        .visibility-radio {
+            width: 24px;
+            height: 24px;
+            border: 2px solid var(--border-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .visibility-option.active .visibility-radio {
+            border-color: var(--pixar-blue);
+            background: var(--pixar-blue);
+        }
+
+        .visibility-option.active .visibility-radio::after {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: white;
+            border-radius: 50%;
+        }
+
+        .visibility-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--border-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .visibility-option.active .visibility-icon {
+            background: var(--pixar-blue);
+            color: white;
+        }
+
+        .visibility-icon i { width: 20px; height: 20px; }
+
+        .visibility-content { flex: 1; }
+
+        .visibility-title {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 4px;
+            color: var(--text-primary);
+        }
+
+        .visibility-desc {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        /* License Options */
+        .license-section {
+            margin-top: 24px;
+            padding-top: 24px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .license-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .license-option {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px;
+            background: var(--bg-primary);
+            border: 2px solid var(--border-color);
+            border-radius: var(--pixar-radius-sm);
+            cursor: pointer;
+        }
+
+        .license-option:hover { border-color: var(--pixar-blue); }
+
+        .license-option.active {
+            border-color: var(--pixar-blue);
+            background: rgba(0, 102, 255, 0.05);
+        }
+
+        .license-checkbox {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--border-color);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .license-option.active .license-checkbox {
+            border-color: var(--pixar-blue);
+            background: var(--pixar-blue);
+        }
+
+        .license-option.active .license-checkbox i {
+            width: 14px;
+            height: 14px;
+            color: white;
+        }
+
+        .license-label {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        /* Review Section */
+        .review-section {
+            background: var(--bg-primary);
+            border-radius: var(--pixar-radius-sm);
+            padding: 20px;
+            margin-bottom: 16px;
+        }
+
+        .review-section-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--pixar-blue);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .review-section-title i { width: 16px; height: 16px; }
+
+        .review-row {
+            display: flex;
+            margin-bottom: 8px;
+        }
+
+        .review-label {
+            width: 100px;
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .review-value {
+            flex: 1;
+            font-size: 13px;
+            color: var(--text-primary);
+        }
+
+        .review-thumbnail {
+            width: 80px;
+            height: 80px;
+            border-radius: 8px;
+            overflow: hidden;
+            background: var(--border-color);
+        }
+
+        .review-thumbnail img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .review-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .review-tag {
+            padding: 4px 10px;
+            background: var(--border-color);
+            border-radius: 12px;
+            font-size: 12px;
+        }
+
+        /* Success Animation */
+        .success-animation {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .success-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--pixar-success);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 24px;
+            animation: successPop 0.5s ease;
+        }
+
+        .success-icon i {
+            width: 40px;
+            height: 40px;
+            color: white;
+        }
+
+        @keyframes successPop {
+            0% { transform: scale(0); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        .success-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: var(--text-primary);
+        }
+
+        .success-message {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 24px;
+        }
+
+        .success-actions {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        /* ==================== Responsive Design ==================== */
+        /* Tablet (1024px) */
+        @media (max-width: 1024px) {
+            .sidebar-left { width: 240px; }
+            .sidebar-right { width: 260px; }
+            .sidebar-content { padding: 12px; }
+            .asset-grid { gap: 6px; }
+            .asset-item { padding: 10px; }
+            .asset-icon { width: 36px; height: 36px; }
+            .color-palette { grid-template-columns: repeat(8, 1fr); }
+            .properties-content { padding: 12px; }
+            .status-shortcuts { display: none; }
+        }
+
+        /* Mobile (768px) */
+        @media (max-width: 768px) {
+            .editor-layout { flex-direction: column; height: auto; min-height: 100vh; }
+            .sidebar-left { width: 100%; border-right: none; border-bottom: 1px solid var(--border-color); max-height: 200px; }
+            .sidebar-tabs { overflow-x: auto; }
+            .sidebar-content { padding: 10px; overflow-x: auto; }
+            .asset-grid { grid-template-columns: repeat(4, 1fr); }
+            .color-palette { grid-template-columns: repeat(12, 1fr); }
+            .editor-main { min-height: 400px; }
+            .editor-toolbar { padding: 6px 12px; flex-wrap: wrap; gap: 8px; }
+            .toolbar-group { flex-wrap: wrap; }
+            .toolbar-btn { width: 32px; height: 32px; }
+            .toolbar-btn i { width: 18px; height: 18px; }
+            .toolbar-btn-label { padding: 6px 10px; font-size: 12px; }
+            .sidebar-right { width: 100%; border-left: none; border-top: 1px solid var(--border-color); max-height: 300px; }
+            .properties-header { padding: 12px; }
+            .properties-content { padding: 10px; }
+            .property-row { flex-direction: column; }
+            .hierarchy-list { max-height: 150px; }
+            .status-bar { padding: 6px 12px; font-size: 11px; }
+        }
+
+        /* Small Mobile (480px) */
+        @media (max-width: 480px) {
+            .sidebar-left { max-height: 150px; }
+            .sidebar-header { padding: 10px; }
+            .sidebar-header .logo { font-size: 14px; }
+            .sidebar-tab { padding: 8px; font-size: 11px; }
+            .asset-grid { grid-template-columns: repeat(3, 1fr); gap: 4px; }
+            .asset-item { padding: 8px; }
+            .asset-icon { width: 32px; height: 32px; }
+            .asset-name { font-size: 10px; }
+            .editor-toolbar { padding: 4px 8px; }
+            .toolbar-btn { width: 28px; height: 28px; }
+            .toolbar-separator { margin: 0 4px; height: 20px; }
+            .canvas-container { min-height: 300px; }
+            .sidebar-right { max-height: 250px; }
+            .property-label { font-size: 10px; }
+            .property-input { padding: 6px; font-size: 11px; }
+            .modal { padding: 16px; max-width: 90%; }
+        }
+    </style>
+</head>
+<body>
+    <div class="editor-layout">
+        <!-- Left Sidebar - Asset Library -->
+        <div class="sidebar-left">
+            <div class="sidebar-header">
+                <a href="07_brickart_list.html" class="logo">
+                    <i data-lucide="box"></i>
+                    BrickArt Editor
+                </a>
+            </div>
+
+            <div class="sidebar-tabs">
+                <button class="sidebar-tab active" onclick="switchAssetTab('shapes')">프리미티브</button>
+                <button class="sidebar-tab" onclick="switchAssetTab('colors')">색상</button>
+            </div>
+
+            <div class="sidebar-content" id="assetContent">
+                <!-- Primitives Tab -->
+                <div id="shapesTab">
+                    <div class="asset-category">
+                        <div class="category-title">기본 도형</div>
+                        <div class="asset-grid">
+                            <div class="asset-item" onclick="addPrimitive('box')">
+                                <div class="asset-icon"><i data-lucide="box"></i></div>
+                                <div class="asset-name">박스</div>
+                            </div>
+                            <div class="asset-item" onclick="addPrimitive('sphere')">
+                                <div class="asset-icon"><i data-lucide="circle"></i></div>
+                                <div class="asset-name">구</div>
+                            </div>
+                            <div class="asset-item" onclick="addPrimitive('cylinder')">
+                                <div class="asset-icon"><i data-lucide="cylinder"></i></div>
+                                <div class="asset-name">원기둥</div>
+                            </div>
+                            <div class="asset-item" onclick="addPrimitive('cone')">
+                                <div class="asset-icon"><i data-lucide="triangle"></i></div>
+                                <div class="asset-name">원뿔</div>
+                            </div>
+                            <div class="asset-item" onclick="addPrimitive('torus')">
+                                <div class="asset-icon"><i data-lucide="circle-dot"></i></div>
+                                <div class="asset-name">토러스</div>
+                            </div>
+                            <div class="asset-item" onclick="addPrimitive('plane')">
+                                <div class="asset-icon"><i data-lucide="square"></i></div>
+                                <div class="asset-name">평면</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="asset-category">
+                        <div class="category-title">브릭 부품</div>
+                        <div class="asset-grid">
+                            <div class="asset-item" onclick="addPrimitive('brick1x1')">
+                                <div class="asset-icon" style="background: #FF6B6B;"><i data-lucide="box"></i></div>
+                                <div class="asset-name">1x1 브릭</div>
+                            </div>
+                            <div class="asset-item" onclick="addPrimitive('brick2x1')">
+                                <div class="asset-icon" style="background: #4ECDC4;"><i data-lucide="box"></i></div>
+                                <div class="asset-name">2x1 브릭</div>
+                            </div>
+                            <div class="asset-item" onclick="addPrimitive('brick2x2')">
+                                <div class="asset-icon" style="background: #45B7D1;"><i data-lucide="box"></i></div>
+                                <div class="asset-name">2x2 브릭</div>
+                            </div>
+                            <div class="asset-item" onclick="addPrimitive('brick4x2')">
+                                <div class="asset-icon" style="background: #96CEB4;"><i data-lucide="box"></i></div>
+                                <div class="asset-name">4x2 브릭</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Colors Tab -->
+                <div id="colorsTab" style="display: none;">
+                    <div class="asset-category">
+                        <div class="category-title">색상 팔레트</div>
+                        <div class="color-palette" id="colorPalette">
+                            <!-- Colors will be generated dynamically -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Editor -->
+        <div class="editor-main">
+            <!-- Toolbar -->
+            <div class="editor-toolbar">
+                <div class="toolbar-group">
+                    <button class="toolbar-btn" id="selectBtn" onclick="setTransformMode('select')" title="선택 (V)">
+                        <i data-lucide="mouse-pointer"></i>
+                    </button>
+                    <button class="toolbar-btn active" id="translateBtn" onclick="setTransformMode('translate')" title="이동 (M)">
+                        <i data-lucide="move"></i>
+                    </button>
+                    <button class="toolbar-btn" id="rotateBtn" onclick="setTransformMode('rotate')" title="회전 (R)">
+                        <i data-lucide="rotate-3d"></i>
+                    </button>
+                    <button class="toolbar-btn" id="scaleBtn" onclick="setTransformMode('scale')" title="크기 (S)">
+                        <i data-lucide="maximize-2"></i>
+                    </button>
+
+                    <div class="toolbar-separator"></div>
+
+                    <button class="toolbar-btn" onclick="undo()" title="실행 취소 (Ctrl+Z)">
+                        <i data-lucide="undo-2"></i>
+                    </button>
+                    <button class="toolbar-btn" onclick="redo()" title="다시 실행 (Ctrl+Y)">
+                        <i data-lucide="redo-2"></i>
+                    </button>
+
+                    <div class="toolbar-separator"></div>
+
+                    <button class="toolbar-btn" onclick="copySelected()" title="복사 (Ctrl+C)">
+                        <i data-lucide="copy"></i>
+                    </button>
+                    <button class="toolbar-btn" onclick="deleteSelected()" title="삭제 (Delete)">
+                        <i data-lucide="trash-2"></i>
+                    </button>
+                    <button class="toolbar-btn" onclick="toggleVisibility()" title="숨기기 (H)">
+                        <i data-lucide="eye-off"></i>
+                    </button>
+
+                    <div class="toolbar-separator"></div>
+
+                    <button class="toolbar-btn" onclick="focusSelected()" title="선택으로 이동 (F)">
+                        <i data-lucide="focus"></i>
+                    </button>
+                    <button class="toolbar-btn" onclick="resetCamera()" title="카메라 리셋">
+                        <i data-lucide="home"></i>
+                    </button>
+                </div>
+
+                <div class="toolbar-group">
+                    <button class="toolbar-btn-label" onclick="exportPNG()">
+                        <i data-lucide="image"></i>
+                        PNG
+                    </button>
+                    <button class="toolbar-btn-label" onclick="exportGLTF()">
+                        <i data-lucide="download"></i>
+                        GLTF
+                    </button>
+                    <button class="toolbar-btn-label" onclick="exportSTL()">
+                        <i data-lucide="file-box"></i>
+                        STL
+                    </button>
+
+                    <div class="toolbar-separator"></div>
+
+                    <button class="toolbar-btn-label primary" onclick="saveProject()">
+                        <i data-lucide="save"></i>
+                        저장
+                    </button>
+                </div>
+            </div>
+
+            <!-- Canvas -->
+            <div class="canvas-container" id="canvasContainer">
+                <div class="loading-overlay" id="loadingOverlay">
+                    <div class="loading-spinner"></div>
+                    <div class="loading-text">에디터 로딩 중...</div>
+                </div>
+                <div id="editorCanvas"></div>
+            </div>
+
+            <!-- Status Bar -->
+            <div class="status-bar">
+                <div class="status-item">
+                    <i data-lucide="box"></i>
+                    <span>객체: <span id="objectCount">0</span></span>
+                </div>
+                <div class="status-item">
+                    <span id="selectedInfo">선택 없음</span>
+                </div>
+                <div class="status-shortcuts">
+                    <div class="shortcut"><kbd>M</kbd> 이동</div>
+                    <div class="shortcut"><kbd>R</kbd> 회전</div>
+                    <div class="shortcut"><kbd>H</kbd> 숨기기</div>
+                    <div class="shortcut"><kbd>Del</kbd> 삭제</div>
+                    <div class="shortcut"><kbd>Ctrl+Z</kbd> 실행취소</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Sidebar - Properties -->
+        <div class="sidebar-right">
+            <div class="properties-header">
+                <div class="properties-title">
+                    <i data-lucide="sliders"></i>
+                    속성
+                </div>
+                <div class="selected-name" id="selectedName">선택된 객체 없음</div>
+            </div>
+
+            <div class="properties-content">
+                <!-- Transform -->
+                <div class="property-group">
+                    <div class="property-label">위치 (Position)</div>
+                    <div class="property-row">
+                        <div class="property-input-group">
+                            <label>X</label>
+                            <input type="number" class="property-input" id="posX" step="0.1" onchange="updateTransform('position')">
+                        </div>
+                        <div class="property-input-group">
+                            <label>Y</label>
+                            <input type="number" class="property-input" id="posY" step="0.1" onchange="updateTransform('position')">
+                        </div>
+                        <div class="property-input-group">
+                            <label>Z</label>
+                            <input type="number" class="property-input" id="posZ" step="0.1" onchange="updateTransform('position')">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="property-group">
+                    <div class="property-label">회전 (Rotation)</div>
+                    <div class="property-row">
+                        <div class="property-input-group">
+                            <label>X</label>
+                            <input type="number" class="property-input" id="rotX" step="1" onchange="updateTransform('rotation')">
+                        </div>
+                        <div class="property-input-group">
+                            <label>Y</label>
+                            <input type="number" class="property-input" id="rotY" step="1" onchange="updateTransform('rotation')">
+                        </div>
+                        <div class="property-input-group">
+                            <label>Z</label>
+                            <input type="number" class="property-input" id="rotZ" step="1" onchange="updateTransform('rotation')">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="property-group">
+                    <div class="property-label">크기 (Scale)</div>
+                    <div class="property-row">
+                        <div class="property-input-group">
+                            <label>X</label>
+                            <input type="number" class="property-input" id="scaleX" step="0.1" value="1" onchange="updateTransform('scale')">
+                        </div>
+                        <div class="property-input-group">
+                            <label>Y</label>
+                            <input type="number" class="property-input" id="scaleY" step="0.1" value="1" onchange="updateTransform('scale')">
+                        </div>
+                        <div class="property-input-group">
+                            <label>Z</label>
+                            <input type="number" class="property-input" id="scaleZ" step="0.1" value="1" onchange="updateTransform('scale')">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Scene Hierarchy -->
+                <div class="property-group">
+                    <div class="property-label">씬 계층 구조</div>
+                    <div class="hierarchy-list" id="hierarchyList">
+                        <!-- Items will be generated dynamically -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Assembly Section -->
+            <div class="assembly-section">
+                <div class="assembly-header">
+                    <div class="assembly-title">
+                        <i data-lucide="layers"></i>
+                        조립 레벨
+                    </div>
+                    <input type="number" class="assembly-level-input" id="assemblyLevel" min="0" max="99" value="0" onchange="setAssemblyLevel(this.value)">
+                </div>
+                <input type="range" class="assembly-slider" id="assemblySlider" min="0" max="20" value="20" oninput="filterByAssemblyLevel(this.value)">
+                <div style="font-size: 11px; color: var(--text-secondary); margin-top: 6px;">
+                    표시 단계: 0 ~ <span id="currentAssemblyLevel">20</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast"></div>
+
+    <!-- Save Wizard Modal -->
+    <div class="modal-overlay hidden" id="wizardModal">
+        <div class="wizard-modal">
+            <div class="wizard-header">
+                <div class="wizard-steps">
+                    <div class="wizard-step active" data-step="1">
+                        <span class="wizard-step-number">1</span>
+                        <span>작품 정보</span>
+                    </div>
+                    <div class="wizard-step" data-step="2">
+                        <span class="wizard-step-number">2</span>
+                        <span>공개 설정</span>
+                    </div>
+                    <div class="wizard-step" data-step="3">
+                        <span class="wizard-step-number">3</span>
+                        <span>검토 및 저장</span>
+                    </div>
+                </div>
+                <h2 class="wizard-title" id="wizardTitle">작품 정보 입력</h2>
+            </div>
+            <div class="wizard-body" id="wizardBody">
+                <!-- Step 1: 작품 정보 -->
+                <div class="wizard-step-content" id="step1Content">
+                    <div class="form-group">
+                        <label class="form-label">작품명 <span class="required">*</span></label>
+                        <input type="text" class="form-input" id="wizardTitleInput" placeholder="작품의 제목을 입력하세요" value="새 BrickArt 작품">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">작품 설명</label>
+                        <textarea class="form-input form-textarea" id="wizardDescription" placeholder="작품에 대한 설명을 입력하세요"></textarea>
+                        <p class="form-hint">작품의 특징이나 제작 의도를 설명해주세요</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">카테고리 <span class="required">*</span></label>
+                        <div class="category-grid">
+                            <div class="category-item" data-category="character">
+                                <i data-lucide="smile"></i>
+                                캐릭터
+                            </div>
+                            <div class="category-item" data-category="animal">
+                                <i data-lucide="cat"></i>
+                                동물
+                            </div>
+                            <div class="category-item" data-category="vehicle">
+                                <i data-lucide="car"></i>
+                                탈것
+                            </div>
+                            <div class="category-item" data-category="building">
+                                <i data-lucide="building"></i>
+                                건물
+                            </div>
+                            <div class="category-item" data-category="mecha">
+                                <i data-lucide="bot"></i>
+                                로봇/메카
+                            </div>
+                            <div class="category-item" data-category="furniture">
+                                <i data-lucide="armchair"></i>
+                                가구
+                            </div>
+                            <div class="category-item" data-category="nature">
+                                <i data-lucide="tree-pine"></i>
+                                자연
+                            </div>
+                            <div class="category-item" data-category="other">
+                                <i data-lucide="shapes"></i>
+                                기타
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">태그</label>
+                        <div class="tags-input-wrapper" id="tagsWrapper">
+                            <input type="text" class="tag-input" id="tagInput" placeholder="태그 입력 후 Enter">
+                        </div>
+                        <p class="form-hint">쉼표 또는 Enter로 태그를 추가하세요 (최대 10개)</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">썸네일</label>
+                        <div class="thumbnail-section">
+                            <div class="thumbnail-preview empty" id="thumbnailPreview">
+                                <i data-lucide="image"></i>
+                                <span>미리보기</span>
+                            </div>
+                            <div class="thumbnail-options">
+                                <button class="thumbnail-btn" id="btnAutoThumbnail">
+                                    <i data-lucide="camera"></i>
+                                    현재 뷰에서 캡처
+                                </button>
+                                <button class="thumbnail-btn" id="btnUploadThumbnail">
+                                    <i data-lucide="upload"></i>
+                                    이미지 업로드
+                                </button>
+                                <p class="form-hint">권장 크기: 400x400px</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 2: 공개 설정 -->
+                <div class="wizard-step-content" id="step2Content" style="display: none;">
+                    <div class="form-group">
+                        <label class="form-label">공개 범위 <span class="required">*</span></label>
+                        <div class="visibility-options">
+                            <div class="visibility-option active" data-visibility="public">
+                                <div class="visibility-radio"></div>
+                                <div class="visibility-icon">
+                                    <i data-lucide="globe"></i>
+                                </div>
+                                <div class="visibility-content">
+                                    <div class="visibility-title">전체 공개</div>
+                                    <div class="visibility-desc">모든 사용자가 작품을 볼 수 있습니다. 검색 결과와 갤러리에 노출됩니다.</div>
+                                </div>
+                            </div>
+                            <div class="visibility-option" data-visibility="link">
+                                <div class="visibility-radio"></div>
+                                <div class="visibility-icon">
+                                    <i data-lucide="link"></i>
+                                </div>
+                                <div class="visibility-content">
+                                    <div class="visibility-title">링크 공유</div>
+                                    <div class="visibility-desc">링크를 아는 사람만 볼 수 있습니다. 검색 결과에는 노출되지 않습니다.</div>
+                                </div>
+                            </div>
+                            <div class="visibility-option" data-visibility="private">
+                                <div class="visibility-radio"></div>
+                                <div class="visibility-icon">
+                                    <i data-lucide="lock"></i>
+                                </div>
+                                <div class="visibility-content">
+                                    <div class="visibility-title">비공개</div>
+                                    <div class="visibility-desc">나만 볼 수 있습니다. 다른 사용자에게 노출되지 않습니다.</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="license-section">
+                        <label class="form-label">라이선스 설정</label>
+                        <p class="form-hint" style="margin-bottom: 12px;">다른 사용자가 이 작품을 어떻게 사용할 수 있는지 설정합니다.</p>
+                        <div class="license-options">
+                            <div class="license-option active" data-license="view">
+                                <div class="license-checkbox">
+                                    <i data-lucide="check"></i>
+                                </div>
+                                <span class="license-label">보기 허용</span>
+                            </div>
+                            <div class="license-option" data-license="download">
+                                <div class="license-checkbox">
+                                    <i data-lucide="check"></i>
+                                </div>
+                                <span class="license-label">다운로드 허용</span>
+                            </div>
+                            <div class="license-option" data-license="remix">
+                                <div class="license-checkbox">
+                                    <i data-lucide="check"></i>
+                                </div>
+                                <span class="license-label">수정/리믹스 허용</span>
+                            </div>
+                            <div class="license-option" data-license="commercial">
+                                <div class="license-checkbox">
+                                    <i data-lucide="check"></i>
+                                </div>
+                                <span class="license-label">상업적 이용 허용</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 3: 검토 및 저장 -->
+                <div class="wizard-step-content" id="step3Content" style="display: none;">
+                    <div class="review-section">
+                        <div class="review-section-title">
+                            <i data-lucide="file-text"></i>
+                            작품 정보
+                        </div>
+                        <div class="review-row">
+                            <span class="review-label">작품명</span>
+                            <span class="review-value" id="reviewTitle">-</span>
+                        </div>
+                        <div class="review-row">
+                            <span class="review-label">설명</span>
+                            <span class="review-value" id="reviewDescription">-</span>
+                        </div>
+                        <div class="review-row">
+                            <span class="review-label">카테고리</span>
+                            <span class="review-value" id="reviewCategory">-</span>
+                        </div>
+                        <div class="review-row">
+                            <span class="review-label">태그</span>
+                            <div class="review-value">
+                                <div class="review-tags" id="reviewTags"></div>
+                            </div>
+                        </div>
+                        <div class="review-row">
+                            <span class="review-label">썸네일</span>
+                            <div class="review-thumbnail" id="reviewThumbnail">
+                                <img src="" alt="썸네일">
+                            </div>
+                        </div>
+                        <div class="review-row">
+                            <span class="review-label">객체 수</span>
+                            <span class="review-value" id="reviewObjectCount">0개</span>
+                        </div>
+                    </div>
+
+                    <div class="review-section">
+                        <div class="review-section-title">
+                            <i data-lucide="eye"></i>
+                            공개 설정
+                        </div>
+                        <div class="review-row">
+                            <span class="review-label">공개 범위</span>
+                            <span class="review-value" id="reviewVisibility">-</span>
+                        </div>
+                        <div class="review-row">
+                            <span class="review-label">라이선스</span>
+                            <span class="review-value" id="reviewLicense">-</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 4: 완료 -->
+                <div class="wizard-step-content" id="step4Content" style="display: none;">
+                    <div class="success-animation">
+                        <div class="success-icon">
+                            <i data-lucide="check"></i>
+                        </div>
+                        <h3 class="success-title">저장이 완료되었습니다!</h3>
+                        <p class="success-message">BrickArt 작품이 성공적으로 저장되었습니다.<br>갤러리에서 작품을 확인할 수 있습니다.</p>
+                        <div class="success-actions">
+                            <button class="wizard-btn wizard-btn-secondary" onclick="closeWizardAndContinue()">
+                                <i data-lucide="edit"></i>
+                                계속 편집
+                            </button>
+                            <button class="wizard-btn wizard-btn-primary" onclick="goToGallery()">
+                                <i data-lucide="images"></i>
+                                갤러리로 이동
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="wizard-footer" id="wizardFooter">
+                <button class="wizard-btn wizard-btn-secondary" id="wizardPrev" onclick="wizardPrevStep()">
+                    <i data-lucide="arrow-left"></i>
+                    이전
+                </button>
+                <div style="display: flex; gap: 12px;">
+                    <button class="wizard-btn wizard-btn-secondary" onclick="closeWizard()">취소</button>
+                    <button class="wizard-btn wizard-btn-primary" id="wizardNext" onclick="wizardNextStep()">
+                        다음
+                        <i data-lucide="arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hidden file input for thumbnail -->
+    <input type="file" id="thumbnailImport" accept="image/*" style="display: none;">
+
+    <!-- Save Modal (legacy) -->
+    <div class="modal-overlay hidden" id="saveModal">
+        <div class="modal">
+            <div class="modal-title">저장 완료</div>
+            <div class="modal-content" id="saveModalContent">프로젝트가 성공적으로 저장되었습니다.</div>
+            <div class="modal-actions">
+                <button class="modal-btn modal-btn-primary" onclick="closeSaveModal()">확인</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ==========================================
+        // BrickArt 3D Editor
+        // Ported from legacy VrMallEditorView.tsx
+        // ==========================================
+
+        let scene, camera, renderer, orbitControl, transformControl;
+        let assetGroup, selectedGroup;
+        let selectedObjects = [];
+        let clock;
+
+        // Editor History
+        let editorHistory = [];
+        let historyIndex = 0;
+        const MAX_HISTORY = 50;
+
+        // Materials
+        let hideMaterial, glassMaterial;
+
+        // Counter for unique names
+        let objectCounter = 0;
+
+        // Clipboard
+        let clipboard = [];
+
+        // Current transform mode
+        let currentMode = 'translate';
+
+        // Color palette data
+        const colorData = [
+            {id:1,title:"White",color:"#F8F8F8"},
+            {id:2,title:"Sand Yellow",color:"#D9D097"},
+            {id:3,title:"Light Yellow",color:"#DFCD77"},
+            {id:4,title:"Yellow",color:"#DEBC1A"},
+            {id:5,title:"Yellow Deep",color:"#E6A321"},
+            {id:6,title:"Orange",color:"#F15607"},
+            {id:10,title:"Dark Orange",color:"#EB3300"},
+            {id:11,title:"Red",color:"#A10000"},
+            {id:12,title:"Bordeaux",color:"#550002"},
+            {id:16,title:"Raw Sienna",color:"#A56F41"},
+            {id:17,title:"Brown Yellow",color:"#C05B31"},
+            {id:22,title:"Coffee",color:"#5C3A31"},
+            {id:24,title:"Dark Brown",color:"#382720"},
+            {id:29,title:"Light Green",color:"#2FA75F"},
+            {id:30,title:"Green",color:"#17834C"},
+            {id:31,title:"Pale Green",color:"#BCD884"},
+            {id:32,title:"Apple Green",color:"#8BAB30"},
+            {id:33,title:"Grass Green",color:"#829539"},
+            {id:34,title:"Sap Green",color:"#3C682B"},
+            {id:37,title:"Pink",color:"#D09CC3"},
+            {id:38,title:"Peach Red",color:"#CA7F96"},
+            {id:39,title:"Dark Pink",color:"#D84CA3"},
+            {id:40,title:"Plum Red",color:"#D44B79"},
+            {id:41,title:"Rose Red",color:"#AC2C5C"},
+            {id:47,title:"Medium Violet",color:"#87318E"},
+            {id:48,title:"Purple",color:"#3F3189"},
+            {id:50,title:"Pale Purple",color:"#AA9ED0"},
+            {id:52,title:"Light Purple",color:"#9D72B9"},
+            {id:55,title:"Mint Green",color:"#B4D8D4"},
+            {id:56,title:"Aqua Blue",color:"#3CABC9"},
+            {id:57,title:"Sea Blue",color:"#0598C1"},
+            {id:58,title:"Cerulean",color:"#3E77BE"},
+            {id:59,title:"Sky Blue",color:"#1285C9"},
+            {id:60,title:"Blue",color:"#154EB2"},
+            {id:65,title:"Dark Blue",color:"#145F9E"},
+            {id:66,title:"Marine Blue",color:"#1A3564"},
+            {id:71,title:"Black Gray",color:"#33383E"},
+            {id:72,title:"Black",color:"#181C1F"},
+            {id:74,title:"Light Gray",color:"#869197"},
+            {id:75,title:"Medium Gray",color:"#666F6E"},
+            {id:77,title:"Dark Gray",color:"#4F545A"},
+            {id:78,title:"Gray White",color:"#CFCDC9"},
+            {id:88,title:"Turquoise Blue",color:"#00B2A9"},
+            {id:89,title:"Mono Warm",color:"#CDA077"},
+            {id:90,title:"Burnt Umber",color:"#89532F"},
+            {id:91,title:"Compose Blue",color:"#71C5E8"},
+            {id:92,title:"Indigo",color:"#003B5C"}
+        ];
+
+        let selectedColor = 0x0066FF;
+
+        // Initialize
+        function init() {
+            const container = document.getElementById('editorCanvas');
+            const rect = document.getElementById('canvasContainer').getBoundingClientRect();
+
+            // Scene
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x1a1a2e);
+
+            // Camera
+            camera = new THREE.PerspectiveCamera(45, rect.width / rect.height, 0.1, 1000);
+            camera.position.set(15, 12, 15);
+            camera.lookAt(0, 0, 0);
+
+            // Renderer
+            renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
+            renderer.setPixelRatio(window.devicePixelRatio);
+            renderer.setSize(rect.width, rect.height);
+            renderer.shadowMap.enabled = true;
+            renderer.outputEncoding = THREE.sRGBEncoding;
+            container.appendChild(renderer.domElement);
+
+            // OrbitControls
+            orbitControl = new THREE.OrbitControls(camera, renderer.domElement);
+            orbitControl.enableDamping = true;
+            orbitControl.dampingFactor = 0.05;
+            orbitControl.screenSpacePanning = true;
+
+            // TransformControls
+            transformControl = new THREE.TransformControls(camera, renderer.domElement);
+            transformControl.addEventListener('change', render);
+            transformControl.addEventListener('dragging-changed', (e) => {
+                orbitControl.enabled = !e.value;
+            });
+            transformControl.setTranslationSnap(0.1);
+            transformControl.setRotationSnap(THREE.MathUtils.degToRad(15));
+            scene.add(transformControl);
+
+            // Asset Group
+            assetGroup = new THREE.Group();
+            assetGroup.name = 'assetGroup';
+            scene.add(assetGroup);
+
+            // Selected Group
+            selectedGroup = new THREE.Group();
+            selectedGroup.name = 'selectedGroup';
+            scene.add(selectedGroup);
+
+            // Clock
+            clock = new THREE.Clock();
+
+            // Materials
+            hideMaterial = new THREE.MeshPhysicalMaterial({
+                opacity: 0,
+                transparent: true,
+                depthWrite: false
+            });
+
+            glassMaterial = new THREE.MeshPhysicalMaterial({
+                opacity: 0.15,
+                transparent: true,
+                color: 0x88ccff,
+                depthWrite: false
+            });
+
+            // Lighting
+            setupLighting();
+
+            // Environment
+            setupEnvironment();
+
+            // Generate color palette
+            generateColorPalette();
+
+            // Events
+            window.addEventListener('resize', onWindowResize);
+            document.addEventListener('keydown', onKeyDown);
+            renderer.domElement.addEventListener('click', onCanvasClick);
+
+            // Hide loading
+            setTimeout(() => {
+                document.getElementById('loadingOverlay').classList.add('hidden');
+            }, 1000);
+
+            // Animate
+            animate();
+        }
+
+        function setupLighting() {
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
+            scene.add(ambientLight);
+
+            const directions = [[1, 1, 1], [-1, 1, 1], [1, 1, -1], [-1, 1, -1]];
+            directions.forEach((dir, i) => {
+                const light = new THREE.DirectionalLight(0xffffff, 0.4);
+                light.position.set(dir[0] * 10, dir[1] * 10, dir[2] * 10);
+                if (i === 0) {
+                    light.castShadow = true;
+                    light.shadow.mapSize.width = 2048;
+                    light.shadow.mapSize.height = 2048;
+                }
+                scene.add(light);
+            });
+        }
+
+        function setupEnvironment() {
+            // Ground
+            const groundGeometry = new THREE.PlaneGeometry(50, 50);
+            const groundMaterial = new THREE.MeshStandardMaterial({
+                color: 0x2a2a4e,
+                roughness: 0.8
+            });
+            const ground = new THREE.Mesh(groundGeometry, groundMaterial);
+            ground.rotation.x = -Math.PI / 2;
+            ground.position.y = -0.01;
+            ground.receiveShadow = true;
+            ground.name = 'ground';
+            scene.add(ground);
+
+            // Grid
+            const gridHelper = new THREE.GridHelper(50, 50, 0x444466, 0x333355);
+            scene.add(gridHelper);
+        }
+
+        function generateColorPalette() {
+            const palette = document.getElementById('colorPalette');
+            colorData.forEach(color => {
+                const swatch = document.createElement('div');
+                swatch.className = 'color-swatch';
+                swatch.style.backgroundColor = color.color;
+                swatch.title = color.title;
+                swatch.onclick = () => selectColor(color.color, swatch);
+                palette.appendChild(swatch);
+            });
+        }
+
+        function selectColor(colorHex, element) {
+            document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('selected'));
+            element.classList.add('selected');
+            selectedColor = new THREE.Color(colorHex).getHex();
+
+            // Apply to selected objects
+            if (selectedObjects.length > 0) {
+                selectedObjects.forEach(obj => {
+                    if (obj.material) {
+                        obj.material.color.setHex(selectedColor);
+                    }
+                });
+                showToast('색상 적용됨');
+            }
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            orbitControl.update();
+            render();
+        }
+
+        function render() {
+            renderer.render(scene, camera);
+        }
+
+        function onWindowResize() {
+            const rect = document.getElementById('canvasContainer').getBoundingClientRect();
+            camera.aspect = rect.width / rect.height;
+            camera.updateProjectionMatrix();
+            renderer.setSize(rect.width, rect.height);
+        }
+
+        // Add Primitive
+        function addPrimitive(type) {
+            let geometry, size = 1;
+
+            switch(type) {
+                case 'box':
+                    geometry = new THREE.BoxGeometry(1, 1, 1);
+                    break;
+                case 'sphere':
+                    geometry = new THREE.SphereGeometry(0.5, 32, 32);
+                    break;
+                case 'cylinder':
+                    geometry = new THREE.CylinderGeometry(0.5, 0.5, 1, 32);
+                    break;
+                case 'cone':
+                    geometry = new THREE.ConeGeometry(0.5, 1, 32);
+                    break;
+                case 'torus':
+                    geometry = new THREE.TorusGeometry(0.4, 0.15, 16, 32);
+                    break;
+                case 'plane':
+                    geometry = new THREE.PlaneGeometry(1, 1);
+                    break;
+                case 'brick1x1':
+                    geometry = new THREE.BoxGeometry(0.8, 0.32, 0.8);
+                    break;
+                case 'brick2x1':
+                    geometry = new THREE.BoxGeometry(1.6, 0.32, 0.8);
+                    break;
+                case 'brick2x2':
+                    geometry = new THREE.BoxGeometry(1.6, 0.32, 1.6);
+                    break;
+                case 'brick4x2':
+                    geometry = new THREE.BoxGeometry(3.2, 0.32, 1.6);
+                    break;
+                default:
+                    geometry = new THREE.BoxGeometry(1, 1, 1);
+            }
+
+            const material = new THREE.MeshStandardMaterial({
+                color: selectedColor,
+                roughness: 0.6,
+                metalness: 0.1
+            });
+
+            const mesh = new THREE.Mesh(geometry, material);
+            mesh.position.set(0, geometry.parameters.height ? geometry.parameters.height / 2 : 0.5, 0);
+            mesh.castShadow = true;
+            mesh.receiveShadow = true;
+            mesh.name = `${type}_${++objectCounter}`;
+            mesh.userData = {
+                type: type,
+                assemblyLevel: 0,
+                originalMaterial: material
+            };
+
+            assetGroup.add(mesh);
+            saveToHistory('add', [mesh]);
+            selectObject(mesh);
+            updateHierarchy();
+            updateObjectCount();
+            showToast(`${type} 추가됨`);
+        }
+
+        // Selection
+        function onCanvasClick(event) {
+            const rect = renderer.domElement.getBoundingClientRect();
+            const mouse = new THREE.Vector2(
+                ((event.clientX - rect.left) / rect.width) * 2 - 1,
+                -((event.clientY - rect.top) / rect.height) * 2 + 1
+            );
+
+            const raycaster = new THREE.Raycaster();
+            raycaster.setFromCamera(mouse, camera);
+            const intersects = raycaster.intersectObjects(assetGroup.children, true);
+
+            if (intersects.length > 0) {
+                let obj = intersects[0].object;
+                while (obj.parent && obj.parent !== assetGroup) {
+                    obj = obj.parent;
+                }
+
+                if (event.shiftKey) {
+                    toggleSelection(obj);
+                } else {
+                    selectObject(obj);
+                }
+            } else if (!event.shiftKey) {
+                clearSelection();
+            }
+        }
+
+        function selectObject(obj) {
+            clearSelection();
+            selectedObjects = [obj];
+            transformControl.attach(obj);
+            updatePropertiesPanel(obj);
+            updateHierarchy();
+        }
+
+        function toggleSelection(obj) {
+            const idx = selectedObjects.indexOf(obj);
+            if (idx > -1) {
+                selectedObjects.splice(idx, 1);
+            } else {
+                selectedObjects.push(obj);
+            }
+
+            if (selectedObjects.length === 1) {
+                transformControl.attach(selectedObjects[0]);
+            } else {
+                transformControl.detach();
+            }
+            updatePropertiesPanel(selectedObjects[0]);
+            updateHierarchy();
+        }
+
+        function clearSelection() {
+            selectedObjects = [];
+            transformControl.detach();
+            document.getElementById('selectedName').textContent = '선택된 객체 없음';
+            document.getElementById('selectedInfo').textContent = '선택 없음';
+            updateHierarchy();
+        }
+
+        function updatePropertiesPanel(obj) {
+            if (!obj) return;
+
+            document.getElementById('selectedName').textContent = obj.name;
+            document.getElementById('selectedInfo').textContent = `선택: ${obj.name}`;
+
+            document.getElementById('posX').value = obj.position.x.toFixed(2);
+            document.getElementById('posY').value = obj.position.y.toFixed(2);
+            document.getElementById('posZ').value = obj.position.z.toFixed(2);
+
+            document.getElementById('rotX').value = THREE.MathUtils.radToDeg(obj.rotation.x).toFixed(0);
+            document.getElementById('rotY').value = THREE.MathUtils.radToDeg(obj.rotation.y).toFixed(0);
+            document.getElementById('rotZ').value = THREE.MathUtils.radToDeg(obj.rotation.z).toFixed(0);
+
+            document.getElementById('scaleX').value = obj.scale.x.toFixed(2);
+            document.getElementById('scaleY').value = obj.scale.y.toFixed(2);
+            document.getElementById('scaleZ').value = obj.scale.z.toFixed(2);
+
+            if (obj.userData.assemblyLevel !== undefined) {
+                document.getElementById('assemblyLevel').value = obj.userData.assemblyLevel;
+            }
+        }
+
+        function updateTransform(type) {
+            if (selectedObjects.length === 0) return;
+            const obj = selectedObjects[0];
+
+            if (type === 'position') {
+                obj.position.set(
+                    parseFloat(document.getElementById('posX').value) || 0,
+                    parseFloat(document.getElementById('posY').value) || 0,
+                    parseFloat(document.getElementById('posZ').value) || 0
+                );
+            } else if (type === 'rotation') {
+                obj.rotation.set(
+                    THREE.MathUtils.degToRad(parseFloat(document.getElementById('rotX').value) || 0),
+                    THREE.MathUtils.degToRad(parseFloat(document.getElementById('rotY').value) || 0),
+                    THREE.MathUtils.degToRad(parseFloat(document.getElementById('rotZ').value) || 0)
+                );
+            } else if (type === 'scale') {
+                obj.scale.set(
+                    parseFloat(document.getElementById('scaleX').value) || 1,
+                    parseFloat(document.getElementById('scaleY').value) || 1,
+                    parseFloat(document.getElementById('scaleZ').value) || 1
+                );
+            }
+        }
+
+        // Transform Mode
+        function setTransformMode(mode) {
+            currentMode = mode;
+            document.querySelectorAll('.toolbar-btn').forEach(btn => btn.classList.remove('active'));
+
+            if (mode === 'select') {
+                document.getElementById('selectBtn').classList.add('active');
+                transformControl.detach();
+            } else {
+                document.getElementById(mode + 'Btn').classList.add('active');
+                transformControl.setMode(mode);
+                if (selectedObjects.length > 0) {
+                    transformControl.attach(selectedObjects[0]);
+                }
+            }
+        }
+
+        // History (Undo/Redo)
+        function saveToHistory(action, objects) {
+            editorHistory = editorHistory.slice(0, historyIndex);
+            editorHistory.push({
+                action: action,
+                objects: objects.map(o => ({
+                    name: o.name,
+                    position: o.position.clone(),
+                    rotation: o.rotation.clone(),
+                    scale: o.scale.clone()
+                }))
+            });
+            if (editorHistory.length > MAX_HISTORY) {
+                editorHistory.shift();
+            }
+            historyIndex = editorHistory.length;
+        }
+
+        function undo() {
+            if (historyIndex > 0) {
+                historyIndex--;
+                const action = editorHistory[historyIndex];
+                if (action.action === 'add') {
+                    action.objects.forEach(data => {
+                        const obj = assetGroup.getObjectByName(data.name);
+                        if (obj) assetGroup.remove(obj);
+                    });
+                }
+                updateHierarchy();
+                updateObjectCount();
+                showToast('실행 취소');
+            }
+        }
+
+        function redo() {
+            if (historyIndex < editorHistory.length) {
+                const action = editorHistory[historyIndex];
+                historyIndex++;
+                showToast('다시 실행');
+            }
+        }
+
+        // Copy/Delete
+        function copySelected() {
+            if (selectedObjects.length === 0) {
+                showToast('복사할 객체를 선택하세요');
+                return;
+            }
+
+            selectedObjects.forEach(obj => {
+                const clone = obj.clone();
+                clone.name = `${obj.userData.type || 'object'}_${++objectCounter}`;
+                clone.position.x += 1;
+                clone.userData = { ...obj.userData };
+                assetGroup.add(clone);
+            });
+
+            updateHierarchy();
+            updateObjectCount();
+            showToast('복사됨');
+        }
+
+        function deleteSelected() {
+            if (selectedObjects.length === 0) {
+                showToast('삭제할 객체를 선택하세요');
+                return;
+            }
+
+            saveToHistory('delete', selectedObjects);
+            selectedObjects.forEach(obj => {
+                assetGroup.remove(obj);
+            });
+            clearSelection();
+            updateHierarchy();
+            updateObjectCount();
+            showToast('삭제됨');
+        }
+
+        function toggleVisibility() {
+            if (selectedObjects.length === 0) return;
+
+            selectedObjects.forEach(obj => {
+                if (!obj.userData.originalMaterial) {
+                    obj.userData.originalMaterial = obj.material;
+                }
+                if (obj.material === hideMaterial) {
+                    obj.material = obj.userData.originalMaterial;
+                } else {
+                    obj.material = hideMaterial;
+                }
+            });
+            showToast('가시성 변경됨');
+        }
+
+        // Camera
+        function focusSelected() {
+            if (selectedObjects.length === 0) {
+                showToast('객체를 선택하세요');
+                return;
+            }
+            const obj = selectedObjects[0];
+            orbitControl.target.copy(obj.position);
+            showToast('선택으로 이동');
+        }
+
+        function resetCamera() {
+            camera.position.set(15, 12, 15);
+            orbitControl.target.set(0, 0, 0);
+            orbitControl.update();
+            showToast('카메라 리셋');
+        }
+
+        // Assembly Level
+        function setAssemblyLevel(level) {
+            if (selectedObjects.length === 0) return;
+            selectedObjects.forEach(obj => {
+                obj.userData.assemblyLevel = parseInt(level);
+            });
+            showToast(`조립 레벨: ${level}`);
+        }
+
+        function filterByAssemblyLevel(maxLevel) {
+            document.getElementById('currentAssemblyLevel').textContent = maxLevel;
+            assetGroup.children.forEach(obj => {
+                if (obj.userData.assemblyLevel !== undefined) {
+                    if (obj.userData.assemblyLevel <= maxLevel) {
+                        if (obj.userData.originalMaterial) {
+                            obj.material = obj.userData.originalMaterial;
+                        }
+                    } else {
+                        if (!obj.userData.originalMaterial) {
+                            obj.userData.originalMaterial = obj.material;
+                        }
+                        obj.material = glassMaterial;
+                    }
+                }
+            });
+        }
+
+        // Hierarchy
+        function updateHierarchy() {
+            const list = document.getElementById('hierarchyList');
+            list.innerHTML = '';
+
+            assetGroup.children.forEach(obj => {
+                const item = document.createElement('div');
+                item.className = 'hierarchy-item' + (selectedObjects.includes(obj) ? ' selected' : '');
+                item.onclick = () => selectObject(obj);
+
+                const colorHex = obj.material && obj.material.color ? '#' + obj.material.color.getHexString() : '#666';
+
+                item.innerHTML = `
+                    <div class="hierarchy-color" style="background: ${colorHex}"></div>
+                    <div class="hierarchy-name">${obj.name}</div>
+                    <div class="hierarchy-actions">
+                        <button class="hierarchy-btn" onclick="event.stopPropagation(); focusOnObject('${obj.name}')">
+                            <i data-lucide="focus"></i>
+                        </button>
+                        <button class="hierarchy-btn" onclick="event.stopPropagation(); deleteByName('${obj.name}')">
+                            <i data-lucide="trash-2"></i>
+                        </button>
+                    </div>
+                `;
+                list.appendChild(item);
+            });
+
+            lucide.createIcons();
+        }
+
+        function focusOnObject(name) {
+            const obj = assetGroup.getObjectByName(name);
+            if (obj) {
+                orbitControl.target.copy(obj.position);
+            }
+        }
+
+        function deleteByName(name) {
+            const obj = assetGroup.getObjectByName(name);
+            if (obj) {
+                assetGroup.remove(obj);
+                if (selectedObjects.includes(obj)) {
+                    clearSelection();
+                }
+                updateHierarchy();
+                updateObjectCount();
+                showToast('삭제됨');
+            }
+        }
+
+        function updateObjectCount() {
+            document.getElementById('objectCount').textContent = assetGroup.children.length;
+        }
+
+        // Keyboard Shortcuts
+        function onKeyDown(event) {
+            if (event.target.tagName === 'INPUT') return;
+
+            if (event.key === 'm' || event.key === 'M') {
+                setTransformMode('translate');
+            } else if (event.key === 'r' && !event.ctrlKey) {
+                setTransformMode('rotate');
+            } else if (event.key === 's' && !event.ctrlKey) {
+                setTransformMode('scale');
+            } else if (event.key === 'v' || event.key === 'V') {
+                setTransformMode('select');
+            } else if (event.key === 'h' || event.key === 'H') {
+                toggleVisibility();
+            } else if (event.key === 'f' || event.key === 'F') {
+                focusSelected();
+            } else if (event.key === 'Delete') {
+                deleteSelected();
+            } else if (event.ctrlKey && event.key === 'z') {
+                event.preventDefault();
+                undo();
+            } else if (event.ctrlKey && event.key === 'y') {
+                event.preventDefault();
+                redo();
+            } else if (event.ctrlKey && event.key === 'c') {
+                event.preventDefault();
+                clipboard = selectedObjects.slice();
+                showToast('클립보드에 복사됨');
+            } else if (event.ctrlKey && event.key === 'v') {
+                event.preventDefault();
+                if (clipboard.length > 0) {
+                    copySelected();
+                }
+            } else if (event.key === 'Escape') {
+                clearSelection();
+            }
+        }
+
+        // Tab Switch
+        function switchAssetTab(tab) {
+            document.querySelectorAll('.sidebar-tab').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+
+            document.getElementById('shapesTab').style.display = tab === 'shapes' ? 'block' : 'none';
+            document.getElementById('colorsTab').style.display = tab === 'colors' ? 'block' : 'none';
+        }
+
+        // Export Functions
+        function exportPNG() {
+            try {
+                const dataUrl = renderer.domElement.toDataURL('image/png');
+                const link = document.createElement('a');
+                link.download = 'brickart-editor.png';
+                link.href = dataUrl;
+                link.click();
+                showToast('PNG 내보내기 완료');
+            } catch (e) {
+                showToast('PNG 내보내기 실패');
+            }
+        }
+
+        function exportGLTF() {
+            const exporter = new THREE.GLTFExporter();
+            exporter.parse(assetGroup, (gltf) => {
+                const blob = new Blob([JSON.stringify(gltf)], { type: 'application/json' });
+                const link = document.createElement('a');
+                link.download = 'brickart-editor.gltf';
+                link.href = URL.createObjectURL(blob);
+                link.click();
+                showToast('GLTF 내보내기 완료');
+            });
+        }
+
+        function exportSTL() {
+            const exporter = new THREE.STLExporter();
+            const result = exporter.parse(assetGroup);
+            const blob = new Blob([result], { type: 'application/octet-stream' });
+            const link = document.createElement('a');
+            link.download = 'brickart-editor.stl';
+            link.href = URL.createObjectURL(blob);
+            link.click();
+            showToast('STL 내보내기 완료');
+        }
+
+        // Save Project - Opens Wizard
+        function saveProject() {
+            showSaveWizard();
+        }
+
+        function closeSaveModal() {
+            document.getElementById('saveModal').classList.add('hidden');
+        }
+
+        // ===============================================
+        // Save Wizard
+        // ===============================================
+        let wizardStep = 1;
+        let wizardData = {
+            title: '새 BrickArt 작품',
+            description: '',
+            category: '',
+            tags: [],
+            thumbnail: null,
+            visibility: 'public',
+            licenses: ['view']
+        };
+
+        function initWizardEventListeners() {
+            // Category selection
+            document.querySelectorAll('.category-item').forEach(item => {
+                item.addEventListener('click', () => {
+                    document.querySelectorAll('.category-item').forEach(i => i.classList.remove('active'));
+                    item.classList.add('active');
+                    wizardData.category = item.dataset.category;
+                });
+            });
+
+            // Tags input
+            const tagInput = document.getElementById('tagInput');
+            if (tagInput) {
+                tagInput.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' || e.key === ',') {
+                        e.preventDefault();
+                        addTag(tagInput.value.trim());
+                        tagInput.value = '';
+                    }
+                });
+            }
+
+            // Visibility selection
+            document.querySelectorAll('.visibility-option').forEach(option => {
+                option.addEventListener('click', () => {
+                    document.querySelectorAll('.visibility-option').forEach(o => o.classList.remove('active'));
+                    option.classList.add('active');
+                    wizardData.visibility = option.dataset.visibility;
+                });
+            });
+
+            // License selection
+            document.querySelectorAll('.license-option').forEach(option => {
+                option.addEventListener('click', () => {
+                    option.classList.toggle('active');
+                    const license = option.dataset.license;
+                    if (option.classList.contains('active')) {
+                        if (!wizardData.licenses.includes(license)) {
+                            wizardData.licenses.push(license);
+                        }
+                    } else {
+                        wizardData.licenses = wizardData.licenses.filter(l => l !== license);
+                    }
+                    lucide.createIcons();
+                });
+            });
+
+            // Auto-generate thumbnail
+            document.getElementById('btnAutoThumbnail').addEventListener('click', generateThumbnail);
+
+            // Upload thumbnail
+            document.getElementById('btnUploadThumbnail').addEventListener('click', () => {
+                document.getElementById('thumbnailImport').click();
+            });
+
+            document.getElementById('thumbnailImport').addEventListener('change', (e) => {
+                if (e.target.files[0]) {
+                    const reader = new FileReader();
+                    reader.onload = (event) => {
+                        wizardData.thumbnail = event.target.result;
+                        updateThumbnailPreview();
+                    };
+                    reader.readAsDataURL(e.target.files[0]);
+                }
+            });
+        }
+
+        function showSaveWizard() {
+            wizardStep = 1;
+
+            // Generate thumbnail automatically
+            generateThumbnail();
+
+            // Reset wizard state
+            updateWizardStep();
+            document.getElementById('wizardModal').classList.remove('hidden');
+            lucide.createIcons();
+        }
+
+        function closeWizard() {
+            document.getElementById('wizardModal').classList.add('hidden');
+        }
+
+        function closeWizardAndContinue() {
+            closeWizard();
+            showToast('편집을 계속합니다');
+        }
+
+        function goToGallery() {
+            window.location.href = '07_brickart_list.html';
+        }
+
+        function generateThumbnail() {
+            try {
+                const dataUrl = renderer.domElement.toDataURL('image/png');
+                wizardData.thumbnail = dataUrl;
+                updateThumbnailPreview();
+                showToast('썸네일이 생성되었습니다');
+            } catch (e) {
+                showToast('썸네일 생성 실패');
+            }
+        }
+
+        function updateThumbnailPreview() {
+            const preview = document.getElementById('thumbnailPreview');
+            if (wizardData.thumbnail) {
+                preview.classList.remove('empty');
+                preview.innerHTML = `<img src="${wizardData.thumbnail}" alt="썸네일">`;
+            }
+        }
+
+        function addTag(tag) {
+            if (!tag || wizardData.tags.length >= 10) return;
+            if (wizardData.tags.includes(tag)) return;
+
+            wizardData.tags.push(tag);
+            renderTags();
+        }
+
+        function removeTag(tag) {
+            wizardData.tags = wizardData.tags.filter(t => t !== tag);
+            renderTags();
+        }
+
+        function renderTags() {
+            const wrapper = document.getElementById('tagsWrapper');
+            const input = document.getElementById('tagInput');
+
+            // Remove existing chips
+            wrapper.querySelectorAll('.tag-chip').forEach(chip => chip.remove());
+
+            // Add new chips
+            wizardData.tags.forEach(tag => {
+                const chip = document.createElement('div');
+                chip.className = 'tag-chip';
+                chip.innerHTML = `
+                    ${tag}
+                    <button onclick="removeTag('${tag}')">
+                        <i data-lucide="x"></i>
+                    </button>
+                `;
+                wrapper.insertBefore(chip, input);
+            });
+
+            lucide.createIcons();
+        }
+
+        function wizardNextStep() {
+            // Validate current step
+            if (wizardStep === 1) {
+                wizardData.title = document.getElementById('wizardTitleInput').value.trim();
+                wizardData.description = document.getElementById('wizardDescription').value.trim();
+
+                if (!wizardData.title) {
+                    showToast('작품명을 입력해주세요');
+                    return;
+                }
+                if (!wizardData.category) {
+                    showToast('카테고리를 선택해주세요');
+                    return;
+                }
+            }
+
+            if (wizardStep === 3) {
+                // Save action
+                saveProjectData();
+                return;
+            }
+
+            wizardStep++;
+            updateWizardStep();
+        }
+
+        function wizardPrevStep() {
+            if (wizardStep > 1) {
+                wizardStep--;
+                updateWizardStep();
+            }
+        }
+
+        function updateWizardStep() {
+            // Update step indicators
+            document.querySelectorAll('.wizard-step').forEach(step => {
+                const stepNum = parseInt(step.dataset.step);
+                step.classList.remove('active', 'completed');
+                if (stepNum < wizardStep) {
+                    step.classList.add('completed');
+                    step.querySelector('.wizard-step-number').innerHTML = '<i data-lucide="check"></i>';
+                } else if (stepNum === wizardStep) {
+                    step.classList.add('active');
+                    step.querySelector('.wizard-step-number').textContent = stepNum;
+                } else {
+                    step.querySelector('.wizard-step-number').textContent = stepNum;
+                }
+            });
+
+            // Update title
+            const titles = {
+                1: '작품 정보 입력',
+                2: '공개 설정',
+                3: '검토 및 저장',
+                4: '저장 완료'
+            };
+            document.getElementById('wizardTitle').textContent = titles[wizardStep];
+
+            // Show/hide content
+            document.querySelectorAll('.wizard-step-content').forEach(content => {
+                content.style.display = 'none';
+            });
+            document.getElementById(`step${wizardStep}Content`).style.display = 'block';
+
+            // Update buttons
+            const prevBtn = document.getElementById('wizardPrev');
+            const nextBtn = document.getElementById('wizardNext');
+            const footer = document.getElementById('wizardFooter');
+
+            if (wizardStep === 1) {
+                prevBtn.style.visibility = 'hidden';
+            } else {
+                prevBtn.style.visibility = 'visible';
+            }
+
+            if (wizardStep === 3) {
+                nextBtn.innerHTML = '<i data-lucide="save"></i> 저장하기';
+            } else {
+                nextBtn.innerHTML = '다음 <i data-lucide="arrow-right"></i>';
+            }
+
+            if (wizardStep === 4) {
+                footer.style.display = 'none';
+            } else {
+                footer.style.display = 'flex';
+            }
+
+            // Update review step
+            if (wizardStep === 3) {
+                updateReviewStep();
+            }
+
+            lucide.createIcons();
+        }
+
+        function updateReviewStep() {
+            document.getElementById('reviewTitle').textContent = wizardData.title || '-';
+            document.getElementById('reviewDescription').textContent = wizardData.description || '(설명 없음)';
+
+            const categoryNames = {
+                'character': '캐릭터',
+                'animal': '동물',
+                'vehicle': '탈것',
+                'building': '건물',
+                'mecha': '로봇/메카',
+                'furniture': '가구',
+                'nature': '자연',
+                'other': '기타'
+            };
+            document.getElementById('reviewCategory').textContent = categoryNames[wizardData.category] || '-';
+
+            // Tags
+            const tagsContainer = document.getElementById('reviewTags');
+            tagsContainer.innerHTML = wizardData.tags.length > 0
+                ? wizardData.tags.map(tag => `<span class="review-tag">${tag}</span>`).join('')
+                : '<span style="color: var(--text-secondary);">(태그 없음)</span>';
+
+            // Thumbnail
+            const thumbnailContainer = document.getElementById('reviewThumbnail');
+            if (wizardData.thumbnail) {
+                thumbnailContainer.innerHTML = `<img src="${wizardData.thumbnail}" alt="썸네일">`;
+            }
+
+            // Object count
+            document.getElementById('reviewObjectCount').textContent = `${assetGroup.children.length}개`;
+
+            // Visibility
+            const visibilityNames = {
+                'public': '전체 공개',
+                'link': '링크 공유',
+                'private': '비공개'
+            };
+            document.getElementById('reviewVisibility').textContent = visibilityNames[wizardData.visibility] || '-';
+
+            // License
+            const licenseNames = {
+                'view': '보기',
+                'download': '다운로드',
+                'remix': '수정/리믹스',
+                'commercial': '상업적 이용'
+            };
+            const activeLicenses = wizardData.licenses.map(l => licenseNames[l]).join(', ');
+            document.getElementById('reviewLicense').textContent = activeLicenses || '(없음)';
+        }
+
+        function saveProjectData() {
+            // Simulate saving
+            showToast('저장 중...');
+
+            setTimeout(() => {
+                const projectData = {
+                    title: wizardData.title,
+                    description: wizardData.description,
+                    category: wizardData.category,
+                    tags: wizardData.tags,
+                    thumbnail: wizardData.thumbnail,
+                    visibility: wizardData.visibility,
+                    licenses: wizardData.licenses,
+                    objects: assetGroup.children.map(obj => ({
+                        name: obj.name,
+                        type: obj.userData.type,
+                        position: obj.position.toArray(),
+                        rotation: [obj.rotation.x, obj.rotation.y, obj.rotation.z],
+                        scale: obj.scale.toArray(),
+                        color: obj.material.color ? obj.material.color.getHex() : 0xffffff,
+                        assemblyLevel: obj.userData.assemblyLevel || 0
+                    }))
+                };
+
+                localStorage.setItem('brickart-project', JSON.stringify(projectData));
+
+                // Show success step
+                wizardStep = 4;
+                updateWizardStep();
+
+                // Reset history
+                editorHistory = [];
+                historyIndex = 0;
+            }, 1000);
+        }
+
+        // Toast
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 2000);
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+            init();
+            initWizardEventListeners();
+        });
+    </script>
+</body>
+</html>

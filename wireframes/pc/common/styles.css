@@ -1,0 +1,1165 @@
+/* ============================================
+   BrickGround Wireframe - Common Styles
+   ============================================ */
+
+/* ----------------------------------------
+   1. CSS Variables (Design Tokens)
+   ---------------------------------------- */
+:root {
+    /* Background Colors */
+    --bg-primary: #F8FAFC;
+    --bg-secondary: #FFFFFF;
+
+    /* Text Colors */
+    --text-primary: #1E293B;
+    --text-secondary: #64748B;
+    --text-muted: #94A3B8;
+
+    /* Border */
+    --border-color: #E2E8F0;
+
+    /* Brand Colors - User (Pixar Style) */
+    --pixar-blue: #0066FF;
+    --pixar-blue-dark: #0052CC;
+    --toy-yellow: #FFD93D;
+    --toy-orange: #FF6B35;
+    --toy-green: #6BCB77;
+    --toy-purple: #9B59B6;
+    --toy-pink: #FF6B9D;
+    --toy-cyan: #4ECDC4;
+
+    /* Status Colors */
+    --color-success: #6BCB77;
+    --color-error: #FF6B6B;
+    --color-warning: #FFD93D;
+    --color-info: #0066FF;
+
+    /* User Radius (Pixar Style - Rounded) */
+    --pixar-radius: 20px;
+    --pixar-radius-sm: 12px;
+    --pixar-radius-xs: 8px;
+
+    /* Admin Radius (shadcn/ui Style - Sharp) */
+    --admin-radius: 8px;
+    --admin-radius-sm: 6px;
+
+    /* Shadows */
+    --shadow-soft: 0 4px 20px rgba(0, 102, 255, 0.1);
+    --shadow-float: 0 8px 30px rgba(0, 102, 255, 0.15);
+    --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.08);
+
+    /* Transitions */
+    --transition-fast: 0.2s ease;
+    --transition-normal: 0.3s ease;
+}
+
+/* ----------------------------------------
+   2. Reset & Base Styles
+   ---------------------------------------- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Nunito', 'Pretendard', sans-serif;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    min-height: 100vh;
+    line-height: 1.5;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+button {
+    font-family: inherit;
+    cursor: pointer;
+    border: none;
+    background: none;
+}
+
+ul, ol {
+    list-style: none;
+}
+
+/* ----------------------------------------
+   3. User Header Styles
+   ---------------------------------------- */
+.site-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 40px;
+    background: var(--bg-secondary);
+    border-bottom: 1px solid var(--border-color);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--pixar-blue);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.logo i {
+    width: 32px;
+    height: 32px;
+}
+
+.logo-image {
+    width: 150px !important;
+    min-width: 150px;
+    max-width: 150px;
+    height: 40px !important;
+    min-height: 40px;
+    max-height: 40px;
+    object-fit: contain;
+}
+
+.nav-menu {
+    display: flex;
+    gap: 8px;
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 16px;
+    color: var(--text-secondary);
+    font-weight: 600;
+    font-size: 15px;
+    border-radius: var(--pixar-radius-sm);
+    transition: all var(--transition-fast);
+}
+
+.nav-item i {
+    width: 18px;
+    height: 18px;
+}
+
+.nav-item:hover {
+    color: var(--pixar-blue);
+    background: rgba(0, 102, 255, 0.08);
+}
+
+.nav-item.active {
+    color: var(--pixar-blue);
+    background: rgba(0, 102, 255, 0.1);
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.search-box {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 20px;
+    background: var(--bg-primary);
+    border: 2px solid var(--border-color);
+    border-radius: 24px;
+    width: 280px;
+    transition: border-color var(--transition-fast);
+}
+
+.search-box:focus-within {
+    border-color: var(--pixar-blue);
+}
+
+.search-box i {
+    width: 18px;
+    height: 18px;
+    color: var(--text-muted);
+}
+
+.search-box input {
+    border: none;
+    outline: none;
+    font-size: 14px;
+    background: transparent;
+    flex: 1;
+    color: var(--text-primary);
+}
+
+.search-box input::placeholder {
+    color: var(--text-muted);
+}
+
+.header-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: var(--bg-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    transition: all var(--transition-fast);
+}
+
+.header-icon i {
+    width: 22px;
+    height: 22px;
+    color: var(--text-primary);
+}
+
+.header-icon:hover {
+    background: linear-gradient(135deg, var(--pixar-blue) 0%, var(--pixar-blue-dark) 100%);
+}
+
+.header-icon:hover i {
+    color: white;
+}
+
+.header-icon.active {
+    background: linear-gradient(135deg, var(--pixar-blue) 0%, var(--pixar-blue-dark) 100%);
+}
+
+.header-icon.active i {
+    color: white;
+}
+
+.header-icon .badge {
+    position: absolute;
+    top: -2px;
+    right: -2px;
+    background: var(--color-error);
+    color: white;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 10px;
+    min-width: 18px;
+    text-align: center;
+}
+
+.user-avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--pixar-blue) 0%, var(--pixar-blue-dark) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 700;
+    font-size: 16px;
+}
+
+/* ----------------------------------------
+   4. User Footer Styles
+   ---------------------------------------- */
+.site-footer {
+    background: var(--bg-secondary);
+    border-top: 1px solid var(--border-color);
+    padding: 60px 40px 30px;
+    margin-top: 80px;
+}
+
+.footer-content {
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.footer-main {
+    display: grid;
+    grid-template-columns: 1.5fr repeat(4, 1fr);
+    gap: 48px;
+    margin-bottom: 48px;
+}
+
+.footer-brand .logo {
+    margin-bottom: 16px;
+}
+
+.footer-brand p {
+    color: var(--text-secondary);
+    font-size: 14px;
+    line-height: 1.7;
+    margin-bottom: 20px;
+}
+
+.footer-social {
+    display: flex;
+    gap: 12px;
+}
+
+.social-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--bg-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all var(--transition-fast);
+}
+
+.social-icon i {
+    width: 20px;
+    height: 20px;
+    color: var(--text-secondary);
+}
+
+.social-icon:hover {
+    background: linear-gradient(135deg, var(--pixar-blue) 0%, var(--pixar-blue-dark) 100%);
+}
+
+.social-icon:hover i {
+    color: white;
+}
+
+.footer-section h4 {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 20px;
+}
+
+.footer-section ul li {
+    margin-bottom: 12px;
+}
+
+.footer-section ul li a {
+    color: var(--text-secondary);
+    font-size: 14px;
+    transition: color var(--transition-fast);
+}
+
+.footer-section ul li a:hover {
+    color: var(--pixar-blue);
+}
+
+.footer-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 30px;
+    border-top: 1px solid var(--border-color);
+}
+
+.footer-copyright {
+    color: var(--text-muted);
+    font-size: 13px;
+}
+
+.footer-links {
+    display: flex;
+    gap: 24px;
+}
+
+.footer-links a {
+    color: var(--text-secondary);
+    font-size: 13px;
+    transition: color var(--transition-fast);
+}
+
+.footer-links a:hover {
+    color: var(--pixar-blue);
+}
+
+/* ----------------------------------------
+   5. Admin Sidebar Styles
+   ---------------------------------------- */
+.admin-layout {
+    display: flex;
+    min-height: 100vh;
+}
+
+.admin-sidebar {
+    width: 260px;
+    background: var(--bg-secondary);
+    border-right: 1px solid var(--border-color);
+    padding: 16px;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+}
+
+.admin-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    margin-bottom: 24px;
+}
+
+.admin-brand i {
+    width: 28px;
+    height: 28px;
+    color: var(--pixar-blue);
+}
+
+.admin-brand-text {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.admin-brand-sub {
+    font-size: 11px;
+    color: var(--text-secondary);
+}
+
+.admin-nav-section {
+    margin-bottom: 4px;
+}
+
+.admin-nav-title {
+    font-size: 11px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    padding: 12px 12px 8px;
+    letter-spacing: 0.5px;
+    font-weight: 600;
+}
+
+.admin-nav-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 12px;
+    color: var(--text-secondary);
+    border-radius: var(--admin-radius-sm);
+    font-size: 14px;
+    font-weight: 500;
+    transition: all var(--transition-fast);
+}
+
+.admin-nav-item i {
+    width: 18px;
+    height: 18px;
+}
+
+.admin-nav-item:hover {
+    background: var(--bg-primary);
+    color: var(--text-primary);
+}
+
+.admin-nav-item.active {
+    background: linear-gradient(135deg, var(--pixar-blue) 0%, var(--pixar-blue-dark) 100%);
+    color: white;
+}
+
+.admin-nav-badge {
+    margin-left: auto;
+    background: var(--color-error);
+    color: white;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+
+.admin-content {
+    flex: 1;
+    padding: 24px;
+    background: var(--bg-primary);
+}
+
+/* ----------------------------------------
+   6. MyPage Sidebar Styles
+   ---------------------------------------- */
+.mypage-layout {
+    display: flex;
+    min-height: calc(100vh - 73px);
+}
+
+.mypage-sidebar {
+    width: 280px;
+    background: var(--bg-secondary);
+    border-right: 1px solid var(--border-color);
+    padding: 24px;
+}
+
+.profile-card {
+    text-align: center;
+    padding: 24px;
+    background: linear-gradient(135deg, var(--bg-primary) 0%, #EBF4FF 100%);
+    border-radius: var(--pixar-radius);
+    margin-bottom: 24px;
+}
+
+.profile-avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--pixar-blue) 0%, var(--pixar-blue-dark) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 16px;
+    font-size: 32px;
+    color: white;
+    font-weight: 800;
+}
+
+.profile-name {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+}
+
+.profile-email {
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-bottom: 12px;
+}
+
+.profile-level {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    background: var(--toy-yellow);
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.profile-level i {
+    width: 14px;
+    height: 14px;
+}
+
+.mypage-menu {
+    margin-bottom: 16px;
+}
+
+.mypage-menu a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    color: var(--text-primary);
+    border-radius: var(--pixar-radius-sm);
+    font-weight: 600;
+    font-size: 14px;
+    transition: all var(--transition-normal);
+}
+
+.mypage-menu a i {
+    width: 20px;
+    height: 20px;
+    color: var(--text-secondary);
+}
+
+.mypage-menu a:hover {
+    background: var(--bg-primary);
+}
+
+.mypage-menu a.active {
+    background: linear-gradient(135deg, var(--pixar-blue) 0%, var(--pixar-blue-dark) 100%);
+    color: white;
+}
+
+.mypage-menu a.active i {
+    color: white;
+}
+
+.mypage-divider {
+    height: 1px;
+    background: var(--border-color);
+    margin: 16px 0;
+}
+
+.mypage-content {
+    flex: 1;
+    padding: 32px;
+    background: var(--bg-primary);
+}
+
+/* ----------------------------------------
+   7. Hero Section Styles
+   ---------------------------------------- */
+.hero-section {
+    padding: 60px 40px;
+    text-align: center;
+    color: white;
+}
+
+.hero-section.blue {
+    background: linear-gradient(135deg, var(--pixar-blue) 0%, var(--toy-cyan) 100%);
+}
+
+.hero-section.purple {
+    background: linear-gradient(135deg, var(--toy-purple) 0%, var(--toy-pink) 100%);
+}
+
+.hero-section.orange {
+    background: linear-gradient(135deg, var(--toy-orange) 0%, var(--toy-yellow) 100%);
+}
+
+.hero-section.green {
+    background: linear-gradient(135deg, var(--toy-green) 0%, var(--toy-cyan) 100%);
+}
+
+.hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.2);
+    padding: 10px 20px;
+    border-radius: 24px;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+.hero-badge i {
+    width: 18px;
+    height: 18px;
+}
+
+.hero-section h1 {
+    font-size: 42px;
+    font-weight: 800;
+    margin-bottom: 16px;
+}
+
+.hero-section p {
+    font-size: 18px;
+    opacity: 0.9;
+    margin-bottom: 32px;
+    max-width: 600px;
+    margin-inline: auto;
+}
+
+.hero-actions {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+}
+
+/* ----------------------------------------
+   8. Common Button Styles
+   ---------------------------------------- */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 24px;
+    border-radius: var(--pixar-radius-sm);
+    font-size: 15px;
+    font-weight: 600;
+    transition: all var(--transition-fast);
+}
+
+.btn i {
+    width: 18px;
+    height: 18px;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--pixar-blue) 0%, var(--pixar-blue-dark) 100%);
+    color: white;
+    box-shadow: 0 4px 15px rgba(0, 102, 255, 0.3);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 102, 255, 0.4);
+}
+
+.btn-secondary {
+    background: transparent;
+    color: var(--text-primary);
+    border: 2px solid var(--border-color);
+}
+
+.btn-secondary:hover {
+    border-color: var(--pixar-blue);
+    color: var(--pixar-blue);
+}
+
+.btn-hero-primary {
+    padding: 16px 32px;
+    background: white;
+    color: var(--pixar-blue);
+    border-radius: 28px;
+    font-size: 16px;
+    font-weight: 700;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.btn-hero-secondary {
+    padding: 16px 32px;
+    background: transparent;
+    color: white;
+    border: 2px solid white;
+    border-radius: 28px;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+/* ----------------------------------------
+   9. Card Styles
+   ---------------------------------------- */
+.card {
+    background: var(--bg-secondary);
+    border-radius: var(--pixar-radius);
+    box-shadow: var(--shadow-card);
+    overflow: hidden;
+    transition: transform var(--transition-normal);
+}
+
+.card:hover {
+    transform: translateY(-6px);
+}
+
+/* ----------------------------------------
+   10. Filter Bar Styles
+   ---------------------------------------- */
+.filter-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 32px;
+}
+
+.category-tabs {
+    display: flex;
+    gap: 8px;
+}
+
+.category-tab {
+    padding: 12px 20px;
+    background: var(--bg-secondary);
+    border: 2px solid transparent;
+    border-radius: 24px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: all var(--transition-fast);
+}
+
+.category-tab i {
+    width: 16px;
+    height: 16px;
+}
+
+.category-tab:hover {
+    border-color: var(--pixar-blue);
+}
+
+.category-tab.active {
+    border-color: var(--pixar-blue);
+    color: var(--pixar-blue);
+}
+
+.filter-actions {
+    display: flex;
+    gap: 12px;
+}
+
+.filter-btn {
+    padding: 10px 20px;
+    background: var(--bg-secondary);
+    border: 2px solid var(--border-color);
+    border-radius: 24px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.filter-btn i {
+    width: 16px;
+    height: 16px;
+}
+
+.view-toggle {
+    display: flex;
+    background: var(--bg-secondary);
+    border: 2px solid var(--border-color);
+    border-radius: 24px;
+    padding: 4px;
+}
+
+.view-toggle button {
+    width: 36px;
+    height: 36px;
+    border-radius: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.view-toggle button.active {
+    background: linear-gradient(135deg, var(--pixar-blue) 0%, var(--pixar-blue-dark) 100%);
+}
+
+.view-toggle button.active i {
+    color: white;
+}
+
+.view-toggle button i {
+    width: 18px;
+    height: 18px;
+    color: var(--text-secondary);
+}
+
+/* ----------------------------------------
+   11. Pagination Styles
+   ---------------------------------------- */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin-top: 48px;
+}
+
+.pagination button {
+    width: 44px;
+    height: 44px;
+    border: 2px solid var(--border-color);
+    background: var(--bg-secondary);
+    border-radius: var(--pixar-radius-sm);
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all var(--transition-fast);
+}
+
+.pagination button i {
+    width: 18px;
+    height: 18px;
+}
+
+.pagination button:hover {
+    border-color: var(--pixar-blue);
+}
+
+.pagination button.active {
+    background: linear-gradient(135deg, var(--pixar-blue) 0%, var(--pixar-blue-dark) 100%);
+    border-color: var(--pixar-blue);
+    color: white;
+}
+
+/* ----------------------------------------
+   12. Floating Action Button
+   ---------------------------------------- */
+.fab {
+    position: fixed;
+    bottom: 40px;
+    right: 40px;
+    padding: 18px 32px;
+    background: linear-gradient(135deg, var(--pixar-blue), var(--toy-cyan));
+    border-radius: 32px;
+    color: white;
+    font-size: 16px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 6px 25px rgba(0, 102, 255, 0.4);
+    transition: transform var(--transition-fast);
+    z-index: 50;
+}
+
+.fab:hover {
+    transform: translateY(-3px);
+}
+
+.fab i {
+    width: 22px;
+    height: 22px;
+}
+
+/* ----------------------------------------
+   13. Stat Card Styles
+   ---------------------------------------- */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    margin-bottom: 32px;
+}
+
+.stat-card {
+    background: var(--bg-secondary);
+    border-radius: var(--pixar-radius);
+    padding: 24px;
+    box-shadow: var(--shadow-soft);
+}
+
+.stat-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: var(--pixar-radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 16px;
+}
+
+.stat-icon i {
+    width: 24px;
+    height: 24px;
+    color: white;
+}
+
+.stat-icon.blue {
+    background: linear-gradient(135deg, var(--pixar-blue) 0%, var(--pixar-blue-dark) 100%);
+}
+
+.stat-icon.yellow {
+    background: linear-gradient(135deg, var(--toy-yellow) 0%, #F5C800 100%);
+}
+
+.stat-icon.green {
+    background: linear-gradient(135deg, var(--toy-green) 0%, #4CAF50 100%);
+}
+
+.stat-icon.red {
+    background: linear-gradient(135deg, var(--color-error) 0%, #E53935 100%);
+}
+
+.stat-icon.orange {
+    background: linear-gradient(135deg, var(--toy-orange) 0%, var(--toy-yellow) 100%);
+}
+
+.stat-value {
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+}
+
+.stat-label {
+    font-size: 14px;
+    color: var(--text-secondary);
+}
+
+/* ----------------------------------------
+   14. Badge & Tag Styles
+   ---------------------------------------- */
+.badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 6px 12px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.badge.hot {
+    background: var(--color-error);
+    color: white;
+}
+
+.badge.new {
+    background: var(--toy-green);
+    color: white;
+}
+
+.badge.sale {
+    background: var(--toy-yellow);
+    color: var(--text-primary);
+}
+
+.badge.music {
+    background: var(--toy-purple);
+    color: white;
+}
+
+.badge.threed {
+    background: var(--toy-cyan);
+    color: white;
+}
+
+.tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 10px;
+    background: var(--bg-primary);
+    border-radius: 8px;
+    font-size: 11px;
+    color: var(--text-secondary);
+}
+
+.tag.success {
+    background: rgba(107, 203, 119, 0.15);
+    color: var(--toy-green);
+}
+
+.tag.warning {
+    background: rgba(255, 217, 61, 0.2);
+    color: #B8860B;
+}
+
+.tag.info {
+    background: rgba(0, 102, 255, 0.1);
+    color: var(--pixar-blue);
+}
+
+/* ----------------------------------------
+   15. Page Title Styles
+   ---------------------------------------- */
+.page-title {
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--text-primary);
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.page-title i {
+    width: 32px;
+    height: 32px;
+    color: var(--pixar-blue);
+}
+
+/* ----------------------------------------
+   16. Section Card Styles
+   ---------------------------------------- */
+.section-card {
+    background: var(--bg-secondary);
+    border-radius: var(--pixar-radius);
+    padding: 24px;
+    box-shadow: var(--shadow-soft);
+    margin-bottom: 24px;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.section-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.section-title i {
+    width: 20px;
+    height: 20px;
+    color: var(--pixar-blue);
+}
+
+.view-all {
+    color: var(--pixar-blue);
+    font-size: 14px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.view-all i {
+    width: 16px;
+    height: 16px;
+}
+
+/* ----------------------------------------
+   17. Main Content Container
+   ---------------------------------------- */
+.main-content {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 40px;
+}
+
+/* ----------------------------------------
+   18. Product Grid
+   ---------------------------------------- */
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+}
+
+@media (max-width: 1200px) {
+    .product-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 900px) {
+    .product-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 600px) {
+    .product-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ----------------------------------------
+   19. Navigation Debug Links (Dev Only)
+   ---------------------------------------- */
+.nav-debug {
+    display: flex;
+    gap: 12px;
+    margin-top: 24px;
+    justify-content: center;
+    padding: 24px;
+    flex-wrap: wrap;
+}
+
+.nav-debug a {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 20px;
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    border-radius: var(--pixar-radius-sm);
+    font-size: 14px;
+    font-weight: 600;
+    transition: all var(--transition-normal);
+    box-shadow: var(--shadow-soft);
+}
+
+.nav-debug a i {
+    width: 16px;
+    height: 16px;
+}
+
+.nav-debug a:hover {
+    background: linear-gradient(135deg, var(--pixar-blue) 0%, var(--pixar-blue-dark) 100%);
+    color: white;
+}

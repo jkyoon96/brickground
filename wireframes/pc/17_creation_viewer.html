@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Creation 3D Viewer - BrickGround</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="common/components.css">
+    <link rel="stylesheet" href="common/responsive.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #F8FAFC;
+            --bg-secondary: #FFFFFF;
+            --text-primary: #1E293B;
+            --text-secondary: #64748B;
+            --text-muted: #94A3B8;
+            --border-color: #E2E8F0;
+            --pixar-blue: #0066FF;
+            --toy-orange: #FF9F43;
+            --pixar-teal: #00CEC9;
+            --pixar-cyan: #00D4FF;
+            --pixar-success: #6BCB77;
+            --pixar-error: #FF6B6B;
+            --pixar-yellow: #FFD93D;
+            --viewer-bg: #1a1a2e;
+            --viewer-card: #252542;
+            --viewer-border: #3d3d5c;
+            --viewer-text: #FFFFFF;
+            --viewer-text-light: #a0a0b0;
+            --pixar-radius: 16px;
+            --pixar-radius-sm: 10px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Nunito', 'Nanum Square Round', sans-serif;
+            background: var(--viewer-bg);
+            color: var(--viewer-text);
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Top Bar */
+        .top-bar {
+            background: var(--viewer-card);
+            padding: 16px 32px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--viewer-border);
+        }
+
+        .top-left { display: flex; align-items: center; gap: 20px; }
+
+        .back-btn {
+            width: 44px; height: 44px;
+            border-radius: 50%;
+            background: var(--viewer-bg);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--viewer-text);
+        }
+        .back-btn i { width: 22px; height: 22px; }
+
+        .creation-info { display: flex; align-items: center; gap: 16px; }
+
+        .creation-thumb {
+            width: 56px; height: 56px;
+            border-radius: var(--pixar-radius-sm);
+            background: linear-gradient(135deg, var(--pixar-teal), var(--pixar-cyan));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .creation-thumb i { width: 28px; height: 28px; color: white; }
+
+        .creation-details h1 { font-size: 20px; font-weight: 700; margin-bottom: 4px; }
+        .creation-meta {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            font-size: 13px;
+            color: var(--viewer-text-light);
+        }
+        .creation-meta span { display: flex; align-items: center; gap: 4px; }
+        .creation-meta i { width: 14px; height: 14px; }
+
+        .top-right { display: flex; align-items: center; gap: 12px; }
+
+        .btn-icon {
+            width: 44px; height: 44px;
+            border-radius: 50%;
+            background: var(--viewer-bg);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--viewer-text);
+        }
+        .btn-icon i { width: 20px; height: 20px; }
+        .btn-icon.liked { color: var(--pixar-error); }
+        .btn-icon.liked i { fill: var(--pixar-error); }
+
+        .btn-secondary {
+            padding: 12px 24px;
+            border: 2px solid var(--viewer-border);
+            background: transparent;
+            color: var(--viewer-text);
+            border-radius: 24px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .btn-secondary:hover { border-color: var(--pixar-teal); color: var(--pixar-teal); }
+        .btn-secondary i { width: 18px; height: 18px; }
+
+        .btn-primary {
+            padding: 12px 24px;
+            border: none;
+            background: linear-gradient(135deg, var(--pixar-teal), var(--pixar-cyan));
+            color: white;
+            border-radius: 24px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .btn-primary i { width: 18px; height: 18px; }
+
+        /* Main Layout */
+        .viewer-layout { display: flex; height: calc(100vh - 88px); }
+
+        /* 3D Viewer Area */
+        .viewer-area {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            background: radial-gradient(circle at center, #252542 0%, #1a1a2e 100%);
+        }
+
+        .model-placeholder {
+            width: 500px; height: 500px;
+            background: rgba(0, 206, 201, 0.1);
+            border: 2px dashed var(--pixar-teal);
+            border-radius: var(--pixar-radius);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .model-placeholder i { width: 120px; height: 120px; color: var(--pixar-teal); opacity: 0.5; }
+        .model-placeholder span { font-size: 20px; font-weight: 600; color: var(--viewer-text-light); margin-top: 16px; }
+        .model-placeholder small { font-size: 14px; color: var(--viewer-text-light); opacity: 0.7; margin-top: 4px; }
+
+        /* View Presets */
+        .view-presets {
+            position: absolute;
+            left: 24px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .preset-btn {
+            width: 50px; height: 50px;
+            background: var(--viewer-card);
+            border: none;
+            border-radius: var(--pixar-radius-sm);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--viewer-text);
+        }
+        .preset-btn.active { background: var(--pixar-teal); }
+        .preset-btn i { width: 22px; height: 22px; }
+
+        /* Auto Rotate */
+        .auto-rotate {
+            position: absolute;
+            top: 24px;
+            left: 24px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--viewer-card);
+            padding: 12px 18px;
+            border-radius: 24px;
+        }
+        .auto-rotate i { width: 18px; height: 18px; color: var(--pixar-teal); }
+        .auto-rotate span { font-size: 13px; font-weight: 600; }
+
+        .toggle-switch { position: relative; width: 44px; height: 24px; }
+        .toggle-switch input { opacity: 0; width: 0; height: 0; }
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: var(--viewer-border);
+            border-radius: 24px;
+            transition: 0.3s;
+        }
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 18px; width: 18px;
+            left: 3px; bottom: 3px;
+            background: white;
+            border-radius: 50%;
+            transition: 0.3s;
+        }
+        input:checked + .toggle-slider { background: var(--pixar-teal); }
+        input:checked + .toggle-slider:before { transform: translateX(20px); }
+
+        /* View Controls */
+        .view-controls {
+            position: absolute;
+            bottom: 32px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 8px;
+            background: var(--viewer-card);
+            padding: 12px;
+            border-radius: 32px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .view-ctrl-btn {
+            width: 48px; height: 48px;
+            border: none;
+            background: var(--viewer-bg);
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--viewer-text);
+        }
+        .view-ctrl-btn.active { background: var(--pixar-teal); }
+        .view-ctrl-btn i { width: 22px; height: 22px; }
+
+        /* Fullscreen Button */
+        .fullscreen-btn {
+            position: absolute;
+            top: 24px;
+            right: 24px;
+            width: 48px; height: 48px;
+            background: var(--viewer-card);
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--viewer-text);
+        }
+        .fullscreen-btn i { width: 22px; height: 22px; }
+
+        /* Right Panel */
+        .right-panel {
+            width: 380px;
+            background: var(--viewer-card);
+            border-left: 1px solid var(--viewer-border);
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+
+        .panel-section {
+            padding: 24px;
+            border-bottom: 1px solid var(--viewer-border);
+        }
+
+        .panel-title {
+            font-size: 16px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+        .panel-title i { width: 20px; height: 20px; color: var(--pixar-teal); }
+
+        /* Tabs */
+        .panel-tabs { display: flex; gap: 4px; margin-bottom: 20px; }
+        .panel-tab {
+            flex: 1;
+            padding: 10px;
+            background: var(--viewer-bg);
+            border: none;
+            border-radius: 8px;
+            color: var(--viewer-text-light);
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+        .panel-tab.active { background: var(--pixar-teal); color: white; }
+        .panel-tab i { width: 16px; height: 16px; }
+
+        /* Export Grid */
+        .export-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .export-btn {
+            padding: 20px;
+            background: var(--viewer-bg);
+            border: 2px solid var(--viewer-border);
+            border-radius: var(--pixar-radius-sm);
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+        }
+        .export-btn:hover { border-color: var(--pixar-teal); }
+        .export-btn i { width: 28px; height: 28px; color: var(--pixar-teal); }
+        .export-btn span { font-size: 13px; font-weight: 600; color: var(--viewer-text); }
+        .export-btn small { font-size: 11px; color: var(--viewer-text-light); }
+
+        /* Settings */
+        .setting-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 0;
+            border-bottom: 1px solid var(--viewer-border);
+        }
+        .setting-row:last-child { border-bottom: none; }
+
+        .setting-label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+        }
+        .setting-label i { width: 18px; height: 18px; color: var(--viewer-text-light); }
+
+        .setting-control {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .control-btn {
+            width: 32px; height: 32px;
+            border: none;
+            background: var(--viewer-bg);
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--viewer-text);
+        }
+        .control-btn i { width: 14px; height: 14px; }
+
+        .control-value {
+            min-width: 50px;
+            text-align: center;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--pixar-teal);
+        }
+
+        /* Author Card */
+        .author-card {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px;
+            background: var(--viewer-bg);
+            border-radius: var(--pixar-radius-sm);
+            margin-bottom: 16px;
+        }
+
+        .author-avatar {
+            width: 56px; height: 56px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--pixar-teal), var(--pixar-cyan));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .author-avatar i { width: 28px; height: 28px; color: white; }
+
+        .author-info { flex: 1; }
+        .author-name { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+        .author-stats { font-size: 12px; color: var(--viewer-text-light); }
+
+        .follow-btn {
+            padding: 10px 20px;
+            border: none;
+            background: var(--pixar-teal);
+            color: white;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        /* Related Works */
+        .related-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .related-item {
+            aspect-ratio: 1;
+            background: var(--viewer-bg);
+            border-radius: var(--pixar-radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        .related-item i { width: 32px; height: 32px; color: var(--viewer-text-light); }
+
+        .related-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 10px;
+            background: linear-gradient(transparent, rgba(0,0,0,0.8));
+        }
+        .related-overlay span { font-size: 11px; font-weight: 600; }
+
+        /* ==================== Responsive Design ==================== */
+        /* Tablet (1024px) */
+        @media (max-width: 1024px) {
+            .top-bar { padding: 12px 20px; }
+            .creation-thumb { width: 48px; height: 48px; }
+            .creation-details h1 { font-size: 18px; }
+            .btn-icon { width: 40px; height: 40px; }
+            .sidebar { width: 300px; }
+        }
+
+        /* Mobile (768px) */
+        @media (max-width: 768px) {
+            .top-bar { flex-wrap: wrap; gap: 10px; padding: 10px 16px; }
+            .top-left { flex: 1; min-width: 100%; }
+            .top-right { flex: 1; min-width: 100%; justify-content: flex-end; }
+            .back-btn { width: 40px; height: 40px; }
+            .creation-thumb { width: 44px; height: 44px; }
+            .creation-details h1 { font-size: 16px; }
+            .creation-meta { gap: 10px; font-size: 12px; }
+            .btn-icon { width: 36px; height: 36px; }
+            .btn-secondary, .btn-primary { padding: 10px 16px; font-size: 13px; }
+            .viewer-layout { flex-direction: column; height: auto; }
+            .viewer-area { min-height: 50vh; }
+            .viewer-controls { bottom: 12px; padding: 6px; gap: 6px; }
+            .ctrl-btn { width: 36px; height: 36px; }
+            .sidebar { width: 100%; max-height: 40vh; border-left: none; border-top: 1px solid var(--viewer-border); }
+            .sidebar-section { padding: 16px; }
+            .related-grid { grid-template-columns: repeat(4, 1fr); }
+        }
+
+        /* Small Mobile (480px) */
+        @media (max-width: 480px) {
+            .top-bar { padding: 8px 12px; }
+            .back-btn { width: 36px; height: 36px; }
+            .creation-info { gap: 10px; }
+            .creation-thumb { width: 36px; height: 36px; }
+            .creation-details h1 { font-size: 14px; }
+            .creation-meta { display: none; }
+            .btn-icon { width: 32px; height: 32px; }
+            .btn-secondary { display: none; }
+            .btn-primary { padding: 8px 12px; font-size: 12px; }
+            .viewer-area { min-height: 40vh; }
+            .viewer-controls { gap: 4px; }
+            .ctrl-btn { width: 32px; height: 32px; }
+            .sidebar { max-height: 35vh; }
+            .sidebar-section { padding: 12px; }
+            .related-grid { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+            .related-item { height: 60px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <div class="top-left">
+            <button class="back-btn"><i data-lucide="arrow-left"></i></button>
+            <div class="creation-info">
+                <div class="creation-thumb"><i data-lucide="building-2"></i></div>
+                <div class="creation-details">
+                    <h1>미래 도시 스카이라인</h1>
+                    <div class="creation-meta">
+                        <span><i data-lucide="user"></i>빌더마스터</span>
+                        <span><i data-lucide="calendar"></i>2025.01.15</span>
+                        <span><i data-lucide="eye"></i>12,487 views</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="top-right">
+            <button class="btn-icon liked"><i data-lucide="heart"></i></button>
+            <button class="btn-icon"><i data-lucide="bookmark"></i></button>
+            <button class="btn-icon"><i data-lucide="share-2"></i></button>
+            <button class="btn-secondary"><i data-lucide="git-branch"></i>리믹스</button>
+            <button class="btn-primary"><i data-lucide="download"></i>다운로드</button>
+        </div>
+    </div>
+
+    <!-- Main Layout -->
+    <div class="viewer-layout">
+        <!-- 3D Viewer Area -->
+        <div class="viewer-area">
+            <div class="model-placeholder">
+                <i data-lucide="building-2"></i>
+                <span>3D 창작물 뷰어</span>
+                <small>마우스로 회전, 휠로 확대/축소</small>
+            </div>
+
+            <!-- View Presets -->
+            <div class="view-presets">
+                <button class="preset-btn active"><i data-lucide="box"></i></button>
+                <button class="preset-btn"><i data-lucide="rotate-3d"></i></button>
+                <button class="preset-btn"><i data-lucide="arrow-up"></i></button>
+                <button class="preset-btn"><i data-lucide="compass"></i></button>
+                <button class="preset-btn"><i data-lucide="home"></i></button>
+            </div>
+
+            <!-- Auto Rotate -->
+            <div class="auto-rotate">
+                <i data-lucide="refresh-cw"></i>
+                <span>자동 회전</span>
+                <label class="toggle-switch">
+                    <input type="checkbox" checked>
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+
+            <!-- Fullscreen Button -->
+            <button class="fullscreen-btn"><i data-lucide="maximize"></i></button>
+
+            <!-- View Controls -->
+            <div class="view-controls">
+                <button class="view-ctrl-btn active"><i data-lucide="rotate-3d"></i></button>
+                <button class="view-ctrl-btn"><i data-lucide="move"></i></button>
+                <button class="view-ctrl-btn"><i data-lucide="zoom-in"></i></button>
+                <button class="view-ctrl-btn"><i data-lucide="zoom-out"></i></button>
+                <button class="view-ctrl-btn"><i data-lucide="scan"></i></button>
+                <button class="view-ctrl-btn"><i data-lucide="camera"></i></button>
+            </div>
+        </div>
+
+        <!-- Right Panel -->
+        <div class="right-panel">
+            <!-- Tabs -->
+            <div class="panel-section">
+                <div class="panel-tabs">
+                    <button class="panel-tab active"><i data-lucide="download"></i>내보내기</button>
+                    <button class="panel-tab"><i data-lucide="settings-2"></i>설정</button>
+                    <button class="panel-tab"><i data-lucide="info"></i>정보</button>
+                </div>
+
+                <!-- Export Grid -->
+                <div class="export-grid">
+                    <button class="export-btn">
+                        <i data-lucide="image"></i>
+                        <span>PNG</span>
+                        <small>스크린샷</small>
+                    </button>
+                    <button class="export-btn">
+                        <i data-lucide="film"></i>
+                        <span>GIF</span>
+                        <small>애니메이션</small>
+                    </button>
+                    <button class="export-btn">
+                        <i data-lucide="box"></i>
+                        <span>GLTF</span>
+                        <small>3D 모델</small>
+                    </button>
+                    <button class="export-btn">
+                        <i data-lucide="cube"></i>
+                        <span>OBJ</span>
+                        <small>3D 메쉬</small>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Render Settings -->
+            <div class="panel-section">
+                <h3 class="panel-title"><i data-lucide="sliders"></i>렌더링 설정</h3>
+                <div class="setting-row">
+                    <div class="setting-label">
+                        <i data-lucide="sun"></i>
+                        <span>밝기</span>
+                    </div>
+                    <div class="setting-control">
+                        <button class="control-btn"><i data-lucide="minus"></i></button>
+                        <span class="control-value">100%</span>
+                        <button class="control-btn"><i data-lucide="plus"></i></button>
+                    </div>
+                </div>
+                <div class="setting-row">
+                    <div class="setting-label">
+                        <i data-lucide="contrast"></i>
+                        <span>대비</span>
+                    </div>
+                    <div class="setting-control">
+                        <button class="control-btn"><i data-lucide="minus"></i></button>
+                        <span class="control-value">50%</span>
+                        <button class="control-btn"><i data-lucide="plus"></i></button>
+                    </div>
+                </div>
+                <div class="setting-row">
+                    <div class="setting-label">
+                        <i data-lucide="shadow"></i>
+                        <span>그림자</span>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+                <div class="setting-row">
+                    <div class="setting-label">
+                        <i data-lucide="grid-3x3"></i>
+                        <span>와이어프레임</span>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Author -->
+            <div class="panel-section">
+                <h3 class="panel-title"><i data-lucide="user"></i>창작자</h3>
+                <div class="author-card">
+                    <div class="author-avatar"><i data-lucide="user"></i></div>
+                    <div class="author-info">
+                        <div class="author-name">빌더마스터</div>
+                        <div class="author-stats">팔로워 2,345 / 작품 48개</div>
+                    </div>
+                    <button class="follow-btn">팔로우</button>
+                </div>
+            </div>
+
+            <!-- Related Works -->
+            <div class="panel-section">
+                <h3 class="panel-title"><i data-lucide="sparkles"></i>관련 작품</h3>
+                <div class="related-grid">
+                    <div class="related-item" style="background: linear-gradient(135deg, #00CEC9, #00D4FF);">
+                        <i data-lucide="building-2"></i>
+                        <div class="related-overlay"><span>네온 타워</span></div>
+                    </div>
+                    <div class="related-item" style="background: linear-gradient(135deg, #9B5DE5, #F15BB5);">
+                        <i data-lucide="rocket"></i>
+                        <div class="related-overlay"><span>우주 정거장</span></div>
+                    </div>
+                    <div class="related-item" style="background: linear-gradient(135deg, #FFD93D, #FF6B6B);">
+                        <i data-lucide="car"></i>
+                        <div class="related-overlay"><span>사이버 카</span></div>
+                    </div>
+                    <div class="related-item" style="background: linear-gradient(135deg, #6BCB77, #4D96FF);">
+                        <i data-lucide="trees"></i>
+                        <div class="related-overlay"><span>미래 공원</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Footer -->
+    <div id="footer"></div>
+
+
+
+    <script>lucide.createIcons();</script>
+    <script src="common/loader.js"></script>
+</body>
+</html>

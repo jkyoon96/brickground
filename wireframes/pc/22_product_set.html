@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>상품 세트/패키지 - PC Wireframe</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="common/components.css">
+    <link rel="stylesheet" href="common/responsive.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #F8FAFC;
+            --bg-secondary: #FFFFFF;
+            --text-primary: #1E293B;
+            --text-secondary: #64748B;
+            --text-muted: #94A3B8;
+            --border-color: #E2E8F0;
+            --pixar-blue: #0066FF;
+            --toy-orange: #FF6B35;
+            --toy-yellow: #FFD93D;
+            --pixar-success: #6BCB77;
+            --pixar-error: #FF6B6B;
+            --pixar-purple: #9B59B6;
+            --pixar-radius: 20px;
+            --pixar-radius-sm: 12px;
+            --pixar-shadow: 0 4px 20px rgba(155, 89, 182, 0.15);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            background: var(--bg-secondary);
+            padding: 16px 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: var(--pixar-shadow);
+        }
+
+        .header-left { display: flex; align-items: center; gap: 32px; }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--pixar-blue);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .logo i { width: 32px; height: 32px; }
+
+        .nav-links { display: flex; gap: 24px; }
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-weight: 600;
+            padding: 8px 16px;
+            border-radius: var(--pixar-radius-sm);
+            transition: all 0.3s ease;
+        }
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--pixar-purple);
+            background: rgba(155, 89, 182, 0.1);
+        }
+
+        .header-right { display: flex; align-items: center; gap: 16px; }
+
+        .header-icon {
+            width: 44px; height: 44px;
+            border-radius: 50%;
+            background: var(--bg-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            position: relative;
+        }
+        .header-icon i { width: 22px; height: 22px; color: var(--text-primary); }
+        .header-icon .badge {
+            position: absolute;
+            top: -2px; right: -2px;
+            background: var(--pixar-error);
+            color: white;
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 10px;
+            font-weight: 700;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, var(--pixar-purple) 0%, #FF6B9D 100%);
+            padding: 60px 40px;
+            text-align: center;
+            color: white;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255,255,255,0.2);
+            padding: 10px 20px;
+            border-radius: 24px;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+        .hero-badge i { width: 18px; height: 18px; }
+
+        .hero h1 { font-size: 42px; font-weight: 800; margin-bottom: 16px; }
+        .hero p { font-size: 18px; opacity: 0.9; margin-bottom: 32px; max-width: 600px; margin-inline: auto; }
+
+        .hero-actions { display: flex; gap: 16px; justify-content: center; }
+
+        .btn-hero-primary {
+            padding: 16px 32px;
+            background: white;
+            color: var(--pixar-purple);
+            border: none;
+            border-radius: 28px;
+            font-size: 16px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+        .btn-hero-primary i { width: 22px; height: 22px; }
+
+        .btn-hero-secondary {
+            padding: 16px 32px;
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+            border-radius: 28px;
+            font-size: 16px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+        }
+        .btn-hero-secondary i { width: 22px; height: 22px; }
+
+        /* Main Content */
+        .main-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px;
+        }
+
+        /* Category Tabs */
+        .category-section { margin-bottom: 40px; }
+        .category-tabs { display: flex; gap: 8px; justify-content: center; }
+        .category-tab {
+            padding: 14px 28px;
+            background: var(--bg-secondary);
+            border: 2px solid transparent;
+            border-radius: 28px;
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+        }
+        .category-tab i { width: 18px; height: 18px; }
+        .category-tab:hover { border-color: var(--pixar-purple); }
+        .category-tab.active { border-color: var(--pixar-purple); color: var(--pixar-purple); background: rgba(155, 89, 182, 0.1); }
+
+        /* Section Header */
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+        .section-title {
+            font-size: 26px;
+            font-weight: 800;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .section-title i { width: 28px; height: 28px; color: var(--pixar-purple); }
+        .section-more {
+            color: var(--pixar-purple);
+            font-size: 15px;
+            font-weight: 600;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .section-more i { width: 18px; height: 18px; }
+
+        /* Set Cards Grid */
+        .set-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin-bottom: 60px;
+        }
+
+        .set-card {
+            background: var(--bg-secondary);
+            border-radius: var(--pixar-radius);
+            overflow: hidden;
+            box-shadow: var(--pixar-shadow);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .set-card:hover { transform: translateY(-6px); }
+
+        .set-thumbnail {
+            width: 100%;
+            aspect-ratio: 16/10;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .set-items {
+            display: flex;
+            gap: 8px;
+            position: absolute;
+            bottom: 16px;
+            left: 16px;
+            right: 16px;
+        }
+        .set-item-thumb {
+            width: 50px; height: 50px;
+            background: white;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        }
+        .set-item-thumb i { width: 24px; height: 24px; color: var(--text-secondary); }
+        .set-item-more {
+            width: 50px; height: 50px;
+            background: rgba(0,0,0,0.6);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .set-badge {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            padding: 8px 16px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+        .set-badge.bundle { background: var(--pixar-purple); color: white; }
+        .set-badge.rental { background: var(--toy-yellow); color: var(--text-primary); }
+        .set-badge.limited { background: var(--pixar-error); color: white; }
+
+        .set-discount {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: var(--pixar-error);
+            color: white;
+            padding: 8px 14px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 800;
+        }
+
+        .set-body { padding: 24px; }
+
+        .set-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            line-height: 1.3;
+        }
+
+        .set-desc {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+            line-height: 1.5;
+        }
+
+        .set-includes {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 16px;
+        }
+        .set-includes span {
+            font-size: 12px;
+            padding: 4px 10px;
+            background: var(--bg-primary);
+            border-radius: 8px;
+            color: var(--text-secondary);
+        }
+
+        .set-price-row {
+            display: flex;
+            align-items: baseline;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+        .set-price {
+            font-size: 26px;
+            font-weight: 800;
+            color: var(--text-primary);
+        }
+        .set-original-price {
+            font-size: 16px;
+            color: var(--text-secondary);
+            text-decoration: line-through;
+        }
+        .set-savings {
+            font-size: 14px;
+            color: var(--pixar-success);
+            font-weight: 600;
+        }
+
+        .set-actions {
+            display: flex;
+            gap: 10px;
+        }
+        .btn-set-cart, .btn-set-buy {
+            flex: 1;
+            padding: 14px 20px;
+            border-radius: var(--pixar-radius-sm);
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .btn-set-cart {
+            background: white;
+            border: 2px solid var(--pixar-purple);
+            color: var(--pixar-purple);
+        }
+        .btn-set-buy {
+            background: linear-gradient(135deg, var(--pixar-purple), #FF6B9D);
+            border: none;
+            color: white;
+        }
+        .btn-set-cart i, .btn-set-buy i { width: 18px; height: 18px; }
+
+        /* Rental Section */
+        .rental-section { margin-bottom: 60px; }
+
+        .rental-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+        }
+
+        .rental-card {
+            background: var(--bg-secondary);
+            border-radius: var(--pixar-radius);
+            overflow: hidden;
+            box-shadow: var(--pixar-shadow);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .rental-card:hover { transform: translateY(-6px); }
+
+        .rental-thumbnail {
+            width: 100%;
+            aspect-ratio: 1;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .rental-thumbnail i { width: 48px; height: 48px; color: rgba(255,255,255,0.5); }
+
+        .rental-period {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            background: var(--toy-yellow);
+            color: var(--text-primary);
+            padding: 6px 12px;
+            border-radius: 10px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .rental-body { padding: 20px; }
+
+        .rental-title {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .rental-price-row {
+            display: flex;
+            align-items: baseline;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+        .rental-price {
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--text-primary);
+        }
+        .rental-unit {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .rental-info {
+            display: flex;
+            gap: 12px;
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+        .rental-info span {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .rental-info i { width: 14px; height: 14px; }
+
+        /* Benefits Section */
+        .benefits-section {
+            background: var(--bg-secondary);
+            border-radius: var(--pixar-radius);
+            padding: 40px;
+            box-shadow: var(--pixar-shadow);
+        }
+
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 32px;
+        }
+
+        .benefit-item {
+            text-align: center;
+        }
+
+        .benefit-icon {
+            width: 72px; height: 72px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, rgba(155, 89, 182, 0.2), rgba(255, 107, 157, 0.2));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+        }
+        .benefit-icon i { width: 32px; height: 32px; color: var(--pixar-purple); }
+
+        .benefit-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        .benefit-desc {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        /* FAB */
+        .set-fab {
+            position: fixed;
+            bottom: 40px;
+            right: 40px;
+            background: linear-gradient(135deg, var(--pixar-purple), #FF6B9D);
+            border: none;
+            padding: 18px 32px;
+            border-radius: 32px;
+            color: white;
+            font-size: 16px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 6px 25px rgba(155, 89, 182, 0.4);
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+        .set-fab:hover { transform: translateY(-3px); }
+        .set-fab i { width: 22px; height: 22px; }
+
+        /* Footer */
+        .footer {
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border-color);
+            padding: 40px;
+            margin-top: 60px;
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-logo {
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--pixar-blue);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .footer-logo i { width: 24px; height: 24px; }
+
+        .footer-text {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        /* ==================== Responsive Design ==================== */
+        /* Tablet (1024px) */
+        @media (max-width: 1024px) {
+            .header { padding: 12px 24px; }
+            .nav-links { gap: 16px; }
+            .nav-links a { padding: 6px 12px; font-size: 14px; }
+            .hero { padding: 48px 24px; }
+            .hero h1 { font-size: 36px; }
+            .hero p { font-size: 16px; }
+            .main-content { padding: 32px 24px; }
+            .set-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        /* Mobile (768px) */
+        @media (max-width: 768px) {
+            .header { padding: 10px 16px; flex-wrap: wrap; gap: 10px; }
+            .header-left { flex: 1; min-width: 100%; justify-content: space-between; }
+            .nav-links { display: none; }
+            .header-right { flex: 1; min-width: 100%; justify-content: flex-end; }
+            .logo { font-size: 20px; }
+            .logo i { width: 28px; height: 28px; }
+            .header-icon { width: 40px; height: 40px; }
+            .hero { padding: 36px 16px; }
+            .hero-badge { padding: 8px 16px; font-size: 13px; }
+            .hero h1 { font-size: 28px; margin-bottom: 12px; }
+            .hero p { font-size: 14px; margin-bottom: 24px; }
+            .hero-actions { flex-direction: column; gap: 12px; }
+            .btn-hero-primary, .btn-hero-secondary { padding: 14px 24px; font-size: 14px; width: 100%; justify-content: center; }
+            .main-content { padding: 24px 16px; }
+            .section-title { font-size: 22px; margin-bottom: 20px; }
+            .set-grid { grid-template-columns: 1fr; gap: 16px; }
+            .set-card { border-radius: 16px; }
+            .set-header { padding: 16px; }
+            .set-content { padding: 16px; }
+            .set-items { gap: 8px; }
+            .set-item { padding: 12px; }
+            .set-footer { padding: 16px; flex-direction: column; gap: 12px; }
+            .set-footer .btn-primary { width: 100%; }
+            .footer { padding: 32px 16px; flex-direction: column; gap: 16px; text-align: center; }
+        }
+
+        /* Small Mobile (480px) */
+        @media (max-width: 480px) {
+            .header { padding: 8px 12px; }
+            .logo { font-size: 18px; }
+            .header-icon { width: 36px; height: 36px; }
+            .hero { padding: 28px 12px; }
+            .hero h1 { font-size: 24px; }
+            .hero p { font-size: 13px; }
+            .btn-hero-primary, .btn-hero-secondary { padding: 12px 20px; font-size: 13px; }
+            .main-content { padding: 20px 12px; }
+            .section-title { font-size: 20px; }
+            .set-header { padding: 12px; }
+            .set-content { padding: 12px; }
+            .set-item { padding: 10px; }
+            .item-thumb { width: 48px; height: 48px; }
+            .set-footer { padding: 12px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <!-- Header -->
+    <div id="header"></div>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-badge"><i data-lucide="package"></i>Special Package</div>
+        <h1>세트 & 패키지</h1>
+        <p>더 저렴하게, 더 알차게! 세트 구매로 최대 30% 할인</p>
+        <div class="hero-actions">
+            <button class="btn-hero-primary"><i data-lucide="sparkles"></i>추천 세트</button>
+            <button class="btn-hero-secondary"><i data-lucide="calendar"></i>렌탈 상품</button>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Category Tabs -->
+        <div class="category-section">
+            <div class="category-tabs">
+                <button class="category-tab active"><i data-lucide="package"></i>번들 세트</button>
+                <button class="category-tab"><i data-lucide="gift"></i>기획 패키지</button>
+                <button class="category-tab"><i data-lucide="calendar"></i>렌탈 상품</button>
+                <button class="category-tab"><i data-lucide="crown"></i>한정판</button>
+            </div>
+        </div>
+
+        <!-- Bundle Sets -->
+        <section class="bundle-section">
+            <div class="section-header">
+                <h2 class="section-title"><i data-lucide="package"></i>인기 번들 세트</h2>
+                <a href="#" class="section-more">전체보기 <i data-lucide="chevron-right"></i></a>
+            </div>
+
+            <div class="set-grid">
+                <div class="set-card">
+                    <div class="set-thumbnail" style="background: linear-gradient(135deg, #9B59B6, #FF6B9D);">
+                        <span class="set-badge bundle">BUNDLE</span>
+                        <span class="set-discount">-25%</span>
+                        <div class="set-items">
+                            <div class="set-item-thumb"><i data-lucide="car"></i></div>
+                            <div class="set-item-thumb"><i data-lucide="box"></i></div>
+                            <div class="set-item-thumb"><i data-lucide="lightbulb"></i></div>
+                            <div class="set-item-more">+2</div>
+                        </div>
+                    </div>
+                    <div class="set-body">
+                        <h3 class="set-title">레고 테크닉 슈퍼카 컬렉션</h3>
+                        <p class="set-desc">람보르기니, 포르쉐, 페라리 3종 + LED 키트 + 케이스</p>
+                        <div class="set-includes">
+                            <span>람보르기니</span>
+                            <span>포르쉐 911</span>
+                            <span>페라리</span>
+                            <span>LED 키트</span>
+                            <span>디스플레이 케이스</span>
+                        </div>
+                        <div class="set-price-row">
+                            <span class="set-price">W1,199,000</span>
+                            <span class="set-original-price">W1,598,000</span>
+                            <span class="set-savings">399,000원 절약</span>
+                        </div>
+                        <div class="set-actions">
+                            <button class="btn-set-cart"><i data-lucide="shopping-cart"></i>담기</button>
+                            <button class="btn-set-buy"><i data-lucide="credit-card"></i>구매</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="set-card">
+                    <div class="set-thumbnail" style="background: linear-gradient(135deg, #FF6B35, #FFD93D);">
+                        <span class="set-badge bundle">BUNDLE</span>
+                        <span class="set-discount">-20%</span>
+                        <div class="set-items">
+                            <div class="set-item-thumb"><i data-lucide="castle"></i></div>
+                            <div class="set-item-thumb"><i data-lucide="wand-2"></i></div>
+                            <div class="set-item-thumb"><i data-lucide="home"></i></div>
+                        </div>
+                    </div>
+                    <div class="set-body">
+                        <h3 class="set-title">해리포터 매직 컬렉션</h3>
+                        <p class="set-desc">호그와트 성 + 다이애건 앨리 + 위즐리 가 버로우</p>
+                        <div class="set-includes">
+                            <span>호그와트 성</span>
+                            <span>다이애건 앨리</span>
+                            <span>버로우</span>
+                        </div>
+                        <div class="set-price-row">
+                            <span class="set-price">W879,000</span>
+                            <span class="set-original-price">W1,099,000</span>
+                            <span class="set-savings">220,000원 절약</span>
+                        </div>
+                        <div class="set-actions">
+                            <button class="btn-set-cart"><i data-lucide="shopping-cart"></i>담기</button>
+                            <button class="btn-set-buy"><i data-lucide="credit-card"></i>구매</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="set-card">
+                    <div class="set-thumbnail" style="background: linear-gradient(135deg, #0066FF, #4ECDC4);">
+                        <span class="set-badge limited">LIMITED</span>
+                        <span class="set-discount">-30%</span>
+                        <div class="set-items">
+                            <div class="set-item-thumb"><i data-lucide="rocket"></i></div>
+                            <div class="set-item-thumb"><i data-lucide="building-2"></i></div>
+                            <div class="set-item-thumb"><i data-lucide="moon"></i></div>
+                        </div>
+                    </div>
+                    <div class="set-body">
+                        <h3 class="set-title">NASA 우주 탐험 세트</h3>
+                        <p class="set-desc">스페이스 셔틀 + 아폴로 새턴 + 달 착륙선</p>
+                        <div class="set-includes">
+                            <span>스페이스 셔틀</span>
+                            <span>아폴로 새턴 V</span>
+                            <span>달 착륙선</span>
+                        </div>
+                        <div class="set-price-row">
+                            <span class="set-price">W489,000</span>
+                            <span class="set-original-price">W699,000</span>
+                            <span class="set-savings">210,000원 절약</span>
+                        </div>
+                        <div class="set-actions">
+                            <button class="btn-set-cart"><i data-lucide="shopping-cart"></i>담기</button>
+                            <button class="btn-set-buy"><i data-lucide="credit-card"></i>구매</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Rental Section -->
+        <section class="rental-section">
+            <div class="section-header">
+                <h2 class="section-title"><i data-lucide="calendar"></i>렌탈 상품</h2>
+                <a href="#" class="section-more">전체보기 <i data-lucide="chevron-right"></i></a>
+            </div>
+
+            <div class="rental-grid">
+                <div class="rental-card">
+                    <div class="rental-thumbnail" style="background: linear-gradient(135deg, #6BCB77, #4ECDC4);">
+                        <span class="rental-period">1개월</span>
+                        <i data-lucide="box"></i>
+                    </div>
+                    <div class="rental-body">
+                        <h3 class="rental-title">레고 테크닉 체험 패키지</h3>
+                        <div class="rental-price-row">
+                            <span class="rental-price">W39,000</span>
+                            <span class="rental-unit">/ 월</span>
+                        </div>
+                        <div class="rental-info">
+                            <span><i data-lucide="package"></i>3개 제품</span>
+                            <span><i data-lucide="truck"></i>무료배송</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="rental-card">
+                    <div class="rental-thumbnail" style="background: linear-gradient(135deg, #FF6B9D, #9B59B6);">
+                        <span class="rental-period">2주</span>
+                        <i data-lucide="puzzle"></i>
+                    </div>
+                    <div class="rental-body">
+                        <h3 class="rental-title">보드게임 파티 세트</h3>
+                        <div class="rental-price-row">
+                            <span class="rental-price">W25,000</span>
+                            <span class="rental-unit">/ 2주</span>
+                        </div>
+                        <div class="rental-info">
+                            <span><i data-lucide="package"></i>5개 게임</span>
+                            <span><i data-lucide="truck"></i>무료배송</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="rental-card">
+                    <div class="rental-thumbnail" style="background: linear-gradient(135deg, #FFD93D, #FF6B35);">
+                        <span class="rental-period">1개월</span>
+                        <i data-lucide="brain"></i>
+                    </div>
+                    <div class="rental-body">
+                        <h3 class="rental-title">교육완구 성장 구독</h3>
+                        <div class="rental-price-row">
+                            <span class="rental-price">W49,000</span>
+                            <span class="rental-unit">/ 월</span>
+                        </div>
+                        <div class="rental-info">
+                            <span><i data-lucide="package"></i>연령별 맞춤</span>
+                            <span><i data-lucide="refresh-cw"></i>매월 교체</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="rental-card">
+                    <div class="rental-thumbnail" style="background: linear-gradient(135deg, #0066FF, #9B59B6);">
+                        <span class="rental-period">3개월</span>
+                        <i data-lucide="gamepad-2"></i>
+                    </div>
+                    <div class="rental-body">
+                        <h3 class="rental-title">피규어 컬렉션 체험</h3>
+                        <div class="rental-price-row">
+                            <span class="rental-price">W79,000</span>
+                            <span class="rental-unit">/ 3개월</span>
+                        </div>
+                        <div class="rental-info">
+                            <span><i data-lucide="package"></i>프리미엄 피규어</span>
+                            <span><i data-lucide="shield-check"></i>파손 보험</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Benefits Section -->
+        <section class="benefits-section">
+            <div class="section-header" style="margin-bottom: 32px;">
+                <h2 class="section-title"><i data-lucide="gift"></i>세트 구매 혜택</h2>
+            </div>
+
+            <div class="benefits-grid">
+                <div class="benefit-item">
+                    <div class="benefit-icon"><i data-lucide="percent"></i></div>
+                    <h3 class="benefit-title">최대 30% 할인</h3>
+                    <p class="benefit-desc">개별 구매보다 훨씬 저렴하게 구매하세요</p>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-icon"><i data-lucide="truck"></i></div>
+                    <h3 class="benefit-title">무료 배송</h3>
+                    <p class="benefit-desc">모든 세트 상품 무료 배송</p>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-icon"><i data-lucide="gift"></i></div>
+                    <h3 class="benefit-title">추가 사은품</h3>
+                    <p class="benefit-desc">세트 구매 시 특별 사은품 증정</p>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-icon"><i data-lucide="shield-check"></i></div>
+                    <h3 class="benefit-title">품질 보증</h3>
+                    <p class="benefit-desc">30일 무료 반품 및 교환</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+
+    <!-- FAB -->
+    <button class="set-fab"><i data-lucide="sparkles"></i>맞춤 세트 만들기</button>
+    <!-- Footer -->
+    <div id="footer"></div>
+
+
+
+    <script>lucide.createIcons();</script>
+    <script src="common/loader.js"></script>
+</body>
+</html>

@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>주문 상세 - PC Wireframe</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="common/components.css">
+    <link rel="stylesheet" href="common/responsive.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #F8FAFC;
+            --bg-secondary: #FFFFFF;
+            --text-primary: #1E293B;
+            --text-secondary: #64748B;
+            --text-muted: #94A3B8;
+            --border-color: #E2E8F0;
+            --pixar-blue: #0066FF;
+            --toy-orange: #FF6B35;
+            --toy-yellow: #FFD93D;
+            --toy-green: #6BCB77;
+            --pixar-error: #FF6B6B;
+            --pixar-radius: 20px;
+            --pixar-radius-sm: 12px;
+            --pixar-shadow: 0 4px 20px rgba(0, 102, 255, 0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            background: var(--bg-secondary);
+            padding: 16px 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: var(--pixar-shadow);
+        }
+
+        .header-left { display: flex; align-items: center; gap: 32px; }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--pixar-blue);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .logo i { width: 32px; height: 32px; }
+
+        .nav-links { display: flex; gap: 24px; }
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-weight: 600;
+            padding: 8px 16px;
+            border-radius: var(--pixar-radius-sm);
+        }
+        .nav-links a.active { color: var(--pixar-blue); background: rgba(0, 102, 255, 0.1); }
+
+        .header-right { display: flex; align-items: center; gap: 16px; }
+
+        .header-icon {
+            width: 44px; height: 44px;
+            border-radius: 50%;
+            background: var(--bg-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+        .header-icon i { width: 22px; height: 22px; color: var(--text-primary); }
+
+        /* Page Header */
+        .page-header {
+            background: linear-gradient(135deg, var(--pixar-blue) 0%, #4ECDC4 100%);
+            padding: 40px;
+            color: white;
+        }
+
+        .page-header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .page-title-section { display: flex; align-items: center; gap: 16px; }
+
+        .back-btn {
+            width: 44px; height: 44px;
+            background: rgba(255,255,255,0.2);
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .back-btn i { width: 22px; height: 22px; color: white; }
+
+        .page-title h1 {
+            font-size: 28px;
+            font-weight: 800;
+            margin-bottom: 4px;
+        }
+        .page-title .order-id { font-size: 14px; opacity: 0.8; }
+
+        .order-status-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            background: white;
+            border-radius: 24px;
+            font-size: 16px;
+            font-weight: 700;
+        }
+        .order-status-badge i { width: 20px; height: 20px; }
+        .order-status-badge.shipping { color: var(--pixar-blue); }
+        .order-status-badge.delivered { color: var(--toy-green); }
+        .order-status-badge.cancelled { color: var(--pixar-error); }
+
+        /* Main Content */
+        .main-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 32px;
+        }
+
+        /* Section Card */
+        .section-card {
+            background: var(--bg-secondary);
+            border-radius: var(--pixar-radius);
+            padding: 28px;
+            box-shadow: var(--pixar-shadow);
+            margin-bottom: 24px;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .section-title i { width: 22px; height: 22px; color: var(--pixar-blue); }
+
+        .section-action {
+            padding: 8px 16px;
+            background: transparent;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .section-action i { width: 14px; height: 14px; }
+        .section-action:hover { border-color: var(--pixar-blue); color: var(--pixar-blue); }
+
+        /* Delivery Timeline */
+        .timeline {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+            padding: 0 20px;
+        }
+        .timeline::before {
+            content: '';
+            position: absolute;
+            top: 22px;
+            left: 60px;
+            right: 60px;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+        }
+        .timeline::after {
+            content: '';
+            position: absolute;
+            top: 22px;
+            left: 60px;
+            width: 60%;
+            height: 4px;
+            background: var(--pixar-blue);
+            border-radius: 2px;
+        }
+
+        .timeline-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            z-index: 1;
+        }
+
+        .timeline-icon {
+            width: 48px; height: 48px;
+            background: var(--border-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .timeline-step.completed .timeline-icon { background: var(--pixar-blue); }
+        .timeline-step.current .timeline-icon {
+            background: white;
+            border: 3px solid var(--pixar-blue);
+            animation: pulse 2s infinite;
+        }
+        .timeline-icon i { width: 22px; height: 22px; color: var(--text-secondary); }
+        .timeline-step.completed .timeline-icon i { color: white; }
+        .timeline-step.current .timeline-icon i { color: var(--pixar-blue); }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(0, 102, 255, 0.4); }
+            50% { box-shadow: 0 0 0 10px rgba(0, 102, 255, 0); }
+        }
+
+        .timeline-label { font-size: 14px; font-weight: 600; text-align: center; }
+        .timeline-date { font-size: 12px; color: var(--text-secondary); }
+
+        /* Delivery Detail */
+        .delivery-detail {
+            background: var(--bg-primary);
+            border-radius: var(--pixar-radius-sm);
+            padding: 20px;
+            margin-top: 24px;
+        }
+
+        .delivery-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+        .delivery-company {
+            font-size: 15px;
+            font-weight: 700;
+        }
+        .tracking-number {
+            font-size: 14px;
+            color: var(--pixar-blue);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .tracking-number i { width: 14px; height: 14px; }
+
+        .delivery-log { margin-top: 16px; }
+
+        .log-item {
+            display: flex;
+            gap: 16px;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .log-item:last-child { border-bottom: none; }
+
+        .log-time {
+            font-size: 12px;
+            color: var(--text-secondary);
+            width: 100px;
+            flex-shrink: 0;
+        }
+        .log-status { font-size: 14px; font-weight: 600; }
+        .log-location { font-size: 13px; color: var(--text-secondary); margin-top: 2px; }
+
+        /* Order Items */
+        .order-item {
+            display: flex;
+            gap: 20px;
+            padding: 20px;
+            background: var(--bg-primary);
+            border-radius: var(--pixar-radius-sm);
+            margin-bottom: 12px;
+        }
+        .order-item:last-child { margin-bottom: 0; }
+
+        .order-item-image {
+            width: 100px; height: 100px;
+            border-radius: var(--pixar-radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .order-item-image i { width: 40px; height: 40px; color: rgba(255,255,255,0.5); }
+
+        .order-item-info { flex: 1; }
+        .order-item-brand { font-size: 12px; color: var(--text-secondary); margin-bottom: 4px; }
+        .order-item-name { font-size: 16px; font-weight: 700; margin-bottom: 8px; }
+        .order-item-option { font-size: 13px; color: var(--text-secondary); margin-bottom: 12px; }
+
+        .order-item-actions { display: flex; gap: 8px; }
+        .item-action-btn {
+            padding: 8px 14px;
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .item-action-btn i { width: 14px; height: 14px; }
+        .item-action-btn:hover { border-color: var(--pixar-blue); color: var(--pixar-blue); }
+
+        .order-item-price { text-align: right; min-width: 120px; }
+        .order-item-price .current { font-size: 18px; font-weight: 800; margin-bottom: 4px; }
+        .order-item-price .qty { font-size: 13px; color: var(--text-secondary); }
+
+        /* Sidebar */
+        .sidebar { display: flex; flex-direction: column; gap: 24px; }
+
+        /* Info Card */
+        .info-card {
+            background: var(--bg-secondary);
+            border-radius: var(--pixar-radius);
+            padding: 24px;
+            box-shadow: var(--pixar-shadow);
+        }
+
+        .info-card-title {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .info-card-title i { width: 18px; height: 18px; color: var(--pixar-blue); }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .info-row:last-child { border-bottom: none; }
+        .info-row .label { font-size: 14px; color: var(--text-secondary); }
+        .info-row .value { font-size: 14px; font-weight: 600; }
+        .info-row .value.discount { color: var(--pixar-error); }
+
+        .info-total {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            padding-top: 16px;
+            margin-top: 8px;
+            border-top: 2px solid var(--border-color);
+        }
+        .info-total .label { font-size: 15px; font-weight: 700; }
+        .info-total .price { font-size: 24px; font-weight: 800; color: var(--pixar-blue); }
+
+        /* Delivery Info */
+        .delivery-info-content {
+            background: var(--bg-primary);
+            border-radius: var(--pixar-radius-sm);
+            padding: 16px;
+            line-height: 1.8;
+            font-size: 14px;
+        }
+        .delivery-info-content strong { display: block; font-size: 15px; margin-bottom: 4px; }
+
+        /* Payment Info */
+        .payment-method {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: var(--bg-primary);
+            border-radius: var(--pixar-radius-sm);
+            padding: 16px;
+        }
+        .payment-icon {
+            width: 44px; height: 44px;
+            background: white;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .payment-icon i { width: 22px; height: 22px; color: var(--text-primary); }
+        .payment-details .method { font-size: 15px; font-weight: 600; }
+        .payment-details .date { font-size: 13px; color: var(--text-secondary); }
+
+        /* Action Buttons */
+        .action-card {
+            background: var(--bg-secondary);
+            border-radius: var(--pixar-radius);
+            padding: 24px;
+            box-shadow: var(--pixar-shadow);
+        }
+
+        .action-btn {
+            width: 100%;
+            padding: 14px;
+            border-radius: var(--pixar-radius-sm);
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+        .action-btn:last-child { margin-bottom: 0; }
+        .action-btn i { width: 18px; height: 18px; }
+
+        .action-btn.primary {
+            background: var(--pixar-blue);
+            border: none;
+            color: white;
+        }
+        .action-btn.secondary {
+            background: white;
+            border: 2px solid var(--border-color);
+            color: var(--text-primary);
+        }
+        .action-btn.secondary:hover { border-color: var(--pixar-blue); color: var(--pixar-blue); }
+        .action-btn.danger {
+            background: white;
+            border: 2px solid var(--pixar-error);
+            color: var(--pixar-error);
+        }
+
+        /* Help Section */
+        .help-section {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px;
+            background: rgba(0, 102, 255, 0.05);
+            border-radius: var(--pixar-radius-sm);
+            margin-top: 16px;
+        }
+        .help-icon {
+            width: 40px; height: 40px;
+            background: var(--pixar-blue);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .help-icon i { width: 20px; height: 20px; color: white; }
+        .help-text { font-size: 14px; }
+        .help-text strong { display: block; margin-bottom: 2px; }
+        .help-text span { color: var(--text-secondary); font-size: 13px; }
+
+        /* ==================== Responsive Design ==================== */
+        /* Tablet (1024px) */
+        @media (max-width: 1024px) {
+            .header { padding: 16px 24px; }
+            .page-header { padding: 32px 24px; }
+            .main-content { padding: 32px 24px; gap: 24px; }
+
+            .timeline { padding: 0 10px; }
+            .timeline::before, .timeline::after { left: 40px; right: 40px; }
+            .timeline-icon { width: 40px; height: 40px; }
+            .timeline-icon i { width: 18px; height: 18px; }
+            .timeline-label { font-size: 12px; }
+        }
+
+        /* Mobile (768px) */
+        @media (max-width: 768px) {
+            .header { padding: 12px 16px; }
+            .header-left { gap: 16px; }
+            .nav-links { display: none; }
+            .logo { font-size: 20px; }
+            .logo i { width: 28px; height: 28px; }
+
+            .page-header { padding: 24px 16px; }
+            .page-header-content { flex-direction: column; align-items: flex-start; gap: 16px; }
+            .page-title h1 { font-size: 22px; }
+            .page-title .order-id { font-size: 12px; }
+            .back-btn { width: 36px; height: 36px; }
+            .order-status-badge { padding: 8px 16px; font-size: 14px; }
+
+            .main-content {
+                padding: 20px 16px;
+                grid-template-columns: 1fr !important;
+                gap: 20px;
+            }
+
+            .section-card { padding: 20px; }
+            .section-title { font-size: 16px; }
+
+            .timeline {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 20px;
+                padding: 0;
+            }
+            .timeline::before, .timeline::after { display: none; }
+            .timeline-step {
+                flex-direction: row;
+                gap: 16px;
+                width: 100%;
+            }
+            .timeline-icon { width: 36px; height: 36px; }
+            .timeline-label { text-align: left; }
+
+            .order-item { flex-wrap: wrap; gap: 12px; padding: 16px; }
+            .order-item-image { width: 80px; height: 80px; }
+            .order-item-info { flex: 1; min-width: calc(100% - 100px); }
+            .order-item-name { font-size: 14px; }
+            .order-item-actions { flex-wrap: wrap; }
+            .order-item-price {
+                width: 100%;
+                text-align: left;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding-top: 12px;
+                border-top: 1px solid var(--border-color);
+            }
+
+            .info-card { padding: 20px; }
+            .info-total .price { font-size: 20px; }
+
+            .action-btn { padding: 12px; font-size: 14px; }
+        }
+
+        /* Small Mobile (480px) */
+        @media (max-width: 480px) {
+            .header { padding: 10px 12px; }
+            .logo { font-size: 18px; }
+            .header-icon { width: 38px; height: 38px; }
+
+            .page-header { padding: 20px 12px; }
+            .page-title h1 { font-size: 18px; }
+            .back-btn { width: 32px; height: 32px; }
+            .back-btn i { width: 18px; height: 18px; }
+            .order-status-badge { padding: 6px 12px; font-size: 13px; }
+
+            .main-content { padding: 16px 12px; }
+
+            .section-card { padding: 16px; margin-bottom: 16px; }
+            .section-header { margin-bottom: 16px; }
+            .section-title { font-size: 14px; gap: 8px; }
+            .section-title i { width: 18px; height: 18px; }
+            .section-action { padding: 6px 10px; font-size: 12px; }
+
+            .timeline-step { gap: 12px; }
+            .timeline-icon { width: 32px; height: 32px; }
+            .timeline-icon i { width: 16px; height: 16px; }
+            .timeline-label { font-size: 13px; }
+            .timeline-date { font-size: 11px; }
+
+            .delivery-detail { padding: 14px; }
+            .delivery-header { flex-direction: column; align-items: flex-start; gap: 8px; }
+            .log-item { flex-direction: column; gap: 4px; }
+            .log-time { width: auto; font-size: 11px; }
+            .log-status { font-size: 13px; }
+
+            .order-item { padding: 12px; }
+            .order-item-image { width: 60px; height: 60px; }
+            .order-item-image i { width: 28px; height: 28px; }
+            .order-item-brand { font-size: 11px; }
+            .order-item-name { font-size: 13px; }
+            .order-item-option { font-size: 12px; }
+            .item-action-btn { padding: 6px 10px; font-size: 11px; }
+            .order-item-price .current { font-size: 16px; }
+
+            .info-card { padding: 16px; }
+            .info-card-title { font-size: 14px; margin-bottom: 12px; }
+            .info-row { padding: 8px 0; font-size: 13px; }
+            .info-total .label { font-size: 14px; }
+            .info-total .price { font-size: 18px; }
+
+            .payment-method { padding: 12px; gap: 10px; }
+            .payment-icon { width: 36px; height: 36px; }
+            .payment-details .method { font-size: 13px; }
+            .payment-details .date { font-size: 12px; }
+
+            .delivery-info-content { padding: 12px; font-size: 13px; }
+
+            .action-card { padding: 16px; }
+            .action-btn { padding: 12px; font-size: 13px; margin-bottom: 8px; }
+            .action-btn i { width: 16px; height: 16px; }
+
+            .help-section { padding: 12px; gap: 10px; }
+            .help-icon { width: 32px; height: 32px; }
+            .help-icon i { width: 16px; height: 16px; }
+            .help-text { font-size: 13px; }
+            .help-text span { font-size: 12px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <!-- Header -->
+    <div id="header"></div>
+
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="page-header-content">
+            <div class="page-title-section">
+                <button class="back-btn"><i data-lucide="arrow-left"></i></button>
+                <div class="page-title">
+                    <h1>주문 상세</h1>
+                    <span class="order-id">주문번호: ORD-20260101-001234</span>
+                </div>
+            </div>
+            <div class="order-status-badge shipping">
+                <i data-lucide="truck"></i>
+                배송중
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="content-area">
+            <!-- Delivery Status -->
+            <div class="section-card">
+                <div class="section-header">
+                    <h2 class="section-title"><i data-lucide="map-pin"></i>배송 현황</h2>
+                    <button class="section-action">
+                        <i data-lucide="bell"></i>
+                        알림 설정
+                    </button>
+                </div>
+
+                <div class="timeline">
+                    <div class="timeline-step completed">
+                        <div class="timeline-icon"><i data-lucide="check"></i></div>
+                        <span class="timeline-label">결제 완료</span>
+                        <span class="timeline-date">01.01 14:30</span>
+                    </div>
+                    <div class="timeline-step completed">
+                        <div class="timeline-icon"><i data-lucide="package"></i></div>
+                        <span class="timeline-label">상품 준비</span>
+                        <span class="timeline-date">01.01 18:00</span>
+                    </div>
+                    <div class="timeline-step current">
+                        <div class="timeline-icon"><i data-lucide="truck"></i></div>
+                        <span class="timeline-label">배송중</span>
+                        <span class="timeline-date">01.02 09:30</span>
+                    </div>
+                    <div class="timeline-step">
+                        <div class="timeline-icon"><i data-lucide="home"></i></div>
+                        <span class="timeline-label">배송 완료</span>
+                        <span class="timeline-date">01.03 예정</span>
+                    </div>
+                </div>
+
+                <div class="delivery-detail">
+                    <div class="delivery-header">
+                        <span class="delivery-company">CJ대한통운</span>
+                        <span class="tracking-number">
+                            123456789012
+                            <i data-lucide="copy"></i>
+                        </span>
+                    </div>
+                    <div class="delivery-log">
+                        <div class="log-item">
+                            <div class="log-time">01.02 09:30</div>
+                            <div>
+                                <div class="log-status">배송 출발</div>
+                                <div class="log-location">강남 물류센터</div>
+                            </div>
+                        </div>
+                        <div class="log-item">
+                            <div class="log-time">01.02 06:00</div>
+                            <div>
+                                <div class="log-status">간선 상차</div>
+                                <div class="log-location">용인 Hub</div>
+                            </div>
+                        </div>
+                        <div class="log-item">
+                            <div class="log-time">01.01 18:00</div>
+                            <div>
+                                <div class="log-status">집하 완료</div>
+                                <div class="log-location">판매자 발송</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Order Items -->
+            <div class="section-card">
+                <div class="section-header">
+                    <h2 class="section-title"><i data-lucide="package"></i>주문 상품</h2>
+                </div>
+
+                <div class="order-item">
+                    <div class="order-item-image" style="background: linear-gradient(135deg, #FF6B35, #FFD93D);">
+                        <i data-lucide="box"></i>
+                    </div>
+                    <div class="order-item-info">
+                        <div class="order-item-brand">레고 / 테크닉</div>
+                        <div class="order-item-name">레고 테크닉 람보르기니 시안 FKP 37</div>
+                        <div class="order-item-option">선물포장: O</div>
+                        <div class="order-item-actions">
+                            <button class="item-action-btn"><i data-lucide="star"></i>리뷰 작성</button>
+                            <button class="item-action-btn"><i data-lucide="message-circle"></i>문의</button>
+                            <button class="item-action-btn"><i data-lucide="repeat"></i>재구매</button>
+                        </div>
+                    </div>
+                    <div class="order-item-price">
+                        <div class="current">489,000</div>
+                        <div class="qty">수량: 1개</div>
+                    </div>
+                </div>
+
+                <div class="order-item">
+                    <div class="order-item-image" style="background: linear-gradient(135deg, #0066FF, #4ECDC4);">
+                        <i data-lucide="gamepad-2"></i>
+                    </div>
+                    <div class="order-item-info">
+                        <div class="order-item-brand">피규어 / 건담</div>
+                        <div class="order-item-name">건담 RG 1/144 사자비 스페셜 에디션</div>
+                        <div class="order-item-option"></div>
+                        <div class="order-item-actions">
+                            <button class="item-action-btn"><i data-lucide="star"></i>리뷰 작성</button>
+                            <button class="item-action-btn"><i data-lucide="message-circle"></i>문의</button>
+                            <button class="item-action-btn"><i data-lucide="repeat"></i>재구매</button>
+                        </div>
+                    </div>
+                    <div class="order-item-price">
+                        <div class="current">68,000</div>
+                        <div class="qty">수량: 1개</div>
+                    </div>
+                </div>
+
+                <div class="order-item">
+                    <div class="order-item-image" style="background: linear-gradient(135deg, #6BCB77, #9B59B6);">
+                        <i data-lucide="puzzle"></i>
+                    </div>
+                    <div class="order-item-info">
+                        <div class="order-item-brand">보드게임</div>
+                        <div class="order-item-name">카탄: 확장판 시나리오 컬렉션</div>
+                        <div class="order-item-option"></div>
+                        <div class="order-item-actions">
+                            <button class="item-action-btn"><i data-lucide="star"></i>리뷰 작성</button>
+                            <button class="item-action-btn"><i data-lucide="message-circle"></i>문의</button>
+                            <button class="item-action-btn"><i data-lucide="repeat"></i>재구매</button>
+                        </div>
+                    </div>
+                    <div class="order-item-price">
+                        <div class="current">70,000</div>
+                        <div class="qty">수량: 2개</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <!-- Payment Summary -->
+            <div class="info-card">
+                <h3 class="info-card-title"><i data-lucide="receipt"></i>결제 금액</h3>
+                <div class="info-row">
+                    <span class="label">상품 금액</span>
+                    <span class="value">717,000</span>
+                </div>
+                <div class="info-row">
+                    <span class="label">상품 할인</span>
+                    <span class="value discount">-90,000</span>
+                </div>
+                <div class="info-row">
+                    <span class="label">배송비</span>
+                    <span class="value">무료</span>
+                </div>
+                <div class="info-total">
+                    <span class="label">총 결제 금액</span>
+                    <span class="price">627,000</span>
+                </div>
+            </div>
+
+            <!-- Payment Method -->
+            <div class="info-card">
+                <h3 class="info-card-title"><i data-lucide="credit-card"></i>결제 수단</h3>
+                <div class="payment-method">
+                    <div class="payment-icon"><i data-lucide="credit-card"></i></div>
+                    <div class="payment-details">
+                        <div class="method">삼성카드 (****1234)</div>
+                        <div class="date">2026.01.01 14:30 결제</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Delivery Info -->
+            <div class="info-card">
+                <h3 class="info-card-title"><i data-lucide="map-pin"></i>배송지</h3>
+                <div class="delivery-info-content">
+                    <strong>홍길동 / 010-1234-5678</strong>
+                    [12345] 서울특별시 강남구 테헤란로 123<br>
+                    브릭타워 5층 502호<br><br>
+                    <span style="color: var(--pixar-blue);">요청사항: 문 앞에 놓아주세요</span>
+                </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="action-card">
+                <button class="action-btn primary">
+                    <i data-lucide="download"></i>
+                    영수증 다운로드
+                </button>
+                <button class="action-btn secondary">
+                    <i data-lucide="refresh-ccw"></i>
+                    교환/반품 신청
+                </button>
+                <button class="action-btn danger">
+                    <i data-lucide="x-circle"></i>
+                    주문 취소
+                </button>
+
+                <div class="help-section">
+                    <div class="help-icon"><i data-lucide="headphones"></i></div>
+                    <div class="help-text">
+                        <strong>도움이 필요하신가요?</strong>
+                        <span>고객센터 1588-1234</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <!-- Footer -->
+    <div id="footer"></div>
+
+
+
+    <script>lucide.createIcons();</script>
+    <script src="common/loader.js"></script>
+</body>
+</html>

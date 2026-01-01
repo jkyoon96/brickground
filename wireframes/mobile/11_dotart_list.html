@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=390, initial-scale=1.0">
+    <title>DotArt 갤러리 - Mobile Wireframe</title>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --pixar-primary: #0066FF;
+            --pixar-secondary: #FFD93D;
+            --pixar-success: #6BCB77;
+            --pixar-error: #FF6B6B;
+            --pixar-purple: #9B5DE5;
+            --pixar-pink: #F15BB5;
+            --pixar-bg: #F8FAFC;
+            --pixar-card: #FFFFFF;
+            --pixar-text: #1E293B;
+            --pixar-text-light: #64748B;
+            --pixar-border: #E2E8F0;
+            --pixar-radius: 16px;
+            --pixar-radius-sm: 10px;
+            --pixar-shadow: 0 4px 20px rgba(0, 102, 255, 0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Nunito', '나눔스퀘어라운드', sans-serif;
+            background: #1a1a2e;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .phone-frame {
+            width: 390px;
+            background: #1a1a1a;
+            border-radius: 50px;
+            padding: 12px;
+            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.5);
+        }
+
+        .phone-screen {
+            background: var(--pixar-bg);
+            border-radius: 40px;
+            overflow: hidden;
+            min-height: 780px;
+            position: relative;
+        }
+
+        /* Status Bar */
+        .status-bar {
+            padding: 14px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--pixar-card);
+        }
+        .status-time { font-size: 14px; font-weight: 600; }
+        .status-icons { display: flex; gap: 6px; }
+        .status-icons i { width: 16px; height: 16px; }
+
+        /* Header */
+        .header {
+            background: var(--pixar-card);
+            padding: 10px 16px 14px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--pixar-primary);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .logo i { width: 22px; height: 22px; }
+
+        .header-icons { display: flex; gap: 8px; }
+        .header-icon {
+            width: 36px; height: 36px;
+            border-radius: 50%;
+            background: var(--pixar-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .header-icon i { width: 18px; height: 18px; color: var(--pixar-text); }
+
+        /* Hero */
+        .hero {
+            background: linear-gradient(135deg, var(--pixar-purple), var(--pixar-pink));
+            padding: 24px 16px;
+            text-align: center;
+            color: white;
+        }
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: rgba(255,255,255,0.2);
+            padding: 6px 12px;
+            border-radius: 16px;
+            font-size: 11px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        .hero-badge i { width: 12px; height: 12px; }
+        .hero h1 { font-size: 24px; font-weight: 800; margin-bottom: 6px; }
+        .hero p { font-size: 13px; opacity: 0.9; margin-bottom: 14px; }
+
+        .btn-hero-primary {
+            padding: 10px 20px;
+            background: white;
+            color: var(--pixar-purple);
+            border: none;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+        }
+        .btn-hero-primary i { width: 16px; height: 16px; }
+
+        /* Main Content */
+        .main-content { padding: 16px; }
+
+        /* Category Tabs */
+        .category-tabs {
+            display: flex;
+            gap: 6px;
+            overflow-x: auto;
+            padding-bottom: 12px;
+            margin-bottom: 4px;
+        }
+        .category-tab {
+            padding: 8px 14px;
+            background: var(--pixar-card);
+            border: 2px solid transparent;
+            border-radius: 16px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--pixar-text-light);
+            cursor: pointer;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .category-tab i { width: 12px; height: 12px; }
+        .category-tab.active { border-color: var(--pixar-purple); color: var(--pixar-purple); }
+
+        /* Art Grid */
+        .art-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .art-card {
+            background: var(--pixar-card);
+            border-radius: var(--pixar-radius);
+            overflow: hidden;
+            box-shadow: var(--pixar-shadow);
+        }
+
+        .art-thumbnail {
+            width: 100%;
+            aspect-ratio: 1;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .art-thumbnail i { width: 36px; height: 36px; color: rgba(255,255,255,0.6); }
+
+        .art-badge {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            background: var(--pixar-secondary);
+            color: var(--pixar-text);
+            padding: 3px 8px;
+            border-radius: 8px;
+            font-size: 9px;
+            font-weight: 700;
+        }
+
+        .art-3d-badge {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: var(--pixar-purple);
+            color: white;
+            padding: 3px 8px;
+            border-radius: 8px;
+            font-size: 9px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+        .art-3d-badge i { width: 8px; height: 8px; }
+
+        .art-body { padding: 10px; }
+
+        .art-author {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 6px;
+        }
+        .author-avatar {
+            width: 20px; height: 20px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--pixar-purple), var(--pixar-pink));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .author-avatar i { width: 10px; height: 10px; color: white; }
+        .author-name { font-size: 10px; color: var(--pixar-text-light); }
+
+        .art-title { font-size: 12px; font-weight: 700; margin-bottom: 6px; }
+
+        .art-stats { display: flex; gap: 10px; }
+        .art-stat {
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            font-size: 10px;
+            color: var(--pixar-text-light);
+        }
+        .art-stat i { width: 12px; height: 12px; }
+        .art-stat.liked i { color: var(--pixar-error); fill: var(--pixar-error); }
+
+        /* Bottom Nav */
+        .bottom-nav {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--pixar-card);
+            padding: 10px 20px 30px;
+            display: flex;
+            justify-content: space-around;
+            box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            color: var(--pixar-text-light);
+            text-decoration: none;
+        }
+        .nav-item.active { color: var(--pixar-purple); }
+        .nav-item i { width: 22px; height: 22px; }
+        .nav-item span { font-size: 10px; font-weight: 600; }
+
+        .nav-fab {
+            width: 50px; height: 50px;
+            background: linear-gradient(135deg, var(--pixar-purple), var(--pixar-pink));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: -20px;
+            box-shadow: 0 4px 15px rgba(155, 93, 229, 0.4);
+        }
+        .nav-fab i { width: 24px; height: 24px; color: white; }
+
+        /* Home Indicator */
+        .home-indicator {
+            position: absolute;
+            bottom: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 134px;
+            height: 5px;
+            background: var(--pixar-text);
+            border-radius: 3px;
+            opacity: 0.2;
+        }
+    </style>
+</head>
+<body>
+    <div class="phone-frame">
+        <div class="phone-screen">
+            <!-- Status Bar -->
+            <div class="status-bar">
+                <span class="status-time">9:41</span>
+                <div class="status-icons">
+                    <i data-lucide="signal"></i>
+                    <i data-lucide="wifi"></i>
+                    <i data-lucide="battery-full"></i>
+                </div>
+            </div>
+
+            <!-- Header -->
+            <header class="header">
+                <div class="logo"><i data-lucide="box"></i>BrickGround</div>
+                <div class="header-icons">
+                    <div class="header-icon"><i data-lucide="search"></i></div>
+                    <div class="header-icon"><i data-lucide="bell"></i></div>
+                </div>
+            </header>
+
+            <!-- Hero -->
+            <section class="hero">
+                <div class="hero-badge"><i data-lucide="sparkles"></i>픽셀 아트 창작</div>
+                <h1>DotArt 갤러리</h1>
+                <p>나만의 픽셀 아트를 만들고 3D로 변환하세요!</p>
+                <button class="btn-hero-primary"><i data-lucide="pencil"></i>새 작품 만들기</button>
+            </section>
+
+            <!-- Main Content -->
+            <main class="main-content">
+                <div class="category-tabs">
+                    <button class="category-tab active"><i data-lucide="grid-3x3"></i>전체</button>
+                    <button class="category-tab"><i data-lucide="flame"></i>인기</button>
+                    <button class="category-tab"><i data-lucide="clock"></i>최신</button>
+                    <button class="category-tab"><i data-lucide="box"></i>3D</button>
+                    <button class="category-tab"><i data-lucide="music"></i>음악</button>
+                </div>
+
+                <div class="art-grid">
+                    <div class="art-card">
+                        <div class="art-thumbnail" style="background: linear-gradient(135deg, #FFD93D, #FF6B6B);">
+                            <span class="art-badge">HOT</span>
+                            <span class="art-3d-badge"><i data-lucide="box"></i>3D</span>
+                            <i data-lucide="cat"></i>
+                        </div>
+                        <div class="art-body">
+                            <div class="art-author">
+                                <div class="author-avatar"><i data-lucide="user"></i></div>
+                                <span class="author-name">픽셀마스터</span>
+                            </div>
+                            <h3 class="art-title">귀여운 고양이</h3>
+                            <div class="art-stats">
+                                <span class="art-stat liked"><i data-lucide="heart"></i>2,847</span>
+                                <span class="art-stat"><i data-lucide="message-circle"></i>156</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="art-card">
+                        <div class="art-thumbnail" style="background: linear-gradient(135deg, #6BCB77, #4D96FF);">
+                            <span class="art-3d-badge"><i data-lucide="box"></i>3D</span>
+                            <i data-lucide="gamepad-2"></i>
+                        </div>
+                        <div class="art-body">
+                            <div class="art-author">
+                                <div class="author-avatar"><i data-lucide="user"></i></div>
+                                <span class="author-name">레트로게이머</span>
+                            </div>
+                            <h3 class="art-title">클래식 캐릭터</h3>
+                            <div class="art-stats">
+                                <span class="art-stat liked"><i data-lucide="heart"></i>1,923</span>
+                                <span class="art-stat"><i data-lucide="message-circle"></i>89</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="art-card">
+                        <div class="art-thumbnail" style="background: linear-gradient(135deg, #9B5DE5, #F15BB5);">
+                            <span class="art-badge">NEW</span>
+                            <i data-lucide="flower-2"></i>
+                        </div>
+                        <div class="art-body">
+                            <div class="art-author">
+                                <div class="author-avatar"><i data-lucide="user"></i></div>
+                                <span class="author-name">아트러버</span>
+                            </div>
+                            <h3 class="art-title">봄꽃 피는 날</h3>
+                            <div class="art-stats">
+                                <span class="art-stat"><i data-lucide="heart"></i>567</span>
+                                <span class="art-stat"><i data-lucide="message-circle"></i>34</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="art-card">
+                        <div class="art-thumbnail" style="background: linear-gradient(135deg, #4D96FF, #00D4FF);">
+                            <i data-lucide="sailboat"></i>
+                        </div>
+                        <div class="art-body">
+                            <div class="art-author">
+                                <div class="author-avatar"><i data-lucide="user"></i></div>
+                                <span class="author-name">바다소년</span>
+                            </div>
+                            <h3 class="art-title">푸른 바다 위 요트</h3>
+                            <div class="art-stats">
+                                <span class="art-stat liked"><i data-lucide="heart"></i>1,456</span>
+                                <span class="art-stat"><i data-lucide="message-circle"></i>72</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+
+            <!-- Bottom Navigation -->
+            <nav class="bottom-nav">
+                <a href="#" class="nav-item">
+                    <i data-lucide="home"></i>
+                    <span>홈</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i data-lucide="store"></i>
+                    <span>VR Mall</span>
+                </a>
+                <div class="nav-fab">
+                    <i data-lucide="plus"></i>
+                </div>
+                <a href="#" class="nav-item active">
+                    <i data-lucide="grid-3x3"></i>
+                    <span>DotArt</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i data-lucide="user"></i>
+                    <span>마이</span>
+                </a>
+            </nav>
+
+            <div class="home-indicator"></div>
+        </div>
+    </div>
+    <script>lucide.createIcons();</script>
+</body>
+</html>

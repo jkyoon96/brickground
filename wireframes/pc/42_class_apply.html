@@ -1,0 +1,1070 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>클래스 신청 - BrickGround</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="common/components.css">
+    <link rel="stylesheet" href="common/responsive.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #F8FAFC;
+            --bg-secondary: #FFFFFF;
+            --text-primary: #1E293B;
+            --text-secondary: #64748B;
+            --text-muted: #94A3B8;
+            --border-color: #E2E8F0;
+            --pixar-blue: #0066FF;
+            --toy-green: #10B981;
+            --toy-yellow: #FFD93D;
+            --toy-success: #6BCB77;
+            --toy-error: #FF6B6B;
+            --toy-orange: #F97316;
+            --radius-lg: 20px;
+            --radius-md: 12px;
+            --shadow: 0 4px 20px rgba(16, 185, 129, 0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Nunito', 'Nanum Square Round', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+        }
+
+        /* Breadcrumb */
+        .breadcrumb {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px 40px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .breadcrumb a {
+            color: var(--text-secondary);
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            color: var(--toy-green);
+        }
+
+        .breadcrumb i {
+            width: 16px;
+            height: 16px;
+        }
+
+        .breadcrumb span {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        /* Main Content */
+        .main-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 40px 60px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+        }
+
+        /* Page Title */
+        .page-header {
+            margin-bottom: 32px;
+        }
+
+        .page-title {
+            font-size: 28px;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .page-subtitle {
+            font-size: 15px;
+            color: var(--text-secondary);
+        }
+
+        /* Form Sections */
+        .form-section {
+            background: var(--bg-secondary);
+            border-radius: var(--radius-lg);
+            padding: 28px;
+            box-shadow: var(--shadow);
+            margin-bottom: 24px;
+        }
+
+        .form-section-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .form-section-title i {
+            width: 22px;
+            height: 22px;
+            color: var(--toy-green);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group:last-child {
+            margin-bottom: 0;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .form-label .required {
+            color: var(--toy-error);
+            margin-left: 2px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius-md);
+            font-size: 15px;
+            font-family: inherit;
+            transition: border-color 0.2s;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--toy-green);
+        }
+
+        .form-input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .form-select {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius-md);
+            font-size: 15px;
+            font-family: inherit;
+            background: white;
+            cursor: pointer;
+        }
+
+        .form-select:focus {
+            outline: none;
+            border-color: var(--toy-green);
+        }
+
+        .form-textarea {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius-md);
+            font-size: 15px;
+            font-family: inherit;
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .form-textarea:focus {
+            outline: none;
+            border-color: var(--toy-green);
+        }
+
+        .form-help {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-top: 6px;
+        }
+
+        /* Schedule Selection */
+        .schedule-options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .schedule-option {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px 20px;
+            background: var(--bg-primary);
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .schedule-option:hover {
+            border-color: var(--toy-green);
+        }
+
+        .schedule-option.selected {
+            border-color: var(--toy-green);
+            background: rgba(16, 185, 129, 0.05);
+        }
+
+        .schedule-option input {
+            display: none;
+        }
+
+        .schedule-radio {
+            width: 22px;
+            height: 22px;
+            border: 2px solid var(--border-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .schedule-option.selected .schedule-radio {
+            border-color: var(--toy-green);
+        }
+
+        .schedule-option.selected .schedule-radio::after {
+            content: '';
+            width: 12px;
+            height: 12px;
+            background: var(--toy-green);
+            border-radius: 50%;
+        }
+
+        .schedule-date {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex: 1;
+        }
+
+        .schedule-date-box {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--toy-green), #059669);
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .schedule-date-box .month {
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .schedule-date-box .day {
+            font-size: 18px;
+            font-weight: 800;
+            line-height: 1;
+        }
+
+        .schedule-info {
+            flex: 1;
+        }
+
+        .schedule-time {
+            font-weight: 700;
+            margin-bottom: 2px;
+        }
+
+        .schedule-spots {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .schedule-spots.few {
+            color: var(--toy-orange);
+        }
+
+        /* Participants */
+        .participants-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .participant-card {
+            background: var(--bg-primary);
+            border-radius: var(--radius-md);
+            padding: 20px;
+        }
+
+        .participant-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .participant-number {
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .participant-number i {
+            width: 18px;
+            height: 18px;
+            color: var(--toy-green);
+        }
+
+        .remove-participant {
+            padding: 6px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--text-muted);
+        }
+
+        .remove-participant:hover {
+            color: var(--toy-error);
+        }
+
+        .add-participant-btn {
+            width: 100%;
+            padding: 14px;
+            background: var(--bg-primary);
+            border: 2px dashed var(--border-color);
+            border-radius: var(--radius-md);
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.2s;
+        }
+
+        .add-participant-btn:hover {
+            border-color: var(--toy-green);
+            color: var(--toy-green);
+        }
+
+        .add-participant-btn i {
+            width: 18px;
+            height: 18px;
+        }
+
+        /* Checkbox */
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            cursor: pointer;
+        }
+
+        .checkbox-item input {
+            display: none;
+        }
+
+        .checkbox-box {
+            width: 22px;
+            height: 22px;
+            border: 2px solid var(--border-color);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+
+        .checkbox-item input:checked + .checkbox-box {
+            background: var(--toy-green);
+            border-color: var(--toy-green);
+        }
+
+        .checkbox-item input:checked + .checkbox-box i {
+            display: block;
+        }
+
+        .checkbox-box i {
+            width: 14px;
+            height: 14px;
+            color: white;
+            display: none;
+        }
+
+        .checkbox-label {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        .checkbox-label a {
+            color: var(--toy-green);
+            text-decoration: underline;
+        }
+
+        /* Right Column - Summary */
+        .summary-sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .sticky-box {
+            position: sticky;
+            top: 100px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        /* Class Summary */
+        .class-summary {
+            background: var(--bg-secondary);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+
+        .summary-thumbnail {
+            width: 100%;
+            aspect-ratio: 16/10;
+            background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .summary-thumbnail i {
+            width: 48px;
+            height: 48px;
+            color: var(--toy-green);
+        }
+
+        .summary-thumbnail span {
+            font-size: 14px;
+            color: var(--toy-green);
+            font-weight: 600;
+        }
+
+        .summary-content {
+            padding: 24px;
+        }
+
+        .summary-type {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 10px;
+            background: rgba(16, 185, 129, 0.1);
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--toy-green);
+            margin-bottom: 10px;
+        }
+
+        .summary-type i {
+            width: 12px;
+            height: 12px;
+        }
+
+        .summary-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            line-height: 1.4;
+        }
+
+        .summary-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .summary-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .summary-meta-item i {
+            width: 16px;
+            height: 16px;
+            color: var(--toy-green);
+        }
+
+        /* Payment Summary */
+        .payment-summary {
+            background: var(--bg-secondary);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            box-shadow: var(--shadow);
+        }
+
+        .payment-title {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .payment-rows {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .payment-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+        }
+
+        .payment-row.discount {
+            color: var(--toy-green);
+        }
+
+        .payment-total {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .payment-total-label {
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        .payment-total-value {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--toy-green);
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 18px;
+            background: var(--toy-green);
+            border: none;
+            border-radius: var(--radius-md);
+            font-size: 18px;
+            font-weight: 700;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .submit-btn i {
+            width: 22px;
+            height: 22px;
+        }
+
+        .submit-btn:hover {
+            background: #059669;
+        }
+
+        .submit-btn:disabled {
+            background: var(--text-muted);
+            cursor: not-allowed;
+        }
+
+        /* Notes */
+        .notes-card {
+            background: rgba(16, 185, 129, 0.1);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+        }
+
+        .notes-title {
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .notes-title i {
+            width: 18px;
+            height: 18px;
+            color: var(--toy-green);
+        }
+
+        .notes-list {
+            list-style: none;
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.8;
+        }
+
+        .notes-list li {
+            padding-left: 16px;
+            position: relative;
+        }
+
+        .notes-list li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 8px;
+            width: 4px;
+            height: 4px;
+            background: var(--toy-green);
+            border-radius: 50%;
+        }
+
+        /* ==================== Responsive Design ==================== */
+        /* Tablet (1024px) */
+        @media (max-width: 1024px) {
+            .breadcrumb { padding: 16px 24px; }
+            .main-content { padding: 0 24px 40px; gap: 32px; }
+
+            .form-section { padding: 24px; }
+            .form-row { gap: 12px; }
+
+            .sticky-box { top: 80px; }
+        }
+
+        /* Mobile (768px) */
+        @media (max-width: 768px) {
+            .breadcrumb {
+                padding: 12px 16px;
+                font-size: 12px;
+                overflow-x: auto;
+                white-space: nowrap;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            .main-content {
+                padding: 0 16px 32px;
+                grid-template-columns: 1fr !important;
+                gap: 24px;
+            }
+
+            .page-header { margin-bottom: 24px; }
+            .page-title { font-size: 24px; }
+            .page-subtitle { font-size: 14px; }
+
+            .form-section { padding: 20px; margin-bottom: 20px; }
+            .form-section-title { font-size: 16px; margin-bottom: 20px; }
+
+            .form-row { grid-template-columns: 1fr; }
+
+            .schedule-option { padding: 14px 16px; }
+            .schedule-date-box { width: 44px; height: 44px; }
+            .schedule-date-box .day { font-size: 16px; }
+
+            .participant-card { padding: 16px; }
+            .form-input, .form-select, .form-textarea { padding: 12px 14px; font-size: 14px; }
+
+            .sticky-box { position: static; }
+            .class-summary, .payment-summary { margin-bottom: 16px; }
+            .summary-content { padding: 20px; }
+            .payment-summary { padding: 20px; }
+            .payment-total-value { font-size: 24px; }
+        }
+
+        /* Small Mobile (480px) */
+        @media (max-width: 480px) {
+            .breadcrumb { padding: 10px 12px; font-size: 11px; gap: 4px; }
+            .breadcrumb i { width: 12px; height: 12px; }
+
+            .main-content { padding: 0 12px 24px; gap: 16px; }
+
+            .page-header { margin-bottom: 20px; }
+            .page-title { font-size: 20px; }
+            .page-subtitle { font-size: 13px; }
+
+            .form-section { padding: 16px; margin-bottom: 16px; }
+            .form-section-title {
+                font-size: 14px;
+                margin-bottom: 16px;
+                padding-bottom: 12px;
+                gap: 8px;
+            }
+            .form-section-title i { width: 18px; height: 18px; }
+
+            .form-group { margin-bottom: 16px; }
+            .form-label { font-size: 13px; }
+            .form-input, .form-select, .form-textarea {
+                padding: 12px;
+                font-size: 14px;
+                border-radius: 10px;
+            }
+            .form-help { font-size: 12px; }
+
+            .schedule-option { padding: 12px; gap: 12px; }
+            .schedule-radio { width: 18px; height: 18px; }
+            .schedule-date-box { width: 40px; height: 40px; }
+            .schedule-date-box .month { font-size: 9px; }
+            .schedule-date-box .day { font-size: 14px; }
+            .schedule-time { font-size: 13px; }
+            .schedule-spots { font-size: 11px; }
+
+            .participant-card { padding: 14px; }
+            .participant-header { margin-bottom: 14px; }
+            .participant-number { font-size: 13px; }
+
+            .add-participant-btn { padding: 12px; font-size: 13px; }
+
+            .checkbox-item { gap: 10px; }
+            .checkbox-box { width: 20px; height: 20px; }
+            .checkbox-label { font-size: 12px; }
+
+            .summary-thumbnail { aspect-ratio: 16/8; }
+            .summary-thumbnail i { width: 36px; height: 36px; }
+            .summary-thumbnail span { font-size: 12px; }
+
+            .summary-content { padding: 16px; }
+            .summary-type { font-size: 11px; padding: 3px 8px; }
+            .summary-title { font-size: 15px; margin-bottom: 10px; }
+            .summary-meta-item { font-size: 12px; }
+            .summary-meta-item i { width: 14px; height: 14px; }
+
+            .payment-summary { padding: 16px; }
+            .payment-title { font-size: 14px; margin-bottom: 16px; }
+            .payment-rows { margin-bottom: 16px; padding-bottom: 16px; }
+            .payment-row { font-size: 13px; }
+            .payment-total { margin-bottom: 20px; }
+            .payment-total-label { font-size: 14px; }
+            .payment-total-value { font-size: 22px; }
+
+            .submit-btn { padding: 14px; font-size: 16px; }
+            .submit-btn i { width: 20px; height: 20px; }
+
+            .notes-card { padding: 14px; }
+            .notes-title { font-size: 13px; margin-bottom: 10px; }
+            .notes-list { font-size: 12px; line-height: 1.7; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div id="header"></div>
+
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb">
+        <a href="00_main_home.html">홈</a>
+        <i data-lucide="chevron-right"></i>
+        <a href="40_class_list.html">클래스</a>
+        <i data-lucide="chevron-right"></i>
+        <a href="41_class_detail.html">레고 테크닉 자동차 조립 체험</a>
+        <i data-lucide="chevron-right"></i>
+        <span>신청</span>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Left Column - Form -->
+        <div class="form-main">
+            <div class="page-header">
+                <h1 class="page-title">클래스 신청</h1>
+                <p class="page-subtitle">수업에 참여할 학생 정보를 입력해 주세요.</p>
+            </div>
+
+            <!-- Schedule Selection -->
+            <div class="form-section">
+                <h2 class="form-section-title"><i data-lucide="calendar"></i>수업 일정 선택</h2>
+                <div class="schedule-options">
+                    <label class="schedule-option selected">
+                        <input type="radio" name="schedule" value="jan15" checked>
+                        <span class="schedule-radio"></span>
+                        <div class="schedule-date">
+                            <div class="schedule-date-box">
+                                <span class="month">Jan</span>
+                                <span class="day">15</span>
+                            </div>
+                            <div class="schedule-info">
+                                <div class="schedule-time">토요일 10:00 - 12:00</div>
+                                <div class="schedule-spots few">3자리 남음</div>
+                            </div>
+                        </div>
+                    </label>
+                    <label class="schedule-option">
+                        <input type="radio" name="schedule" value="jan22">
+                        <span class="schedule-radio"></span>
+                        <div class="schedule-date">
+                            <div class="schedule-date-box">
+                                <span class="month">Jan</span>
+                                <span class="day">22</span>
+                            </div>
+                            <div class="schedule-info">
+                                <div class="schedule-time">토요일 10:00 - 12:00</div>
+                                <div class="schedule-spots">8자리 남음</div>
+                            </div>
+                        </div>
+                    </label>
+                    <label class="schedule-option">
+                        <input type="radio" name="schedule" value="jan29">
+                        <span class="schedule-radio"></span>
+                        <div class="schedule-date">
+                            <div class="schedule-date-box">
+                                <span class="month">Jan</span>
+                                <span class="day">29</span>
+                            </div>
+                            <div class="schedule-info">
+                                <div class="schedule-time">토요일 10:00 - 12:00</div>
+                                <div class="schedule-spots">12자리 남음</div>
+                            </div>
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Participant Info -->
+            <div class="form-section">
+                <h2 class="form-section-title"><i data-lucide="users"></i>참여자 정보</h2>
+                <div class="participants-list">
+                    <div class="participant-card">
+                        <div class="participant-header">
+                            <span class="participant-number"><i data-lucide="user"></i>참여자 1</span>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">이름 <span class="required">*</span></label>
+                                <input type="text" class="form-input" placeholder="참여자 이름">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">생년월일 <span class="required">*</span></label>
+                                <input type="date" class="form-input">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">학교/학년</label>
+                                <input type="text" class="form-input" placeholder="예: 서울초등학교 2학년">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">성별</label>
+                                <select class="form-select">
+                                    <option value="">선택해주세요</option>
+                                    <option value="male">남자</option>
+                                    <option value="female">여자</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">특이사항</label>
+                            <textarea class="form-textarea" placeholder="알레르기, 주의사항 등이 있다면 알려주세요."></textarea>
+                        </div>
+                    </div>
+                </div>
+                <button class="add-participant-btn">
+                    <i data-lucide="plus"></i>
+                    참여자 추가
+                </button>
+            </div>
+
+            <!-- Guardian Info -->
+            <div class="form-section">
+                <h2 class="form-section-title"><i data-lucide="shield-check"></i>보호자 정보</h2>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">보호자 성함 <span class="required">*</span></label>
+                        <input type="text" class="form-input" placeholder="보호자 성함" value="홍길동">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">관계 <span class="required">*</span></label>
+                        <select class="form-select">
+                            <option value="">선택해주세요</option>
+                            <option value="parent" selected>부모</option>
+                            <option value="grandparent">조부모</option>
+                            <option value="other">기타</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">연락처 <span class="required">*</span></label>
+                        <input type="tel" class="form-input" placeholder="010-0000-0000" value="010-1234-5678">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">이메일 <span class="required">*</span></label>
+                        <input type="email" class="form-input" placeholder="email@example.com" value="hong@example.com">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">비상 연락처</label>
+                    <input type="tel" class="form-input" placeholder="비상시 연락 가능한 다른 번호">
+                    <p class="form-help">수업 중 연락이 필요한 경우 사용됩니다.</p>
+                </div>
+            </div>
+
+            <!-- Payment Method -->
+            <div class="form-section">
+                <h2 class="form-section-title"><i data-lucide="credit-card"></i>결제 방법</h2>
+                <div class="form-group">
+                    <select class="form-select">
+                        <option value="">결제 방법을 선택해주세요</option>
+                        <option value="card">신용/체크카드</option>
+                        <option value="kakao">카카오페이</option>
+                        <option value="naver">네이버페이</option>
+                        <option value="toss">토스페이</option>
+                        <option value="transfer">계좌이체</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Agreement -->
+            <div class="form-section">
+                <h2 class="form-section-title"><i data-lucide="file-check"></i>약관 동의</h2>
+                <div class="checkbox-group">
+                    <label class="checkbox-item">
+                        <input type="checkbox">
+                        <span class="checkbox-box"><i data-lucide="check"></i></span>
+                        <span class="checkbox-label">전체 동의</span>
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox">
+                        <span class="checkbox-box"><i data-lucide="check"></i></span>
+                        <span class="checkbox-label">(필수) <a href="#">클래스 이용약관</a>에 동의합니다.</span>
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox">
+                        <span class="checkbox-box"><i data-lucide="check"></i></span>
+                        <span class="checkbox-label">(필수) <a href="#">개인정보 수집 및 이용</a>에 동의합니다.</span>
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox">
+                        <span class="checkbox-box"><i data-lucide="check"></i></span>
+                        <span class="checkbox-label">(필수) <a href="#">환불 정책</a>에 동의합니다.</span>
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox">
+                        <span class="checkbox-box"><i data-lucide="check"></i></span>
+                        <span class="checkbox-label">(선택) 마케팅 정보 수신에 동의합니다.</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column - Summary -->
+        <aside class="summary-sidebar">
+            <div class="sticky-box">
+                <!-- Class Summary -->
+                <div class="class-summary">
+                    <div class="summary-thumbnail">
+                        <i data-lucide="puzzle"></i>
+                        <span>레고 조립 체험</span>
+                    </div>
+                    <div class="summary-content">
+                        <div class="summary-type"><i data-lucide="sparkles"></i>체험수업</div>
+                        <h3 class="summary-title">레고 테크닉 자동차 조립 체험</h3>
+                        <div class="summary-meta">
+                            <div class="summary-meta-item">
+                                <i data-lucide="calendar"></i>
+                                1월 15일 (토) 10:00 - 12:00
+                            </div>
+                            <div class="summary-meta-item">
+                                <i data-lucide="map-pin"></i>
+                                서울 강남구 삼성동
+                            </div>
+                            <div class="summary-meta-item">
+                                <i data-lucide="users"></i>
+                                참여자 1명
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Payment Summary -->
+                <div class="payment-summary">
+                    <h3 class="payment-title">결제 정보</h3>
+                    <div class="payment-rows">
+                        <div class="payment-row">
+                            <span>수업료 (1명)</span>
+                            <span>35,000원</span>
+                        </div>
+                        <div class="payment-row discount">
+                            <span>신규 가입 할인</span>
+                            <span>-3,500원</span>
+                        </div>
+                    </div>
+                    <div class="payment-total">
+                        <span class="payment-total-label">총 결제금액</span>
+                        <span class="payment-total-value">31,500원</span>
+                    </div>
+                    <button class="submit-btn">
+                        <i data-lucide="check-circle"></i>
+                        결제하기
+                    </button>
+                </div>
+
+                <!-- Notes -->
+                <div class="notes-card">
+                    <h4 class="notes-title"><i data-lucide="info"></i>안내사항</h4>
+                    <ul class="notes-list">
+                        <li>수업 시작 3일 전까지 무료 취소 가능</li>
+                        <li>수업 시작 1일 전: 50% 환불</li>
+                        <li>당일 취소 및 노쇼: 환불 불가</li>
+                        <li>수업 10분 전까지 도착해주세요</li>
+                    </ul>
+                </div>
+            </div>
+        </aside>
+    </main>
+
+    <!-- Footer -->
+    <div id="footer"></div>
+
+    <script>lucide.createIcons();</script>
+    <script src="common/loader.js"></script>
+    <script>
+        // Schedule option selection
+        document.querySelectorAll('.schedule-option').forEach(option => {
+            option.addEventListener('click', function() {
+                document.querySelectorAll('.schedule-option').forEach(o => o.classList.remove('selected'));
+                this.classList.add('selected');
+            });
+        });
+    </script>
+</body>
+</html>

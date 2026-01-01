@@ -1,0 +1,1725 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BrickArt 3D 뷰어 - BrickGround</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="common/components.css">
+    <link rel="stylesheet" href="common/responsive.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <!-- Three.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/EffectComposer.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/RenderPass.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/ShaderPass.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/OutlinePass.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/CopyShader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/FXAAShader.js"></script>
+    <style>
+        :root {
+            --bg-primary: #F8FAFC;
+            --bg-secondary: #FFFFFF;
+            --text-primary: #1E293B;
+            --text-secondary: #64748B;
+            --text-muted: #94A3B8;
+            --border-color: #E2E8F0;
+            --pixar-blue: #0066FF;
+            --toy-cyan: #00CEC9;
+            --pixar-secondary: #FFD93D;
+            --pixar-success: #6BCB77;
+            --pixar-error: #FF6B6B;
+            --pixar-radius: 20px;
+            --pixar-radius-sm: 12px;
+            --shadow-soft: 0 4px 20px rgba(0, 102, 255, 0.1);
+            --shadow-float: 0 8px 30px rgba(0, 102, 255, 0.15);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: var(--bg-primary);
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Viewer Layout */
+        .viewer-layout {
+            display: flex;
+            height: 100vh;
+        }
+
+        /* 3D Viewer */
+        .viewer-main {
+            flex: 1;
+            background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
+            position: relative;
+        }
+
+        #vrCanvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        .viewer-header {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 24px;
+            background: linear-gradient(180deg, rgba(0, 0, 0, 0.5) 0%, transparent 100%);
+            z-index: 10;
+        }
+
+        .back-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 16px;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            border-radius: var(--pixar-radius-sm);
+            color: white;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+            text-decoration: none;
+            transition: background 0.3s;
+        }
+        .back-btn:hover { background: rgba(255, 255, 255, 0.2); }
+        .back-btn i { width: 18px; height: 18px; }
+
+        .viewer-title {
+            color: white;
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .viewer-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .viewer-btn {
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+        .viewer-btn:hover { background: rgba(255, 255, 255, 0.2); }
+        .viewer-btn.active { background: var(--pixar-blue); }
+        .viewer-btn i { width: 20px; height: 20px; }
+
+        /* Controls */
+        .viewer-controls {
+            position: absolute;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 12px;
+            padding: 12px 20px;
+            background: rgba(0, 0, 0, 0.6);
+            border-radius: 50px;
+            backdrop-filter: blur(10px);
+            z-index: 10;
+        }
+
+        .control-btn {
+            width: 44px;
+            height: 44px;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+        .control-btn:hover, .control-btn.active { background: var(--pixar-blue); }
+        .control-btn i { width: 22px; height: 22px; }
+
+        .control-separator {
+            width: 1px;
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Assembly Guide Panel */
+        .assembly-panel {
+            position: absolute;
+            bottom: 100px;
+            left: 24px;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: var(--pixar-radius);
+            padding: 16px;
+            backdrop-filter: blur(10px);
+            z-index: 10;
+            min-width: 200px;
+        }
+
+        .assembly-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .assembly-title {
+            color: white;
+            font-weight: 700;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .assembly-title i { width: 18px; height: 18px; color: var(--pixar-secondary); }
+
+        .assembly-toggle {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .assembly-toggle label {
+            color: rgba(255,255,255,0.7);
+            font-size: 12px;
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 40px;
+            height: 20px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .toggle-switch.active { background: var(--pixar-blue); }
+
+        .toggle-switch::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 16px;
+            height: 16px;
+            background: white;
+            border-radius: 50%;
+            transition: transform 0.3s;
+        }
+
+        .toggle-switch.active::after { transform: translateX(20px); }
+
+        .assembly-steps {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin-bottom: 12px;
+        }
+
+        .step-btn {
+            width: 32px;
+            height: 32px;
+            border: none;
+            border-radius: 8px;
+            background: rgba(255,255,255,0.1);
+            color: white;
+            font-weight: 600;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .step-btn:hover { background: rgba(255,255,255,0.2); }
+        .step-btn.active { background: var(--pixar-blue); }
+        .step-btn.completed { background: var(--pixar-success); }
+
+        .assembly-slider {
+            width: 100%;
+            height: 6px;
+            -webkit-appearance: none;
+            background: rgba(255,255,255,0.2);
+            border-radius: 3px;
+            outline: none;
+        }
+
+        .assembly-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 18px;
+            height: 18px;
+            background: var(--pixar-blue);
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        /* Info Panel */
+        .info-panel {
+            position: absolute;
+            top: 80px;
+            left: 24px;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: var(--pixar-radius);
+            padding: 16px;
+            backdrop-filter: blur(10px);
+            z-index: 10;
+            max-width: 280px;
+            display: none;
+        }
+
+        .info-panel.visible { display: block; }
+
+        .info-panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .info-panel-title {
+            color: white;
+            font-weight: 700;
+            font-size: 16px;
+        }
+
+        .info-panel-close {
+            background: none;
+            border: none;
+            color: rgba(255,255,255,0.6);
+            cursor: pointer;
+        }
+        .info-panel-close i { width: 18px; height: 18px; }
+
+        .info-panel-content {
+            color: rgba(255,255,255,0.8);
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .part-color {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border-radius: 4px;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+
+        /* Sidebar */
+        .viewer-sidebar {
+            width: 380px;
+            background: var(--bg-secondary);
+            border-left: 1px solid var(--border-color);
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .mall-info {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+        }
+
+        .mall-avatar {
+            width: 60px;
+            height: 60px;
+            background: var(--pixar-blue);
+            border-radius: var(--pixar-radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .mall-avatar i { width: 30px; height: 30px; color: white; }
+
+        .mall-details h2 {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .mall-details p {
+            font-size: 13px;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .mall-details p i { width: 14px; height: 14px; }
+
+        .mall-stats {
+            display: flex;
+            gap: 24px;
+            margin-top: 16px;
+        }
+
+        .stat-item { text-align: center; }
+        .stat-value { font-size: 20px; font-weight: 800; color: var(--text-primary); }
+        .stat-label { font-size: 12px; color: var(--text-secondary); }
+
+        /* Tabs */
+        .sidebar-tabs {
+            display: flex;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .sidebar-tab {
+            flex: 1;
+            padding: 14px;
+            background: none;
+            border: none;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .sidebar-tab:hover { color: var(--text-primary); }
+        .sidebar-tab.active {
+            color: var(--pixar-blue);
+            border-bottom-color: var(--pixar-blue);
+        }
+
+        /* Parts Section */
+        .sidebar-section {
+            padding: 20px;
+            border-bottom: 1px solid var(--border-color);
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .section-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .section-title i { width: 20px; height: 20px; color: var(--pixar-blue); }
+
+        .view-all {
+            font-size: 13px;
+            color: var(--pixar-blue);
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        /* Part List */
+        .part-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .part-item {
+            display: flex;
+            gap: 12px;
+            padding: 12px;
+            background: var(--bg-primary);
+            border-radius: var(--pixar-radius-sm);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .part-item:hover { background: #EBF4FF; }
+        .part-item.selected { background: #EBF4FF; border-color: var(--pixar-blue); }
+        .part-item.highlighted { background: #FFF9E6; border-color: var(--pixar-secondary); }
+
+        .part-color-box {
+            width: 48px;
+            height: 48px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 11px;
+        }
+
+        .part-info { flex: 1; }
+        .part-name { font-size: 14px; font-weight: 600; color: var(--text-primary); margin-bottom: 2px; }
+        .part-desc { font-size: 12px; color: var(--text-secondary); }
+        .part-count { font-size: 11px; color: var(--text-muted); margin-top: 4px; }
+
+        .part-action {
+            display: flex;
+            align-items: center;
+        }
+
+        .part-checkbox {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--border-color);
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .part-checkbox.checked {
+            background: var(--pixar-blue);
+            border-color: var(--pixar-blue);
+        }
+        .part-checkbox.checked i { color: white; }
+        .part-checkbox i { width: 14px; height: 14px; color: transparent; }
+
+        /* Product List */
+        .product-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .product-item {
+            display: flex;
+            gap: 12px;
+            padding: 12px;
+            background: var(--bg-primary);
+            border-radius: var(--pixar-radius-sm);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .product-item:hover { background: #EBF4FF; }
+        .product-item.selected { background: #EBF4FF; border: 2px solid var(--pixar-blue); }
+
+        .product-thumb {
+            width: 64px;
+            height: 64px;
+            background: var(--border-color);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .product-thumb i { width: 28px; height: 28px; color: var(--text-secondary); }
+
+        .product-info { flex: 1; }
+        .product-name { font-size: 14px; font-weight: 600; color: var(--text-primary); margin-bottom: 4px; }
+        .product-price { font-size: 15px; font-weight: 700; color: var(--pixar-blue); }
+        .product-meta { font-size: 12px; color: var(--text-secondary); margin-top: 4px; }
+
+        .product-action {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .action-btn {
+            width: 32px;
+            height: 32px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+        .action-btn:hover { border-color: var(--pixar-blue); }
+        .action-btn i { width: 16px; height: 16px; color: var(--text-secondary); }
+        .action-btn:hover i { color: var(--pixar-blue); }
+
+        /* Sidebar Actions */
+        .sidebar-actions {
+            padding: 20px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .primary-btn {
+            width: 100%;
+            padding: 14px;
+            background: var(--pixar-blue);
+            color: white;
+            border: none;
+            border-radius: var(--pixar-radius-sm);
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 12px;
+            transition: background 0.2s;
+        }
+        .primary-btn:hover { background: #0052cc; }
+        .primary-btn i { width: 20px; height: 20px; }
+
+        .secondary-btns {
+            display: flex;
+            gap: 12px;
+        }
+
+        .secondary-btn {
+            flex: 1;
+            padding: 12px;
+            background: var(--bg-secondary);
+            border: 2px solid var(--border-color);
+            border-radius: var(--pixar-radius-sm);
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            transition: all 0.2s;
+        }
+        .secondary-btn:hover { border-color: var(--pixar-blue); color: var(--pixar-blue); }
+        .secondary-btn i { width: 18px; height: 18px; }
+
+        /* Loading Overlay */
+        .loading-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(26, 26, 46, 0.9);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+        }
+
+        .loading-overlay.hidden { display: none; }
+
+        .loading-spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid rgba(255,255,255,0.1);
+            border-top-color: var(--pixar-blue);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            color: white;
+            margin-top: 20px;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            z-index: 1000;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+
+        /* ==================== Responsive Design ==================== */
+        /* Tablet (1024px) */
+        @media (max-width: 1024px) {
+            .viewer-sidebar { width: 320px; }
+            .sidebar-header { padding: 16px; }
+            .mall-stats { gap: 16px; }
+            .stat-value { font-size: 18px; }
+            .sidebar-section { padding: 16px; }
+            .viewer-controls { padding: 10px 16px; gap: 8px; }
+            .control-btn { width: 40px; height: 40px; }
+            .assembly-panel { min-width: 180px; padding: 12px; left: 16px; bottom: 80px; }
+        }
+
+        /* Mobile (768px) */
+        @media (max-width: 768px) {
+            .viewer-layout { flex-direction: column; height: auto; min-height: 100vh; }
+            .viewer-main { height: 60vh; min-height: 400px; }
+            .viewer-sidebar { width: 100%; height: auto; border-left: none; border-top: 1px solid var(--border-color); }
+            .viewer-header { padding: 12px 16px; }
+            .viewer-title { font-size: 16px; }
+            .back-btn { padding: 8px 12px; font-size: 13px; }
+            .viewer-btn { width: 36px; height: 36px; }
+            .viewer-btn i { width: 18px; height: 18px; }
+            .viewer-controls { bottom: 16px; padding: 8px 12px; gap: 6px; }
+            .control-btn { width: 36px; height: 36px; }
+            .control-btn i { width: 18px; height: 18px; }
+            .assembly-panel { left: 12px; bottom: 70px; min-width: 160px; padding: 10px; }
+            .assembly-title { font-size: 13px; }
+            .step-btn { width: 28px; height: 28px; font-size: 11px; }
+            .info-panel { left: 12px; top: 70px; max-width: 240px; padding: 12px; }
+            .sidebar-header { padding: 12px; }
+            .mall-avatar { width: 48px; height: 48px; }
+            .mall-avatar i { width: 24px; height: 24px; }
+            .mall-details h2 { font-size: 16px; }
+            .mall-stats { gap: 12px; margin-top: 12px; }
+            .stat-value { font-size: 16px; }
+            .sidebar-tab { padding: 10px; font-size: 13px; }
+            .sidebar-section { padding: 12px; }
+            .section-title { font-size: 14px; }
+            .part-item { padding: 10px; gap: 10px; }
+            .part-color-box { width: 40px; height: 40px; font-size: 10px; }
+            .product-thumb { width: 56px; height: 56px; }
+            .sidebar-actions { padding: 12px; }
+            .primary-btn { padding: 12px; font-size: 14px; }
+            .secondary-btn { padding: 10px; font-size: 13px; }
+        }
+
+        /* Small Mobile (480px) */
+        @media (max-width: 480px) {
+            .viewer-main { height: 50vh; min-height: 320px; }
+            .viewer-header { padding: 10px 12px; }
+            .viewer-title { font-size: 14px; }
+            .back-btn { padding: 6px 10px; font-size: 12px; gap: 4px; }
+            .back-btn i { width: 16px; height: 16px; }
+            .viewer-btn { width: 32px; height: 32px; }
+            .viewer-btn i { width: 16px; height: 16px; }
+            .viewer-actions { gap: 4px; }
+            .viewer-controls { padding: 6px 10px; gap: 4px; border-radius: 30px; }
+            .control-btn { width: 32px; height: 32px; }
+            .control-btn i { width: 16px; height: 16px; }
+            .assembly-panel { left: 8px; bottom: 60px; min-width: 140px; padding: 8px; }
+            .assembly-title { font-size: 12px; gap: 4px; }
+            .assembly-toggle label { font-size: 10px; }
+            .toggle-switch { width: 32px; height: 16px; }
+            .step-btn { width: 24px; height: 24px; font-size: 10px; border-radius: 6px; }
+            .info-panel { display: none; }
+            .sidebar-header { padding: 10px; }
+            .mall-info { gap: 10px; }
+            .mall-avatar { width: 40px; height: 40px; }
+            .mall-details h2 { font-size: 14px; }
+            .mall-details p { font-size: 12px; }
+            .mall-stats { flex-wrap: wrap; gap: 8px; }
+            .stat-item { min-width: 60px; }
+            .stat-value { font-size: 14px; }
+            .stat-label { font-size: 11px; }
+            .sidebar-tab { padding: 8px; font-size: 12px; }
+            .sidebar-section { padding: 10px; }
+            .part-list, .product-list { gap: 6px; }
+            .part-item { padding: 8px; }
+            .part-color-box { width: 36px; height: 36px; }
+            .part-name { font-size: 13px; }
+            .part-desc { font-size: 11px; }
+            .product-item { padding: 8px; gap: 8px; }
+            .product-thumb { width: 48px; height: 48px; }
+            .product-name { font-size: 13px; }
+            .product-price { font-size: 14px; }
+            .action-btn { width: 28px; height: 28px; }
+            .sidebar-actions { padding: 10px; }
+            .primary-btn { padding: 10px; font-size: 13px; margin-bottom: 8px; }
+            .secondary-btns { gap: 8px; }
+            .secondary-btn { padding: 8px; font-size: 12px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="viewer-layout">
+        <!-- 3D Viewer -->
+        <div class="viewer-main" id="viewerMain">
+            <!-- Loading -->
+            <div class="loading-overlay" id="loadingOverlay">
+                <div class="loading-spinner"></div>
+                <div class="loading-text">3D 모델 로딩 중...</div>
+            </div>
+
+            <!-- Header -->
+            <div class="viewer-header">
+                <a href="07_brickart_list.html" class="back-btn">
+                    <i data-lucide="arrow-left"></i>
+                    목록으로
+                </a>
+                <h1 class="viewer-title">미니어처 하우스 컬렉션</h1>
+                <div class="viewer-actions">
+                    <button class="viewer-btn" onclick="shareViewer()" title="공유">
+                        <i data-lucide="share-2"></i>
+                    </button>
+                    <button class="viewer-btn" id="likeBtn" onclick="toggleLike()" title="좋아요">
+                        <i data-lucide="heart"></i>
+                    </button>
+                    <button class="viewer-btn" onclick="toggleFullscreen()" title="전체화면">
+                        <i data-lucide="maximize-2"></i>
+                    </button>
+                    <button class="viewer-btn" onclick="saveAsImage()" title="이미지 저장">
+                        <i data-lucide="download"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- 3D Canvas -->
+            <div id="vrCanvas"></div>
+
+            <!-- Assembly Guide Panel -->
+            <div class="assembly-panel" id="assemblyPanel">
+                <div class="assembly-header">
+                    <div class="assembly-title">
+                        <i data-lucide="layers"></i>
+                        조립 가이드
+                    </div>
+                    <div class="assembly-toggle">
+                        <label>하이라이트</label>
+                        <div class="toggle-switch active" id="highlightToggle" onclick="toggleHighlight()"></div>
+                    </div>
+                </div>
+                <div class="assembly-steps" id="assemblySteps">
+                    <!-- Steps will be generated dynamically -->
+                </div>
+                <input type="range" class="assembly-slider" id="assemblySlider" min="0" max="10" value="0" oninput="setAssemblyStep(this.value)">
+                <div style="color: rgba(255,255,255,0.6); font-size: 12px; margin-top: 8px; text-align: center;">
+                    단계: <span id="currentStep">0</span> / <span id="totalSteps">10</span>
+                </div>
+            </div>
+
+            <!-- Info Panel -->
+            <div class="info-panel" id="infoPanel">
+                <div class="info-panel-header">
+                    <div class="info-panel-title" id="infoPanelTitle">부품 정보</div>
+                    <button class="info-panel-close" onclick="hideInfoPanel()">
+                        <i data-lucide="x"></i>
+                    </button>
+                </div>
+                <div class="info-panel-content" id="infoPanelContent">
+                    부품을 선택하면 정보가 표시됩니다.
+                </div>
+            </div>
+
+            <!-- Controls -->
+            <div class="viewer-controls">
+                <button class="control-btn" id="rotateBtn" onclick="toggleAutoRotate()" title="자동 회전">
+                    <i data-lucide="rotate-3d"></i>
+                </button>
+                <button class="control-btn" onclick="resetCamera()" title="카메라 리셋">
+                    <i data-lucide="home"></i>
+                </button>
+                <div class="control-separator"></div>
+                <button class="control-btn" onclick="zoomIn()" title="확대">
+                    <i data-lucide="zoom-in"></i>
+                </button>
+                <button class="control-btn" onclick="zoomOut()" title="축소">
+                    <i data-lucide="zoom-out"></i>
+                </button>
+                <div class="control-separator"></div>
+                <button class="control-btn" onclick="focusSelected()" title="선택 객체로 이동">
+                    <i data-lucide="focus"></i>
+                </button>
+                <button class="control-btn" onclick="clearSelection()" title="선택 해제">
+                    <i data-lucide="x-circle"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="viewer-sidebar">
+            <div class="sidebar-header">
+                <div class="mall-info">
+                    <div class="mall-avatar">
+                        <i data-lucide="home"></i>
+                    </div>
+                    <div class="mall-details">
+                        <h2>미니어처 하우스 컬렉션</h2>
+                        <p>
+                            <i data-lucide="user"></i>
+                            홍길동의 공방
+                        </p>
+                    </div>
+                </div>
+                <div class="mall-stats">
+                    <div class="stat-item">
+                        <div class="stat-value">24</div>
+                        <div class="stat-label">부품</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">12.5K</div>
+                        <div class="stat-label">조회</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">2.3K</div>
+                        <div class="stat-label">좋아요</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tabs -->
+            <div class="sidebar-tabs">
+                <button class="sidebar-tab active" onclick="switchTab('parts')">부품 목록</button>
+                <button class="sidebar-tab" onclick="switchTab('products')">상품</button>
+            </div>
+
+            <!-- Parts Section -->
+            <div class="sidebar-section" id="partsSection">
+                <div class="section-header">
+                    <h3 class="section-title">
+                        <i data-lucide="puzzle"></i>
+                        부품 (<span id="partCount">0</span>)
+                    </h3>
+                    <button onclick="showAllParts()" class="view-all">전체 보기</button>
+                </div>
+                <div class="part-list" id="partList">
+                    <!-- Parts will be generated dynamically -->
+                </div>
+            </div>
+
+            <!-- Products Section (Hidden by default) -->
+            <div class="sidebar-section" id="productsSection" style="display: none;">
+                <div class="section-header">
+                    <h3 class="section-title">
+                        <i data-lucide="package"></i>
+                        상품 목록
+                    </h3>
+                    <a href="09_brickart_product.html" class="view-all">전체보기</a>
+                </div>
+
+                <div class="product-list">
+                    <div class="product-item selected">
+                        <div class="product-thumb">
+                            <i data-lucide="home"></i>
+                        </div>
+                        <div class="product-info">
+                            <div class="product-name">클래식 빅토리안 하우스</div>
+                            <div class="product-price">45,000원</div>
+                            <div class="product-meta">DIY 키트 / 조립시간 3시간</div>
+                        </div>
+                        <div class="product-action">
+                            <button class="action-btn" onclick="focusOnProduct(0)">
+                                <i data-lucide="eye"></i>
+                            </button>
+                            <button class="action-btn" onclick="addToCart(0)">
+                                <i data-lucide="shopping-cart"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="product-item">
+                        <div class="product-thumb">
+                            <i data-lucide="building"></i>
+                        </div>
+                        <div class="product-info">
+                            <div class="product-name">모던 미니멀 하우스</div>
+                            <div class="product-price">38,000원</div>
+                            <div class="product-meta">DIY 키트 / 조립시간 2시간</div>
+                        </div>
+                        <div class="product-action">
+                            <button class="action-btn" onclick="focusOnProduct(1)">
+                                <i data-lucide="eye"></i>
+                            </button>
+                            <button class="action-btn" onclick="addToCart(1)">
+                                <i data-lucide="shopping-cart"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="product-item">
+                        <div class="product-thumb">
+                            <i data-lucide="store"></i>
+                        </div>
+                        <div class="product-info">
+                            <div class="product-name">유럽풍 카페 세트</div>
+                            <div class="product-price">52,000원</div>
+                            <div class="product-meta">DIY 키트 / 조립시간 4시간</div>
+                        </div>
+                        <div class="product-action">
+                            <button class="action-btn" onclick="focusOnProduct(2)">
+                                <i data-lucide="eye"></i>
+                            </button>
+                            <button class="action-btn" onclick="addToCart(2)">
+                                <i data-lucide="shopping-cart"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sidebar-actions">
+                <button class="primary-btn" onclick="addToCart()">
+                    <i data-lucide="shopping-cart"></i>
+                    장바구니에 담기
+                </button>
+                <div class="secondary-btns">
+                    <button class="secondary-btn" onclick="toggleLike()">
+                        <i data-lucide="heart"></i>
+                        찜하기
+                    </button>
+                    <button class="secondary-btn" onclick="shareViewer()">
+                        <i data-lucide="share-2"></i>
+                        공유
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast"></div>
+
+    <script>
+        // ==========================================
+        // Three.js VR Mall Viewer
+        // Ported from legacy VrMallView.tsx
+        // ==========================================
+
+        let scene, camera, renderer, orbitControl;
+        let composer, outlinePass;
+        let assetGroup;
+        let selectedObject = null;
+        let INTERSECTED = null;
+        let raycaster, mouse;
+        let clock;
+        let isHighlightEnabled = true;
+        let currentAssemblyStep = 0;
+        let totalAssemblySteps = 10;
+
+        // Materials
+        let glassMaterial, focusMaterial, hideMaterial;
+
+        // Parts data
+        const partsData = [];
+
+        // Auto-move variables
+        let moveMode = false;
+        let moveTarget = null;
+        let moveLine = null;
+        let movePosition = 0;
+
+        // Colors for parts
+        const partColors = [
+            0xFF6B6B, 0x4ECDC4, 0x45B7D1, 0x96CEB4,
+            0xFECE44, 0xF38181, 0xAA96DA, 0xFCBAD3,
+            0x6BCB77, 0x0066FF, 0xFF9F43, 0x9B5DE5
+        ];
+
+        // Initialize
+        function init() {
+            const container = document.getElementById('vrCanvas');
+            const width = container.clientWidth || window.innerWidth - 380;
+            const height = container.clientHeight || window.innerHeight;
+
+            // Scene
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x1a1a2e);
+
+            // Camera
+            camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
+            camera.position.set(15, 12, 15);
+            camera.lookAt(0, 0, 0);
+
+            // Renderer
+            renderer = new THREE.WebGLRenderer({
+                antialias: true,
+                preserveDrawingBuffer: true
+            });
+            renderer.setPixelRatio(window.devicePixelRatio);
+            renderer.setSize(width, height);
+            renderer.shadowMap.enabled = true;
+            renderer.outputEncoding = THREE.sRGBEncoding;
+            container.appendChild(renderer.domElement);
+
+            // OrbitControls
+            orbitControl = new THREE.OrbitControls(camera, renderer.domElement);
+            orbitControl.enableDamping = true;
+            orbitControl.dampingFactor = 0.05;
+            orbitControl.screenSpacePanning = true;
+            orbitControl.maxDistance = 50;
+            orbitControl.minDistance = 3;
+
+            // Raycaster
+            raycaster = new THREE.Raycaster();
+            mouse = new THREE.Vector2();
+
+            // Clock
+            clock = new THREE.Clock();
+
+            // Asset Group
+            assetGroup = new THREE.Group();
+            scene.add(assetGroup);
+
+            // Materials
+            glassMaterial = new THREE.MeshPhysicalMaterial({
+                opacity: 0.3,
+                transparent: true,
+                color: 0x88ccff,
+                roughness: 0.1
+            });
+
+            focusMaterial = new THREE.MeshPhysicalMaterial({
+                color: 0x00ffff,
+                emissive: 0x004444
+            });
+
+            hideMaterial = new THREE.MeshPhysicalMaterial({
+                opacity: 0,
+                transparent: true,
+                depthWrite: false
+            });
+
+            // Lighting
+            setupLighting();
+
+            // Environment
+            setupEnvironment();
+
+            // Create demo scene
+            createDemoScene();
+
+            // Post-processing
+            setupPostProcessing();
+
+            // Events
+            window.addEventListener('resize', onWindowResize);
+            renderer.domElement.addEventListener('click', onMouseClick);
+            renderer.domElement.addEventListener('mousemove', onMouseMove);
+
+            // Generate assembly steps UI
+            generateAssemblySteps();
+
+            // Hide loading
+            setTimeout(() => {
+                document.getElementById('loadingOverlay').classList.add('hidden');
+            }, 1500);
+
+            // Animate
+            animate();
+        }
+
+        function setupLighting() {
+            // Ambient
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
+            scene.add(ambientLight);
+
+            // Directional lights
+            const directions = [
+                [1, 1, 1], [-1, 1, 1], [1, 1, -1], [-1, 1, -1]
+            ];
+
+            directions.forEach((dir, i) => {
+                const light = new THREE.DirectionalLight(0xffffff, 0.3);
+                light.position.set(dir[0] * 10, dir[1] * 10, dir[2] * 10);
+                if (i === 0) {
+                    light.castShadow = true;
+                    light.shadow.mapSize.width = 2048;
+                    light.shadow.mapSize.height = 2048;
+                }
+                scene.add(light);
+            });
+        }
+
+        function setupEnvironment() {
+            // Ground plane
+            const groundGeometry = new THREE.PlaneGeometry(30, 30);
+            const groundTexture = createGridTexture();
+            const groundMaterial = new THREE.MeshStandardMaterial({
+                map: groundTexture,
+                roughness: 0.8
+            });
+            const ground = new THREE.Mesh(groundGeometry, groundMaterial);
+            ground.rotation.x = -Math.PI / 2;
+            ground.position.y = -0.01;
+            ground.receiveShadow = true;
+            ground.name = 'ground';
+            scene.add(ground);
+
+            // Grid helper
+            const gridHelper = new THREE.GridHelper(30, 30, 0x444466, 0x333355);
+            gridHelper.position.y = 0;
+            scene.add(gridHelper);
+        }
+
+        function createGridTexture() {
+            const canvas = document.createElement('canvas');
+            canvas.width = 512;
+            canvas.height = 512;
+            const ctx = canvas.getContext('2d');
+
+            ctx.fillStyle = '#2a2a4e';
+            ctx.fillRect(0, 0, 512, 512);
+
+            ctx.strokeStyle = '#3a3a5e';
+            ctx.lineWidth = 2;
+            for (let i = 0; i <= 16; i++) {
+                ctx.beginPath();
+                ctx.moveTo(i * 32, 0);
+                ctx.lineTo(i * 32, 512);
+                ctx.stroke();
+                ctx.beginPath();
+                ctx.moveTo(0, i * 32);
+                ctx.lineTo(512, i * 32);
+                ctx.stroke();
+            }
+
+            const texture = new THREE.CanvasTexture(canvas);
+            texture.wrapS = THREE.RepeatWrapping;
+            texture.wrapT = THREE.RepeatWrapping;
+            texture.repeat.set(1, 1);
+            return texture;
+        }
+
+        function createDemoScene() {
+            // Create a miniature house model with multiple parts
+
+            // Base platform
+            createPart('platform', new THREE.BoxGeometry(8, 0.3, 8), 0x8B4513,
+                { x: 0, y: 0.15, z: 0 }, 1);
+
+            // Main house body
+            createPart('house_body', new THREE.BoxGeometry(5, 3, 4), 0xE8D5B7,
+                { x: 0, y: 1.65, z: 0 }, 2);
+
+            // Roof
+            const roofGeometry = new THREE.ConeGeometry(4, 2, 4);
+            createPart('roof', roofGeometry, 0xB22222,
+                { x: 0, y: 4.15, z: 0 }, 3, { y: Math.PI / 4 });
+
+            // Door
+            createPart('door', new THREE.BoxGeometry(0.8, 1.5, 0.1), 0x654321,
+                { x: 0, y: 0.9, z: 2.05 }, 4);
+
+            // Windows
+            createPart('window_left', new THREE.BoxGeometry(0.8, 0.8, 0.1), 0x87CEEB,
+                { x: -1.2, y: 1.8, z: 2.05 }, 5);
+            createPart('window_right', new THREE.BoxGeometry(0.8, 0.8, 0.1), 0x87CEEB,
+                { x: 1.2, y: 1.8, z: 2.05 }, 6);
+
+            // Chimney
+            createPart('chimney', new THREE.BoxGeometry(0.6, 1.5, 0.6), 0x8B0000,
+                { x: 1.5, y: 4.5, z: -0.5 }, 7);
+
+            // Fence posts
+            for (let i = 0; i < 4; i++) {
+                const x = -3 + i * 2;
+                createPart(`fence_post_${i}`, new THREE.CylinderGeometry(0.1, 0.1, 1), 0xDEB887,
+                    { x: x, y: 0.5, z: 4.5 }, 8);
+            }
+
+            // Trees
+            createPart('tree_trunk_1', new THREE.CylinderGeometry(0.2, 0.3, 1.5), 0x8B4513,
+                { x: -5, y: 0.75, z: -3 }, 9);
+            createPart('tree_leaves_1', new THREE.SphereGeometry(1, 8, 8), 0x228B22,
+                { x: -5, y: 2, z: -3 }, 9);
+
+            createPart('tree_trunk_2', new THREE.CylinderGeometry(0.15, 0.25, 1.2), 0x8B4513,
+                { x: 5, y: 0.6, z: 2 }, 10);
+            createPart('tree_leaves_2', new THREE.SphereGeometry(0.8, 8, 8), 0x32CD32,
+                { x: 5, y: 1.6, z: 2 }, 10);
+
+            // Update part list in sidebar
+            updatePartList();
+        }
+
+        function createPart(name, geometry, color, position, assemblyLevel, rotation = {}) {
+            const material = new THREE.MeshStandardMaterial({
+                color: color,
+                roughness: 0.6,
+                metalness: 0.1
+            });
+
+            const mesh = new THREE.Mesh(geometry, material);
+            mesh.position.set(position.x, position.y, position.z);
+            if (rotation.x) mesh.rotation.x = rotation.x;
+            if (rotation.y) mesh.rotation.y = rotation.y;
+            if (rotation.z) mesh.rotation.z = rotation.z;
+            mesh.castShadow = true;
+            mesh.receiveShadow = true;
+            mesh.name = name;
+            mesh.userData = {
+                assemblyLevel: assemblyLevel,
+                originalMaterial: material,
+                color: color,
+                partName: formatPartName(name)
+            };
+
+            assetGroup.add(mesh);
+
+            partsData.push({
+                name: name,
+                displayName: formatPartName(name),
+                color: color,
+                assemblyLevel: assemblyLevel,
+                mesh: mesh
+            });
+        }
+
+        function formatPartName(name) {
+            return name.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+        }
+
+        function setupPostProcessing() {
+            const width = renderer.domElement.clientWidth;
+            const height = renderer.domElement.clientHeight;
+
+            composer = new THREE.EffectComposer(renderer);
+
+            const renderPass = new THREE.RenderPass(scene, camera);
+            composer.addPass(renderPass);
+
+            outlinePass = new THREE.OutlinePass(
+                new THREE.Vector2(width, height),
+                scene,
+                camera
+            );
+            outlinePass.edgeStrength = 5;
+            outlinePass.edgeThickness = 2;
+            outlinePass.visibleEdgeColor.set('#00ffff');
+            outlinePass.hiddenEdgeColor.set('#00ffff');
+            composer.addPass(outlinePass);
+
+            const fxaaPass = new THREE.ShaderPass(THREE.FXAAShader);
+            fxaaPass.uniforms['resolution'].value.set(1 / width, 1 / height);
+            composer.addPass(fxaaPass);
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+
+            const delta = clock.getDelta();
+
+            orbitControl.update();
+
+            // Auto-move to target
+            if (moveMode && moveTarget) {
+                moveToTarget();
+            }
+
+            // Render
+            if (composer) {
+                composer.render();
+            } else {
+                renderer.render(scene, camera);
+            }
+        }
+
+        function onWindowResize() {
+            const container = document.getElementById('viewerMain');
+            const width = container.clientWidth;
+            const height = container.clientHeight;
+
+            camera.aspect = width / height;
+            camera.updateProjectionMatrix();
+            renderer.setSize(width, height);
+
+            if (composer) {
+                composer.setSize(width, height);
+            }
+        }
+
+        function onMouseClick(event) {
+            const rect = renderer.domElement.getBoundingClientRect();
+            mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+            mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+
+            raycaster.setFromCamera(mouse, camera);
+            const intersects = raycaster.intersectObjects(assetGroup.children, true);
+
+            if (intersects.length > 0) {
+                const object = intersects[0].object;
+                if (object.name !== 'ground') {
+                    selectObject(object);
+                    initMoveToTarget(object);
+                }
+            } else {
+                clearSelection();
+            }
+        }
+
+        function onMouseMove(event) {
+            const rect = renderer.domElement.getBoundingClientRect();
+            mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+            mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+
+            raycaster.setFromCamera(mouse, camera);
+            const intersects = raycaster.intersectObjects(assetGroup.children, true);
+
+            if (intersects.length > 0) {
+                const object = intersects[0].object;
+                if (object.name !== 'ground' && INTERSECTED !== object) {
+                    if (INTERSECTED && INTERSECTED !== selectedObject) {
+                        restoreObjectMaterial(INTERSECTED);
+                    }
+                    INTERSECTED = object;
+                    renderer.domElement.style.cursor = 'pointer';
+                }
+            } else {
+                if (INTERSECTED && INTERSECTED !== selectedObject) {
+                    restoreObjectMaterial(INTERSECTED);
+                }
+                INTERSECTED = null;
+                renderer.domElement.style.cursor = 'default';
+            }
+        }
+
+        function selectObject(object) {
+            // Deselect previous
+            if (selectedObject) {
+                restoreObjectMaterial(selectedObject);
+            }
+
+            selectedObject = object;
+            outlinePass.selectedObjects = [object];
+
+            // Update sidebar
+            updatePartSelection(object.name);
+
+            // Show info panel
+            showInfoPanel(object);
+        }
+
+        function clearSelection() {
+            if (selectedObject) {
+                restoreObjectMaterial(selectedObject);
+                selectedObject = null;
+            }
+            outlinePass.selectedObjects = [];
+            hideInfoPanel();
+
+            // Clear sidebar selection
+            document.querySelectorAll('.part-item').forEach(item => {
+                item.classList.remove('selected');
+            });
+        }
+
+        function restoreObjectMaterial(object) {
+            if (object.userData.originalMaterial) {
+                object.material = object.userData.originalMaterial;
+            }
+        }
+
+        // Auto-move to target
+        function initMoveToTarget(target) {
+            moveTarget = target;
+            movePosition = 0;
+            moveMode = true;
+        }
+
+        function moveToTarget() {
+            if (!moveTarget) return;
+
+            const targetPos = moveTarget.position.clone();
+            const distance = camera.position.distanceTo(targetPos);
+
+            if (distance < 8) {
+                moveMode = false;
+                orbitControl.target.copy(targetPos);
+                return;
+            }
+
+            movePosition += 0.02;
+
+            const direction = targetPos.clone().sub(camera.position).normalize();
+            camera.position.add(direction.multiplyScalar(0.3));
+            orbitControl.target.lerp(targetPos, 0.05);
+        }
+
+        // Assembly Guide
+        function generateAssemblySteps() {
+            const stepsContainer = document.getElementById('assemblySteps');
+            stepsContainer.innerHTML = '';
+
+            for (let i = 0; i <= totalAssemblySteps; i++) {
+                const btn = document.createElement('button');
+                btn.className = 'step-btn' + (i === 0 ? ' active' : '');
+                btn.textContent = i;
+                btn.onclick = () => setAssemblyStep(i);
+                stepsContainer.appendChild(btn);
+            }
+
+            document.getElementById('totalSteps').textContent = totalAssemblySteps;
+        }
+
+        function setAssemblyStep(step) {
+            currentAssemblyStep = parseInt(step);
+            document.getElementById('assemblySlider').value = step;
+            document.getElementById('currentStep').textContent = step;
+
+            // Update step buttons
+            document.querySelectorAll('.step-btn').forEach((btn, i) => {
+                btn.classList.remove('active', 'completed');
+                if (i < currentAssemblyStep) btn.classList.add('completed');
+                if (i == currentAssemblyStep) btn.classList.add('active');
+            });
+
+            // Update object visibility
+            const selectedForOutline = [];
+
+            assetGroup.children.forEach(child => {
+                if (!child.userData.assemblyLevel) return;
+
+                const level = child.userData.assemblyLevel;
+
+                if (level < currentAssemblyStep) {
+                    // Already assembled - show normally
+                    child.visible = true;
+                    restoreObjectMaterial(child);
+                } else if (level == currentAssemblyStep) {
+                    // Current step - highlight
+                    child.visible = true;
+                    restoreObjectMaterial(child);
+                    if (isHighlightEnabled) {
+                        selectedForOutline.push(child);
+                    }
+                } else {
+                    // Future step - hide or show transparent
+                    if (currentAssemblyStep === 0) {
+                        child.visible = true;
+                        restoreObjectMaterial(child);
+                    } else {
+                        child.visible = true;
+                        child.material = glassMaterial;
+                    }
+                }
+            });
+
+            outlinePass.selectedObjects = selectedForOutline;
+        }
+
+        function toggleHighlight() {
+            isHighlightEnabled = !isHighlightEnabled;
+            document.getElementById('highlightToggle').classList.toggle('active', isHighlightEnabled);
+            setAssemblyStep(currentAssemblyStep);
+        }
+
+        // Controls
+        function toggleAutoRotate() {
+            orbitControl.autoRotate = !orbitControl.autoRotate;
+            document.getElementById('rotateBtn').classList.toggle('active', orbitControl.autoRotate);
+            showToast(orbitControl.autoRotate ? '자동 회전 ON' : '자동 회전 OFF');
+        }
+
+        function resetCamera() {
+            camera.position.set(15, 12, 15);
+            orbitControl.target.set(0, 0, 0);
+            orbitControl.update();
+            showToast('카메라 리셋');
+        }
+
+        function zoomIn() {
+            camera.position.multiplyScalar(0.9);
+            orbitControl.update();
+        }
+
+        function zoomOut() {
+            camera.position.multiplyScalar(1.1);
+            orbitControl.update();
+        }
+
+        function focusSelected() {
+            if (selectedObject) {
+                initMoveToTarget(selectedObject);
+                showToast('선택 객체로 이동');
+            } else {
+                showToast('선택된 객체가 없습니다');
+            }
+        }
+
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                document.getElementById('viewerMain').requestFullscreen();
+            } else {
+                document.exitFullscreen();
+            }
+        }
+
+        function saveAsImage() {
+            try {
+                const dataUrl = renderer.domElement.toDataURL('image/png');
+                const link = document.createElement('a');
+                link.download = 'brickart-viewer.png';
+                link.href = dataUrl;
+                link.click();
+                showToast('이미지 저장 완료');
+            } catch (e) {
+                showToast('이미지 저장 실패');
+            }
+        }
+
+        // Sidebar
+        function switchTab(tab) {
+            document.querySelectorAll('.sidebar-tab').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+
+            document.getElementById('partsSection').style.display = tab === 'parts' ? 'block' : 'none';
+            document.getElementById('productsSection').style.display = tab === 'products' ? 'block' : 'none';
+        }
+
+        function updatePartList() {
+            const container = document.getElementById('partList');
+            container.innerHTML = '';
+
+            document.getElementById('partCount').textContent = partsData.length;
+
+            partsData.forEach((part, index) => {
+                const item = document.createElement('div');
+                item.className = 'part-item';
+                item.dataset.name = part.name;
+                item.onclick = () => selectPartFromList(part.name);
+
+                item.innerHTML = `
+                    <div class="part-color-box" style="background-color: #${part.color.toString(16).padStart(6, '0')}">
+                        L${part.assemblyLevel}
+                    </div>
+                    <div class="part-info">
+                        <div class="part-name">${part.displayName}</div>
+                        <div class="part-desc">조립 단계: ${part.assemblyLevel}</div>
+                    </div>
+                    <div class="part-action">
+                        <div class="part-checkbox" onclick="event.stopPropagation(); togglePartVisibility('${part.name}')">
+                            <i data-lucide="check"></i>
+                        </div>
+                    </div>
+                `;
+
+                container.appendChild(item);
+            });
+
+            lucide.createIcons();
+        }
+
+        function selectPartFromList(partName) {
+            const part = partsData.find(p => p.name === partName);
+            if (part && part.mesh) {
+                selectObject(part.mesh);
+                initMoveToTarget(part.mesh);
+            }
+        }
+
+        function updatePartSelection(partName) {
+            document.querySelectorAll('.part-item').forEach(item => {
+                item.classList.remove('selected');
+                if (item.dataset.name === partName) {
+                    item.classList.add('selected');
+                    item.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                }
+            });
+        }
+
+        function togglePartVisibility(partName) {
+            const part = partsData.find(p => p.name === partName);
+            if (part && part.mesh) {
+                part.mesh.visible = !part.mesh.visible;
+
+                const checkbox = document.querySelector(`.part-item[data-name="${partName}"] .part-checkbox`);
+                checkbox.classList.toggle('checked', part.mesh.visible);
+            }
+        }
+
+        function showAllParts() {
+            setAssemblyStep(0);
+            showToast('전체 부품 표시');
+        }
+
+        // Info Panel
+        function showInfoPanel(object) {
+            const panel = document.getElementById('infoPanel');
+            const title = document.getElementById('infoPanelTitle');
+            const content = document.getElementById('infoPanelContent');
+
+            title.textContent = object.userData.partName || object.name;
+
+            const colorHex = '#' + object.userData.color.toString(16).padStart(6, '0');
+            content.innerHTML = `
+                <p><span class="part-color" style="background: ${colorHex}"></span> 색상: ${colorHex}</p>
+                <p>조립 단계: ${object.userData.assemblyLevel || '-'}</p>
+                <p>위치: (${object.position.x.toFixed(1)}, ${object.position.y.toFixed(1)}, ${object.position.z.toFixed(1)})</p>
+            `;
+
+            panel.classList.add('visible');
+            lucide.createIcons();
+        }
+
+        function hideInfoPanel() {
+            document.getElementById('infoPanel').classList.remove('visible');
+        }
+
+        // Actions
+        let isLiked = false;
+        function toggleLike() {
+            isLiked = !isLiked;
+            document.getElementById('likeBtn').classList.toggle('active', isLiked);
+            showToast(isLiked ? '찜 목록에 추가됨' : '찜 목록에서 제거됨');
+        }
+
+        function shareViewer() {
+            if (navigator.share) {
+                navigator.share({
+                    title: '미니어처 하우스 컬렉션',
+                    text: 'BrickGround에서 3D로 감상하세요!',
+                    url: window.location.href
+                });
+            } else {
+                navigator.clipboard.writeText(window.location.href);
+                showToast('링크가 복사되었습니다');
+            }
+        }
+
+        function addToCart(productId) {
+            showToast('장바구니에 추가되었습니다');
+        }
+
+        function focusOnProduct(productId) {
+            // Focus on specific product in the scene
+            resetCamera();
+            showToast('상품 위치로 이동');
+        }
+
+        // Toast
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 2000);
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+            init();
+        });
+    </script>
+</body>
+</html>

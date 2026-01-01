@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BrickGround Wireframes - Index</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="common/styles.css">
+    <link rel="stylesheet" href="common/responsive.css">
+    <style>
+        .index-header {
+            background: linear-gradient(135deg, var(--pixar-blue) 0%, var(--toy-cyan) 100%);
+            padding: 60px 40px;
+            text-align: center;
+            color: white;
+        }
+        .index-header h1 {
+            font-size: 48px;
+            font-weight: 800;
+            margin-bottom: 16px;
+        }
+        .index-header p {
+            font-size: 18px;
+            opacity: 0.9;
+        }
+        .index-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px;
+        }
+        .section {
+            margin-bottom: 48px;
+        }
+        .section-title {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--text-primary);
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .section-title i {
+            width: 28px;
+            height: 28px;
+            color: var(--pixar-blue);
+        }
+        .page-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 16px;
+        }
+        .page-card {
+            background: var(--bg-secondary);
+            border-radius: var(--pixar-radius);
+            padding: 20px;
+            box-shadow: var(--shadow-soft);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        .page-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-float);
+        }
+        .page-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .page-icon i {
+            width: 24px;
+            height: 24px;
+            color: white;
+        }
+        .page-icon.blue { background: linear-gradient(135deg, var(--pixar-blue), var(--toy-cyan)); }
+        .page-icon.purple { background: linear-gradient(135deg, var(--toy-purple), var(--toy-pink)); }
+        .page-icon.orange { background: linear-gradient(135deg, var(--toy-orange), var(--toy-yellow)); }
+        .page-icon.green { background: linear-gradient(135deg, var(--toy-green), var(--toy-cyan)); }
+        .page-icon.gray { background: linear-gradient(135deg, #64748B, #94A3B8); }
+        .page-info h3 {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+        .page-info p {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+        .common-section {
+            background: linear-gradient(135deg, rgba(0, 102, 255, 0.05), rgba(78, 205, 196, 0.05));
+            border-radius: var(--pixar-radius);
+            padding: 32px;
+            margin-bottom: 48px;
+        }
+        .common-section h2 {
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--pixar-blue);
+            margin-bottom: 16px;
+        }
+        .common-files {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .common-file {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 20px;
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        .common-file i {
+            width: 18px;
+            height: 18px;
+            color: var(--pixar-blue);
+        }
+    </style>
+</head>
+<body>
+    <header class="index-header">
+        <h1><i data-lucide="box" style="display: inline; width: 48px; height: 48px;"></i> BrickGround</h1>
+        <p>PC Wireframe Index - All Pages Navigation</p>
+    </header>
+
+    <main class="index-content">
+        <!-- Common Files -->
+        <div class="common-section">
+            <h2><i data-lucide="folder" style="display: inline; width: 24px; height: 24px;"></i> Common Components</h2>
+            <div class="common-files">
+                <span class="common-file"><i data-lucide="file-code"></i> common/styles.css</span>
+                <span class="common-file"><i data-lucide="file-code"></i> common/header.html</span>
+                <span class="common-file"><i data-lucide="file-code"></i> common/footer.html</span>
+                <span class="common-file"><i data-lucide="file-code"></i> common/mypage-sidebar.html</span>
+                <span class="common-file"><i data-lucide="file-code"></i> common/admin-sidebar.html</span>
+                <span class="common-file"><i data-lucide="file-code"></i> common/loader.js</span>
+            </div>
+        </div>
+
+        <!-- Auth & Main -->
+        <section class="section">
+            <h2 class="section-title"><i data-lucide="home"></i> Main & Authentication</h2>
+            <div class="page-grid">
+                <a href="00_main_home.html" class="page-card">
+                    <div class="page-icon blue"><i data-lucide="home"></i></div>
+                    <div class="page-info">
+                        <h3>00. Main Home</h3>
+                        <p>Main landing page</p>
+                    </div>
+                </a>
+                <a href="01_register.html" class="page-card">
+                    <div class="page-icon gray"><i data-lucide="user-plus"></i></div>
+                    <div class="page-info">
+                        <h3>01. Register</h3>
+                        <p>User registration</p>
+                    </div>
+                </a>
+                <a href="02_login.html" class="page-card">
+                    <div class="page-icon gray"><i data-lucide="log-in"></i></div>
+                    <div class="page-info">
+                        <h3>02. Login</h3>
+                        <p>User login</p>
+                    </div>
+                </a>
+                <a href="03_password.html" class="page-card">
+                    <div class="page-icon gray"><i data-lucide="key"></i></div>
+                    <div class="page-info">
+                        <h3>03. Password</h3>
+                        <p>Password change</p>
+                    </div>
+                </a>
+            </div>
+        </section>
+
+        <!-- MyPage -->
+        <section class="section">
+            <h2 class="section-title"><i data-lucide="user"></i> MyPage</h2>
+            <div class="page-grid">
+                <a href="04_mypage.html" class="page-card">
+                    <div class="page-icon blue"><i data-lucide="layout-dashboard"></i></div>
+                    <div class="page-info">
+                        <h3>04. MyPage Dashboard</h3>
+                        <p>User dashboard</p>
+                    </div>
+                </a>
+                <a href="04_mypage_orders.html" class="page-card">
+                    <div class="page-icon blue"><i data-lucide="shopping-bag"></i></div>
+                    <div class="page-info">
+                        <h3>04. Order History</h3>
+                        <p>Order list</p>
+                    </div>
+                </a>
+                <a href="04_mypage_wishlist.html" class="page-card">
+                    <div class="page-icon blue"><i data-lucide="heart"></i></div>
+                    <div class="page-info">
+                        <h3>04. Wishlist</h3>
+                        <p>Saved items</p>
+                    </div>
+                </a>
+                <a href="04_mypage_points.html" class="page-card">
+                    <div class="page-icon blue"><i data-lucide="coins"></i></div>
+                    <div class="page-info">
+                        <h3>04. Points</h3>
+                        <p>Point history</p>
+                    </div>
+                </a>
+                <a href="04_mypage_coupons.html" class="page-card">
+                    <div class="page-icon blue"><i data-lucide="ticket"></i></div>
+                    <div class="page-info">
+                        <h3>04. Coupons</h3>
+                        <p>Coupon list</p>
+                    </div>
+                </a>
+                <a href="04_mypage_profile.html" class="page-card">
+                    <div class="page-icon blue"><i data-lucide="user-cog"></i></div>
+                    <div class="page-info">
+                        <h3>04. Profile</h3>
+                        <p>Edit profile</p>
+                    </div>
+                </a>
+            </div>
+        </section>
+
+        <!-- Seller & Admin -->
+        <section class="section">
+            <h2 class="section-title"><i data-lucide="shield"></i> Seller & Admin</h2>
+            <div class="page-grid">
+                <a href="05_seller.html" class="page-card">
+                    <div class="page-icon green"><i data-lucide="store"></i></div>
+                    <div class="page-info">
+                        <h3>05. Seller Dashboard</h3>
+                        <p>Seller management</p>
+                    </div>
+                </a>
+                <a href="06_admin_users.html" class="page-card">
+                    <div class="page-icon gray"><i data-lucide="users"></i></div>
+                    <div class="page-info">
+                        <h3>06. Admin - Users</h3>
+                        <p>User management</p>
+                    </div>
+                </a>
+            </div>
+        </section>
+
+        <!-- BrickArt -->
+        <section class="section">
+            <h2 class="section-title"><i data-lucide="building-2"></i> BrickArt</h2>
+            <div class="page-grid">
+                <a href="07_brickart_list.html" class="page-card">
+                    <div class="page-icon blue"><i data-lucide="layout-grid"></i></div>
+                    <div class="page-info">
+                        <h3>07. BrickArt List</h3>
+                        <p>BrickArt gallery</p>
+                    </div>
+                </a>
+                <a href="08_brickart_viewer.html" class="page-card">
+                    <div class="page-icon blue"><i data-lucide="eye"></i></div>
+                    <div class="page-info">
+                        <h3>08. BrickArt Viewer</h3>
+                        <p>3D BrickArt viewer</p>
+                    </div>
+                </a>
+                <a href="09_brickart_product.html" class="page-card">
+                    <div class="page-icon blue"><i data-lucide="box"></i></div>
+                    <div class="page-info">
+                        <h3>09. BrickArt Product</h3>
+                        <p>Product in BrickArt</p>
+                    </div>
+                </a>
+                <a href="10_brickart_create.html" class="page-card">
+                    <div class="page-icon blue"><i data-lucide="plus-circle"></i></div>
+                    <div class="page-info">
+                        <h3>10. BrickArt Create</h3>
+                        <p>Create new BrickArt</p>
+                    </div>
+                </a>
+            </div>
+        </section>
+
+        <!-- DotArt -->
+        <section class="section">
+            <h2 class="section-title"><i data-lucide="palette"></i> DotArt</h2>
+            <div class="page-grid">
+                <a href="11_dotart_list.html" class="page-card">
+                    <div class="page-icon purple"><i data-lucide="layout-grid"></i></div>
+                    <div class="page-info">
+                        <h3>11. DotArt Gallery</h3>
+                        <p>Pixel art gallery</p>
+                    </div>
+                </a>
+                <a href="12_dotart_editor.html" class="page-card">
+                    <div class="page-icon purple"><i data-lucide="edit-3"></i></div>
+                    <div class="page-info">
+                        <h3>12. DotArt Editor</h3>
+                        <p>Pixel art editor</p>
+                    </div>
+                </a>
+                <a href="13_dotart_viewer.html" class="page-card">
+                    <div class="page-icon purple"><i data-lucide="eye"></i></div>
+                    <div class="page-info">
+                        <h3>13. DotArt Viewer</h3>
+                        <p>Art viewer</p>
+                    </div>
+                </a>
+                <a href="14_dotart_detail.html" class="page-card">
+                    <div class="page-icon purple"><i data-lucide="file-text"></i></div>
+                    <div class="page-info">
+                        <h3>14. DotArt Detail</h3>
+                        <p>Art detail page</p>
+                    </div>
+                </a>
+            </div>
+        </section>
+
+        <!-- Creation -->
+        <section class="section">
+            <h2 class="section-title"><i data-lucide="sparkles"></i> Creation</h2>
+            <div class="page-grid">
+                <a href="15_creation_list.html" class="page-card">
+                    <div class="page-icon orange"><i data-lucide="layout-grid"></i></div>
+                    <div class="page-info">
+                        <h3>15. Creation List</h3>
+                        <p>3D creations gallery</p>
+                    </div>
+                </a>
+                <a href="16_creation_editor.html" class="page-card">
+                    <div class="page-icon orange"><i data-lucide="edit-3"></i></div>
+                    <div class="page-info">
+                        <h3>16. Creation Editor</h3>
+                        <p>3D model editor</p>
+                    </div>
+                </a>
+                <a href="17_creation_viewer.html" class="page-card">
+                    <div class="page-icon orange"><i data-lucide="eye"></i></div>
+                    <div class="page-info">
+                        <h3>17. Creation Viewer</h3>
+                        <p>3D model viewer</p>
+                    </div>
+                </a>
+                <a href="18_creation_detail.html" class="page-card">
+                    <div class="page-icon orange"><i data-lucide="file-text"></i></div>
+                    <div class="page-info">
+                        <h3>18. Creation Detail</h3>
+                        <p>Creation detail page</p>
+                    </div>
+                </a>
+            </div>
+        </section>
+
+        <!-- Shop -->
+        <section class="section">
+            <h2 class="section-title"><i data-lucide="shopping-bag"></i> Shop</h2>
+            <div class="page-grid">
+                <a href="19_product_list.html" class="page-card">
+                    <div class="page-icon orange"><i data-lucide="layout-grid"></i></div>
+                    <div class="page-info">
+                        <h3>19. Product List</h3>
+                        <p>Product catalog</p>
+                    </div>
+                </a>
+                <a href="20_product_detail.html" class="page-card">
+                    <div class="page-icon orange"><i data-lucide="box"></i></div>
+                    <div class="page-info">
+                        <h3>20. Product Detail</h3>
+                        <p>Product page</p>
+                    </div>
+                </a>
+                <a href="21_product_search.html" class="page-card">
+                    <div class="page-icon orange"><i data-lucide="search"></i></div>
+                    <div class="page-info">
+                        <h3>21. Product Search</h3>
+                        <p>Search results</p>
+                    </div>
+                </a>
+                <a href="22_product_set.html" class="page-card">
+                    <div class="page-icon orange"><i data-lucide="package"></i></div>
+                    <div class="page-info">
+                        <h3>22. Product Set</h3>
+                        <p>Bundle sets</p>
+                    </div>
+                </a>
+                <a href="23_cart.html" class="page-card">
+                    <div class="page-icon orange"><i data-lucide="shopping-cart"></i></div>
+                    <div class="page-info">
+                        <h3>23. Cart</h3>
+                        <p>Shopping cart</p>
+                    </div>
+                </a>
+                <a href="24_checkout.html" class="page-card">
+                    <div class="page-icon orange"><i data-lucide="credit-card"></i></div>
+                    <div class="page-info">
+                        <h3>24. Checkout</h3>
+                        <p>Payment page</p>
+                    </div>
+                </a>
+                <a href="25_order_complete.html" class="page-card">
+                    <div class="page-icon green"><i data-lucide="check-circle"></i></div>
+                    <div class="page-info">
+                        <h3>25. Order Complete</h3>
+                        <p>Order confirmation</p>
+                    </div>
+                </a>
+                <a href="26_order_detail.html" class="page-card">
+                    <div class="page-icon blue"><i data-lucide="file-text"></i></div>
+                    <div class="page-info">
+                        <h3>26. Order Detail</h3>
+                        <p>Order details</p>
+                    </div>
+                </a>
+            </div>
+        </section>
+
+        <!-- Help & Support -->
+        <section class="section">
+            <h2 class="section-title"><i data-lucide="help-circle"></i> Help & Support</h2>
+            <div class="page-grid">
+                <a href="27_manual_list.html" class="page-card">
+                    <div class="page-icon green"><i data-lucide="book-open"></i></div>
+                    <div class="page-info">
+                        <h3>27. Manual List</h3>
+                        <p>User manuals</p>
+                    </div>
+                </a>
+                <a href="28_manual_viewer.html" class="page-card">
+                    <div class="page-icon green"><i data-lucide="file-text"></i></div>
+                    <div class="page-info">
+                        <h3>28. Manual Viewer</h3>
+                        <p>Manual reader</p>
+                    </div>
+                </a>
+                <a href="29_help_center.html" class="page-card">
+                    <div class="page-icon green"><i data-lucide="headphones"></i></div>
+                    <div class="page-info">
+                        <h3>29. Help Center</h3>
+                        <p>Customer support</p>
+                    </div>
+                </a>
+                <a href="30_faq.html" class="page-card">
+                    <div class="page-icon green"><i data-lucide="message-circle"></i></div>
+                    <div class="page-info">
+                        <h3>30. FAQ</h3>
+                        <p>FAQ page</p>
+                    </div>
+                </a>
+                <a href="31_qna_list.html" class="page-card">
+                    <div class="page-icon green"><i data-lucide="messages-square"></i></div>
+                    <div class="page-info">
+                        <h3>31. Q&A List</h3>
+                        <p>Questions list</p>
+                    </div>
+                </a>
+                <a href="32_qna_write.html" class="page-card">
+                    <div class="page-icon green"><i data-lucide="edit"></i></div>
+                    <div class="page-info">
+                        <h3>32. Q&A Write</h3>
+                        <p>Write question</p>
+                    </div>
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <footer style="text-align: center; padding: 40px; color: var(--text-secondary); font-size: 14px;">
+        &copy; 2024 BrickGround Wireframes. All pages are for design reference only.
+    </footer>
+
+    <script>lucide.createIcons();</script>
+</body>
+</html>

@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>상품 목록 - PC Wireframe</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="common/components.css">
+    <link rel="stylesheet" href="common/responsive.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #F8FAFC;
+            --bg-secondary: #FFFFFF;
+            --text-primary: #1E293B;
+            --text-secondary: #64748B;
+            --text-muted: #94A3B8;
+            --border-color: #E2E8F0;
+            --pixar-blue: #0066FF;
+            --toy-orange: #FF6B35;
+            --toy-yellow: #FFD93D;
+            --pixar-success: #6BCB77;
+            --pixar-error: #FF6B6B;
+            --pixar-radius: 20px;
+            --pixar-radius-sm: 12px;
+            --pixar-shadow: 0 4px 20px rgba(255, 107, 53, 0.15);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            background: var(--bg-secondary);
+            padding: 16px 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: var(--pixar-shadow);
+        }
+
+        .header-left { display: flex; align-items: center; gap: 32px; }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--pixar-blue);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .logo i { width: 32px; height: 32px; }
+
+        .nav-links { display: flex; gap: 24px; }
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-weight: 600;
+            padding: 8px 16px;
+            border-radius: var(--pixar-radius-sm);
+            transition: all 0.3s ease;
+        }
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--toy-orange);
+            background: rgba(255, 107, 53, 0.1);
+        }
+
+        .header-right { display: flex; align-items: center; gap: 16px; }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 20px;
+            background: var(--bg-primary);
+            border: 2px solid var(--border-color);
+            border-radius: 24px;
+            width: 300px;
+        }
+        .search-box i { width: 18px; height: 18px; color: var(--text-secondary); }
+        .search-box input {
+            border: none;
+            outline: none;
+            font-size: 14px;
+            background: transparent;
+            flex: 1;
+        }
+
+        .header-icon {
+            width: 44px; height: 44px;
+            border-radius: 50%;
+            background: var(--bg-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            position: relative;
+        }
+        .header-icon i { width: 22px; height: 22px; color: var(--text-primary); }
+        .header-icon .badge {
+            position: absolute;
+            top: -2px; right: -2px;
+            background: var(--pixar-error);
+            color: white;
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 10px;
+            font-weight: 700;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, var(--toy-orange) 0%, var(--toy-yellow) 100%);
+            padding: 60px 40px;
+            text-align: center;
+            color: white;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255,255,255,0.2);
+            padding: 10px 20px;
+            border-radius: 24px;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+        .hero-badge i { width: 18px; height: 18px; }
+
+        .hero h1 { font-size: 42px; font-weight: 800; margin-bottom: 16px; }
+        .hero p { font-size: 18px; opacity: 0.9; margin-bottom: 32px; max-width: 600px; margin-inline: auto; }
+
+        .hero-actions { display: flex; gap: 16px; justify-content: center; }
+
+        .btn-hero-primary {
+            padding: 16px 32px;
+            background: white;
+            color: var(--toy-orange);
+            border: none;
+            border-radius: 28px;
+            font-size: 16px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+        .btn-hero-primary i { width: 22px; height: 22px; }
+
+        .btn-hero-secondary {
+            padding: 16px 32px;
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+            border-radius: 28px;
+            font-size: 16px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+        }
+        .btn-hero-secondary i { width: 22px; height: 22px; }
+
+        /* Main Content */
+        .main-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px;
+        }
+
+        /* Stats Section */
+        .stats-section {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            background: var(--bg-secondary);
+            border-radius: var(--pixar-radius);
+            padding: 24px;
+            text-align: center;
+            box-shadow: var(--pixar-shadow);
+        }
+
+        .stat-icon {
+            width: 56px; height: 56px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, rgba(255, 107, 53, 0.2), rgba(255, 217, 61, 0.2));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+        }
+        .stat-icon i { width: 28px; height: 28px; color: var(--toy-orange); }
+
+        .stat-value { font-size: 28px; font-weight: 800; color: var(--toy-orange); margin-bottom: 4px; }
+        .stat-label { font-size: 14px; color: var(--text-secondary); }
+
+        /* Filter Section */
+        .filter-section {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 32px;
+        }
+
+        .category-tabs { display: flex; gap: 8px; }
+        .category-tab {
+            padding: 12px 20px;
+            background: var(--bg-secondary);
+            border: 2px solid transparent;
+            border-radius: 24px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+        }
+        .category-tab i { width: 16px; height: 16px; }
+        .category-tab:hover { border-color: var(--toy-orange); }
+        .category-tab.active { border-color: var(--toy-orange); color: var(--toy-orange); }
+
+        .filter-actions { display: flex; gap: 12px; }
+
+        .filter-btn {
+            padding: 10px 20px;
+            background: var(--bg-secondary);
+            border: 2px solid var(--border-color);
+            border-radius: 24px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .filter-btn i { width: 16px; height: 16px; }
+
+        .view-toggle {
+            display: flex;
+            background: var(--bg-secondary);
+            border: 2px solid var(--border-color);
+            border-radius: 24px;
+            padding: 4px;
+        }
+        .view-toggle button {
+            width: 36px; height: 36px;
+            border: none;
+            background: transparent;
+            border-radius: 18px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .view-toggle button.active { background: var(--toy-orange); }
+        .view-toggle button.active i { color: white; }
+        .view-toggle button i { width: 18px; height: 18px; color: var(--text-secondary); }
+
+        /* Product Grid */
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+        }
+
+        .product-card {
+            background: var(--bg-secondary);
+            border-radius: var(--pixar-radius);
+            overflow: hidden;
+            box-shadow: var(--pixar-shadow);
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        .product-card:hover { transform: translateY(-6px); }
+
+        .product-thumbnail {
+            width: 100%;
+            aspect-ratio: 1;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .product-thumbnail i { width: 64px; height: 64px; color: rgba(255,255,255,0.5); }
+
+        .product-badge {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            background: var(--pixar-error);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+        .product-badge.new { background: var(--pixar-success); }
+        .product-badge.sale { background: var(--toy-yellow); color: var(--text-primary); }
+
+        .product-wishlist {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            width: 40px; height: 40px;
+            background: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .product-wishlist i { width: 20px; height: 20px; color: var(--text-secondary); }
+        .product-wishlist.active i { color: var(--pixar-error); fill: var(--pixar-error); }
+
+        .product-body { padding: 20px; }
+
+        .product-category {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-bottom: 6px;
+        }
+
+        .product-name {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            line-height: 1.4;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .product-rating {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            margin-bottom: 12px;
+        }
+        .product-rating i { width: 14px; height: 14px; color: var(--toy-yellow); fill: var(--toy-yellow); }
+        .product-rating span { font-size: 13px; color: var(--text-secondary); margin-left: 4px; }
+
+        .product-price { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+        .price-current { font-size: 20px; font-weight: 800; color: var(--text-primary); }
+        .price-original { font-size: 14px; color: var(--text-secondary); text-decoration: line-through; }
+        .price-discount { font-size: 14px; font-weight: 700; color: var(--pixar-error); }
+
+        .product-tags {
+            display: flex;
+            gap: 6px;
+            margin-top: 12px;
+        }
+        .product-tags span {
+            font-size: 11px;
+            padding: 4px 10px;
+            background: var(--bg-primary);
+            border-radius: 8px;
+            color: var(--text-secondary);
+        }
+
+        /* Card Link */
+        .product-card-link {
+            display: block;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .product-card-link:hover .product-name {
+            color: var(--toy-orange);
+        }
+
+        /* Load More */
+        .load-more {
+            display: flex;
+            justify-content: center;
+            margin-top: 48px;
+        }
+
+        .load-more-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 16px 48px;
+            background: var(--bg-secondary);
+            border: 2px solid var(--border-color);
+            border-radius: 20px;
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .load-more-btn:hover {
+            border-color: var(--toy-orange);
+            background: var(--toy-orange);
+            color: white;
+        }
+
+        .load-more-btn i {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* Shopping FAB */
+        .shop-fab {
+            position: fixed;
+            bottom: 40px;
+            right: 40px;
+            background: linear-gradient(135deg, var(--toy-orange), var(--toy-yellow));
+            border: none;
+            padding: 18px 32px;
+            border-radius: 32px;
+            color: white;
+            font-size: 16px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 6px 25px rgba(255, 107, 53, 0.4);
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+        .shop-fab:hover { transform: translateY(-3px); }
+        .shop-fab i { width: 22px; height: 22px; }
+
+        /* Footer */
+        .footer {
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border-color);
+            padding: 40px;
+            margin-top: 60px;
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-logo {
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--pixar-blue);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .footer-logo i { width: 24px; height: 24px; }
+
+        .footer-text {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        /* ========== Responsive Design ========== */
+        /* Tablet (1024px) */
+        @media (max-width: 1024px) {
+            .header { padding: 12px 24px; }
+            .nav-links { gap: 16px; }
+            .nav-links a { padding: 6px 12px; font-size: 14px; }
+            .search-box { width: 240px; }
+
+            .hero { padding: 40px 24px; }
+            .hero h1 { font-size: 32px; }
+            .hero p { font-size: 16px; }
+
+            .main-content { padding: 24px; }
+
+            .stats-section {
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 16px;
+            }
+
+            .filter-section { flex-wrap: wrap; gap: 16px; }
+            .category-tabs {
+                overflow-x: auto;
+                flex-wrap: nowrap;
+                padding-bottom: 8px;
+                -webkit-overflow-scrolling: touch;
+            }
+            .category-tab { flex-shrink: 0; }
+
+            .product-grid {
+                grid-template-columns: repeat(3, 1fr) !important;
+                gap: 16px;
+            }
+
+            .footer { padding: 24px; }
+        }
+
+        /* Mobile (768px) */
+        @media (max-width: 768px) {
+            .header { padding: 12px 16px; }
+            .header-left { gap: 16px; }
+            .logo { font-size: 20px; }
+            .logo i { width: 24px; height: 24px; }
+            .nav-links { display: none; }
+            .search-box { width: 180px; padding: 8px 14px; }
+            .header-icon { width: 36px; height: 36px; }
+            .header-icon i { width: 18px; height: 18px; }
+
+            .hero { padding: 32px 16px; }
+            .hero-badge { padding: 8px 14px; font-size: 12px; }
+            .hero h1 { font-size: 26px; margin-bottom: 12px; }
+            .hero p { font-size: 14px; margin-bottom: 24px; }
+            .hero-actions { flex-direction: column; gap: 12px; }
+            .btn-hero-primary, .btn-hero-secondary {
+                padding: 12px 24px;
+                font-size: 14px;
+                justify-content: center;
+            }
+
+            .main-content { padding: 16px; }
+
+            .stats-section { gap: 12px; }
+            .stat-card { padding: 16px; }
+            .stat-icon { width: 44px; height: 44px; margin-bottom: 12px; }
+            .stat-icon i { width: 22px; height: 22px; }
+            .stat-value { font-size: 22px; }
+            .stat-label { font-size: 12px; }
+
+            .filter-section { flex-direction: column; align-items: stretch; }
+            .category-tabs { width: 100%; }
+            .category-tab { padding: 10px 14px; font-size: 12px; }
+            .filter-actions { justify-content: space-between; }
+            .filter-btn { padding: 8px 14px; font-size: 12px; }
+
+            .product-grid {
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 12px;
+            }
+
+            .product-body { padding: 14px; }
+            .product-category { font-size: 11px; }
+            .product-name { font-size: 14px; }
+            .product-rating i { width: 12px; height: 12px; }
+            .product-rating span { font-size: 11px; }
+            .price-current { font-size: 16px; }
+            .price-original { font-size: 12px; }
+            .price-discount { font-size: 12px; }
+            .product-tags span { font-size: 10px; padding: 3px 8px; }
+
+            .shop-fab {
+                bottom: 20px;
+                right: 20px;
+                padding: 14px 24px;
+                font-size: 14px;
+            }
+
+            .footer { padding: 20px 16px; margin-top: 40px; }
+            .footer-content { flex-direction: column; gap: 12px; text-align: center; }
+        }
+
+        /* Small Mobile (480px) */
+        @media (max-width: 480px) {
+            .header { padding: 10px 12px; }
+            .logo { font-size: 18px; }
+            .search-box { width: 140px; padding: 6px 12px; font-size: 12px; }
+            .header-right { gap: 8px; }
+            .header-icon { width: 32px; height: 32px; }
+
+            .hero { padding: 24px 12px; }
+            .hero h1 { font-size: 22px; }
+            .hero p { font-size: 13px; }
+
+            .main-content { padding: 12px; }
+
+            .stats-section {
+                grid-template-columns: 1fr !important;
+            }
+
+            .category-tabs { gap: 6px; }
+            .category-tab { padding: 8px 12px; }
+
+            .product-grid {
+                grid-template-columns: 1fr !important;
+            }
+
+            .product-card:hover { transform: none; }
+            .product-thumbnail { aspect-ratio: 4/3; }
+            .product-body { padding: 12px; }
+
+            .load-more-btn {
+                padding: 12px 32px;
+                font-size: 14px;
+                width: 100%;
+                justify-content: center;
+            }
+
+            .shop-fab {
+                bottom: 16px;
+                right: 16px;
+                left: 16px;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <!-- Header -->
+    <div id="header"></div>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-badge"><i data-lucide="shopping-bag"></i>BrickGround Shop</div>
+        <h1>Product Gallery</h1>
+        <p>레고, 피규어, 보드게임 등 다양한 상품을 만나보세요</p>
+        <div class="hero-actions">
+            <button class="btn-hero-primary"><i data-lucide="flame"></i>인기상품</button>
+            <button class="btn-hero-secondary"><i data-lucide="percent"></i>특가 세일</button>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Stats Section -->
+        <div class="stats-section">
+            <div class="stat-card">
+                <div class="stat-icon"><i data-lucide="package"></i></div>
+                <div class="stat-value">12,847</div>
+                <div class="stat-label">전체 상품</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon"><i data-lucide="store"></i></div>
+                <div class="stat-value">456</div>
+                <div class="stat-label">브랜드</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon"><i data-lucide="star"></i></div>
+                <div class="stat-value">89.2K</div>
+                <div class="stat-label">리뷰</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon"><i data-lucide="truck"></i></div>
+                <div class="stat-value">무료배송</div>
+                <div class="stat-label">5만원 이상</div>
+            </div>
+        </div>
+
+        <!-- Filter Section -->
+        <div class="filter-section">
+            <div class="category-tabs">
+                <button class="category-tab active"><i data-lucide="grid-3x3"></i>전체</button>
+                <button class="category-tab"><i data-lucide="flame"></i>인기</button>
+                <button class="category-tab"><i data-lucide="sparkles"></i>신상품</button>
+                <button class="category-tab"><i data-lucide="box"></i>레고</button>
+                <button class="category-tab"><i data-lucide="gamepad-2"></i>피규어</button>
+                <button class="category-tab"><i data-lucide="puzzle"></i>보드게임</button>
+                <button class="category-tab"><i data-lucide="brain"></i>교육완구</button>
+            </div>
+            <div class="filter-actions">
+                <button class="filter-btn"><i data-lucide="sliders"></i>필터</button>
+                <button class="filter-btn"><i data-lucide="arrow-up-down"></i>인기순</button>
+                <div class="view-toggle">
+                    <button class="active"><i data-lucide="grid-3x3"></i></button>
+                    <button><i data-lucide="list"></i></button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Product Grid -->
+        <div class="product-grid">
+            <div class="product-card">
+                <a href="20_product_detail.html" class="product-card-link">
+                <div class="product-thumbnail" style="background: #f8f8f8;">
+                    <img src="assets/images/shop/1000000054.jpg" alt="상품" style="width: 100%; height: 100%; object-fit: cover;">
+                    <span class="product-badge">HOT</span>
+                    <button class="product-wishlist active"><i data-lucide="heart"></i></button>
+                </div>
+                <div class="product-body">
+                    <span class="product-category">레고 / 테크닉</span>
+                    <h3 class="product-name">레고 테크닉 람보르기니 시안 FKP 37</h3>
+                    <div class="product-rating">
+                        <i data-lucide="star"></i>
+                        <i data-lucide="star"></i>
+                        <i data-lucide="star"></i>
+                        <i data-lucide="star"></i>
+                        <i data-lucide="star"></i>
+                        <span>4.9 (128)</span>
+                    </div>
+                    <div class="product-price">
+                        <span class="price-current">W489,000</span>
+                        <span class="price-original">W549,000</span>
+                        <span class="price-discount">11%</span>
+                    </div>
+                    <div class="product-tags">
+                        <span>무료배송</span>
+                        <span>오늘출발</span>
+                    </div>
+                </div>
+            </a>
+            </div>
+
+            <div class="product-card">
+                <a href="20_product_detail.html" class="product-card-link">
+                <div class="product-thumbnail" style="background: #f8f8f8;">
+                    <img src="assets/images/shop/1000000062.jpg" alt="상품" style="width: 100%; height: 100%; object-fit: cover;">
+                    <span class="product-badge new">NEW</span>
+                    <button class="product-wishlist"><i data-lucide="heart"></i></button>
+                </div>
+                <div class="product-body">
+                    <span class="product-category">피규어 / 건담</span>
+                    <h3 class="product-name">건담 RG 1/144 사자비 스페셜 에디션</h3>
+                    <div class="product-rating">
+                        <i data-lucide="star"></i>
+                        <i data-lucide="star"></i>
+                        <i data-lucide="star"></i>
+                        <i data-lucide="star"></i>
+                        <i data-lucide="star"></i>
+                        <span>4.8 (89)</span>
+                    </div>
+                    <div class="product-price">
+                        <span class="price-current">W68,000</span>
+                    </div>
+                    <div class="product-tags">
+                        <span>무료배송</span>
+                    </div>
+                </div>
+            </a>
+            </div>
+
+            <div class="product-card">
+                <a href="20_product_detail.html" class="product-card-link">
+                <div class="product-thumbnail" style="background: #f8f8f8;">
+                    <img src="assets/images/shop/1000000065.jpg" alt="상품" style="width: 100%; height: 100%; object-fit: cover;">
+                    <span class="product-badge sale">30%</span>
+                    <button class="product-wishlist"><i data-lucide="heart"></i></button>
+                </div>
+                <div class="product-body">
+                    <span class="product-category">보드게임</span>
+                    <h3 class="product-name">카탄: 확장판 시나리오 컬렉션</h3>
+                    <div class="product-rating">
+                        <i data-lucide="star"></i>
+                        <i data-lucide="star"></i>
+                        <i data-lucide="star"></i>
+                        <i data-lucide="star"></i>
+                        <i data-lucide="star"></i>
+                        <span>4.7 (256)</span>
+                    </div>
+                    <div class="product-price">
+                        <span class="price-current">W35,000</span>
+                        <span class="price-original">W50,000</span>
+                        <span class="price-discount">30%</span>
+                    </div>
+                    <div class="product-tags">
+                        <span>특가</span>
+                    </div>
+                </div>
+            </a>
+            </div>
+
+            <div class="product-card">
+                <a href="20_product_detail.html" class="product-card-link">
+                <div class="product-thumbnail" style="background: #f8f8f8;">
+                    <img src="assets/images/shop/1000000069.jpg" alt="상품" style="width: 100%; height: 100%; object-fit: cover;">
+                    <button class="product-wishlist"><i data-lucide="heart"></i></button>
+                </div>
+                <div class="product-body">
+                    <span class="product-category">교육완구</span>
+                    <h3 class="product-name">스마트 코딩 로봇 큐브로이드 프로</h3>
+                    <div class="product-rating">
+                        <i data-lucide="star"></i>
+                        <i data-lucide="star"></i>
+                        <i data-lucide="star"></i>
+                        <i data-lucide="star"></i>
+                        <i data-lucide="star"></i>
+                        <span>4.6 (78)</span>
+                    </div>
+                    <div class="product-price">
+                        <span class="price-current">W129,000</span>
+                    </div>
+                    <div class="product-tags">
+                        <span>무료배송</span>
+                        <span>인기</span>
+                    </div>
+                </div>
+            </a>
+            </div>
+
+            <div class="product-card">
+                <a href="20_product_detail.html" class="product-card-link">
+                <div class="product-thumbnail" style="background: #f8f8f8;">
+                    <img src="assets/images/shop/1000000094.jpg" alt="상품" style="width: 100%; height: 100%; object-fit: cover;">
+                    <button class="product-wishlist"><i data-lucide="heart"></i></button>
+                </div>
+                <div class="product-body">
+                    <span class="product-category">레고 / 시티</span>
+                    <h3 class="product-name">레고 시티 경찰서 세트 (60316)</h3>
+                    <div class="product-rating">
+                        <i data-lucide="star"></i>
+                        <i data-lucide="star"></i>
+                        <i data-lucide="star"></i>
+                        <i data-lucide="star"></i>
+                        <i data-lucide="star"></i>
+                        <span>4.5 (192)</span>
+                    </div>
+                    <div class="product-price">
+                        <span class="price-current">W89,000</span>
+                    </div>
+                    <div class="product-tags">
+                        <span>무료배송</span>
+                    </div>
+                </div>
+            </a>
+            </div>
+
+            <div class="product-card">
+                <a href="20_product_detail.html" class="product-card-link">
+                <div class="product-thumbnail" style="background: #f8f8f8;">
+                    <img src="assets/images/shop/1000000097.jpg" alt="상품" style="width: 100%; height: 100%; object-fit: cover;">
+                    <span class="product-badge">HOT</span>
+                    <button class="product-wishlist"><i data-lucide="heart"></i></button>
+                </div>
+                <div class="product-body">
+                    <span class="product-category">레고 / 디즈니</span>
+                    <h3 class="product-name">레고 디즈니 캐슬 71040</h3>
+                    <div class="product-rating">
+                        <i data-lucide="star"></i>
+                        <i data-lucide="star"></i>
+                        <i data-lucide="star"></i>
+                        <i data-lucide="star"></i>
+                        <i data-lucide="star"></i>
+                        <span>4.9 (312)</span>
+                    </div>
+                    <div class="product-price">
+                        <span class="price-current">W449,000</span>
+                        <span class="price-original">W499,000</span>
+                        <span class="price-discount">10%</span>
+                    </div>
+                    <div class="product-tags">
+                        <span>무료배송</span>
+                        <span>베스트</span>
+                    </div>
+                </div>
+            </a>
+            </div>
+
+            <div class="product-card">
+                <a href="20_product_detail.html" class="product-card-link">
+                <div class="product-thumbnail" style="background: #f8f8f8;">
+                    <img src="assets/images/shop/1000000101.jpg" alt="상품" style="width: 100%; height: 100%; object-fit: cover;">
+                    <button class="product-wishlist"><i data-lucide="heart"></i></button>
+                </div>
+                <div class="product-body">
+                    <span class="product-category">퍼즐</span>
+                    <h3 class="product-name">라벤스부르거 3D 퍼즐 - 에펠탑</h3>
+                    <div class="product-rating">
+                        <i data-lucide="star"></i>
+                        <i data-lucide="star"></i>
+                        <i data-lucide="star"></i>
+                        <i data-lucide="star"></i>
+                        <i data-lucide="star"></i>
+                        <span>4.4 (67)</span>
+                    </div>
+                    <div class="product-price">
+                        <span class="price-current">W42,000</span>
+                    </div>
+                    <div class="product-tags">
+                        <span>무료배송</span>
+                    </div>
+                </div>
+            </a>
+            </div>
+
+            <div class="product-card">
+                <a href="20_product_detail.html" class="product-card-link">
+                <div class="product-thumbnail" style="background: #f8f8f8;">
+                    <img src="assets/images/shop/1000000103.jpg" alt="상품" style="width: 100%; height: 100%; object-fit: cover;">
+                    <span class="product-badge new">NEW</span>
+                    <button class="product-wishlist"><i data-lucide="heart"></i></button>
+                </div>
+                <div class="product-body">
+                    <span class="product-category">레고 / 아이디어스</span>
+                    <h3 class="product-name">레고 아이디어스 NASA 스페이스 셔틀</h3>
+                    <div class="product-rating">
+                        <i data-lucide="star"></i>
+                        <i data-lucide="star"></i>
+                        <i data-lucide="star"></i>
+                        <i data-lucide="star"></i>
+                        <i data-lucide="star"></i>
+                        <span>4.8 (145)</span>
+                    </div>
+                    <div class="product-price">
+                        <span class="price-current">W289,000</span>
+                    </div>
+                    <div class="product-tags">
+                        <span>무료배송</span>
+                        <span>인기</span>
+                    </div>
+                </div>
+            </a>
+            </div>
+        </div>
+
+                <!-- Load More -->
+        <div class="load-more">
+            <button class="load-more-btn">
+                <i data-lucide="plus"></i>
+                더 보기
+            </button>
+        </div>
+    </main>
+
+    <!-- Footer -->
+
+    <!-- Shopping FAB -->
+    <button class="shop-fab"><i data-lucide="shopping-cart"></i>장바구니 (3)</button>
+    <!-- Footer -->
+    <div id="footer"></div>
+
+
+
+    <script>lucide.createIcons();</script>
+    <script src="common/loader.js"></script>
+</body>
+</html>

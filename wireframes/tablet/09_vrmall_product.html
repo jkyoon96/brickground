@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1024, initial-scale=1.0">
+    <title>VR Mall 상품 상세 - Tablet Wireframe</title>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --pixar-primary: #0066FF;
+            --pixar-secondary: #FFD93D;
+            --pixar-success: #6BCB77;
+            --pixar-error: #FF6B6B;
+            --pixar-bg: #F8FAFC;
+            --pixar-card: #FFFFFF;
+            --pixar-text: #1E293B;
+            --pixar-text-light: #64748B;
+            --pixar-border: #E2E8F0;
+            --pixar-radius: 20px;
+            --pixar-radius-sm: 12px;
+            --pixar-shadow: 0 4px 20px rgba(0, 102, 255, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Nunito', '나눔스퀘어라운드', sans-serif;
+            background: #1a1a2e;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        /* Tablet Frame */
+        .tablet-frame {
+            width: 1024px;
+            background: #2d2d44;
+            border-radius: 40px;
+            padding: 20px;
+            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.5);
+        }
+
+        .tablet-screen {
+            background: var(--pixar-bg);
+            border-radius: 24px;
+            overflow: hidden;
+            min-height: 720px;
+        }
+
+        /* Header */
+        .header {
+            background: var(--pixar-card);
+            padding: 14px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: var(--pixar-shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .back-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--pixar-bg);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .back-btn i {
+            width: 20px;
+            height: 20px;
+            color: var(--pixar-text);
+        }
+
+        .header-title {
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .header-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--pixar-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .header-icon i {
+            width: 20px;
+            height: 20px;
+            color: var(--pixar-text);
+        }
+
+        .badge {
+            position: absolute;
+            top: -2px;
+            right: -2px;
+            background: var(--pixar-error);
+            color: white;
+            font-size: 10px;
+            font-weight: 700;
+            min-width: 16px;
+            height: 16px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 20px;
+        }
+
+        /* Product Layout */
+        .product-layout {
+            display: grid;
+            grid-template-columns: 1fr 380px;
+            gap: 24px;
+        }
+
+        /* Product Gallery */
+        .product-gallery {
+            background: var(--pixar-card);
+            border-radius: var(--pixar-radius);
+            padding: 20px;
+            box-shadow: var(--pixar-shadow);
+        }
+
+        .main-image {
+            width: 100%;
+            aspect-ratio: 4/3;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: var(--pixar-radius-sm);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 14px;
+            position: relative;
+        }
+
+        .main-image i {
+            width: 64px;
+            height: 64px;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 12px;
+        }
+
+        .main-image span {
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .image-badge {
+            position: absolute;
+            top: 14px;
+            left: 14px;
+            background: var(--pixar-primary);
+            color: white;
+            padding: 6px 14px;
+            border-radius: 18px;
+            font-size: 13px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .image-badge i {
+            width: 14px;
+            height: 14px;
+            color: white;
+            margin: 0;
+        }
+
+        .view-controls {
+            position: absolute;
+            bottom: 14px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 6px;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 6px 10px;
+            border-radius: 20px;
+        }
+
+        .view-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: transparent;
+            border: none;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .view-btn:hover,
+        .view-btn.active {
+            background: var(--pixar-primary);
+        }
+
+        .view-btn i {
+            width: 16px;
+            height: 16px;
+            color: white;
+        }
+
+        .thumbnail-list {
+            display: flex;
+            gap: 10px;
+        }
+
+        .thumbnail {
+            width: 70px;
+            height: 70px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            cursor: pointer;
+            border: 3px solid transparent;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .thumbnail:hover,
+        .thumbnail.active {
+            border-color: var(--pixar-primary);
+        }
+
+        .thumbnail i {
+            width: 24px;
+            height: 24px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        /* Product Info */
+        .product-info {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .product-header {
+            background: var(--pixar-card);
+            border-radius: var(--pixar-radius);
+            padding: 20px;
+            box-shadow: var(--pixar-shadow);
+        }
+
+        .product-tags {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 10px;
+        }
+
+        .tag {
+            background: rgba(0, 102, 255, 0.1);
+            color: var(--pixar-primary);
+            padding: 5px 10px;
+            border-radius: 16px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .tag.hot {
+            background: rgba(255, 107, 107, 0.1);
+            color: var(--pixar-error);
+        }
+
+        .product-title {
+            font-size: 20px;
+            font-weight: 800;
+            margin-bottom: 8px;
+            line-height: 1.3;
+        }
+
+        .product-mall {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--pixar-text-light);
+            font-size: 13px;
+            margin-bottom: 12px;
+        }
+
+        .product-mall a {
+            color: var(--pixar-primary);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .product-stats {
+            display: flex;
+            gap: 16px;
+            padding-top: 12px;
+            border-top: 1px solid var(--pixar-border);
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            color: var(--pixar-text-light);
+            font-size: 13px;
+        }
+
+        .stat-item i {
+            width: 16px;
+            height: 16px;
+        }
+
+        /* Price Box */
+        .price-box {
+            background: var(--pixar-card);
+            border-radius: var(--pixar-radius);
+            padding: 20px;
+            box-shadow: var(--pixar-shadow);
+        }
+
+        .price-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 14px;
+        }
+
+        .price-label {
+            font-size: 13px;
+            color: var(--pixar-text-light);
+        }
+
+        .price-original {
+            font-size: 14px;
+            color: var(--pixar-text-light);
+            text-decoration: line-through;
+        }
+
+        .price-current {
+            font-size: 26px;
+            font-weight: 800;
+            color: var(--pixar-primary);
+        }
+
+        .discount-badge {
+            background: var(--pixar-error);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .quantity-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 0;
+            border-top: 1px solid var(--pixar-border);
+            border-bottom: 1px solid var(--pixar-border);
+            margin-bottom: 16px;
+        }
+
+        .quantity-label {
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .quantity-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .qty-btn {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: var(--pixar-bg);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .qty-btn i {
+            width: 16px;
+            height: 16px;
+            color: var(--pixar-text);
+        }
+
+        .qty-value {
+            width: 40px;
+            text-align: center;
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-cart {
+            flex: 1;
+            padding: 14px;
+            border-radius: var(--pixar-radius-sm);
+            border: 2px solid var(--pixar-primary);
+            background: white;
+            color: var(--pixar-primary);
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .btn-cart i {
+            width: 18px;
+            height: 18px;
+        }
+
+        .btn-buy {
+            flex: 2;
+            padding: 14px;
+            border-radius: var(--pixar-radius-sm);
+            border: none;
+            background: linear-gradient(135deg, var(--pixar-primary) 0%, #0052CC 100%);
+            color: white;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .btn-buy i {
+            width: 18px;
+            height: 18px;
+        }
+
+        /* Delivery & Seller */
+        .info-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .delivery-box,
+        .seller-box {
+            background: var(--pixar-card);
+            border-radius: var(--pixar-radius);
+            padding: 16px;
+            box-shadow: var(--pixar-shadow);
+        }
+
+        .box-title {
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .box-title i {
+            width: 18px;
+            height: 18px;
+            color: var(--pixar-primary);
+        }
+
+        .delivery-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--pixar-border);
+            font-size: 13px;
+        }
+
+        .delivery-item:last-child {
+            border-bottom: none;
+        }
+
+        .delivery-item i {
+            width: 16px;
+            height: 16px;
+            color: var(--pixar-text-light);
+        }
+
+        .seller-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .seller-avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--pixar-secondary) 0%, #FFC107 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .seller-avatar i {
+            width: 22px;
+            height: 22px;
+            color: white;
+        }
+
+        .seller-name {
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .seller-desc {
+            font-size: 11px;
+            color: var(--pixar-text-light);
+        }
+
+        /* Detail Tabs */
+        .detail-section {
+            margin-top: 20px;
+        }
+
+        .detail-tabs {
+            display: flex;
+            gap: 6px;
+            background: var(--pixar-card);
+            padding: 6px;
+            border-radius: var(--pixar-radius);
+            box-shadow: var(--pixar-shadow);
+            margin-bottom: 16px;
+        }
+
+        .detail-tab {
+            flex: 1;
+            padding: 12px 16px;
+            border: none;
+            background: transparent;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--pixar-text-light);
+            cursor: pointer;
+            border-radius: var(--pixar-radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .detail-tab.active {
+            background: var(--pixar-primary);
+            color: white;
+        }
+
+        .detail-tab i {
+            width: 16px;
+            height: 16px;
+        }
+
+        .detail-content {
+            background: var(--pixar-card);
+            border-radius: var(--pixar-radius);
+            padding: 24px;
+            box-shadow: var(--pixar-shadow);
+            text-align: center;
+        }
+
+        .detail-placeholder i {
+            width: 48px;
+            height: 48px;
+            color: var(--pixar-text-light);
+            opacity: 0.5;
+            margin-bottom: 12px;
+        }
+
+        .detail-placeholder p {
+            font-size: 14px;
+            color: var(--pixar-text-light);
+        }
+
+        /* VR FAB */
+        .vr-fab {
+            position: fixed;
+            bottom: 80px;
+            right: 60px;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--pixar-primary) 0%, #0052CC 100%);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 20px rgba(0, 102, 255, 0.4);
+        }
+
+        .vr-fab i {
+            width: 24px;
+            height: 24px;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <!-- Tablet Frame -->
+    <div class="tablet-frame">
+        <div class="tablet-screen">
+            <!-- Header -->
+            <header class="header">
+                <div class="header-left">
+                    <button class="back-btn">
+                        <i data-lucide="arrow-left"></i>
+                    </button>
+                    <span class="header-title">상품 상세</span>
+                </div>
+                <div class="header-right">
+                    <div class="header-icon">
+                        <i data-lucide="heart"></i>
+                    </div>
+                    <div class="header-icon">
+                        <i data-lucide="share-2"></i>
+                    </div>
+                    <div class="header-icon">
+                        <i data-lucide="shopping-cart"></i>
+                        <span class="badge">3</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Main Content -->
+            <main class="main-content">
+                <!-- Product Layout -->
+                <div class="product-layout">
+                    <!-- Product Gallery -->
+                    <div class="product-gallery">
+                        <div class="main-image">
+                            <div class="image-badge">
+                                <i data-lucide="box"></i>
+                                3D 미리보기
+                            </div>
+                            <i data-lucide="sofa"></i>
+                            <span>3D 상품 뷰어</span>
+                            <div class="view-controls">
+                                <button class="view-btn active">
+                                    <i data-lucide="rotate-3d"></i>
+                                </button>
+                                <button class="view-btn">
+                                    <i data-lucide="maximize-2"></i>
+                                </button>
+                                <button class="view-btn">
+                                    <i data-lucide="move"></i>
+                                </button>
+                                <button class="view-btn">
+                                    <i data-lucide="zoom-in"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="thumbnail-list">
+                            <div class="thumbnail active">
+                                <i data-lucide="box"></i>
+                            </div>
+                            <div class="thumbnail">
+                                <i data-lucide="image"></i>
+                            </div>
+                            <div class="thumbnail">
+                                <i data-lucide="image"></i>
+                            </div>
+                            <div class="thumbnail">
+                                <i data-lucide="image"></i>
+                            </div>
+                            <div class="thumbnail">
+                                <i data-lucide="video"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Product Info -->
+                    <div class="product-info">
+                        <!-- Header -->
+                        <div class="product-header">
+                            <div class="product-tags">
+                                <span class="tag hot">🔥 베스트</span>
+                                <span class="tag">무료배송</span>
+                                <span class="tag">3D</span>
+                            </div>
+                            <h1 class="product-title">북유럽 스타일 프리미엄 3인용 패브릭 소파</h1>
+                            <div class="product-mall">
+                                <i data-lucide="store"></i>
+                                <a href="#">코스모스 리빙</a>에서 판매
+                            </div>
+                            <div class="product-stats">
+                                <div class="stat-item">
+                                    <i data-lucide="star"></i>
+                                    <span>4.8 (324)</span>
+                                </div>
+                                <div class="stat-item">
+                                    <i data-lucide="eye"></i>
+                                    <span>12,847</span>
+                                </div>
+                                <div class="stat-item">
+                                    <i data-lucide="shopping-bag"></i>
+                                    <span>1,234 구매</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Price Box -->
+                        <div class="price-box">
+                            <div class="price-row">
+                                <div>
+                                    <span class="price-label">정가</span>
+                                    <p class="price-original">890,000원</p>
+                                </div>
+                                <span class="discount-badge">25% OFF</span>
+                            </div>
+                            <div class="price-row">
+                                <span class="price-label">판매가</span>
+                                <span class="price-current">667,500원</span>
+                            </div>
+                            <div class="quantity-row">
+                                <span class="quantity-label">수량</span>
+                                <div class="quantity-control">
+                                    <button class="qty-btn">
+                                        <i data-lucide="minus"></i>
+                                    </button>
+                                    <span class="qty-value">1</span>
+                                    <button class="qty-btn">
+                                        <i data-lucide="plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="action-buttons">
+                                <button class="btn-cart">
+                                    <i data-lucide="shopping-cart"></i>
+                                    장바구니
+                                </button>
+                                <button class="btn-buy">
+                                    <i data-lucide="credit-card"></i>
+                                    바로 구매
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Delivery & Seller Row -->
+                        <div class="info-row">
+                            <div class="delivery-box">
+                                <h3 class="box-title">
+                                    <i data-lucide="truck"></i>
+                                    배송 정보
+                                </h3>
+                                <div class="delivery-item">
+                                    <i data-lucide="package"></i>
+                                    <span><strong>무료배송</strong></span>
+                                </div>
+                                <div class="delivery-item">
+                                    <i data-lucide="calendar"></i>
+                                    <span>1/3(금) 도착 예정</span>
+                                </div>
+                            </div>
+                            <div class="seller-box">
+                                <h3 class="box-title">
+                                    <i data-lucide="store"></i>
+                                    판매자
+                                </h3>
+                                <div class="seller-header">
+                                    <div class="seller-avatar">
+                                        <i data-lucide="store"></i>
+                                    </div>
+                                    <div>
+                                        <p class="seller-name">코스모스 리빙</p>
+                                        <p class="seller-desc">⭐ 4.9 • 응답률 98%</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Detail Section -->
+                <div class="detail-section">
+                    <div class="detail-tabs">
+                        <button class="detail-tab active">
+                            <i data-lucide="file-text"></i>
+                            상품 상세
+                        </button>
+                        <button class="detail-tab">
+                            <i data-lucide="star"></i>
+                            리뷰 (324)
+                        </button>
+                        <button class="detail-tab">
+                            <i data-lucide="help-circle"></i>
+                            Q&A (18)
+                        </button>
+                        <button class="detail-tab">
+                            <i data-lucide="info"></i>
+                            배송/교환
+                        </button>
+                    </div>
+                    <div class="detail-content">
+                        <div class="detail-placeholder">
+                            <i data-lucide="image"></i>
+                            <p>상품 상세 이미지 및 설명이 표시됩니다</p>
+                        </div>
+                    </div>
+                </div>
+            </main>
+
+            <!-- VR FAB -->
+            <button class="vr-fab">
+                <i data-lucide="glasses"></i>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>

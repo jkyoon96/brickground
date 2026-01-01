@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=390, initial-scale=1.0">
+    <title>VR Mall 3D 뷰어 - Mobile Wireframe</title>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --pixar-primary: #0066FF;
+            --pixar-secondary: #FFD93D;
+            --pixar-success: #6BCB77;
+            --pixar-error: #FF6B6B;
+            --pixar-bg: #F8FAFC;
+            --pixar-card: #FFFFFF;
+            --pixar-text: #1E293B;
+            --pixar-text-light: #64748B;
+            --pixar-border: #E2E8F0;
+            --pixar-radius: 16px;
+            --pixar-radius-sm: 10px;
+            --pixar-shadow: 0 2px 12px rgba(0, 102, 255, 0.08);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Nunito', '나눔스퀘어라운드', sans-serif;
+            background: #1a1a2e;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        /* Phone Frame */
+        .phone-frame {
+            width: 390px;
+            background: #2d2d44;
+            border-radius: 50px;
+            padding: 12px;
+            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.5);
+        }
+
+        .phone-screen {
+            background: #1a1a2e;
+            border-radius: 40px;
+            overflow: hidden;
+            height: 844px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Status Bar */
+        .status-bar {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 12px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+            font-weight: 600;
+            color: white;
+        }
+
+        .status-bar-right {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .status-bar-right i {
+            width: 16px;
+            height: 16px;
+        }
+
+        /* Top Bar */
+        .top-bar {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 10px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .top-bar-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .back-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .back-btn i {
+            width: 18px;
+            height: 18px;
+        }
+
+        .mall-info {
+            color: white;
+        }
+
+        .mall-info h2 {
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .mall-info span {
+            font-size: 11px;
+            opacity: 0.7;
+        }
+
+        .top-bar-right {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .top-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .top-btn i {
+            width: 16px;
+            height: 16px;
+        }
+
+        /* 3D Scene */
+        .scene-3d {
+            flex: 1;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .scene-3d-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 12px;
+        }
+
+        .scene-3d-icon i {
+            width: 40px;
+            height: 40px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .scene-3d-text {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .scene-3d-hint {
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 11px;
+        }
+
+        /* Hotspots */
+        .hotspot {
+            position: absolute;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: var(--pixar-primary);
+            border: 2px solid white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: pulse-ring 2s ease infinite;
+        }
+
+        .hotspot i {
+            width: 20px;
+            height: 20px;
+            color: white;
+        }
+
+        .hotspot-1 { top: 25%; left: 20%; }
+        .hotspot-2 { top: 45%; right: 20%; }
+        .hotspot-3 { bottom: 35%; left: 35%; }
+
+        @keyframes pulse-ring {
+            0% { box-shadow: 0 0 0 0 rgba(0, 102, 255, 0.5); }
+            70% { box-shadow: 0 0 0 12px rgba(0, 102, 255, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(0, 102, 255, 0); }
+        }
+
+        /* Mini Map */
+        .mini-map {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            width: 80px;
+            height: 60px;
+            background: rgba(0, 0, 0, 0.6);
+            border-radius: 8px;
+            padding: 6px;
+        }
+
+        .mini-map-content {
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            position: relative;
+        }
+
+        .map-dot {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: var(--pixar-primary);
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        /* Visitor Badge */
+        .visitor-badge {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 6px 12px;
+            border-radius: 16px;
+            color: white;
+            font-size: 11px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .visitor-badge i {
+            width: 14px;
+            height: 14px;
+        }
+
+        /* Control Bar */
+        .control-bar {
+            position: absolute;
+            bottom: 16px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 8px;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 8px;
+            border-radius: 24px;
+        }
+
+        .control-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .control-btn.active {
+            background: var(--pixar-primary);
+        }
+
+        .control-btn i {
+            width: 18px;
+            height: 18px;
+        }
+
+        /* Bottom Sheet */
+        .bottom-sheet {
+            background: var(--pixar-card);
+            border-radius: 24px 24px 0 0;
+            padding: 16px;
+        }
+
+        .sheet-handle {
+            width: 40px;
+            height: 4px;
+            background: var(--pixar-border);
+            border-radius: 2px;
+            margin: 0 auto 12px;
+        }
+
+        .sheet-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .sheet-title {
+            font-size: 14px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .sheet-title i {
+            width: 18px;
+            height: 18px;
+            color: var(--pixar-primary);
+        }
+
+        .product-count {
+            font-size: 11px;
+            color: var(--pixar-text-light);
+        }
+
+        .view-all {
+            color: var(--pixar-primary);
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        /* Product Scroll */
+        .product-scroll {
+            display: flex;
+            gap: 12px;
+            overflow-x: auto;
+            padding-bottom: 8px;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .product-scroll::-webkit-scrollbar {
+            display: none;
+        }
+
+        .product-card {
+            flex-shrink: 0;
+            width: 120px;
+        }
+
+        .product-thumb {
+            width: 120px;
+            height: 120px;
+            border-radius: var(--pixar-radius-sm);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 8px;
+        }
+
+        .product-thumb i {
+            width: 32px;
+            height: 32px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .product-name {
+            font-size: 11px;
+            font-weight: 600;
+            margin-bottom: 2px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .product-price {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--pixar-primary);
+        }
+
+        /* Cart Bar */
+        .cart-bar {
+            background: var(--pixar-card);
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-top: 1px solid var(--pixar-border);
+        }
+
+        .cart-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .cart-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--pixar-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .cart-icon i {
+            width: 20px;
+            height: 20px;
+            color: var(--pixar-text);
+        }
+
+        .cart-badge {
+            position: absolute;
+            top: -2px;
+            right: -2px;
+            background: var(--pixar-error);
+            color: white;
+            font-size: 10px;
+            font-weight: 700;
+            min-width: 16px;
+            height: 16px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .cart-text {
+            font-size: 12px;
+            color: var(--pixar-text-light);
+        }
+
+        .cart-total {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--pixar-primary);
+        }
+
+        .cart-btn {
+            padding: 12px 24px;
+            background: linear-gradient(135deg, var(--pixar-primary) 0%, #0052CC 100%);
+            border: none;
+            border-radius: var(--pixar-radius-sm);
+            color: white;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        /* Home Indicator */
+        .home-indicator {
+            height: 34px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--pixar-card);
+        }
+
+        .home-indicator::after {
+            content: '';
+            width: 134px;
+            height: 5px;
+            background: var(--pixar-text);
+            border-radius: 3px;
+            opacity: 0.2;
+        }
+    </style>
+</head>
+<body>
+    <!-- Phone Frame -->
+    <div class="phone-frame">
+        <div class="phone-screen">
+            <!-- Status Bar -->
+            <div class="status-bar">
+                <span>9:41</span>
+                <div class="status-bar-right">
+                    <i data-lucide="signal"></i>
+                    <i data-lucide="wifi"></i>
+                    <i data-lucide="battery-full"></i>
+                </div>
+            </div>
+
+            <!-- Top Bar -->
+            <div class="top-bar">
+                <div class="top-bar-left">
+                    <button class="back-btn">
+                        <i data-lucide="arrow-left"></i>
+                    </button>
+                    <div class="mall-info">
+                        <h2>코스모스 리빙</h2>
+                        <span>프리미엄 가구 전문점</span>
+                    </div>
+                </div>
+                <div class="top-bar-right">
+                    <button class="top-btn">
+                        <i data-lucide="heart"></i>
+                    </button>
+                    <button class="top-btn">
+                        <i data-lucide="share-2"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- 3D Scene -->
+            <div class="scene-3d">
+                <div class="scene-3d-icon">
+                    <i data-lucide="box"></i>
+                </div>
+                <span class="scene-3d-text">3D 씬 렌더링 영역</span>
+                <span class="scene-3d-hint">React Three Fiber 캔버스</span>
+
+                <!-- Visitor Badge -->
+                <div class="visitor-badge">
+                    <i data-lucide="users"></i>
+                    24명 방문 중
+                </div>
+
+                <!-- Mini Map -->
+                <div class="mini-map">
+                    <div class="mini-map-content">
+                        <div class="map-dot"></div>
+                    </div>
+                </div>
+
+                <!-- Hotspots -->
+                <div class="hotspot hotspot-1">
+                    <i data-lucide="sofa"></i>
+                </div>
+                <div class="hotspot hotspot-2">
+                    <i data-lucide="lamp-desk"></i>
+                </div>
+                <div class="hotspot hotspot-3">
+                    <i data-lucide="armchair"></i>
+                </div>
+
+                <!-- Control Bar -->
+                <div class="control-bar">
+                    <button class="control-btn active">
+                        <i data-lucide="rotate-3d"></i>
+                    </button>
+                    <button class="control-btn">
+                        <i data-lucide="move"></i>
+                    </button>
+                    <button class="control-btn">
+                        <i data-lucide="zoom-in"></i>
+                    </button>
+                    <button class="control-btn">
+                        <i data-lucide="glasses"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Bottom Sheet -->
+            <div class="bottom-sheet">
+                <div class="sheet-handle"></div>
+                <div class="sheet-header">
+                    <div>
+                        <h3 class="sheet-title">
+                            <i data-lucide="package"></i>
+                            상품 목록
+                        </h3>
+                        <span class="product-count">156개 상품</span>
+                    </div>
+                    <a href="#" class="view-all">전체보기</a>
+                </div>
+                <div class="product-scroll">
+                    <div class="product-card">
+                        <div class="product-thumb">
+                            <i data-lucide="sofa"></i>
+                        </div>
+                        <p class="product-name">북유럽 3인용 소파</p>
+                        <p class="product-price">667,500원</p>
+                    </div>
+                    <div class="product-card">
+                        <div class="product-thumb" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                            <i data-lucide="lamp-desk"></i>
+                        </div>
+                        <p class="product-name">LED 플로어 스탠드</p>
+                        <p class="product-price">189,000원</p>
+                    </div>
+                    <div class="product-card">
+                        <div class="product-thumb" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+                            <i data-lucide="square"></i>
+                        </div>
+                        <p class="product-name">원목 사이드 테이블</p>
+                        <p class="product-price">145,000원</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cart Bar -->
+            <div class="cart-bar">
+                <div class="cart-info">
+                    <div class="cart-icon">
+                        <i data-lucide="shopping-cart"></i>
+                        <span class="cart-badge">3</span>
+                    </div>
+                    <div>
+                        <p class="cart-text">장바구니</p>
+                        <p class="cart-total">1,001,500원</p>
+                    </div>
+                </div>
+                <button class="cart-btn">보기</button>
+            </div>
+
+            <!-- Home Indicator -->
+            <div class="home-indicator"></div>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>

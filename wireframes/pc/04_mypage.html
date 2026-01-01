@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>마이페이지 - BrickGround</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="common/components.css">
+    <link rel="stylesheet" href="common/responsive.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #F8FAFC;
+            --bg-secondary: #FFFFFF;
+            --text-primary: #1E293B;
+            --text-secondary: #64748B;
+            --text-muted: #94A3B8;
+            --border-color: #E2E8F0;
+            --pixar-blue: #0066FF;
+            --toy-yellow: #FFD93D;
+            --toy-green: #6BCB77;
+            --toy-pink: #FF6B9D;
+            --pixar-radius: 20px;
+            --pixar-radius-sm: 12px;
+            --shadow-soft: 0 4px 20px rgba(0, 102, 255, 0.1);
+            --shadow-float: 0 8px 30px rgba(0, 102, 255, 0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: var(--bg-primary);
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .site-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 32px;
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--pixar-blue);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .logo i {
+            width: 28px;
+            height: 28px;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 32px;
+        }
+
+        .nav-item {
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 15px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .nav-item i {
+            width: 18px;
+            height: 18px;
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .icon-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--bg-primary);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .icon-btn i {
+            width: 20px;
+            height: 20px;
+            color: var(--text-primary);
+        }
+
+        .badge {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            background: #FF6B6B;
+            color: white;
+            font-size: 10px;
+            font-weight: 700;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--pixar-blue);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+        }
+
+        /* Main Content */
+        .main-content {
+            display: flex;
+            min-height: calc(100vh - 73px);
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            background: var(--bg-secondary);
+            border-right: 1px solid var(--border-color);
+            padding: 24px;
+        }
+
+        .profile-card {
+            text-align: center;
+            padding: 24px;
+            background: linear-gradient(135deg, var(--bg-primary) 0%, #EBF4FF 100%);
+            border-radius: var(--pixar-radius);
+            margin-bottom: 24px;
+        }
+
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: var(--pixar-blue);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+            font-size: 32px;
+            color: white;
+            font-weight: 800;
+        }
+
+        .profile-name {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .profile-email {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 12px;
+        }
+
+        .profile-level {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            background: var(--toy-yellow);
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .sidebar-menu {
+            list-style: none;
+        }
+
+        .sidebar-menu li {
+            margin-bottom: 4px;
+        }
+
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            color: var(--text-primary);
+            text-decoration: none;
+            border-radius: var(--pixar-radius-sm);
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-menu a:hover {
+            background: var(--bg-primary);
+        }
+
+        .sidebar-menu a.active {
+            background: var(--pixar-blue);
+            color: white;
+        }
+
+        .sidebar-menu a i {
+            width: 20px;
+            height: 20px;
+        }
+
+        .sidebar-divider {
+            height: 1px;
+            background: var(--border-color);
+            margin: 16px 0;
+        }
+
+        /* Content Area */
+        .content-area {
+            flex: 1;
+            padding: 32px;
+            background: var(--bg-primary);
+        }
+
+        .page-title {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--text-primary);
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .page-title i {
+            width: 32px;
+            height: 32px;
+            color: var(--pixar-blue);
+        }
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 32px;
+        }
+
+        .stat-card {
+            background: var(--bg-secondary);
+            border-radius: var(--pixar-radius);
+            padding: 24px;
+            box-shadow: var(--shadow-soft);
+        }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: var(--pixar-radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 16px;
+        }
+
+        .stat-icon i {
+            width: 24px;
+            height: 24px;
+            color: white;
+        }
+
+        .stat-icon.blue { background: var(--pixar-blue); }
+        .stat-icon.yellow { background: linear-gradient(135deg, var(--toy-yellow) 0%, #F5C800 100%); }
+        .stat-icon.green { background: linear-gradient(135deg, var(--toy-green) 0%, #4CAF50 100%); }
+        .stat-icon.red { background: linear-gradient(135deg, #FF6B6B 0%, #E53935 100%); }
+
+        .stat-value {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        /* Recent Orders */
+        .section-card {
+            background: var(--bg-secondary);
+            border-radius: var(--pixar-radius);
+            padding: 24px;
+            box-shadow: var(--shadow-soft);
+            margin-bottom: 24px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .section-title i {
+            width: 20px;
+            height: 20px;
+            color: var(--pixar-blue);
+        }
+
+        .view-all {
+            color: var(--pixar-blue);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .view-all i {
+            width: 16px;
+            height: 16px;
+        }
+
+        .order-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .order-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px;
+            background: var(--bg-primary);
+            border-radius: var(--pixar-radius-sm);
+        }
+
+        .order-image {
+            width: 60px;
+            height: 60px;
+            background: var(--border-color);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .order-image i {
+            width: 24px;
+            height: 24px;
+            color: var(--text-secondary);
+        }
+
+        .order-info {
+            flex: 1;
+        }
+
+        .order-name {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .order-date {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .order-status {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .order-status.shipping {
+            background: rgba(0, 102, 255, 0.1);
+            color: var(--pixar-blue);
+        }
+
+        .order-status.delivered {
+            background: rgba(107, 203, 119, 0.1);
+            color: var(--toy-green);
+        }
+
+        .order-status.preparing {
+            background: rgba(255, 217, 61, 0.2);
+            color: #B8860B;
+        }
+
+        .order-price {
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        /* Quick Actions */
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+        }
+
+        .quick-action {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            padding: 20px;
+            background: var(--bg-primary);
+            border-radius: var(--pixar-radius-sm);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .quick-action:hover {
+            background: var(--pixar-blue);
+            color: white;
+            transform: translateY(-4px);
+        }
+
+        .quick-action:hover i {
+            color: white;
+        }
+
+        .quick-action i {
+            width: 24px;
+            height: 24px;
+            color: var(--pixar-blue);
+        }
+
+        .quick-action span {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .quick-action:hover span {
+            color: white;
+        }
+
+        /* Navigation Links */
+        .nav-links {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+            justify-content: center;
+            padding: 24px;
+        }
+
+        .nav-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 10px 20px;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            text-decoration: none;
+            border-radius: var(--pixar-radius-sm);
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-soft);
+        }
+
+        .nav-link:hover {
+            background: var(--pixar-blue);
+            color: white;
+        }
+
+        /* ==================== Responsive Design ==================== */
+        /* Tablet (1024px) */
+        @media (max-width: 1024px) {
+            .main-content { flex-direction: column; }
+            .sidebar { width: 100%; border-right: none; border-bottom: 1px solid var(--border-color); }
+            .content-area { padding: 24px; }
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+            .quick-actions { grid-template-columns: repeat(4, 1fr); }
+        }
+
+        /* Mobile (768px) */
+        @media (max-width: 768px) {
+            .site-header { padding: 12px 16px; }
+            .nav-menu { display: none; }
+
+            .sidebar { padding: 16px; }
+            .profile-card { padding: 16px; display: flex; align-items: center; gap: 16px; text-align: left; }
+            .profile-avatar { width: 60px; height: 60px; font-size: 24px; margin: 0; }
+            .sidebar-menu { display: flex; flex-wrap: wrap; gap: 4px; }
+            .sidebar-menu li { margin-bottom: 0; }
+            .sidebar-menu a { padding: 8px 12px; font-size: 13px; gap: 6px; }
+            .sidebar-menu a i { width: 16px; height: 16px; }
+            .sidebar-divider { display: none; }
+
+            .content-area { padding: 16px; }
+            .page-title { font-size: 22px; margin-bottom: 20px; }
+            .page-title i { width: 26px; height: 26px; }
+
+            .stats-grid { gap: 12px; }
+            .stat-card { padding: 16px; }
+            .stat-icon { width: 40px; height: 40px; margin-bottom: 12px; }
+            .stat-icon i { width: 20px; height: 20px; }
+            .stat-value { font-size: 22px; }
+
+            .section-card { padding: 16px; }
+            .order-item { flex-wrap: wrap; gap: 12px; padding: 12px; }
+            .order-info { flex: 1; min-width: 150px; }
+            .order-price { width: 100%; text-align: left; margin-top: 8px; }
+
+            .quick-actions { grid-template-columns: repeat(4, 1fr); gap: 8px; }
+            .quick-action { padding: 12px 8px; }
+            .quick-action span { font-size: 11px; }
+
+            .nav-links { padding: 16px; flex-wrap: wrap; gap: 8px; }
+        }
+
+        /* Small Mobile (480px) */
+        @media (max-width: 480px) {
+            .site-header { padding: 10px 12px; }
+            .logo { font-size: 20px; }
+            .logo i { width: 24px; height: 24px; }
+
+            .sidebar { padding: 12px; }
+            .profile-card { padding: 12px; gap: 12px; }
+            .profile-avatar { width: 48px; height: 48px; font-size: 20px; }
+            .profile-name { font-size: 15px; }
+            .profile-email { font-size: 12px; margin-bottom: 6px; }
+            .profile-level { padding: 4px 10px; font-size: 11px; }
+
+            .sidebar-menu a { padding: 6px 10px; font-size: 12px; }
+
+            .content-area { padding: 12px; }
+            .page-title { font-size: 18px; gap: 8px; }
+            .page-title i { width: 22px; height: 22px; }
+
+            .stats-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+            .stat-card { padding: 12px; }
+            .stat-value { font-size: 18px; }
+            .stat-label { font-size: 12px; }
+
+            .section-card { padding: 12px; margin-bottom: 16px; }
+            .section-title { font-size: 15px; }
+            .order-image { width: 50px; height: 50px; }
+            .order-name { font-size: 14px; }
+
+            .quick-actions { grid-template-columns: repeat(4, 1fr); gap: 6px; }
+            .quick-action { padding: 10px 4px; }
+            .quick-action i { width: 20px; height: 20px; }
+            .quick-action span { font-size: 10px; }
+
+            .nav-link { padding: 8px 12px; font-size: 12px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div id="header"></div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Mobile Navigation -->
+        <nav class="mypage-mobile-nav">
+            <a href="04_mypage.html" class="active">대시보드</a>
+            <a href="34_mypage_orders.html">주문 내역</a>
+            <a href="35_mypage_wishlist.html">위시리스트</a>
+            <a href="37_mypage_coupons.html">쿠폰함</a>
+            <a href="36_mypage_points.html">포인트</a>
+            <a href="38_mypage_profile.html">회원정보</a>
+            <a href="29_help_center.html">고객센터</a>
+        </nav>
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="profile-card">
+                <div class="profile-avatar">홍</div>
+                <div class="profile-name">홍길동</div>
+                <div class="profile-email">hong@email.com</div>
+                <span class="profile-level">
+                    <i data-lucide="crown" style="width: 14px; height: 14px;"></i>
+                    VIP 회원
+                </span>
+            </div>
+
+            <ul class="sidebar-menu">
+                <li>
+                    <a href="04_mypage.html" class="active">
+                        <i data-lucide="layout-dashboard"></i>
+                        대시보드
+                    </a>
+                </li>
+                <li>
+                    <a href="34_mypage_orders.html">
+                        <i data-lucide="shopping-bag"></i>
+                        주문 내역
+                    </a>
+                </li>
+                <li>
+                    <a href="35_mypage_wishlist.html">
+                        <i data-lucide="heart"></i>
+                        위시리스트
+                    </a>
+                </li>
+                <li>
+                    <a href="04_mypage.html">
+                        <i data-lucide="star"></i>
+                        리뷰 관리
+                    </a>
+                </li>
+                <li>
+                    <a href="37_mypage_coupons.html">
+                        <i data-lucide="ticket"></i>
+                        쿠폰함
+                    </a>
+                </li>
+                <li>
+                    <a href="36_mypage_points.html">
+                        <i data-lucide="coins"></i>
+                        포인트
+                    </a>
+                </li>
+            </ul>
+
+            <div class="sidebar-divider"></div>
+
+            <ul class="sidebar-menu">
+                <li>
+                    <a href="38_mypage_profile.html">
+                        <i data-lucide="user"></i>
+                        회원정보 수정
+                    </a>
+                </li>
+                <li>
+                    <a href="03_password.html">
+                        <i data-lucide="key"></i>
+                        비밀번호 변경
+                    </a>
+                </li>
+                <li>
+                    <a href="04_mypage.html">
+                        <i data-lucide="map-pin"></i>
+                        배송지 관리
+                    </a>
+                </li>
+                <li>
+                    <a href="04_mypage.html">
+                        <i data-lucide="credit-card"></i>
+                        결제 수단
+                    </a>
+                </li>
+            </ul>
+
+            <div class="sidebar-divider"></div>
+
+            <ul class="sidebar-menu">
+                <li>
+                    <a href="29_help_center.html">
+                        <i data-lucide="headphones"></i>
+                        고객센터
+                    </a>
+                </li>
+                <li>
+                    <a href="02_login.html">
+                        <i data-lucide="log-out"></i>
+                        로그아웃
+                    </a>
+                </li>
+            </ul>
+        </aside>
+
+        <!-- Content -->
+        <main class="content-area">
+            <h1 class="page-title">
+                <i data-lucide="layout-dashboard"></i>
+                마이페이지
+            </h1>
+
+            <!-- Stats -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon blue">
+                        <i data-lucide="shopping-bag"></i>
+                    </div>
+                    <div class="stat-value">12</div>
+                    <div class="stat-label">총 주문</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon yellow">
+                        <i data-lucide="coins"></i>
+                    </div>
+                    <div class="stat-value">15,000P</div>
+                    <div class="stat-label">보유 포인트</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon green">
+                        <i data-lucide="ticket"></i>
+                    </div>
+                    <div class="stat-value">5장</div>
+                    <div class="stat-label">사용 가능 쿠폰</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon red">
+                        <i data-lucide="heart"></i>
+                    </div>
+                    <div class="stat-value">28</div>
+                    <div class="stat-label">위시리스트</div>
+                </div>
+            </div>
+
+            <!-- Recent Orders -->
+            <div class="section-card">
+                <div class="section-header">
+                    <h2 class="section-title">
+                        <i data-lucide="package"></i>
+                        최근 주문
+                    </h2>
+                    <a href="34_mypage_orders.html" class="view-all">
+                        전체보기
+                        <i data-lucide="chevron-right"></i>
+                    </a>
+                </div>
+
+                <div class="order-list">
+                    <div class="order-item">
+                        <div class="order-image">
+                            <i data-lucide="box"></i>
+                        </div>
+                        <div class="order-info">
+                            <div class="order-name">3D 미니어처 하우스 키트</div>
+                            <div class="order-date">2024.01.15 주문</div>
+                        </div>
+                        <span class="order-status shipping">배송중</span>
+                        <div class="order-price">45,000원</div>
+                    </div>
+                    <div class="order-item">
+                        <div class="order-image">
+                            <i data-lucide="palette"></i>
+                        </div>
+                        <div class="order-info">
+                            <div class="order-name">픽셀 아트 DIY 키트</div>
+                            <div class="order-date">2024.01.12 주문</div>
+                        </div>
+                        <span class="order-status preparing">상품준비중</span>
+                        <div class="order-price">32,000원</div>
+                    </div>
+                    <div class="order-item">
+                        <div class="order-image">
+                            <i data-lucide="gift"></i>
+                        </div>
+                        <div class="order-info">
+                            <div class="order-name">VR 캐릭터 피규어 세트</div>
+                            <div class="order-date">2024.01.08 주문</div>
+                        </div>
+                        <span class="order-status delivered">배송완료</span>
+                        <div class="order-price">78,000원</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="section-card">
+                <div class="section-header">
+                    <h2 class="section-title">
+                        <i data-lucide="zap"></i>
+                        빠른 메뉴
+                    </h2>
+                </div>
+
+                <div class="quick-actions">
+                    <a href="34_mypage_orders.html" class="quick-action"><i data-lucide="truck"></i>
+                        <span>배송 조회</span>
+                    </a>
+                    <a href="29_help_center.html" class="quick-action">
+                        <i data-lucide="rotate-ccw"></i>
+                        <span>교환/반품</span>
+                    </a>
+                    <a href="31_qna_list.html" class="quick-action"><i data-lucide="message-square"></i>
+                        <span>1:1 문의</span>
+                    </a>
+                    <a href="30_faq.html" class="quick-action">
+                        <i data-lucide="file-text"></i>
+                        <span>FAQ</span>
+                    </a>
+                    <a href="15_creation_list.html" class="quick-action">
+                        <i data-lucide="download"></i>
+                        <span>내 창작물</span>
+                    </a>
+                    <a href="38_mypage_profile.html" class="quick-action"><i data-lucide="settings"></i>
+                        <span>설정</span>
+                    </a>
+                    <a href="05_seller.html" class="quick-action">
+                        <i data-lucide="store"></i>
+                        <span>판매자 등록</span>
+                    </a>
+                    <a href="#" class="quick-action">
+                        <i data-lucide="users"></i>
+                        <span>친구 초대</span>
+                    </a>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div class="nav-links">
+        <a href="02_login.html" class="nav-link">
+            <i data-lucide="log-in" style="width: 16px; height: 16px;"></i>
+            로그인
+        </a>
+        <a href="05_seller.html" class="nav-link">
+            <i data-lucide="store" style="width: 16px; height: 16px;"></i>
+            판매자 대시보드
+        </a>
+        <a href="06_admin_users.html" class="nav-link">
+            <i data-lucide="shield" style="width: 16px; height: 16px;"></i>
+            관리자
+        </a>
+    </div>
+
+    <script>
+        lucide.createIcons();
+    </script>
+    <script src="common/loader.js"></script>
+</body>
+</html>

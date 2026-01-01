@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>회원정보 수정 - BrickGround PC Wireframe</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="common/components.css">
+    <link rel="stylesheet" href="common/responsive.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Nunito', sans-serif;
+        }
+
+        :root {
+            --bg-primary: #F8FAFC;
+            --bg-secondary: #FFFFFF;
+            --text-primary: #1E293B;
+            --text-secondary: #64748B;
+            --text-muted: #94A3B8;
+            --border-color: #E2E8F0;
+            --pixar-blue: #0066FF;
+            --toy-yellow: #FFD93D;
+            --toy-green: #6BCB77;
+            --toy-pink: #FF6B9D;
+            --pixar-radius: 20px;
+            --pixar-radius-sm: 12px;
+            --shadow-soft: 0 4px 20px rgba(0, 102, 255, 0.1);
+            --purple-accent: #A29BFE;
+        }
+
+        body {
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+        }
+
+        .main-content {
+            display: flex;
+            min-height: calc(100vh - 73px);
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .sidebar {
+            width: 280px;
+            background: var(--bg-secondary);
+            border-right: 1px solid var(--border-color);
+            padding: 24px;
+            flex-shrink: 0;
+        }
+
+        .profile-card {
+            text-align: center;
+            padding: 24px;
+            background: linear-gradient(135deg, var(--bg-primary) 0%, #EBF4FF 100%);
+            border-radius: var(--pixar-radius);
+            margin-bottom: 24px;
+        }
+
+        .sidebar-profile-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: var(--pixar-blue);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+            font-size: 32px;
+            color: white;
+            font-weight: 800;
+        }
+
+        .profile-name { font-size: 18px; font-weight: 700; color: var(--text-primary); margin-bottom: 4px; }
+        .profile-email { font-size: 13px; color: var(--text-secondary); margin-bottom: 12px; }
+        .profile-level {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            background: var(--toy-yellow);
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .sidebar-menu { list-style: none; }
+        .sidebar-menu li { margin-bottom: 4px; }
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            color: var(--text-primary);
+            text-decoration: none;
+            border-radius: var(--pixar-radius-sm);
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+        .sidebar-menu a:hover { background: var(--bg-primary); }
+        .sidebar-menu a.active { background: var(--pixar-blue); color: white; }
+        .sidebar-menu a i { width: 20px; height: 20px; }
+        .sidebar-divider { height: 1px; background: var(--border-color); margin: 16px 0; }
+
+        .content-area {
+            flex: 1;
+            padding: 32px;
+            background: var(--bg-primary);
+        }
+
+        .page-title {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--text-primary);
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .page-title i { width: 32px; height: 32px; color: var(--pixar-blue); }
+
+        .card {
+            background: var(--bg-secondary);
+            border-radius: var(--pixar-radius);
+            padding: 24px;
+            box-shadow: var(--shadow-soft);
+            margin-bottom: 24px;
+        }
+
+        .profile-avatar {
+            width: 120px; height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--rose-primary) 0%, var(--coral-primary) 100%);
+            display: flex; align-items: center; justify-content: center;
+            color: white;
+            position: relative;
+            margin: 0 auto;
+        }
+
+        .avatar-edit {
+            position: absolute;
+            bottom: 0; right: 0;
+            width: 36px; height: 36px;
+            background: var(--bg-secondary);
+            border: 2px solid var(--border-color);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .avatar-edit:hover {
+            border-color: var(--rose-primary);
+            color: var(--rose-primary);
+        }
+
+        .form-section {
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 24px;
+            margin-bottom: 24px;
+        }
+
+        .form-section:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+            margin-bottom: 0;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .form-label .required {
+            color: #FF6B6B;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            font-size: 15px;
+            transition: all 0.2s;
+            background: var(--bg-secondary);
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--rose-primary);
+            box-shadow: 0 0 0 4px rgba(255, 107, 157, 0.1);
+        }
+
+        .form-input:disabled {
+            background: var(--bg-primary);
+            color: var(--text-muted);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .btn-primary {
+            padding: 14px 32px;
+            border-radius: 14px;
+            font-weight: 700;
+            font-size: 15px;
+            background: linear-gradient(135deg, var(--rose-primary) 0%, var(--coral-primary) 100%);
+            color: white;
+            transition: all 0.2s;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(255, 107, 157, 0.3);
+        }
+
+        .btn-secondary {
+            padding: 14px 32px;
+            border-radius: 14px;
+            font-weight: 700;
+            font-size: 15px;
+            background: var(--bg-primary);
+            color: var(--text-secondary);
+            border: 2px solid var(--border-color);
+            transition: all 0.2s;
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--text-secondary);
+        }
+
+        .btn-outline-sm {
+            padding: 8px 16px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 13px;
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            transition: all 0.2s;
+        }
+
+        .btn-outline-sm:hover {
+            border-color: var(--rose-primary);
+            color: var(--rose-primary);
+        }
+
+        .social-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px;
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            transition: all 0.2s;
+        }
+
+        .social-link:hover {
+            border-color: var(--rose-primary);
+        }
+
+        .social-icon {
+            width: 40px; height: 40px;
+            border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+        }
+
+        .toggle {
+            width: 48px; height: 26px;
+            background: var(--border-color);
+            border-radius: 13px;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .toggle.active {
+            background: linear-gradient(135deg, var(--rose-primary) 0%, var(--coral-primary) 100%);
+        }
+
+        .toggle::after {
+            content: '';
+            position: absolute;
+            width: 22px; height: 22px;
+            background: white;
+            border-radius: 50%;
+            top: 2px; left: 2px;
+            transition: all 0.2s;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .toggle.active::after {
+            left: 24px;
+        }
+
+        .danger-zone {
+            background: rgba(255, 107, 107, 0.05);
+            border: 1px solid rgba(255, 107, 107, 0.2);
+            border-radius: 16px;
+            padding: 20px;
+        }
+
+        .profile-mini {
+            width: 48px; height: 48px; border-radius: 50%;
+            background: linear-gradient(135deg, var(--rose-primary) 0%, var(--coral-primary) 100%);
+            display: flex; align-items: center; justify-content: center;
+            color: white;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .animate-fade-in { animation: fadeIn 0.4s ease-out forwards; }
+
+        /* ==================== Responsive Design ==================== */
+        /* Tablet (1024px) */
+        @media (max-width: 1024px) {
+            .main-content { flex-direction: column; }
+            .sidebar { width: 100%; border-right: none; border-bottom: 1px solid var(--border-color); padding: 16px; }
+            .profile-card { display: flex; align-items: center; gap: 16px; text-align: left; padding: 16px; margin-bottom: 16px; }
+            .sidebar-profile-avatar { width: 60px; height: 60px; font-size: 24px; margin: 0; }
+            .profile-name { font-size: 16px; }
+            .sidebar-menu { display: flex; flex-wrap: wrap; gap: 4px; }
+            .sidebar-menu li { margin-bottom: 0; }
+            .sidebar-menu a { padding: 10px 14px; font-size: 13px; }
+            .sidebar-divider { display: none; }
+            .content-area { padding: 24px; }
+            .page-title { font-size: 24px; }
+            .grid-cols-2 { grid-template-columns: repeat(2, 1fr) !important; }
+        }
+
+        /* Mobile (768px) */
+        @media (max-width: 768px) {
+            .sidebar { padding: 12px; }
+            .profile-card { padding: 12px; gap: 12px; }
+            .sidebar-profile-avatar { width: 48px; height: 48px; font-size: 20px; }
+            .profile-name { font-size: 14px; }
+            .profile-email { font-size: 12px; margin-bottom: 8px; }
+            .profile-level { font-size: 11px; padding: 4px 10px; }
+            .sidebar-menu a { padding: 8px 12px; font-size: 12px; gap: 8px; }
+            .sidebar-menu a i { width: 16px; height: 16px; }
+            .content-area { padding: 16px; }
+            .page-title { font-size: 20px; margin-bottom: 16px; }
+            .page-title i { width: 24px; height: 24px; }
+            .card { padding: 16px; margin-bottom: 16px; }
+            .profile-avatar { width: 100px; height: 100px; }
+            .form-row { grid-template-columns: 1fr; }
+            .grid-cols-2 { grid-template-columns: 1fr !important; }
+            .social-link { padding: 12px; }
+            .social-icon { width: 36px; height: 36px; }
+            .form-input { padding: 12px 14px; font-size: 14px; }
+            .btn-primary, .btn-secondary { padding: 12px 24px; font-size: 14px; }
+            .danger-zone { padding: 16px; }
+            .danger-zone .flex { flex-direction: column; gap: 12px; align-items: flex-start; }
+        }
+
+        /* Small Mobile (480px) */
+        @media (max-width: 480px) {
+            .sidebar { padding: 10px; }
+            .profile-card { padding: 10px; }
+            .sidebar-profile-avatar { width: 40px; height: 40px; font-size: 16px; }
+            .content-area { padding: 12px; }
+            .page-title { font-size: 18px; }
+            .card { padding: 12px; }
+            .profile-avatar { width: 80px; height: 80px; }
+            .form-section { padding-bottom: 16px; margin-bottom: 16px; }
+            .form-label { font-size: 13px; }
+            .form-input { padding: 10px 12px; font-size: 13px; }
+            .social-link { padding: 10px; }
+            .social-icon { width: 32px; height: 32px; }
+            .toggle { width: 42px; height: 24px; }
+            .toggle::after { width: 20px; height: 20px; }
+            .toggle.active::after { left: 20px; }
+            .btn-primary, .btn-secondary { width: 100%; padding: 12px; }
+            .danger-zone button { width: 100%; }
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <!-- Header -->
+    <!-- Header -->
+    <div id="header"></div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Mobile Navigation -->
+        <nav class="mypage-mobile-nav">
+            <a href="04_mypage.html">대시보드</a>
+            <a href="34_mypage_orders.html">주문 내역</a>
+            <a href="35_mypage_wishlist.html">위시리스트</a>
+            <a href="37_mypage_coupons.html">쿠폰함</a>
+            <a href="36_mypage_points.html">포인트</a>
+            <a href="38_mypage_profile.html" class="active">회원정보</a>
+            <a href="29_help_center.html">고객센터</a>
+        </nav>
+
+        <aside class="sidebar">
+            <div class="profile-card">
+                <div class="sidebar-profile-avatar">홍</div>
+                <div class="profile-name">홍길동</div>
+                <div class="profile-email">hong@email.com</div>
+                <span class="profile-level">
+                    <i data-lucide="crown" style="width: 14px; height: 14px;"></i>
+                    VIP 회원
+                </span>
+            </div>
+            <ul class="sidebar-menu">
+                <li><a href="04_mypage.html"><i data-lucide="layout-dashboard"></i>마이페이지</a></li>
+                <li><a href="34_mypage_orders.html"><i data-lucide="package"></i>주문 내역</a></li>
+                <li><a href="35_mypage_wishlist.html"><i data-lucide="heart"></i>찜 목록</a></li>
+                <li><a href="36_mypage_points.html"><i data-lucide="coins"></i>포인트</a></li>
+                <li><a href="37_mypage_coupons.html"><i data-lucide="ticket"></i>쿠폰</a></li>
+                <li><a href="38_mypage_profile.html" class="active"><i data-lucide="settings"></i>회원정보</a></li>
+            </ul>
+            <div class="sidebar-divider"></div>
+            <ul class="sidebar-menu">
+                <li><a href="#"><i data-lucide="message-square"></i>1:1 문의</a></li>
+                <li><a href="#"><i data-lucide="log-out"></i>로그아웃</a></li>
+            </ul>
+        </aside>
+        <main class="content-area">
+            <h1 class="page-title">
+                <i data-lucide="settings"></i>
+                회원정보 수정
+            </h1>
+
+                <!-- Profile Photo -->
+                <div class="card animate-fade-in" style="animation-delay: 0.1s;">
+                    <div class="text-center py-4">
+                        <div class="profile-avatar">
+                            <i data-lucide="user" class="w-14 h-14"></i>
+                            <div class="avatar-edit">
+                                <i data-lucide="camera" class="w-4 h-4" style="color: var(--text-secondary);"></i>
+                            </div>
+                        </div>
+                        <p class="mt-4 text-sm" style="color: var(--text-muted);">프로필 사진을 클릭하여 변경하세요</p>
+                    </div>
+                </div>
+
+                <!-- Basic Info -->
+                <div class="card animate-fade-in" style="animation-delay: 0.2s;">
+                    <h3 class="text-lg font-bold mb-6 flex items-center gap-2">
+                        <i data-lucide="user" class="w-5 h-5" style="color: var(--rose-primary);"></i>
+                        기본 정보
+                    </h3>
+
+                    <div class="form-section">
+                        <div class="form-row mb-4">
+                            <div>
+                                <label class="form-label">이메일</label>
+                                <input type="email" class="form-input" value="brick@email.com" disabled>
+                            </div>
+                            <div>
+                                <label class="form-label">이름 <span class="required">*</span></label>
+                                <input type="text" class="form-input" value="김브릭">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div>
+                                <label class="form-label">닉네임 <span class="required">*</span></label>
+                                <input type="text" class="form-input" value="브릭마스터">
+                            </div>
+                            <div>
+                                <label class="form-label">연락처 <span class="required">*</span></label>
+                                <div class="flex gap-2">
+                                    <input type="tel" class="form-input flex-1" value="010-1234-5678">
+                                    <button class="btn-outline-sm whitespace-nowrap">인증하기</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <label class="form-label">배송지 주소</label>
+                        <div class="flex gap-2 mb-2">
+                            <input type="text" class="form-input flex-1" value="06234" placeholder="우편번호" readonly>
+                            <button class="btn-outline-sm whitespace-nowrap">주소 검색</button>
+                        </div>
+                        <input type="text" class="form-input mb-2" value="서울특별시 강남구 테헤란로 123" readonly>
+                        <input type="text" class="form-input" placeholder="상세 주소" value="브릭타워 15층">
+                    </div>
+
+                    <div>
+                        <label class="form-label">생년월일</label>
+                        <input type="date" class="form-input" value="1990-05-15" style="max-width: 300px;">
+                    </div>
+                </div>
+
+                <!-- Password -->
+                <div class="card animate-fade-in" style="animation-delay: 0.25s;">
+                    <h3 class="text-lg font-bold mb-6 flex items-center gap-2">
+                        <i data-lucide="lock" class="w-5 h-5" style="color: var(--rose-primary);"></i>
+                        비밀번호 변경
+                    </h3>
+
+                    <div class="space-y-4">
+                        <div>
+                            <label class="form-label">현재 비밀번호</label>
+                            <input type="password" class="form-input" placeholder="현재 비밀번호 입력" style="max-width: 400px;">
+                        </div>
+                        <div>
+                            <label class="form-label">새 비밀번호</label>
+                            <input type="password" class="form-input" placeholder="새 비밀번호 입력" style="max-width: 400px;">
+                            <p class="text-xs mt-1" style="color: var(--text-muted);">8자 이상, 영문/숫자/특수문자 포함</p>
+                        </div>
+                        <div>
+                            <label class="form-label">새 비밀번호 확인</label>
+                            <input type="password" class="form-input" placeholder="새 비밀번호 다시 입력" style="max-width: 400px;">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Social Login -->
+                <div class="card animate-fade-in" style="animation-delay: 0.3s;">
+                    <h3 class="text-lg font-bold mb-6 flex items-center gap-2">
+                        <i data-lucide="link" class="w-5 h-5" style="color: var(--rose-primary);"></i>
+                        소셜 계정 연동
+                    </h3>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="social-link">
+                            <div class="social-icon" style="background: #FEE500;">
+                                <span class="font-bold text-sm" style="color: #3C1E1E;">K</span>
+                            </div>
+                            <div class="flex-1">
+                                <p class="font-semibold">카카오</p>
+                                <p class="text-xs" style="color: #6BCB77;">연동됨</p>
+                            </div>
+                            <button class="btn-outline-sm">해제</button>
+                        </div>
+
+                        <div class="social-link">
+                            <div class="social-icon" style="background: #03C75A;">
+                                <span class="font-bold text-sm text-white">N</span>
+                            </div>
+                            <div class="flex-1">
+                                <p class="font-semibold">네이버</p>
+                                <p class="text-xs" style="color: var(--text-muted);">미연동</p>
+                            </div>
+                            <button class="btn-outline-sm">연동</button>
+                        </div>
+
+                        <div class="social-link">
+                            <div class="social-icon" style="background: #EA4335;">
+                                <span class="font-bold text-sm text-white">G</span>
+                            </div>
+                            <div class="flex-1">
+                                <p class="font-semibold">Google</p>
+                                <p class="text-xs" style="color: var(--text-muted);">미연동</p>
+                            </div>
+                            <button class="btn-outline-sm">연동</button>
+                        </div>
+
+                        <div class="social-link">
+                            <div class="social-icon" style="background: #000000;">
+                                <i data-lucide="apple" class="w-5 h-5 text-white"></i>
+                            </div>
+                            <div class="flex-1">
+                                <p class="font-semibold">Apple</p>
+                                <p class="text-xs" style="color: var(--text-muted);">미연동</p>
+                            </div>
+                            <button class="btn-outline-sm">연동</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Notification Settings -->
+                <div class="card animate-fade-in" style="animation-delay: 0.35s;">
+                    <h3 class="text-lg font-bold mb-6 flex items-center gap-2">
+                        <i data-lucide="bell" class="w-5 h-5" style="color: var(--rose-primary);"></i>
+                        알림 설정
+                    </h3>
+
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between py-2">
+                            <div>
+                                <p class="font-semibold">이메일 알림</p>
+                                <p class="text-sm" style="color: var(--text-muted);">주문, 배송, 이벤트 소식을 이메일로 받아요</p>
+                            </div>
+                            <div class="toggle active"></div>
+                        </div>
+                        <div class="flex items-center justify-between py-2">
+                            <div>
+                                <p class="font-semibold">SMS 알림</p>
+                                <p class="text-sm" style="color: var(--text-muted);">주문, 배송 알림을 문자로 받아요</p>
+                            </div>
+                            <div class="toggle active"></div>
+                        </div>
+                        <div class="flex items-center justify-between py-2">
+                            <div>
+                                <p class="font-semibold">푸시 알림</p>
+                                <p class="text-sm" style="color: var(--text-muted);">앱 푸시 알림을 받아요</p>
+                            </div>
+                            <div class="toggle"></div>
+                        </div>
+                        <div class="flex items-center justify-between py-2">
+                            <div>
+                                <p class="font-semibold">마케팅 수신 동의</p>
+                                <p class="text-sm" style="color: var(--text-muted);">이벤트, 할인 정보를 받아요</p>
+                            </div>
+                            <div class="toggle active"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Danger Zone -->
+                <div class="danger-zone animate-fade-in" style="animation-delay: 0.4s;">
+                    <h3 class="text-lg font-bold mb-4 flex items-center gap-2" style="color: #FF6B6B;">
+                        <i data-lucide="alert-triangle" class="w-5 h-5"></i>
+                        계정 관리
+                    </h3>
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="font-semibold">회원 탈퇴</p>
+                            <p class="text-sm" style="color: var(--text-muted);">탈퇴 시 모든 데이터가 삭제됩니다</p>
+                        </div>
+                        <button class="px-4 py-2 rounded-xl font-semibold text-sm" style="background: rgba(255, 107, 107, 0.1); color: #FF6B6B;">
+                            회원 탈퇴
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Save Button -->
+                <div class="flex justify-center gap-4 pt-4 animate-fade-in" style="animation-delay: 0.45s;">
+                    <button class="btn-secondary">취소</button>
+                    <button class="btn-primary flex items-center gap-2">
+                        <i data-lucide="save" class="w-5 h-5"></i>
+                        변경사항 저장
+                    </button>
+                </div>
+        </main>
+    </div>
+
+    <!-- Footer -->
+    <div id="footer"></div>
+
+    <script>lucide.createIcons();</script>
+    <script src="common/loader.js"></script>
+</body>
+</html>
