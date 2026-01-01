@@ -56,3 +56,6 @@ hs_err_pid*
 # Misc
 *.pem
 .cache/
+
+# Playwright MCP screenshots
+.playwright-mcp/
