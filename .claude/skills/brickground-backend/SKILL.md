@@ -13,6 +13,7 @@ description: BrickGround 백엔드 개발 표준. Spring Boot API, 도메인 로
 | Java | 17 (LTS) | 프로그래밍 언어 |
 | Spring Security | 6.x | 인증/인가 |
 | Spring Data JPA | 3.x | ORM |
+| OpenAPI | 3.x | API 문서화 (Swagger UI) |
 | MySQL | 8.x | 데이터베이스 |
 | Redis | 7.x | 캐시/세션 |
 
@@ -34,7 +35,8 @@ backend/src/main/java/com/brickground/
 └── config/                  # 설정 클래스
     ├── SecurityConfig.java
     ├── JpaConfig.java
-    └── RedisConfig.java
+    ├── RedisConfig.java
+    └── OpenApiConfig.java   # Swagger/OpenAPI 설정
 ```
 
 ## 3. 도메인 목록
@@ -305,7 +307,147 @@ public class ApiResponse<T> {
 | PUT | /api/v1/{domain}/{id} | 수정 |
 | DELETE | /api/v1/{domain}/{id} | 삭제 |
 
-## 11. 참조 문서
+## 11. OpenAPI 3.x (Swagger) 설정
+
+### 11.1 의존성 (build.gradle)
+
+```groovy
+dependencies {
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.3.0'
+}
+```
+
+### 11.2 OpenAPI 설정 클래스
+
+```java
+package com.brickground.config;
+
+import io.swagger.v3.oas.models.Components;
+import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.info.Info;
+import io.swagger.v3.oas.models.info.Contact;
+import io.swagger.v3.oas.models.security.SecurityRequirement;
+import io.swagger.v3.oas.models.security.SecurityScheme;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
+public class OpenApiConfig {
+
+    @Bean
+    public OpenAPI openAPI() {
+        String securitySchemeName = "bearerAuth";
+
+        return new OpenAPI()
+            .info(new Info()
+                .title("BrickGround API")
+                .description("VR Mall & E-commerce Platform API")
+                .version("v1.0.0")
+                .contact(new Contact()
+                    .name("BrickGround Team")
+                    .email("support@brickground.com")))
+            .addSecurityItem(new SecurityRequirement().addList(securitySchemeName))
+            .components(new Components()
+                .addSecuritySchemes(securitySchemeName,
+                    new SecurityScheme()
+                        .name(securitySchemeName)
+                        .type(SecurityScheme.Type.HTTP)
+                        .scheme("bearer")
+                        .bearerFormat("JWT")));
+    }
+}
+```
+
+### 11.3 Controller 어노테이션
+
+```java
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+
+@RestController
+@RequestMapping("/api/v1/products")
+@RequiredArgsConstructor
+@Tag(name = "Product", description = "상품 관리 API")
+public class ProductController {
+
+    @Operation(summary = "상품 목록 조회", description = "페이징된 상품 목록을 조회합니다")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "조회 성공"),
+        @ApiResponse(responseCode = "400", description = "잘못된 요청")
+    })
+    @GetMapping
+    public ResponseEntity<ApiResponse<Page<ProductResponse>>> getProducts(
+            @Parameter(description = "페이지 정보") Pageable pageable) {
+        return ResponseEntity.ok(ApiResponse.success(productService.getProducts(pageable)));
+    }
+
+    @Operation(summary = "상품 상세 조회", description = "ID로 상품을 조회합니다")
+    @GetMapping("/{id}")
+    public ResponseEntity<ApiResponse<ProductResponse>> getProduct(
+            @Parameter(description = "상품 ID", required = true) @PathVariable Long id) {
+        return ResponseEntity.ok(ApiResponse.success(productService.getProduct(id)));
+    }
+
+    @Operation(summary = "상품 등록", description = "새 상품을 등록합니다")
+    @PostMapping
+    public ResponseEntity<ApiResponse<ProductResponse>> createProduct(
+            @RequestBody @Valid ProductCreateRequest request) {
+        return ResponseEntity.ok(ApiResponse.success(productService.createProduct(request)));
+    }
+}
+```
+
+### 11.4 DTO 어노테이션
+
+```java
+import io.swagger.v3.oas.annotations.media.Schema;
+
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@Schema(description = "상품 생성 요청")
+public class ProductCreateRequest {
+
+    @Schema(description = "상품명", example = "레고 클래식 세트", required = true)
+    @NotBlank(message = "상품명은 필수입니다")
+    @Size(max = 200)
+    private String name;
+
+    @Schema(description = "가격", example = "49900", required = true)
+    @NotNull(message = "가격은 필수입니다")
+    @Min(0)
+    private Integer price;
+
+    @Schema(description = "상품 설명", example = "창의력을 키워주는 레고 세트입니다")
+    private String description;
+}
+```
+
+### 11.5 Swagger UI 접속
+
+- **Swagger UI**: `http://localhost:8080/swagger-ui.html`
+- **OpenAPI JSON**: `http://localhost:8080/v3/api-docs`
+- **OpenAPI YAML**: `http://localhost:8080/v3/api-docs.yaml`
+
+### 11.6 application.yml 설정
+
+```yaml
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    tags-sorter: alpha
+    operations-sorter: alpha
+  default-consumes-media-type: application/json
+  default-produces-media-type: application/json
+```
+
+## 12. 참조 문서
 
 - 아키텍처: `docs/03_ARCHITECTURE.md`
 - 데이터베이스: `docs/04_DATABASE.md`
