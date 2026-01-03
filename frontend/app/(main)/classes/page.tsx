@@ -37,7 +37,7 @@ interface ClassItem {
 const mockClasses: ClassItem[] = [
   {
     id: '1',
-    title: '레고 테크닉 자동차 조립 체험',
+    title: '브릭 테크닉 자동차 조립 체험',
     classType: 'experience',
     targetAge: '초등 1-3학년',
     schedule: '매주 토요일 10:00 - 12:00',
@@ -75,7 +75,7 @@ const mockClasses: ClassItem[] = [
   },
   {
     id: '4',
-    title: '레고 마인드스톰 로봇 코딩',
+    title: '브릭 마인드스톰 로봇 코딩',
     classType: 'regular',
     targetAge: '중등 1-3학년',
     schedule: '매주 수요일 17:00 - 19:00',
@@ -119,7 +119,7 @@ const mockUpcomingClasses: UpcomingClass[] = [
     day: 15,
     dayOfWeek: '토요일',
     time: '10:00 AM',
-    title: '레고 테크닉 자동차 조립 체험',
+    title: '브릭 테크닉 자동차 조립 체험',
     location: '서울 강남구 삼성동',
   },
   {
@@ -137,7 +137,7 @@ const mockUpcomingClasses: UpcomingClass[] = [
     day: 18,
     dayOfWeek: '수요일',
     time: '17:00 PM',
-    title: '레고 마인드스톰 로봇 코딩',
+    title: '브릭 마인드스톰 로봇 코딩',
     location: '경기 성남시 분당구',
   },
   {

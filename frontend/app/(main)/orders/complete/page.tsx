@@ -26,7 +26,7 @@ const mockOrderData = {
   items: [
     {
       id: '1',
-      name: '레고 테크닉 람보르기니 시안 FKP 37',
+      name: '브릭 테크닉 람보르기니 시안 FKP 37',
       option: '선물포장: O',
       quantity: 1,
       price: 489000,

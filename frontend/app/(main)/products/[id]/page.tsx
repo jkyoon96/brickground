@@ -19,7 +19,7 @@ import {
 // Mock product data
 const mockProduct = {
   id: '1',
-  name: '레고 테크닉 람보르기니 시안 FKP 37 (42115)',
+  name: '브릭 테크닉 람보르기니 시안 FKP 37 (42115)',
   tags: [
     { label: 'HOT', variant: 'hot' as const },
     { label: 'BEST', variant: 'default' as const },
@@ -41,7 +41,7 @@ const mockProduct = {
   savings: 60000,
   points: 4890,
   images: [
-    { id: '1', src: '/images/product/product-1.jpg', alt: '레고 테크닉 람보르기니' },
+    { id: '1', src: '/images/product/product-1.jpg', alt: '브릭 테크닉 람보르기니' },
     { id: '2', src: '/images/product/product-2.jpg', alt: '썸네일 2' },
     { id: '3', src: '/images/product/product-3.jpg', alt: '썸네일 3' },
     { id: '4', src: '/images/product/product-4.jpg', alt: '썸네일 4' },
@@ -83,9 +83,9 @@ const mockProduct = {
 };
 
 const mockRelatedProducts = [
-  { id: '2', title: '레고 테크닉 포르쉐 911', price: 189000, imageUrl: '/images/product/product-6.jpg' },
-  { id: '3', title: '레고 테크닉 부가티 시론', price: 459000, imageUrl: '/images/product/product-7.jpg' },
-  { id: '4', title: '레고 테크닉 페라리 데이토나', price: 529000, imageUrl: '/images/product/product-8.jpg' },
+  { id: '2', title: '브릭 테크닉 포르쉐 911', price: 189000, imageUrl: '/images/product/product-6.jpg' },
+  { id: '3', title: '브릭 테크닉 부가티 시론', price: 459000, imageUrl: '/images/product/product-7.jpg' },
+  { id: '4', title: '브릭 테크닉 페라리 데이토나', price: 529000, imageUrl: '/images/product/product-8.jpg' },
   { id: '5', title: 'LED 라이트 키트', price: 45000, imageUrl: '/images/product/product-9.jpg' },
   { id: '6', title: '디스플레이 케이스', price: 35000, imageUrl: '/images/product/product-10.jpg' },
 ];
@@ -157,7 +157,7 @@ export default function ProductDetailPage() {
   const breadcrumbItems = [
     { label: '홈', href: '/' },
     { label: '상품', href: '/products' },
-    { label: '레고 / 테크닉', href: '/products?category=lego-technic' },
+    { label: '브릭 / 테크닉', href: '/products?category=lego-technic' },
     { label: mockProduct.name },
   ];
 

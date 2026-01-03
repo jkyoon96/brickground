@@ -47,8 +47,8 @@ const mockAddress = {
 const mockOrderItems: OrderItem[] = [
   {
     id: '1',
-    name: '레고 테크닉 람보르기니 시안 FKP 37',
-    brand: '레고 / 테크닉',
+    name: '브릭 테크닉 람보르기니 시안 FKP 37',
+    brand: '브릭 / 테크닉',
     imageUrl: '/images/products/lego-lambo.jpg',
     option: '선물포장: O',
     quantity: 1,

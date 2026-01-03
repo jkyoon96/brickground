@@ -222,7 +222,7 @@ export default function ClassApplyPage() {
         </Link>
         <ChevronRight className="h-3 w-3 md:h-4 md:w-4" />
         <Link href="/classes/1" className="hover:text-[#10B981]">
-          레고 테크닉 자동차 조립 체험
+          브릭 테크닉 자동차 조립 체험
         </Link>
         <ChevronRight className="h-3 w-3 md:h-4 md:w-4" />
         <span className="font-semibold text-[#1E293B]">신청</span>
@@ -265,7 +265,7 @@ export default function ClassApplyPage() {
             <div className="flex flex-col gap-4 md:gap-6">
               <ClassSummaryCard
                 classType="체험수업"
-                title="레고 테크닉 자동차 조립 체험"
+                title="브릭 테크닉 자동차 조립 체험"
                 iconType="puzzle"
                 schedule={scheduleString}
                 location="서울 강남구 삼성동"

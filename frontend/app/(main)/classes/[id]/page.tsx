@@ -27,7 +27,7 @@ import type {
 // Mock data
 const mockClassData = {
   id: '1',
-  title: '레고 테크닉 자동차 조립 체험',
+  title: '브릭 테크닉 자동차 조립 체험',
   classType: 'experience' as const,
   badge: 'popular' as const,
   status: 'open' as const,
@@ -51,9 +51,9 @@ const mockClassInfo: ClassInfoItem[] = [
 ];
 
 const mockDescriptionParagraphs = [
-  '레고 테크닉 자동차 조립 체험은 아이들이 직접 레고 테크닉 세트를 조립하며 기계공학의 원리를 배우는 체험 수업입니다.',
+  '브릭 테크닉 자동차 조립 체험은 아이들이 직접 브릭 테크닉 세트를 조립하며 기계공학의 원리를 배우는 체험 수업입니다.',
   '이 수업을 통해 아이들은:',
-  '수업에서 사용하는 모든 레고 세트는 제공되며, 완성된 작품은 집으로 가져갈 수 있습니다.',
+  '수업에서 사용하는 모든 브릭 세트는 제공되며, 완성된 작품은 집으로 가져갈 수 있습니다.',
 ];
 
 const mockBulletPoints = [
@@ -67,7 +67,7 @@ const mockCurriculum: CurriculumItem[] = [
   {
     number: 1,
     title: '오리엔테이션 (15분)',
-    description: '레고 테크닉 소개 및 안전 교육, 오늘 만들 자동차 모델 소개',
+    description: '브릭 테크닉 소개 및 안전 교육, 오늘 만들 자동차 모델 소개',
   },
   {
     number: 2,
@@ -88,8 +88,8 @@ const mockCurriculum: CurriculumItem[] = [
 
 const mockInstructor: InstructorInfo = {
   name: '김블록 선생님',
-  role: '레고 공인 강사 (LEGO Certified Professional)',
-  bio: '10년 이상의 레고 교육 경력을 가진 전문 강사입니다. 아이들의 눈높이에 맞춘 재미있고 교육적인 수업을 진행합니다. 현재까지 2,000명 이상의 수강생을 지도했습니다.',
+  role: '브릭 공인 강사 (LEGO Certified Professional)',
+  bio: '10년 이상의 브릭 교육 경력을 가진 전문 강사입니다. 아이들의 눈높이에 맞춘 재미있고 교육적인 수업을 진행합니다. 현재까지 2,000명 이상의 수강생을 지도했습니다.',
 };
 
 const mockReviewDistribution: ReviewRatingDistribution = {

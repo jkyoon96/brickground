@@ -26,7 +26,7 @@ const defaultCategories: CategoryTab[] = [
   { id: 'all', label: '전체', icon: Grid3X3 },
   { id: 'popular', label: '인기', icon: Flame },
   { id: 'new', label: '신상품', icon: Sparkles },
-  { id: 'lego', label: '레고', icon: Box },
+  { id: 'lego', label: '브릭', icon: Box },
   { id: 'figure', label: '피규어', icon: Gamepad2 },
   { id: 'boardgame', label: '보드게임', icon: Puzzle },
   { id: 'education', label: '교육완구', icon: Brain },

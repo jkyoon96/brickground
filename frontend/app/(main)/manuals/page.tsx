@@ -16,8 +16,8 @@ import {
 const mockManuals = [
   {
     id: '1',
-    title: '레고 테크닉 람보르기니 시안 FKP 37 조립 설명서',
-    productName: '레고 테크닉',
+    title: '브릭 테크닉 람보르기니 시안 FKP 37 조립 설명서',
+    productName: '브릭 테크닉',
     productThumbGradient: 'linear-gradient(135deg, #FF6B35, #FFD93D)',
     pageCount: 368,
     downloadCount: '12.4K',
@@ -56,8 +56,8 @@ const mockManuals = [
   },
   {
     id: '5',
-    title: '레고 디즈니 캐슬 71040 조립 설명서',
-    productName: '레고 디즈니',
+    title: '브릭 디즈니 캐슬 71040 조립 설명서',
+    productName: '브릭 디즈니',
     productThumbGradient: 'linear-gradient(135deg, #9B59B6, #FF6B6B)',
     pageCount: 480,
     downloadCount: '9.3K',
@@ -66,8 +66,8 @@ const mockManuals = [
   },
   {
     id: '6',
-    title: '레고 아이디어스 NASA 스페이스 셔틀 조립 설명서',
-    productName: '레고 아이디어스',
+    title: '브릭 아이디어스 NASA 스페이스 셔틀 조립 설명서',
+    productName: '브릭 아이디어스',
     productThumbGradient: 'linear-gradient(135deg, #FF6B6B, #FF6B35)',
     pageCount: 212,
     downloadCount: '6.8K',
@@ -86,8 +86,8 @@ const mockManuals = [
   },
   {
     id: '8',
-    title: '레고 시티 경찰서 세트 조립 설명서',
-    productName: '레고 시티',
+    title: '브릭 시티 경찰서 세트 조립 설명서',
+    productName: '브릭 시티',
     productThumbGradient: 'linear-gradient(135deg, #4ECDC4, #0066FF)',
     pageCount: 156,
     downloadCount: '4.2K',
@@ -97,10 +97,10 @@ const mockManuals = [
 ];
 
 const mockRecentManuals = [
-  { id: '1', title: '레고 테크닉 람보르기니', viewedAt: '오늘 14:30' },
+  { id: '1', title: '브릭 테크닉 람보르기니', viewedAt: '오늘 14:30' },
   { id: '2', title: '건담 RG 사자비', viewedAt: '오늘 11:20' },
   { id: '3', title: '카탄 게임 규칙서', viewedAt: '어제' },
-  { id: '4', title: '레고 디즈니 캐슬', viewedAt: '2일 전' },
+  { id: '4', title: '브릭 디즈니 캐슬', viewedAt: '2일 전' },
 ];
 
 export default function ManualListPage() {

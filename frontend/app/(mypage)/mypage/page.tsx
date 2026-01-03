@@ -40,7 +40,7 @@ const mockRecentOrders: Array<{
     id: '1',
     status: 'shipping',
     date: '2025.01.15',
-    title: '레고 테크닉 포르쉐 911 GT3 RS 외 1건',
+    title: '브릭 테크닉 포르쉐 911 GT3 RS 외 1건',
     price: 156000,
     actionLabel: '배송조회',
   },

@@ -35,8 +35,8 @@ interface Product {
 const mockProducts: Product[] = [
   {
     id: '1',
-    name: '레고 테크닉 람보르기니 시안 FKP 37',
-    category: '레고 / 테크닉',
+    name: '브릭 테크닉 람보르기니 시안 FKP 37',
+    category: '브릭 / 테크닉',
     imageUrl: '/images/product/product-1.jpg',
     rating: 4.9,
     reviewCount: 128,
@@ -89,8 +89,8 @@ const mockProducts: Product[] = [
   },
   {
     id: '5',
-    name: '레고 시티 경찰서 세트 (60316)',
-    category: '레고 / 시티',
+    name: '브릭 시티 경찰서 세트 (60316)',
+    category: '브릭 / 시티',
     imageUrl: '/images/product/product-5.jpg',
     rating: 4.5,
     reviewCount: 192,
@@ -100,8 +100,8 @@ const mockProducts: Product[] = [
   },
   {
     id: '6',
-    name: '레고 디즈니 캐슬 71040',
-    category: '레고 / 디즈니',
+    name: '브릭 디즈니 캐슬 71040',
+    category: '브릭 / 디즈니',
     imageUrl: '/images/product/product-6.jpg',
     rating: 4.9,
     reviewCount: 312,
@@ -126,8 +126,8 @@ const mockProducts: Product[] = [
   },
   {
     id: '8',
-    name: '레고 아이디어스 NASA 스페이스 셔틀',
-    category: '레고 / 아이디어스',
+    name: '브릭 아이디어스 NASA 스페이스 셔틀',
+    category: '브릭 / 아이디어스',
     imageUrl: '/images/product/product-8.jpg',
     rating: 4.8,
     reviewCount: 145,

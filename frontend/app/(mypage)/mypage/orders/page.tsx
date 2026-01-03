@@ -47,7 +47,7 @@ const mockOrders = [
         id: 'p2',
         imageUrl: '/images/shop/1000000106.jpg',
         status: 'shipping' as OrderProductStatus,
-        title: '레고 테크닉 포르쉐 911 GT3 RS',
+        title: '브릭 테크닉 포르쉐 911 GT3 RS',
         option: '옵션: 기본 / 수량: 1개',
         price: 129000,
         primaryAction: {

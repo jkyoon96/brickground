@@ -23,7 +23,7 @@ export function ProductListHero({ onPopularClick, onSaleClick }: ProductListHero
 
       {/* Description */}
       <p className="mx-auto mb-6 max-w-[600px] text-[13px] opacity-90 md:mb-8 md:text-lg">
-        레고, 피규어, 보드게임 등 다양한 상품을 만나보세요
+        브릭, 피규어, 보드게임 등 다양한 상품을 만나보세요
       </p>
 
       {/* Actions */}

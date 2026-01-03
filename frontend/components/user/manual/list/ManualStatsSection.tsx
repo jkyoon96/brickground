@@ -14,7 +14,7 @@ interface ManualStatsSectionProps {
 
 const defaultStats: ManualStat[] = [
   { icon: 'book', value: '2,847', label: '전체 매뉴얼' },
-  { icon: 'lego', value: '1,234', label: '레고 매뉴얼' },
+  { icon: 'lego', value: '1,234', label: '브릭 매뉴얼' },
   { icon: 'download', value: '156K', label: '다운로드' },
   { icon: 'new', value: '24', label: '신규 (이번 주)' },
 ];

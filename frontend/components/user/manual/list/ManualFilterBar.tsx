@@ -36,7 +36,7 @@ interface ManualFilterBarProps {
 
 const defaultCategories: Category[] = [
   { id: 'all', label: '전체', icon: 'all' },
-  { id: 'lego', label: '레고', icon: 'lego' },
+  { id: 'lego', label: '브릭', icon: 'lego' },
   { id: 'figure', label: '피규어', icon: 'figure' },
   { id: 'boardgame', label: '보드게임', icon: 'boardgame' },
   { id: 'education', label: '교육완구', icon: 'education' },

@@ -13,7 +13,7 @@ import {
 // Mock data
 const mockManual = {
   id: '1',
-  title: '레고 테크닉 람보르기니 시안 FKP 37 조립 설명서',
+  title: '브릭 테크닉 람보르기니 시안 FKP 37 조립 설명서',
   productId: 'prod-123',
   totalPages: 368,
   fileSize: '45.2 MB',
@@ -23,7 +23,7 @@ const mockManual = {
 
 const mockProduct = {
   id: 'prod-123',
-  name: '레고 테크닉 람보르기니 시안 FKP 37',
+  name: '브릭 테크닉 람보르기니 시안 FKP 37',
   price: '489,000원',
   imageGradient: 'linear-gradient(135deg, #FF6B35, #FFD93D)',
 };

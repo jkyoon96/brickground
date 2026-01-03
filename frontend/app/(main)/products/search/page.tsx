@@ -37,18 +37,18 @@ interface Filter {
 
 // Mock data
 const mockSuggestions = [
-  '레고 테크닉',
-  '레고 시티',
-  '레고 스타워즈',
-  '레고 해리포터',
-  '레고 디즈니',
+  '브릭 테크닉',
+  '브릭 시티',
+  '브릭 스타워즈',
+  '브릭 해리포터',
+  '브릭 디즈니',
 ];
 
 const mockProducts: Product[] = [
   {
     id: '1',
-    name: '레고 테크닉 람보르기니 시안',
-    category: '레고 / 테크닉',
+    name: '브릭 테크닉 람보르기니 시안',
+    category: '브릭 / 테크닉',
     rating: 4.9,
     reviewCount: 128,
     currentPrice: 489000,
@@ -61,8 +61,8 @@ const mockProducts: Product[] = [
   },
   {
     id: '2',
-    name: '레고 시티 경찰서 세트',
-    category: '레고 / 시티',
+    name: '브릭 시티 경찰서 세트',
+    category: '브릭 / 시티',
     rating: 4.5,
     reviewCount: 89,
     currentPrice: 89000,
@@ -73,8 +73,8 @@ const mockProducts: Product[] = [
   },
   {
     id: '3',
-    name: '레고 디즈니 캐슬 71040',
-    category: '레고 / 디즈니',
+    name: '브릭 디즈니 캐슬 71040',
+    category: '브릭 / 디즈니',
     rating: 4.9,
     reviewCount: 312,
     currentPrice: 449000,
@@ -85,8 +85,8 @@ const mockProducts: Product[] = [
   },
   {
     id: '4',
-    name: '레고 아이디어스 NASA 셔틀',
-    category: '레고 / 아이디어스',
+    name: '브릭 아이디어스 NASA 셔틀',
+    category: '브릭 / 아이디어스',
     rating: 4.8,
     reviewCount: 145,
     currentPrice: 231200,
@@ -99,8 +99,8 @@ const mockProducts: Product[] = [
   },
   {
     id: '5',
-    name: '레고 해리포터 호그와트 성',
-    category: '레고 / 해리포터',
+    name: '브릭 해리포터 호그와트 성',
+    category: '브릭 / 해리포터',
     rating: 4.7,
     reviewCount: 234,
     currentPrice: 599000,
@@ -109,8 +109,8 @@ const mockProducts: Product[] = [
   },
   {
     id: '6',
-    name: '레고 스타워즈 밀레니엄 팔콘',
-    category: '레고 / 스타워즈',
+    name: '브릭 스타워즈 밀레니엄 팔콘',
+    category: '브릭 / 스타워즈',
     rating: 4.9,
     reviewCount: 567,
     currentPrice: 899000,
@@ -119,8 +119,8 @@ const mockProducts: Product[] = [
   },
   {
     id: '7',
-    name: '레고 크리에이터 모던하우스',
-    category: '레고 / 크리에이터',
+    name: '브릭 크리에이터 모던하우스',
+    category: '브릭 / 크리에이터',
     rating: 4.6,
     reviewCount: 178,
     currentPrice: 129000,
@@ -131,8 +131,8 @@ const mockProducts: Product[] = [
   },
   {
     id: '8',
-    name: '레고 보태닉 분재 트리',
-    category: '레고 / 보태닉 컬렉션',
+    name: '브릭 보태닉 분재 트리',
+    category: '브릭 / 보태닉 컬렉션',
     rating: 4.5,
     reviewCount: 98,
     currentPrice: 69000,
@@ -144,14 +144,14 @@ const mockProducts: Product[] = [
 ];
 
 const mockRelatedSearches = [
-  '레고 테크닉',
-  '레고 스타워즈',
-  '레고 해리포터',
-  '레고 디즈니',
-  '레고 시티',
-  '레고 마블',
-  '레고 닌자고',
-  '레고 아키텍처',
+  '브릭 테크닉',
+  '브릭 스타워즈',
+  '브릭 해리포터',
+  '브릭 디즈니',
+  '브릭 시티',
+  '브릭 마블',
+  '브릭 닌자고',
+  '브릭 아키텍처',
 ];
 
 type SortOption = 'popular' | 'newest' | 'priceAsc' | 'priceDesc' | 'rating';
@@ -169,10 +169,10 @@ export default function ProductSearchPage() {
   const searchParams = useSearchParams();
 
   // State
-  const [query, setQuery] = useState(searchParams.get('q') || '레고');
+  const [query, setQuery] = useState(searchParams.get('q') || '브릭');
   const [products, setProducts] = useState(mockProducts);
   const [filters, setFilters] = useState<Filter[]>([
-    { id: 'keyword', label: '레고' },
+    { id: 'keyword', label: '브릭' },
     { id: 'freeShipping', label: '무료배송' },
     { id: 'priceRange', label: '₩100,000 이하' },
   ]);

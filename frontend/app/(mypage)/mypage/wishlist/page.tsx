@@ -28,7 +28,7 @@ const mockWishlistItems: WishlistItem[] = [
   {
     id: '1',
     imageUrl: '/images/shop/1000000106.jpg',
-    title: '레고 테크닉 포르쉐 911 GT3 RS',
+    title: '브릭 테크닉 포르쉐 911 GT3 RS',
     price: 129000,
     originalPrice: 159000,
     discountPercent: 20,
