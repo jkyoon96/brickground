@@ -254,34 +254,60 @@ frontend/
 │   │   ├── data-table.tsx
 │   │   └── ...
 │   ├── user/                     # User Frontend (Pixar Style)
-│   │   ├── layout/
+│   │   ├── index.ts              # Barrel exports
+│   │   ├── layout/               # 레이아웃 컴포넌트
 │   │   │   ├── Header.tsx
 │   │   │   ├── Footer.tsx
-│   │   │   └── MobileNav.tsx
-│   │   ├── product/
-│   │   │   ├── ProductCard.tsx
-│   │   │   ├── ProductGrid.tsx
-│   │   │   └── ProductDetail.tsx
-│   │   ├── vrmall/
-│   │   │   ├── VRMallViewer.tsx
-│   │   │   ├── VRMallCard.tsx
-│   │   │   └── ProductSheet.tsx
-│   │   ├── dotart/
-│   │   │   ├── PixelEditor.tsx
-│   │   │   ├── ColorPalette.tsx
-│   │   │   └── VoxelViewer.tsx
-│   │   ├── class/
-│   │   │   ├── ClassCard.tsx
-│   │   │   ├── ClassList.tsx
-│   │   │   ├── ClassDetail.tsx
-│   │   │   ├── ClassSchedule.tsx
-│   │   │   └── ClassApplyForm.tsx
+│   │   │   └── Layout.tsx
+│   │   ├── cards/                # 공통 카드 컴포넌트
+│   │   ├── sections/             # 공통 섹션 컴포넌트
+│   │   ├── auth/                 # 인증 관련
+│   │   ├── home/                 # 홈 페이지
+│   │   ├── brickart/             # BrickArt (중첩 구조)
+│   │   │   ├── list/             # 목록 페이지 컴포넌트
+│   │   │   ├── detail/           # 상세 페이지 컴포넌트
+│   │   │   ├── editor/           # 에디터 컴포넌트
+│   │   │   └── viewer/           # 3D 뷰어 컴포넌트
+│   │   ├── dotart/               # DotArt (중첩 구조)
+│   │   │   ├── list/
+│   │   │   ├── detail/
+│   │   │   ├── editor/
+│   │   │   └── viewer/
+│   │   ├── creation/             # Creation (중첩 구조)
+│   │   │   ├── list/
+│   │   │   ├── detail/
+│   │   │   ├── editor/
+│   │   │   └── viewer/
+│   │   ├── product/              # 상품 (중첩 구조)
+│   │   │   ├── list/
+│   │   │   ├── detail/
+│   │   │   └── search/
+│   │   ├── class/                # 클래스 (중첩 구조)
+│   │   │   ├── list/
+│   │   │   ├── detail/
+│   │   │   └── apply/
+│   │   ├── mypage/               # 마이페이지 (중첩 구조)
+│   │   │   ├── common/
+│   │   │   ├── dashboard/
+│   │   │   ├── orders/
+│   │   │   ├── wishlist/
+│   │   │   ├── points/
+│   │   │   ├── coupons/
+│   │   │   └── profile/
+│   │   ├── order/                # 주문 (중첩 구조)
+│   │   │   ├── complete/
+│   │   │   └── detail/
+│   │   ├── manual/               # 매뉴얼 (중첩 구조)
+│   │   │   ├── list/
+│   │   │   └── viewer/
+│   │   ├── qna/                  # Q&A (중첩 구조)
+│   │   │   ├── list/
+│   │   │   └── write/
 │   │   ├── cart/
-│   │   │   ├── CartItem.tsx
-│   │   │   └── CartSummary.tsx
-│   │   └── checkout/
-│   │       ├── AddressForm.tsx
-│   │       └── PaymentForm.tsx
+│   │   ├── checkout/
+│   │   ├── help-center/
+│   │   ├── faq/
+│   │   └── seller/
 │   ├── admin/                    # Admin Components
 │   │   ├── layout/
 │   │   │   ├── AdminSidebar.tsx

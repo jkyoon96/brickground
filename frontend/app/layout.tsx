@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
-import { Nunito, Pretendard } from 'next/font/google';
+import { Nunito } from 'next/font/google';
+import localFont from 'next/font/local';
 import '@/styles/globals.css';
 
 const nunito = Nunito({
@@ -8,16 +9,37 @@ const nunito = Nunito({
   display: 'swap',
 });
 
-const pretendard = Pretendard({
-  subsets: ['latin'],
+const pretendard = localFont({
+  src: [
+    {
+      path: '../public/fonts/Pretendard-Regular.woff2',
+      weight: '400',
+      style: 'normal',
+    },
+    {
+      path: '../public/fonts/Pretendard-Medium.woff2',
+      weight: '500',
+      style: 'normal',
+    },
+    {
+      path: '../public/fonts/Pretendard-SemiBold.woff2',
+      weight: '600',
+      style: 'normal',
+    },
+    {
+      path: '../public/fonts/Pretendard-Bold.woff2',
+      weight: '700',
+      style: 'normal',
+    },
+  ],
   variable: '--font-sans',
   display: 'swap',
 });
 
 export const metadata: Metadata = {
-  title: 'BrickGround - VR 쇼핑몰 및 창작 플랫폼',
+  title: 'BrickGround - 브릭 창작 및 쇼핑 플랫폼',
   description:
-    '3D/VR 기반 쇼핑 경험과 픽셀아트 창작 기능을 결합한 통합 플랫폼',
+    '나만의 브릭아트, 도트아트, 3D 창작물을 만들고 공유하는 브릭 창작 및 쇼핑 플랫폼',
 };
 
 export default function RootLayout({
